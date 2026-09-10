@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: bdc-dp-middleware
+
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+
+app:
+  data-location: ${APP_DATA_LOCATION:classpath:data/}
+
+springdoc:
+  paths-to-match:
+    - /api/v1/cohorts
+    - /api/v1/cohorts/**
+    - /api/v1/health
+  show-actuator: false
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    try-it-out-enabled: true

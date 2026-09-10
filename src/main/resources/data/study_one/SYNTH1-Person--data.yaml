@@ -1,0 +1,4500 @@
+cause_of_death:
+- cause: ICD10CM:R99
+  id: 90723e22-0b8f-5ab4-b1bd-8e697cd52e1e
+  order: 1
+id: ddbe1e3e-e49d-590e-97f5-2e5e2102cbd0
+identity: '900001'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 73e3cc59-34b6-5c7e-aee4-df4f2adf0d96
+  order: null
+id: 567cf7d7-a287-5577-82b2-1feaca5df345
+identity: '900002'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1138c48c-208f-5aa0-81f0-b82dd5ec21f4
+  order: null
+id: 4e5b410c-f7e3-5603-83bd-4be1b10af149
+identity: '900003'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 85cc1673-77d2-5af9-a976-b76fe93efebf
+  order: null
+id: 9cc150d8-c842-5605-ae1a-cb13d48bf230
+identity: '900004'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 3674a9a8-aea8-5ee3-b880-edaf9a102460
+  order: 1
+id: 55b2c165-9ca4-58cc-ac92-ea277b717a11
+identity: '900005'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 9ce01fbb-f347-513c-a778-290e4d5e2b13
+  order: null
+id: f0ec0ba3-260f-5025-90db-bd78adbbf507
+identity: '900006'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f33a7186-4304-5fb9-9649-de235cdb42dd
+  order: null
+id: d219dd81-676b-5164-a701-8772e12545b6
+identity: '900007'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a2f1292e-cdd2-51b9-9f0d-78217db9bbe3
+  order: null
+id: a254dde7-b284-574d-8b75-7a49422ba947
+identity: '900008'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e82eb751-5e8a-5780-8f6b-4449671ac0ae
+  order: null
+id: 0e77048c-3526-5615-a2db-2921fffab145
+identity: '900009'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a42da897-97c9-55b9-8b37-d372f1ac6ed2
+  order: null
+id: 01932ab9-2dc8-5ad8-ad4e-282ec8c77c7e
+identity: '900010'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 81f1b55e-7b49-52c5-b3d5-3413de4a86eb
+  order: null
+id: 6116c616-e906-5336-8647-2106c6279691
+identity: '900011'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6405a11d-b1cb-536e-8787-87a38ca52433
+  order: null
+id: c586350b-7dca-5045-80f6-71dd74773557
+identity: '900012'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: fc2e4b90-1b72-5bf5-b681-8f21db5882fc
+  order: null
+id: a5c0ee9f-1412-5517-a564-8fe198efd5a2
+identity: '900013'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8c8c23fa-c3fc-53e2-a558-a3d3f66013e6
+  order: null
+id: db6e6493-c409-5168-9922-aadd03e5a034
+identity: '900014'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: de325384-4bb2-5700-a64b-35aa27f49b9e
+  order: null
+id: 9fba2ad8-a052-5afc-b98c-296aa27c4b8a
+identity: '900015'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8388509b-39ae-5ad0-8aa7-49b46ea8790f
+  order: null
+id: 70120241-ebda-5aa5-b5c8-0ddeed329462
+identity: '900016'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 49fbad23-8e0f-5176-8953-7b86e60aefcd
+  order: null
+id: 3be02bb4-0c8c-586a-912e-6ba66a24fc0e
+identity: '900017'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 268ad796-4221-5b14-9eca-735dbaaf3e35
+  order: null
+id: 2592e16d-8e49-5a54-a286-9a0d5c784491
+identity: '900018'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b635fab4-b588-5fcf-b21f-7c063b7ab50b
+  order: null
+id: 5808327a-ee21-5d7a-9814-6ad640a5100e
+identity: '900019'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 055903be-dd16-544f-a6e0-43fc099f75b1
+  order: null
+id: fa38490d-57dc-55c7-801f-a4884a858ec0
+identity: '900020'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e992f5f9-a634-5542-af84-8f551d843966
+  order: null
+id: a9efdd8f-ecb7-53a8-b7f5-45da77928433
+identity: '900021'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4dae621f-a073-56d0-bd20-3b0109f419fa
+  order: null
+id: d9c84be8-3691-5868-8d57-c42de42f4a7a
+identity: '900022'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a712279f-ffc7-5454-a6fe-04dc1c4539bd
+  order: null
+id: 294cff43-e06f-5c8f-afd2-56cfc8e428ac
+identity: '900023'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: da9b5354-fa53-588c-a440-ced8cb9fcac1
+  order: null
+id: b7afe5ae-676c-5939-aebc-155def163b74
+identity: '900024'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b3b1d4a4-dcc3-53f4-b9f0-5e9728a4834c
+  order: null
+id: e18947ca-21e2-5786-a841-acab90367d4e
+identity: '900025'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e53f45fa-695a-5f57-b15e-baee3e3b7c79
+  order: null
+id: 97fdd284-66d8-5fca-861b-6390398d52b6
+identity: '900026'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9d095865-6486-5dae-8d07-9152cfef07dc
+  order: null
+id: 7593a36c-bbd3-5928-8743-98b144d3a1fe
+identity: '900027'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e946382f-8b25-56cd-96a4-b0596f0e1ace
+  order: null
+id: 47660007-fd97-50cc-8980-b2eb88143312
+identity: '900028'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4e4c407b-aacf-5c9e-96be-09578b05de56
+  order: null
+id: 87908ead-d5e6-5980-af21-b257a78fecf6
+identity: '900029'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 993e61c9-c8dd-5888-9f37-0e636fbc6845
+  order: null
+id: 54a62886-b661-5d53-8e2a-ab68651238a0
+identity: '900030'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f4968a66-bb83-5da9-8ae3-a584cfb1ded7
+  order: null
+id: de327492-a008-5dfb-863d-b74889a95ab1
+identity: '900031'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e611803c-b997-5aab-a39f-60463246b46e
+  order: null
+id: b3564f94-18eb-514e-948c-d4d64d6a9926
+identity: '900032'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9f9f7918-8641-56d6-83c5-d80be9676df1
+  order: null
+id: 4c634fc4-42b5-5769-a190-00f1e25eb447
+identity: '900033'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0ad6211c-8433-586a-a0b1-8c63b320b718
+  order: null
+id: c192dfe3-c36a-5de4-8a88-9d52492ccc71
+identity: '900034'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 61dffac0-50ef-5dc5-97ff-94f80c3cf7cf
+  order: null
+id: 33766978-d58f-515a-a992-2d69a7415c11
+identity: '900035'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0b052e30-eab2-54ce-8dce-94adbd29dcf6
+  order: null
+id: 6b8bbe5c-02d9-57ad-b4e0-a64f1f59363c
+identity: '900036'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d08c2377-2f72-5de5-885a-5a1cfe2ae843
+  order: null
+id: 5903029d-33b7-53a1-a1d9-91c583023211
+identity: '900037'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b9361502-5cd3-52dc-a5bd-bbbcfd302da7
+  order: null
+id: c5072c06-c3b1-56b5-8dd7-47d097bf84a7
+identity: '900038'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5113daef-0466-50db-b749-d29ee7cf7e8a
+  order: null
+id: 7a983617-a949-5ad6-9f02-b4df788bee44
+identity: '900039'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 64604d16-830c-506b-89d8-d1d790bf67be
+  order: null
+id: d2acd27c-52c0-54af-8819-e257e26e9bb8
+identity: '900040'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 715c42c9-f417-5ced-afd3-08b8eab613df
+  order: null
+id: 9e8ab69e-4cf0-5774-9363-3c78120a82d7
+identity: '900041'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 506205e1-1cda-5f96-b793-1d76159588e6
+  order: null
+id: b576d67b-c88b-5dfb-8f61-ebb6577ff0b0
+identity: '900042'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a8037430-1feb-5c7c-ae53-431ed40cea50
+  order: null
+id: b39d2c8e-a592-5242-b2bc-b8c5979bdf35
+identity: '900043'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ac7ddc82-3094-5f1b-9df1-7ab35c2816bd
+  order: null
+id: 035e030a-f81e-54ac-ba4e-7cac8db71c0f
+identity: '900044'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 49ddfd72-75b8-54ac-9bee-5dcb83d2913c
+  order: 1
+id: 509cb9d7-e835-515c-b1f7-ad139fb85e7a
+identity: '900045'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 6eac8768-e2a0-56e0-b721-725a4c46c392
+  order: null
+id: 3be2c268-bde1-5b0c-87fd-07f7ff59e6fa
+identity: '900046'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0dbb460b-1c25-550e-adaf-79f50511f3f5
+  order: null
+id: 9186a165-3384-58d1-87aa-511eca05a656
+identity: '900047'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 01f05c24-c888-5633-a542-7dc63ce19f08
+  order: null
+id: 571ae7f3-307d-5888-8798-2982293f3b88
+identity: '900048'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d85b23b4-bbeb-5b61-bae2-487a7be825ac
+  order: null
+id: 8d9e504a-bdd9-513b-9c43-4e34e2c35c6e
+identity: '900049'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: f48b0261-40df-5996-9a40-417ca5e65828
+  order: 1
+id: 7409639f-06ce-5f1c-870f-90f91c8040ae
+identity: '900050'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: e42a568e-c88c-5bd7-a8d3-bd9e91550715
+  order: null
+id: 7812f6f3-ad09-570f-b2e6-142c77459a38
+identity: '900051'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1d2e2757-ceac-52f2-ab18-67c0d1b8685c
+  order: null
+id: 73136587-b6eb-5831-a3d2-3894ba84f56b
+identity: '900052'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e034d9a9-0e1e-5a50-9e68-bb4f6f669b2b
+  order: null
+id: e4c19efa-8444-511a-a648-047c27a37622
+identity: '900053'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cba93f85-2d52-5171-bf20-e3cac4676d8a
+  order: null
+id: 334dbb4e-9e82-52c8-8bde-4c6372511fac
+identity: '900054'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cecd26f7-774f-5f50-b536-30bd2622a6b2
+  order: null
+id: fb99977a-a9a7-5d2e-bd0f-eb5f11faab74
+identity: '900055'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cd8e0682-d727-5ea2-9e50-afa20122af5b
+  order: null
+id: 4072565c-21a3-54d4-8f40-6a488de02214
+identity: '900056'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d1a7e024-6d25-5417-9514-b9d5c80a9bec
+  order: null
+id: 8820d11b-8f55-5bdd-aa29-63620bc11c5d
+identity: '900057'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 56c64f5e-aca1-5767-abb6-0ece8c78aba6
+  order: null
+id: cfd77415-ab0a-52ed-80eb-8648f02b2c8e
+identity: '900058'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a183fa62-6059-519e-8487-ef3cfb181211
+  order: null
+id: 81d7c612-fc30-5c13-ba60-3d03f2190342
+identity: '900059'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3d541e48-9151-5775-a023-50db34beeed8
+  order: null
+id: 1c802935-a6ad-517d-a3ea-508ae1c70797
+identity: '900060'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 841b6575-32a9-5c63-8095-3ffcfb1bdf9f
+  order: null
+id: 840dc51e-fb23-5295-addc-033d47c69e8c
+identity: '900061'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 7ed56cc8-5b47-5242-9477-b73b8648aaff
+  order: null
+id: 0760ba59-4f07-5926-ab45-d6ebe28cd964
+identity: '900062'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 296b8909-f3b9-5783-9489-45aa660b261f
+  order: null
+id: 0aa103ed-f4fd-5f90-86bf-45bb2c8ba046
+identity: '900063'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6d8421f2-c9c4-5607-9904-6e640449470f
+  order: null
+id: ac874156-0a3f-5d15-a527-61422e18c3c1
+identity: '900064'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 022abd7a-e921-55ea-b145-cbdabc80d40d
+  order: null
+id: 130d8f78-1a14-5a28-a7b4-33508c17163a
+identity: '900065'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 48ccc28e-89af-561c-af9b-e1804d6c69bc
+  order: 1
+id: 08dc99e3-6ee6-565d-93ad-365df1f1f624
+identity: '900066'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 889a71db-6beb-5183-91f5-2d33c6d77bed
+  order: 1
+id: 300b4434-7fb7-5f93-a3dc-d6f294ed6b63
+identity: '900067'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 8ce84d48-29ac-5d39-b90b-719e86fa496b
+  order: null
+id: 9338c626-c70f-53c0-aaac-a49a48953ff2
+identity: '900068'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 950128b0-5419-5eb9-a48a-250261b167dc
+  order: null
+id: f91c36f5-0747-5101-9270-4829e15cdcc3
+identity: '900069'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 59a65e6b-0100-5097-b07d-41d2753dcaf2
+  order: null
+id: 201e7338-9cb2-55dd-9912-7a9964b3b743
+identity: '900070'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 041ff4e0-1924-5311-a625-f7bfd76e6b9d
+  order: null
+id: 45af3ea9-f755-5c8f-aa4e-b97eb4726182
+identity: '900071'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0551ca79-9d5d-5b0c-9829-c6fc973c522c
+  order: null
+id: c7b99207-5388-54ed-a09d-e2d79d70e0b3
+identity: '900072'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 4f616cb8-41c4-5f57-82d8-ab7118ef93fd
+  order: 1
+id: 39b21109-c2a4-5555-9d57-3c2acc60d8ed
+identity: '900073'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: e6ec1fef-c9f6-5285-b55f-290b2384481f
+  order: null
+id: 8b79f12b-0aaa-5bb7-a601-445b9399c29f
+identity: '900074'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a04f75d0-0b04-5ffd-a8a7-c61e963eb24b
+  order: null
+id: 85378cc5-292b-5eaf-a167-b0bdae71da71
+identity: '900075'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c9fa0a20-1076-5ad6-ac2a-9b85f60fb839
+  order: null
+id: aa792eb4-c904-5934-a983-10c2055f054d
+identity: '900076'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a9a0af57-b641-5dd9-8ae6-9834556b8196
+  order: null
+id: 4df70c7f-c7f6-54f2-8878-4fa885a45f17
+identity: '900077'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a3bc53f9-52e5-5e95-b7cf-7a5e65217775
+  order: null
+id: 0abea6bc-30db-5479-b239-73f09156b105
+identity: '900078'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: bfc902a5-c16a-50ee-8093-12f19959e916
+  order: null
+id: 71d5de41-ae2d-50c5-ab90-fba399dee3f1
+identity: '900079'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8a592346-9475-5cdd-9b41-67297cd3485c
+  order: null
+id: 231a96a5-c6f2-53c8-91da-99a5d47e8dbf
+identity: '900080'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c037cd73-eb88-5208-b5c0-718a65fffbee
+  order: null
+id: 8c0621eb-3699-5860-9592-0a754922e356
+identity: '900081'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 49eb065e-b71f-5008-9913-5708809de695
+  order: null
+id: 6a588894-3136-5395-8eb6-0770a1c30ffd
+identity: '900082'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e833f210-8404-5902-a911-e5b5b07070cd
+  order: null
+id: 6c1169e5-5d76-56f0-85ff-495ef0c43cc5
+identity: '900083'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b4731fa1-6ee9-5d0d-8c5f-123ccd388126
+  order: null
+id: 56cc2ff1-8c06-5868-8cf2-b9df3d75dce7
+identity: '900084'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f75fbba9-d55f-53f1-9d54-b72695a7678c
+  order: null
+id: c0c8d74d-6e43-5230-9930-ff85c697eb87
+identity: '900085'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4b99af73-dfb8-55a8-8670-09d50ee21f38
+  order: null
+id: 0da9158b-ad64-5b09-a213-71bb68918d0c
+identity: '900086'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b6586508-f739-5870-a2d1-fb3100e00258
+  order: null
+id: 38a01058-3568-5b7d-8046-99b702cec52d
+identity: '900087'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0c464fdc-ac55-5cf8-953e-bf98b7f40701
+  order: null
+id: e2d4c4f3-7c81-519a-b3ed-10daad642dc1
+identity: '900088'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 10672868-3a05-55eb-b69f-0c1620569f32
+  order: null
+id: 91b0a723-3f30-59a3-bec1-5cd13b9303e4
+identity: '900089'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ad066baf-1b55-5589-84c2-a91104ae983f
+  order: null
+id: 8be4978a-83a0-5b96-ae60-0709f889680c
+identity: '900090'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b2da399d-3236-5cce-b963-bfe140427e14
+  order: null
+id: 7db1bed0-886a-5d95-9ff1-e807c23c9f83
+identity: '900091'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: 78b945ef-0d26-5c5d-8dd0-8712a315c7bc
+  order: 1
+id: 8677879a-2e9d-5add-8030-c624d1680eb2
+identity: '900092'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: c92da1ee-347b-585a-a12c-bda32ec3c201
+  order: null
+id: b9733cac-ed81-52b8-bb35-ac8f1fccb21f
+identity: '900093'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e0fa3dd8-b18b-54c5-9698-3c393bb114ba
+  order: null
+id: 86ceadbf-e4ae-5fc5-8060-258e75f90400
+identity: '900094'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6959ab5b-541c-5ed7-9360-12b82a3d2955
+  order: null
+id: ab4729ed-f90f-58a0-ae62-004840636804
+identity: '900095'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 39a78d93-4599-57a1-8492-ff5fc9caa2b1
+  order: null
+id: 8d7bd6e8-2f27-5812-baf4-a5f58824ea2b
+identity: '900096'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0a7c3de7-0150-5466-a0eb-997f8f54ae67
+  order: null
+id: 8b118f6e-db44-559e-acc7-39e5f5dafe22
+identity: '900097'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c4e0858d-33fa-5faf-bd60-3e9ab0d6736a
+  order: null
+id: 4603cc9c-48a4-540c-9a41-11ad0994b603
+identity: '900098'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e8fea405-1d65-512b-9a2a-4177c4b77bb3
+  order: null
+id: 1ae13327-c52f-5f7b-aa7d-904d4605070f
+identity: '900099'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6656d86a-9ed4-5095-a6ba-5d06be23b009
+  order: null
+id: 82b276b5-567d-5df9-be57-0aa9e0c0dd07
+identity: '900100'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b57571db-8d07-5f71-a088-5eea22090ec7
+  order: null
+id: 439a00c8-615b-5b73-96db-82b73c7b7df6
+identity: '900101'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5edcc859-8fd0-5cf7-8d21-9b7aaa89ebad
+  order: null
+id: 54b8ea18-9470-58bd-894f-4220a1a8e4d6
+identity: '900102'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 7dabbc82-9f0e-57a5-9d2d-56bb7a6c5f24
+  order: null
+id: 9032cdb0-ca44-5526-a339-ccb42f48cc9e
+identity: '900103'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 48c6b904-964c-5bc7-a056-4db2dc2a4c78
+  order: null
+id: 506e027a-4d66-5aa8-b8c0-71b3e5797c61
+identity: '900104'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 906bb5b0-60a5-5e42-8711-63033a8bfa12
+  order: null
+id: ed06ab27-0cd3-579c-beea-ed8887bf5a61
+identity: '900105'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 666cd08c-651a-5976-8787-1a7f249880ab
+  order: null
+id: 6c98a28a-c9a3-533e-a2bb-ff08579a2a8f
+identity: '900106'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cf182388-0388-5fc8-b2b5-3b980d71ff97
+  order: null
+id: 909d34c6-d85c-592e-aac0-30e25ce5f916
+identity: '900107'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a22ab1f5-1811-5277-a305-d5c11281a5da
+  order: null
+id: add2106e-894a-5593-8b4c-9b8f5af9a8c9
+identity: '900108'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c176ec98-cfb6-5742-83c0-23254a8355e2
+  order: null
+id: f16f17e7-9be7-568e-b378-faaa417f2650
+identity: '900109'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 61d4cc72-1a82-5f21-b8ff-d2ca191cfd32
+  order: null
+id: 81584547-5592-5bde-a8bf-c28de51579ba
+identity: '900110'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: c5d4efb2-9af9-5b56-bc71-3a70a3730bdc
+  order: 1
+id: ebefeb81-aff1-5149-a5ab-55eeb6fd54e4
+identity: '900111'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 2bf21978-1413-5cd7-a388-c84a9d43c523
+  order: 1
+id: aef824d3-4ef5-5e8a-bb4f-a6281af73384
+identity: '900112'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: cd8677b5-a670-59fe-a82c-3f4453f7cc19
+  order: 1
+id: 83e43c07-6a35-5335-b1d3-cae2e354ed37
+identity: '900113'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: ad544970-e29d-5405-b046-51a65fbe023e
+  order: null
+id: fd45fd47-bce6-5b41-b34a-45722e106038
+identity: '900114'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 392697aa-ac46-538a-aa34-dd940d7490a8
+  order: null
+id: 618f01b6-b546-5f7c-bf15-23191cd444ac
+identity: '900115'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4cd6d6fe-aba6-5973-b5fa-b9559e8cdf1c
+  order: null
+id: 94ae9670-0bb7-5566-b7e9-b15a306776b2
+identity: '900116'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 40ae1ea4-260c-5947-a6b5-62ab2d3c99d4
+  order: null
+id: 46cc92b2-c52b-564d-929d-bbc0c6dbf8b3
+identity: '900117'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 92a7a86a-aa5f-5d47-b797-19cc9c7712fe
+  order: null
+id: d7305fe3-a5cf-5dc7-9473-753ff36d96df
+identity: '900118'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 2bb94362-edcd-542c-ae6c-7c5ea862c283
+  order: null
+id: 496d17da-981a-57a9-89a6-0ea2e36706e9
+identity: '900119'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a0ef06a6-7852-5240-9e3a-86f11d8e8e18
+  order: null
+id: 7fd94681-a098-55ad-9a4b-02eabc5284c9
+identity: '900120'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c1efaa02-bbb5-5351-a165-f03f920650da
+  order: null
+id: a0afc421-406d-5023-a83e-27ca326cea08
+identity: '900121'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e9ac4c2c-5908-564f-96ca-b6337f9891f4
+  order: null
+id: 6ad27fa6-c7b5-5e23-a32d-19beafb5d494
+identity: '900122'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 202b68b6-c84c-5241-b8a2-7e672891cf8b
+  order: null
+id: 9b3e46f2-ddf0-57f5-89be-44b12a8db0cd
+identity: '900123'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8842899a-a68e-556f-aa2c-ee5fcab7f78f
+  order: null
+id: 05e9bbeb-be9f-576f-ac11-8e0df34bc5b8
+identity: '900124'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 63df728b-54ac-5c12-bd7c-4e401c9c540a
+  order: null
+id: e38e249b-742d-5860-b9ff-96554e443d0d
+identity: '900125'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 94e42dcf-0b10-5596-abfc-707c0abe1dd0
+  order: null
+id: 309c2591-442d-57d3-9856-c2fa380a6373
+identity: '900126'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: dc3742c3-5a4a-51f1-acb3-62e6ed7d435e
+  order: null
+id: 1f1bd13a-b078-5d0d-a933-fc71350d66f5
+identity: '900127'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: fd4d178e-ccc2-5cc7-b649-13f3ab0d38f5
+  order: null
+id: a4f9868a-6131-5f10-aafe-9dadd1b51c86
+identity: '900128'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 9df5998c-3256-54fa-bc60-a58ffea423a1
+  order: 1
+id: 3771c013-0b13-555f-93a5-fabc81b22b68
+identity: '900129'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 8ba5fabe-4449-538a-9f23-bc1ddfb351c1
+  order: null
+id: 867fdd8a-a952-5607-a57f-9b1ddf6590ec
+identity: '900130'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 7543af2f-14c5-5578-b6fe-2749b7e1a5e4
+  order: 1
+id: 92aab4c8-1d47-547e-9406-d1484a9c1de2
+identity: '900131'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 05af0c10-b3d9-5b1c-ab98-b6f488eb7d0e
+  order: null
+id: 0224dd39-1100-5071-888f-c359659eb03e
+identity: '900132'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: 7630b6ef-2d2f-5f93-a8c5-8cf9ea5b86fd
+  order: 1
+id: 63f110d4-ef56-55ef-a875-6fd576d6c0cb
+identity: '900133'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 0fdddb30-4bf0-5023-a974-f3f73e0a44ae
+  order: null
+id: b1460446-ddbc-5358-9727-9785caf2ef9c
+identity: '900134'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: fa0c5174-a9de-5c4d-a63b-a71a9f9d20d6
+  order: null
+id: 5018d8a9-fb7c-55ea-aa01-c326874f67b1
+identity: '900135'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d6826104-528c-5789-88b7-6bf8a3ed8a5c
+  order: null
+id: 95ffe633-8282-585f-98a1-1e6ebc291008
+identity: '900136'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f819ff11-4b6e-5e72-b3aa-a2300f2fbb08
+  order: null
+id: 9abc25d6-eedc-5976-a877-fd9b9f329fea
+identity: '900137'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d0890cce-2a80-5b95-94ee-d41bb8164068
+  order: null
+id: 4471bc51-9e02-5f8e-b114-02b07a3ab502
+identity: '900138'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 00018e77-2d53-564d-897f-82f5551b6e9a
+  order: null
+id: 646556f4-d482-5985-a7a0-9fb8ecf17908
+identity: '900139'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6424f9b9-d449-5efb-b5f9-7f444c4e1670
+  order: null
+id: f25e8cac-f3fc-57f5-ba6d-02091150a089
+identity: '900140'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0ea9d687-4d25-560e-8d19-62cfb97b8b1d
+  order: null
+id: 468dae8c-2f07-57aa-b946-8f9dc6798762
+identity: '900141'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d294b563-e991-508c-881c-d1d6dec4fe16
+  order: null
+id: 02ca779b-44fb-5f5c-ba5c-4e7715a99063
+identity: '900142'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1703f47d-ef5b-5cb2-990b-0af42e2a4605
+  order: null
+id: 81870678-a6fb-5650-9cf3-b4766410e1fc
+identity: '900143'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5bc72e64-90fb-5ccf-aec7-d594f26dba8d
+  order: null
+id: f2ae5ebc-2ea6-554d-9a7a-cfd703e7ee8e
+identity: '900144'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: bc65b62e-c792-541f-9b28-7c0b0e2dbd65
+  order: null
+id: 1ca88799-1b16-559e-a68b-1a24cc7fca0f
+identity: '900145'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 65632b5a-9c53-5fe7-9a6d-bc3866168a81
+  order: null
+id: 90a54f94-09fc-5a45-ab07-724f5e030620
+identity: '900146'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ec7f43a8-5af8-53d6-a815-743569cbde68
+  order: null
+id: f05cd7fd-88bf-5006-92b2-82a11fb1b982
+identity: '900147'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 034be75f-b629-5f73-8d15-4b75081ed1c5
+  order: null
+id: c4d8da6c-d6b3-5521-ae9a-8288049bbed4
+identity: '900148'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 51c38146-ed46-5ef7-bc6d-056ba6eb4b93
+  order: null
+id: 2e37b557-ef50-55a0-8c5f-2174f9f9f008
+identity: '900149'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9bf57669-f573-5e2a-973e-c7c2f91ca23a
+  order: null
+id: 86af29d7-b475-57bf-983b-a5a216334ba2
+identity: '900150'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a7606898-c4d3-5a9a-8c2d-84377de0f46c
+  order: null
+id: 63f3479b-da7d-5003-a879-70476ad06f52
+identity: '900151'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c9ea15f6-9e12-5ab0-8bf4-fea0e35e1d01
+  order: null
+id: 84d79c01-3f65-50d2-927e-34a90c0fa99f
+identity: '900152'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 52a571fd-074a-569e-a226-178442e4bd64
+  order: null
+id: 1ce196b2-832a-5a63-b9ce-7089bc73a1c6
+identity: '900153'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 94677253-21bf-5841-b95e-dd84266d0935
+  order: null
+id: 9b20281a-e664-5e48-b847-99db23707e86
+identity: '900154'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 288d159c-060f-57b2-a04e-dc83a7405d21
+  order: null
+id: 9e6dff36-54b3-5a97-8028-6459305505a4
+identity: '900155'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c2ad54c4-8607-55b0-876b-9f1ca33beac5
+  order: null
+id: 9fed4580-f10e-560e-96cd-2f491adb30be
+identity: '900156'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f90051eb-7f34-5ee3-9b79-e656e86b6781
+  order: null
+id: 45922589-0aed-53dc-af59-7e02a41d658c
+identity: '900157'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8dca3cd2-ca16-5151-adb3-ecac445977dd
+  order: null
+id: ee24cdc5-16dd-5414-b659-77a6c22fd671
+identity: '900158'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 50d6a27b-430f-57d7-a860-f593eeae04c6
+  order: null
+id: 15a38e58-41b5-5a9b-bb86-9c5f55e6af05
+identity: '900159'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1973834a-d17e-5207-9451-e029e93ff3a5
+  order: null
+id: 31bec11f-01ba-5bb5-9283-ba3c76177fdd
+identity: '900160'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: a6739b61-db54-5dd6-9bfd-1fa57d5fb324
+  order: 1
+id: 801491e8-ac50-5c70-827f-7436636d3b04
+identity: '900161'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: f4870725-8650-5ef5-8cc3-79e3d2f313b6
+  order: null
+id: d1b10690-6485-5447-b8bc-0345e072944c
+identity: '900162'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 574a59eb-fc37-5ebd-bfc8-1842148b9650
+  order: null
+id: 1778f43f-01f6-505e-8572-1f757af0ae04
+identity: '900163'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c0cbb8d3-d9ba-5be5-a8b8-8eba1808e1b3
+  order: null
+id: dce77285-61db-54d3-8889-51970494d535
+identity: '900164'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5feff344-f071-5014-be81-2ce49411a4c1
+  order: null
+id: 80ef8031-7437-52d5-82db-818812115e34
+identity: '900165'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d54a516f-288e-5374-b650-c8a2db9f2aee
+  order: null
+id: c8c6c188-b2b9-539c-9285-e987479a03a4
+identity: '900166'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: ae7cdfdc-b75b-52c1-8bf7-abbe33a6daaf
+  order: 1
+id: 6bfb9d5c-98fb-5f4f-8170-ecffe065145e
+identity: '900167'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 47eebc25-de8f-5726-8e27-119002f6aa9b
+  order: null
+id: f802b99b-52a0-5e97-b85c-3333fe6d8001
+identity: '900168'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3d898fba-9802-56e9-87ef-5c45bbac7580
+  order: null
+id: f62c9f97-d855-5b66-b03b-0fa17dca96c9
+identity: '900169'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4e75b928-3fc3-5c74-a095-53228f229fd2
+  order: null
+id: b0bb6898-1ebe-5c48-990c-6d1c5a0e76f6
+identity: '900170'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 809bebad-175f-5b9e-833d-14c62fa0a5a8
+  order: null
+id: 31169960-2927-5831-a479-155c664947ca
+identity: '900171'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c882fb4f-30b2-5bcf-bde8-9c5dd4da1c80
+  order: null
+id: 8c0ce5b1-070e-54e2-a1f2-c60915ee9cd5
+identity: '900172'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 75aebbe9-2c70-5781-aba0-e581899c1e5b
+  order: 1
+id: 58f4f627-7daa-5b23-9ebe-10b69dcdd33a
+identity: '900173'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 5cc9b90b-5af1-540f-8e4e-1cf7440a2131
+  order: null
+id: 3dcdcb38-e7fd-5c76-97b8-85555c3b869f
+identity: '900174'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 17c54de4-54d3-5dc1-9ca9-8f8a3958f37a
+  order: null
+id: 5933f31b-bc38-5d4d-8fe0-919527c81db8
+identity: '900175'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d29b05f9-bf07-5528-be98-36b0a23c689c
+  order: null
+id: 6d22663f-e264-5916-bb47-a9a35492610c
+identity: '900176'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c5153e12-58fe-58f9-ba43-9cbd7e38d8ac
+  order: null
+id: 93857539-fef7-5c59-b540-2e5e36292d2f
+identity: '900177'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5249643b-3f3b-5f6c-8aed-5b0683dcf560
+  order: null
+id: cd3bb90f-27a8-56dd-8f7f-e3c24f3bee60
+identity: '900178'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: f68d6541-2757-5955-b359-dcb9145217bf
+  order: 1
+id: ab6e3771-c13a-5135-ad90-feb74df6237a
+identity: '900179'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 70a3581c-9df2-5a18-a220-9feda64d1453
+  order: null
+id: f59c58af-c7f7-5850-9edb-214bad0721c7
+identity: '900180'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d84c2911-2b20-53c4-8d30-d1a6813a1dda
+  order: null
+id: 02917229-723a-5709-8be7-63312ce0111b
+identity: '900181'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 453192be-a762-587d-99d3-c115b616228c
+  order: null
+id: e82c4234-1040-55c4-9674-296de87a2d68
+identity: '900182'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1876f6a8-ef86-512c-9597-8a1d8aa1899c
+  order: null
+id: 57393496-596d-53cf-90e5-fd739a4417be
+identity: '900183'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0a750fa1-087f-55dd-a8f3-4bdd4784ed09
+  order: null
+id: e9686ee5-fb92-502b-8cca-ebf10cf6ddd3
+identity: '900184'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3910a720-e88f-54c9-ba0f-745632ff466e
+  order: null
+id: d61e2f2c-944b-5eb0-a138-0cb9b43107e3
+identity: '900185'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 4762d878-b9de-5437-91b0-b28c846de014
+  order: 1
+id: 866b62a2-b11b-5a09-bb42-b4629deadfca
+identity: '900186'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 0898e673-953c-5d64-a8eb-75b48bd562cd
+  order: null
+id: a2e631e6-dd3c-5274-bc32-184983c1da5c
+identity: '900187'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8d05f912-b545-5c03-a5aa-3a6a1be33a72
+  order: null
+id: eba2cbe8-2a40-5ba0-9292-b3db65394e8e
+identity: '900188'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c640642e-bd2d-5e3f-b984-5ca7598f2f37
+  order: null
+id: d0b415ad-279e-5e65-9f75-88f75ee1fa16
+identity: '900189'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 457a1aaa-78ce-5d56-be28-37318b4d1782
+  order: null
+id: 9b30d220-ccaa-56c6-80c8-7972efc16de6
+identity: '900190'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4d368d84-6212-5633-8f92-cd223cd99fed
+  order: null
+id: 48ac7e49-599a-59d6-ab1e-6d2e294cfc5a
+identity: '900191'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d20d7c82-ff97-588e-9488-4256e94a213c
+  order: null
+id: 1b67747b-58f3-52f4-913f-d6a7a15d3f3f
+identity: '900192'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4449cb2e-8714-56cc-82ea-9250d4e34daa
+  order: null
+id: 6854fbf5-5f34-5c19-9749-3892c505b5dd
+identity: '900193'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: fe8f1ae3-89f9-5939-ac73-d136509aee14
+  order: null
+id: 83f5079d-9d11-5551-8a53-48601e306d6d
+identity: '900194'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: e1f299fc-807e-529c-8cfb-1dfe20f005bb
+  order: 1
+id: 928e88c5-5798-5154-a473-2e3778c2871b
+identity: '900195'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 976b1660-70bc-558c-b939-aa16a2fcfad9
+  order: null
+id: df53bc8c-0288-5503-a810-e61bec6e04d0
+identity: '900196'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: d541fcc5-c4b1-5187-a70a-73c73d8b3b03
+  order: 1
+id: dc4bc2ea-03a8-5e50-853e-fc6fa1e621eb
+identity: '900197'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 98e36c7c-abfd-539f-8e62-c0bbf5d50a7b
+  order: null
+id: 156bb93b-d90b-51b0-98eb-86d17cc68d98
+identity: '900198'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0b213b04-446d-562d-b5cd-bd4b050b0e17
+  order: null
+id: 0ad5a821-4324-5735-a4e8-dfeeb434f2af
+identity: '900199'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c8fa27a2-50ef-5665-9e68-62318ada84f6
+  order: null
+id: 0be150a6-43c4-5f85-984d-7d11c4875441
+identity: '900200'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c715942d-abab-5889-8a7b-50e348b07695
+  order: null
+id: 476038e0-83c0-5748-9ea5-8832f5dbbd5c
+identity: '900201'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0b077767-0cb7-576a-a5e1-af8b97814792
+  order: null
+id: aea10f38-baba-52b9-ba5a-c341bcc426d4
+identity: '900202'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b866554b-0086-5901-819b-3c48b6f88c0d
+  order: null
+id: 5f497f9f-1645-5486-9e3f-afc6903875a6
+identity: '900203'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9f5a006e-707a-589e-a4c5-5e69b40e4121
+  order: null
+id: 682abdc6-948a-53c4-9c34-2a09fef9738c
+identity: '900204'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6076b8b1-bf44-5ee0-87d9-3ad971321ab8
+  order: null
+id: ed23de4f-f4a1-533b-a84d-15d31ab408db
+identity: '900205'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 76379746-0005-53a9-8701-56db8e28081d
+  order: null
+id: 55a647bc-fcd3-5871-8c4b-15f88484e19d
+identity: '900206'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b93dd099-231a-5954-b313-5f5e9f48777a
+  order: null
+id: 7f8d9890-12a9-5532-9b57-219d8f99257c
+identity: '900207'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 78be5a92-5029-5eda-b32e-b478fa05f455
+  order: null
+id: 82996020-f1d2-548d-b7fe-703225e97fea
+identity: '900208'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1be2a70a-0442-57e2-8d0c-6c1850a4e908
+  order: null
+id: b29a9f08-6844-5ad3-98fc-73364cc7563f
+identity: '900209'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3bfc61b6-67d0-5659-8810-44998066cb84
+  order: null
+id: 377dec19-7626-56a6-9475-78ac3521727b
+identity: '900210'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: be093ed8-4159-58b7-9241-f2f4e581e33b
+  order: null
+id: ae22395d-12cb-54d8-9fdf-9fe20f9f9c57
+identity: '900211'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4c24732e-bf2c-51e1-928c-101b50e06a08
+  order: null
+id: 8f2c7226-f2ec-5934-a886-0a5081fc280d
+identity: '900212'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 2e19c3a7-934e-5350-a040-5073d6534d4e
+  order: null
+id: 32eaa2ef-becc-50c6-a935-c368b8ed8763
+identity: '900213'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3a7ad786-4d5c-534f-99af-8a7c08dd4425
+  order: null
+id: d0a5f1a3-61c2-599a-bcde-6b7d87b83798
+identity: '900214'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0a5e2b0d-9599-5673-a97b-ecb54d196e91
+  order: null
+id: c514e59c-b445-5f81-bd1f-490070627718
+identity: '900215'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b73ec4b6-d881-5a65-b8f2-8b5ac21fd810
+  order: null
+id: 15d45491-a4d4-5407-abbb-b72b319402de
+identity: '900216'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1b99ef95-56a9-5131-831f-954200fe80c4
+  order: null
+id: 1dcb10ff-94fd-5b01-81e9-42330c69b57a
+identity: '900217'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 2642a88f-667f-589a-b59a-21e584cf1a59
+  order: null
+id: d81fe4bc-7a48-5599-9d37-57ee9626d1dd
+identity: '900218'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 41a355e1-75ca-56d3-a54d-fc3ba3161462
+  order: null
+id: 7d97dcd5-84a9-527a-a5a9-a5fd68eeb193
+identity: '900219'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cb651f6d-e64d-5665-b2ec-e4beb698111d
+  order: null
+id: cffae96e-c778-57b1-b749-b0d77cdda04b
+identity: '900220'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 54fb52ac-0cba-5266-968f-f6a13d79d477
+  order: null
+id: 4eecf0f8-ee02-5193-8910-d4df7f546506
+identity: '900221'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 68a360ca-db28-5c1e-a190-171b1052a1cf
+  order: null
+id: b7e46fa5-efc0-5da3-a07a-47d436a8968a
+identity: '900222'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 57340bee-5aed-566f-9580-8e61e0be565c
+  order: null
+id: e12a763f-c335-5918-9534-ceacaa8b9023
+identity: '900223'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c500f870-2321-5f3f-9d88-88132c1dc5f4
+  order: null
+id: 0fe24b6e-1325-54a3-acc4-95838cec30b1
+identity: '900224'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3d951e83-30b2-5ab2-b500-76cc266d169e
+  order: null
+id: 949b73f9-bc8d-54f5-991a-32cb57c2654c
+identity: '900225'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 193ad2a4-d520-531c-b854-d3c3b79a7215
+  order: null
+id: af7781b8-e2bd-5c9a-a25f-afe9db3527c9
+identity: '900226'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 957c4a3c-528e-501c-98c4-e95e832818e0
+  order: null
+id: cd4745da-6038-5487-8ef3-754e1ac3eb9e
+identity: '900227'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b15daded-e301-5d06-a93c-558a94528fc0
+  order: null
+id: 3d8eed41-539b-5cad-a685-c086e2036386
+identity: '900228'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: de7040e2-3feb-51d2-a238-4a77e06d8ca1
+  order: null
+id: abba03e1-e2ee-5491-bb7e-1e0d9c6c6adb
+identity: '900229'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3e75d80b-b464-5bfd-92e6-2a3544cb379d
+  order: null
+id: f33ba5e9-4c64-5da5-ae33-04353d022384
+identity: '900230'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 946f63bc-fcb8-59a4-9dad-cab463680d65
+  order: null
+id: 80ec81da-3cd3-593b-8618-4251f971ed8e
+identity: '900231'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5ac93279-6982-5b61-9cef-8886aba074eb
+  order: null
+id: 1c6ad33d-fca2-5bcb-9360-64df8b0e5e5d
+identity: '900232'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8bd48e15-5f21-5273-9e07-c8177e28c0c3
+  order: null
+id: 74e26902-9523-54cc-9ed1-bf276860f0f1
+identity: '900233'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: 0f122387-a65e-5bc8-8d5d-211aa535e80c
+  order: 1
+id: bca3ac7a-77af-54dc-ad25-490761c84a9c
+identity: '900234'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: c62803cf-1a5d-56d1-aa23-2fb884f7e680
+  order: 1
+id: abe6205e-7668-5c47-9632-34da2c83aa6f
+identity: '900235'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: b1fbd0e1-3a64-5650-a47d-cc9363842a41
+  order: null
+id: 1418f1c7-1081-537b-a4e4-5cafce4cd422
+identity: '900236'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1aee48fa-4a66-5102-a948-f2a97a9f4679
+  order: null
+id: 1982934f-ef34-5b21-9e2b-43b018eb917e
+identity: '900237'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6e6bd10d-d7a5-5ca9-abd8-bb485e1aaf37
+  order: null
+id: afa28fb6-dff2-5790-a52e-d84a96f6260f
+identity: '900238'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d93d33e3-a1ce-5161-b42c-b31cd858035a
+  order: null
+id: 06b9fe87-6dd8-51a3-bcf1-89654c961092
+identity: '900239'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d5f2cca4-0ec2-5496-83cd-21bcf02aff30
+  order: null
+id: a9b15d8e-dfff-5154-bb48-c120cb6e3d4e
+identity: '900240'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 510d97ee-5008-53ca-baf3-71c66cb02661
+  order: null
+id: 2fe8a105-8390-5c67-9e14-ae7037844783
+identity: '900241'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a0e5ffbe-77dd-5d34-9fa4-ee93f62ea08f
+  order: null
+id: ddaca9d0-11f1-5c89-8d1d-8070c425e915
+identity: '900242'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 02adfb16-137a-5676-960c-8e6aa6395357
+  order: null
+id: f60a0c0b-bf1e-5099-98b4-19eeabfab80b
+identity: '900243'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 434977ca-2563-5f45-ba92-a8dfed335b8c
+  order: 1
+id: 461060b0-912f-5303-9007-e35872c8f9df
+identity: '900244'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: e295f437-2497-5aa6-b072-c104367ff766
+  order: null
+id: 0b59bf15-04b7-5042-9acb-49478f934bb4
+identity: '900245'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 21f4b135-410d-5006-bf69-f5833602658f
+  order: null
+id: 0ca11e7b-f934-5259-98f9-360db34c0b71
+identity: '900246'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: bd33c9e8-c85b-5d81-8abe-ed6ce21d4af6
+  order: null
+id: bbfaf743-06b1-5214-a340-6706f5fd9f13
+identity: '900247'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: 6f52ab19-d65c-591d-bf52-1e71fc02b540
+  order: 1
+id: 524e38d3-da83-53cb-b639-f6a75d437986
+identity: '900248'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: f324371f-e3e9-53a7-b1e6-4c1869b2869f
+  order: null
+id: 151ddbca-f471-5e66-97c5-966363e35905
+identity: '900249'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 2ff6fcdb-ef91-5afd-ba73-5ecc223963cc
+  order: null
+id: 91efd11c-a4eb-5a3d-b7fb-9537c6aa3539
+identity: '900250'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9262e021-173a-5259-8138-638c5cf9ae95
+  order: null
+id: 62bdd77a-d4cc-5db9-9320-e31d50df79a6
+identity: '900251'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5b34f84b-3b15-56b4-8b36-fc3f2969ea06
+  order: null
+id: 9b0c96a4-5b83-5fa3-906f-827714f2de57
+identity: '900252'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a07b9f3b-13f3-578e-b031-8484a04739e2
+  order: null
+id: 3ca5da09-8817-5905-abb5-9f472ce2af0f
+identity: '900253'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ec5fe991-ecb7-53c2-8a8d-e39ab4d05a9b
+  order: null
+id: c3c93b83-13cb-5a5b-bf6b-840da1ec0de8
+identity: '900254'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: 22396ba0-90d8-550a-953b-8a0b8afb04d4
+  order: 1
+id: fba1906b-4616-58c7-be7e-9d693a419347
+identity: '900255'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: c54824c6-5d15-5c4e-8160-92d7f3bf487b
+  order: null
+id: 9467efbc-35de-5a3b-a29e-79fe4f8d0352
+identity: '900256'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: fce7ab6a-b0c4-52f9-9a20-e4839f4c5c0c
+  order: null
+id: cb178d0c-9ebe-51f1-a428-76a8d7039483
+identity: '900257'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: c7c4e071-4ffc-5563-9805-9f2b2ae50b14
+  order: 1
+id: 0f0dad69-2010-5032-a79a-88adc826ba4e
+identity: '900258'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: bb04b313-2769-5dc2-a3a7-facd1cf7fd3a
+  order: null
+id: d1caf7e0-0dc2-5007-a23d-182f13481ae7
+identity: '900259'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a54161e1-508d-5e3e-8560-a2da45bfd557
+  order: null
+id: d21da7fc-9235-504f-9a38-ef1be8d7bb94
+identity: '900260'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4fa86298-e2c6-5b02-98a1-3741815f6b39
+  order: null
+id: 76739753-141d-5c58-bdad-5c9d90de31ca
+identity: '900261'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a901cbf4-45f4-5e9b-a686-ec43ec9a3d4d
+  order: null
+id: 0b909f4e-9c50-5dd0-a858-4fd6a74552b3
+identity: '900262'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f259cb47-5997-54d9-80a7-018da627fb33
+  order: null
+id: 167a8c5a-e084-545a-ae93-d193d33e12a1
+identity: '900263'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 32a30464-e4d2-55e3-b13c-108e783bb1c4
+  order: 1
+id: 4901d77c-86b2-5ec1-9e6e-f87e6f7a6f6d
+identity: '900264'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 80656e2d-f631-5e12-ad15-71207ca538f7
+  order: null
+id: f6990e21-440c-5a71-a935-7f84c504395a
+identity: '900265'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a1e4e974-9222-5c07-acb6-4974646874ca
+  order: null
+id: 049360ec-ae51-5ed1-8c48-55995bdeba6e
+identity: '900266'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a1d0a13b-7a1c-58ff-a996-131d6ace6360
+  order: null
+id: 8a5bb272-b6a4-5463-a65a-6e3447a7ec44
+identity: '900267'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 443527a8-8591-5454-914d-5ea34d35e14a
+  order: null
+id: 7e10920a-b543-5fd7-8224-a3074e102155
+identity: '900268'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 012e9b15-7386-54ca-98c8-9e5b23320710
+  order: null
+id: 9b5f2931-5467-568a-b908-7d7f6c6fd3ed
+identity: '900269'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c4ec858f-b49f-5881-840f-cdca2abb9f22
+  order: null
+id: 24a1ce4a-7c12-5379-b00a-22e3853ad09e
+identity: '900270'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 52e73364-b481-5c41-925c-fb91def12440
+  order: null
+id: a9ef9576-ec40-5b78-90d3-5be8e6a5268d
+identity: '900271'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9653708a-ff80-506a-b6aa-b4faf4743356
+  order: null
+id: 1463a6f4-80d8-560c-b5c0-b02fa26c50dd
+identity: '900272'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d9484333-2986-5506-b58e-d6a1a29607e7
+  order: null
+id: caa7f3cb-9610-5b08-910a-fe1d48a53142
+identity: '900273'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ef1addd2-f231-5c07-b609-1b39aa33f1f0
+  order: null
+id: 731efbaf-fde3-518c-88d0-2072e7193b45
+identity: '900274'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 620fb314-a4fd-577e-a6f9-ada6eb428932
+  order: null
+id: a6f9c60a-b93f-5c18-a20c-2b589d570621
+identity: '900275'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b1595c0b-60b9-5a9d-bc4f-5ce9f6fb9f9e
+  order: null
+id: 0d085a9e-9287-5581-ae57-426ea8276aa8
+identity: '900276'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 2637895c-a249-5e65-9f79-cafb6ee06d40
+  order: null
+id: 7fbdbef0-bb6e-5e8e-a009-127fccf2eaca
+identity: '900277'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 84190e28-f91c-5fa4-9740-f6bca193fc15
+  order: null
+id: 3bbddc6a-06d1-590b-9d4b-843fb547e774
+identity: '900278'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 45e7b360-0415-5d2f-9f84-c83cff84268a
+  order: null
+id: e3a8a66e-b026-50e4-bb1d-238da1bfec73
+identity: '900279'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9484a9a4-6694-55be-8fcc-7771ae783981
+  order: null
+id: 9eb11899-cb47-5b05-8f01-1b0f97cf0901
+identity: '900280'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: aca289cb-5bd2-5364-a55a-5767ec3442dd
+  order: null
+id: 6e3e1213-8354-577a-ba5c-10a2a5013464
+identity: '900281'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ed9a4a62-48b0-513a-b194-888b65da0fc9
+  order: null
+id: dcf6b74a-7e70-5d3c-8e94-916c6b0c8af6
+identity: '900282'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1cc2e0eb-1b55-5b7d-bbf9-5fbb5de11a49
+  order: null
+id: b8302280-c982-5cad-af4d-827290f0f59e
+identity: '900283'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9c146dc3-35df-5815-be47-716eb0e75293
+  order: null
+id: a2e9e646-74b9-5e24-bd56-59f6b195d7bc
+identity: '900284'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c9522021-6ce7-5113-9f20-22e3182d6407
+  order: null
+id: cbb3b117-e5c9-54e6-8545-49e9c0644123
+identity: '900285'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 83f49ba7-8bd1-51ed-b04a-9b93387276fa
+  order: null
+id: 32f84e68-a7db-5b94-9509-55ec552b4679
+identity: '900286'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 09274f2b-f0eb-5627-aaf2-0024231ec080
+  order: null
+id: 9067f355-b261-5cfb-a4ac-fa22939abf23
+identity: '900287'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d5c9b7e2-a404-50cd-9e1d-e202e52bb162
+  order: null
+id: 1bca0bf3-357c-537c-920a-b11dcac73547
+identity: '900288'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6928c0a2-db98-527c-b4eb-0ff60c01f98a
+  order: null
+id: ca2e2f4b-cf62-5c6c-973a-c389d206f289
+identity: '900289'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 99dd1680-16b8-55d6-a2d2-3dea33ee6e22
+  order: null
+id: eec38c35-d19a-5f57-892b-0f498d4f2366
+identity: '900290'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ac367abd-d2c7-52c5-ae1f-3d1b74a47218
+  order: null
+id: 2ec52b0f-dc3f-511f-a9bf-a7c744c21f99
+identity: '900291'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 57c22208-4278-5f50-97cc-a040a24c8d8f
+  order: null
+id: 1f70a1be-f8a4-55f5-be90-72a13be9ddcc
+identity: '900292'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 2516a430-cebc-560d-abf6-9ad9979ee0c1
+  order: null
+id: 5b86428a-6004-527d-bce3-055d86290123
+identity: '900293'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1339c3a4-f6bf-5958-b701-d1c3bdc108a4
+  order: null
+id: be951f70-4dde-5f98-9d36-a26ac9cb17ef
+identity: '900294'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d3f3cb31-0d02-5f10-b3ff-f95525aa0965
+  order: null
+id: ae2b6537-92a2-5299-b231-a6ad4235b86d
+identity: '900295'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 33f5c223-49ec-574f-a675-57871ef2f012
+  order: null
+id: 38205544-ce2f-53cf-b0b1-43c7c9e41c0a
+identity: '900296'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: bbcecba9-d7d1-5b89-94ce-17f367584f38
+  order: null
+id: c92b1c7d-251c-5604-8c9b-2dd0ede16627
+identity: '900297'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9cd54289-906c-5275-9c14-5d80d5c27b74
+  order: null
+id: f5bc4565-065c-5ec4-8bd6-fbf44d5ab838
+identity: '900298'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: eb6fd7c3-3a58-5540-b323-cc232b4b2e34
+  order: null
+id: f7ae90a3-8616-5a3e-a06b-255aef568380
+identity: '900299'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ab5b0852-a980-5a4f-96c7-3b7fcb4b38ff
+  order: null
+id: a6a3cd17-831c-50b5-ae3e-0bf12ba67230
+identity: '900300'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 099589e9-649e-55f5-ba5b-189a1931d02a
+  order: null
+id: e6abb325-bc20-5de0-bccb-ae99c9db20e9
+identity: '900301'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a073584d-55e2-5530-ad14-4119010fe085
+  order: null
+id: 4c457bfc-422b-5102-bf46-c2f2e7df7752
+identity: '900302'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 063540f4-8ea7-587b-9e26-f9dc328db6c6
+  order: null
+id: 9dcabbab-6fcb-5d5b-ae66-9b4e3a6cefdc
+identity: '900303'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8879a69c-39c0-5a86-a51d-a29f5ca0f97a
+  order: null
+id: 6023b7b5-2e14-5184-aa23-ec5dd60c03eb
+identity: '900304'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 152a1051-73fe-5264-9caf-3a82d0290aea
+  order: null
+id: 116bac29-a0d1-5c4c-9585-116f611869c1
+identity: '900305'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c872545b-5ec0-5ad1-9246-b674f122851a
+  order: null
+id: d1d0ed10-0cf2-5b2a-abf4-c2fd1c1f0578
+identity: '900306'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ed248449-b7fa-5d47-aa97-75e879927cbc
+  order: null
+id: 5086631b-73bd-5c4c-b896-9a50573e68c7
+identity: '900307'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5db2f440-af2b-5765-948f-03b29ef9bae0
+  order: null
+id: 7c91ed73-a424-5538-9cc1-3b607e24529f
+identity: '900308'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 090d348f-2ae9-531b-98d9-dc2c78fa4b04
+  order: null
+id: 77440f07-4baf-50d2-a526-c0376c8637d9
+identity: '900309'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 64689eb1-9f2a-5209-a772-3aa03a8284d4
+  order: null
+id: cd8b90aa-57ac-57fa-9eb2-b0293235e5e4
+identity: '900310'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3882ddd0-215e-529c-b3f7-f4ad9514b798
+  order: null
+id: ea246bd8-6b11-5bc3-b270-1caa955b7f76
+identity: '900311'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: dced5b63-3668-5b3f-a6bd-8d9aadae6600
+  order: null
+id: 4060ccb7-c749-5c77-8262-32a737324b0b
+identity: '900312'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 18edaf5d-f5f9-508e-953c-2fdab44451a9
+  order: 1
+id: 13c8046e-8b06-5f54-9a53-0dd39629d20c
+identity: '900313'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: be7caada-277c-54a7-a5bf-e07ca5da7180
+  order: null
+id: c480450f-a82e-5158-9560-2e18821ec4e8
+identity: '900314'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 286b18fb-d785-5a9c-94c0-e3c315d7e14d
+  order: null
+id: deb62ef1-dc02-5baf-8ed7-b8e3b8d9a7f8
+identity: '900315'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 6504b753-fef8-5569-9f9f-f6ee1d6d1adb
+  order: 1
+id: 85aded0d-d12f-50d3-ab63-296b5e72403b
+identity: '900316'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 61b656ed-9c34-5b60-a89d-4333d1819c93
+  order: null
+id: f239855d-8298-5cbf-beb1-a4656957b68d
+identity: '900317'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: 4bb1fbf5-3c1e-5bdb-b382-8a8733376302
+  order: 1
+id: f5cf1265-1f0c-55c1-b8c0-cc8411541f08
+identity: '900318'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: fcf40d51-a624-5d30-9175-4f8c7be5cab7
+  order: null
+id: 4c66d40d-5595-5b90-a515-02bccab02507
+identity: '900319'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4637ce1f-4934-58d6-9a81-bda76c1adc4a
+  order: null
+id: b4c6c7f9-c3f9-59c6-8605-612a35ce4140
+identity: '900320'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 19029001-a996-5303-aeb3-7be388a27383
+  order: null
+id: e2145064-74cd-5534-b751-2be46be8575e
+identity: '900321'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0ff417ef-b04a-577f-a417-b7cba35bd431
+  order: null
+id: cb976668-8297-5af7-9c69-cb380f1bf4ea
+identity: '900322'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9698616c-dc17-5091-b2db-c85c74a71fa9
+  order: null
+id: 70ac79e5-a357-542e-9124-ea33867e68a8
+identity: '900323'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0eb327fa-ee6d-5335-9af1-776759ac2430
+  order: null
+id: a7bea8bd-42be-5217-8cdb-0679718cde44
+identity: '900324'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a92acd95-c046-5506-a6aa-f78761c1cf52
+  order: null
+id: e137ede6-03fb-5943-8a36-88871d435c76
+identity: '900325'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3dbec5e8-565c-55ae-aec5-2a91fe0e1bc2
+  order: null
+id: 4db1f72e-773d-58b4-adef-b01713d604f8
+identity: '900326'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 411aaee3-37c6-53d1-b110-717286ec184b
+  order: null
+id: 438bd1ce-dd75-549b-ae7b-d61b984eacf7
+identity: '900327'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cba77595-eb5d-5853-a880-84b59a4613a8
+  order: null
+id: 032e00ba-5a91-50bd-b718-f2fe02088bf5
+identity: '900328'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 92d0dd09-753a-52c6-9a3d-5b82736f9b98
+  order: 1
+id: 21b2b2bc-f502-5a19-a831-b41da88c073b
+identity: '900329'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: f028612f-3450-5207-a0e1-d88cba90a516
+  order: null
+id: 3b68f94a-1d87-5d33-a5ac-38457b230fb1
+identity: '900330'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 58347f4b-2d86-537d-8b51-237bf6dc94eb
+  order: null
+id: 6c504a18-5471-5148-8d63-7a2a970a90ea
+identity: '900331'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a0b3f5d4-1e5e-5749-b48f-b9a6a7bb6c82
+  order: null
+id: 9abd3984-f40c-5284-a53e-4d5643a690af
+identity: '900332'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5afe14c2-8c0b-5c2d-8c2e-e9864156ceaf
+  order: null
+id: e98cd08f-2531-54cb-8be2-b6f556ef6eef
+identity: '900333'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: 8e6a7c06-dd23-5c6a-8b58-f5289a8f141a
+  order: 1
+id: cd0dd391-746b-5708-94cf-e43082c27d13
+identity: '900334'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 0acef46e-12c6-5b1d-86d5-e7701504dc46
+  order: null
+id: 99d807ac-dfee-585b-9f1e-0fae11419591
+identity: '900335'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6f9fddbf-2078-559c-a419-d3df60df76a7
+  order: null
+id: 10f51a15-b6c8-5347-9081-cb75049c8b54
+identity: '900336'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e5787e06-8eba-5ffa-8b98-47c6614a3eac
+  order: null
+id: 38a93e39-f6a2-5038-888c-6edb0061daf4
+identity: '900337'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6c05dc90-b49c-53d3-b65b-3bb345f2f6ac
+  order: null
+id: f99c6b2d-8728-5534-a7da-4ec7b626589b
+identity: '900338'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 68fbcb36-ad3d-533b-911c-acd3bef9689e
+  order: null
+id: 9e117a99-2b08-584c-b777-099bd6bddf87
+identity: '900339'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d46bc4d0-9f15-5a8e-9c56-c553b4defcea
+  order: null
+id: 73a5795b-8cc4-54e8-a0f7-929f348baec8
+identity: '900340'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a0344012-e477-5ed0-ab07-cd7825624be0
+  order: null
+id: 284f6962-2701-557f-86b9-1b91cb3f1a62
+identity: '900341'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5e85a693-d47a-5547-a700-dc8597670580
+  order: null
+id: c2627db6-2fdc-5df9-aa81-074d23f20aeb
+identity: '900342'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a25683fc-3b9f-5013-a650-af2b3bdf1eb9
+  order: null
+id: 9344242e-7949-53b2-a423-6a84cc312254
+identity: '900343'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:R99
+  id: cdc026e2-436f-553c-b223-3f6b545c4015
+  order: 1
+id: 8f683527-2052-5b0b-abe9-1ae6efba632e
+identity: '900344'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 336b4ce9-d54f-5b08-af11-3a7053208687
+  order: null
+id: a9c3a584-3049-5c32-992a-daf54e023615
+identity: '900345'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 84cebc65-3d7b-58cf-babf-5e42c12c547b
+  order: null
+id: dec366dd-33d2-53aa-b538-85df676b2ab0
+identity: '900346'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d864738a-1890-5722-a365-7163e74cd1db
+  order: null
+id: 537336a2-ea76-5e37-bad5-8a3d98ee4a1c
+identity: '900347'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ec1ccbb7-e503-5162-8110-8272c65430b5
+  order: null
+id: 90d51d7d-a82d-5017-b00d-69e54efbb5cc
+identity: '900348'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9211eb77-98e9-53a6-ba6b-4290482adc17
+  order: null
+id: 9fb7a5aa-d60d-51ac-a094-b3273be43af2
+identity: '900349'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 51d0f242-fafb-5772-a0cc-833926295e92
+  order: null
+id: b5655b42-d194-52de-b049-553c9e7ffc29
+identity: '900350'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 32281eab-c4a3-5a59-8c3e-ea6a29533016
+  order: 1
+id: a9e9b18f-9a48-5cf0-b396-6903cb6b79fa
+identity: '900351'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 3c7cb1fc-884d-5af4-863f-0dff985ee2e8
+  order: null
+id: 063a6db8-e090-5afd-a3ed-4c8fae6aa3f1
+identity: '900352'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 37333630-87de-55a1-976e-a3a6a922ab35
+  order: null
+id: bd5f31f8-b72d-55a6-8bbe-cbc92274f986
+identity: '900353'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4d7a4100-e2f0-5426-a2b0-a3505c1df1b8
+  order: null
+id: 9509d836-41c6-531d-a58f-1123ab9a6e7b
+identity: '900354'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8989fc7e-3aee-5599-8199-3c31a9ea6cc1
+  order: null
+id: 6dee9953-37a0-5337-a3e7-e0aae41d227f
+identity: '900355'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 95fb0b06-02c5-5862-9e7d-45c296ab56d4
+  order: null
+id: 6b5a309e-82cb-5772-ab0a-4f634d2da112
+identity: '900356'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3410bd24-9c4c-5393-99c6-6f76c2ee60bf
+  order: null
+id: 5b836ba1-dc80-5233-a741-02f2f688ad77
+identity: '900357'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 94cbd044-85ff-5ede-b3f3-158e7e7c8928
+  order: null
+id: 2200c6f2-b66a-57e1-a026-700455ebd82b
+identity: '900358'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0b6be0b7-ab73-5549-8a0a-9d4a0a84c41a
+  order: null
+id: bd9618fe-eeaa-5a3e-90b1-dca8eff0b7cb
+identity: '900359'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: 69d5bc6f-ba7d-5247-a7ce-07d492c1c260
+  order: 1
+id: a472bf12-09ce-5894-b8ef-192b4b18a9ca
+identity: '900360'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 4ae43d9b-2337-58e5-a3d6-7e7a94b68432
+  order: null
+id: 50b37ddd-573b-5f5c-8783-0950a31e75be
+identity: '900361'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: eb3d7d7b-a226-59b3-91fb-46b610b46973
+  order: null
+id: 6bc9678b-b1bf-56f2-a4b7-5f4e43a7e917
+identity: '900362'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a67fd5a1-48d2-5f99-ad6c-e701cac63f53
+  order: null
+id: 0238cbcc-2334-5084-8792-b574bff8eff2
+identity: '900363'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5c70e7da-1b3d-5e98-af70-2f0f9a494d83
+  order: null
+id: 9bd0a8bb-6f6c-5cce-8373-bb42aacdce6e
+identity: '900364'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ac6a86dd-e205-526c-9e5e-649704fcacbd
+  order: null
+id: 15d2a464-ef96-596b-bba6-d1491752a85a
+identity: '900365'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 093d4a3e-719e-59e3-98b0-d9034941eb50
+  order: null
+id: 6f71ef0f-bca6-50c2-86f7-0e593020d299
+identity: '900366'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 7505b839-8560-5efe-8c77-9d7faecfc425
+  order: 1
+id: e39ebfe6-f692-5385-b63f-dff211a10e4d
+identity: '900367'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 68f2982a-c5bf-53aa-b85f-d05800c9b947
+  order: 1
+id: a408480e-f97e-59a9-b4e7-ba51eebb1544
+identity: '900368'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 96ad4985-01e5-5034-8588-88425c7dcf3c
+  order: null
+id: bd3b3783-2b22-5962-ad25-fcc1aceb8ad4
+identity: '900369'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b32b1628-cdd7-52e1-8c92-9b95a36e0311
+  order: null
+id: cc3d0d2c-ac72-591d-b80b-d692c2b6b51a
+identity: '900370'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0ce2da94-b804-5257-beff-2e087029e538
+  order: null
+id: e4b390b3-852a-5cc3-a066-6bfe25a22b0b
+identity: '900371'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 872a1736-7266-5e00-910a-d9060e6f443b
+  order: null
+id: c60eecb4-3410-57c9-9919-f4a20880e49d
+identity: '900372'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 30a2254d-8681-52a0-aca0-84e9145836fc
+  order: null
+id: 762aa768-95dc-57b6-9cee-18d2bcb5c859
+identity: '900373'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d4977219-33fd-5a0e-b17d-0d0b84609249
+  order: null
+id: 4d8c1d7a-74ec-5716-af11-56afee5d0574
+identity: '900374'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 85a8e287-42df-51dd-a311-794b10e72662
+  order: null
+id: 0a82f2cf-f8d7-51be-8efa-73980f321106
+identity: '900375'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ba3bdd49-1dcb-5178-8326-ab7c4c6ba149
+  order: null
+id: d5e852cf-a913-5295-9583-a8d5eac19cfa
+identity: '900376'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: fe452b9e-491d-563d-8299-17e02a296c63
+  order: null
+id: 3946be46-2460-5531-a5d1-808f68e8611d
+identity: '900377'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1e4a2982-bc06-54ac-abff-0bb26703f114
+  order: null
+id: 53274c02-0b75-5c60-a013-6b69bc60a0be
+identity: '900378'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0d3bbb48-39d1-5c4b-88ce-cb7ab85c52e1
+  order: null
+id: 0d3b53bc-a6db-5ae0-92c8-2f45ac67a3e2
+identity: '900379'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5888a5eb-bf6f-5f8e-becd-2ea822804589
+  order: null
+id: 3d3beb50-1650-5b26-ba84-4c640c9007bf
+identity: '900380'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 28cf0680-3929-5a7c-a317-84d7068ae6e3
+  order: null
+id: 01655534-0766-519d-bf30-768aa1731906
+identity: '900381'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: dcedd507-f820-59a8-988d-3dab1b8d771a
+  order: null
+id: e2be87fe-fd5b-54bd-80e8-9f9b01efbd0f
+identity: '900382'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5eeca906-c7df-580c-85f5-43ec8ed25260
+  order: null
+id: e2268436-9112-5472-be8f-b5e1b8145b8b
+identity: '900383'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b8b8c26a-9cae-5341-a9d5-79f8b41bdb65
+  order: null
+id: d2322692-fa0f-529f-8299-ed66f05592b3
+identity: '900384'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5478ce1e-2e2f-5be9-8e1d-d7c39a533d59
+  order: null
+id: 80b44cec-6242-56f4-9eaa-d37071b0ceff
+identity: '900385'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f8238589-77e7-5f08-83b0-68412c70d878
+  order: null
+id: faca2fff-4e04-5682-b1df-44a3f4687624
+identity: '900386'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5dc8104e-9ad5-51b2-a690-e8e0119f65fa
+  order: null
+id: 4534ec38-f100-5346-bcd6-c0d220e70b71
+identity: '900387'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cb7c6a45-dadb-53ca-8b12-d01efb7421af
+  order: null
+id: 1e5d492f-9350-5f26-9ec1-6c253dfce7f4
+identity: '900388'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 7c45e284-9ab0-57cb-9cf2-ef683766f3f9
+  order: 1
+id: 4036f779-b738-5f71-b416-caddcf6fd459
+identity: '900389'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 381bdc1d-eaec-5607-a74b-367df94ff798
+  order: null
+id: a5371c44-2714-5986-b237-59cc11ef7a3d
+identity: '900390'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e781df59-c408-5184-91e4-caf1b52b573a
+  order: null
+id: 7befe40e-214b-5ca1-83be-1558b0d6f1fb
+identity: '900391'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d9464a6d-fdb0-535e-b6f8-f0234b10a1f0
+  order: null
+id: 7571ce71-6d78-52cc-b12a-cd0382adae6d
+identity: '900392'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: eacc5288-01c7-5fec-8325-e904023c6860
+  order: null
+id: 33847ee7-0b9d-5106-ae32-631ffcd6d041
+identity: '900393'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e1ffd809-bda2-5939-8bed-49fc46c7e0a2
+  order: null
+id: c07fdf80-491a-52f0-aa0e-f8cb55d81bce
+identity: '900394'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: daa3e11e-ada0-5a60-9908-07a1719fcf08
+  order: null
+id: 5268c92d-41ba-58d7-b1db-5102d9660698
+identity: '900395'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4a7245c7-e0e7-5f0a-92d4-b4758d646ab1
+  order: null
+id: 1fb442d7-df7d-5a72-bf47-1466670f0240
+identity: '900396'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0028371c-4263-5351-a0e1-5f1b8f4dde5e
+  order: null
+id: 53461c81-59b1-5da5-99de-d12722ee6a66
+identity: '900397'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 06aa2610-e1da-5b37-99aa-ca7021d78094
+  order: null
+id: 547833e6-c5bc-5eab-b77d-50c6cf1e4d0c
+identity: '900398'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5e4b435e-28b3-5e53-a59e-8fc26c565893
+  order: null
+id: ae7ccd02-279d-52f7-95e2-aa9d753262ec
+identity: '900399'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ecd33f59-8864-5183-aa39-d77fc526de32
+  order: null
+id: 2e60022c-5adb-511b-9419-c39f087c24b4
+identity: '900400'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d43816f8-7623-55f6-a962-054b9a16f166
+  order: null
+id: 7dd2a6c8-32dc-58a4-87d1-a1f4f687d58c
+identity: '900401'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 490b8a45-6546-56a1-952f-76bb01057295
+  order: null
+id: 690557f3-64b5-5531-ad87-71b9912cb17f
+identity: '900402'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3470691f-bb83-5974-96ee-b8c948ea0eae
+  order: null
+id: 6ba5ab4a-172f-58a1-9d98-1731b46ed635
+identity: '900403'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 2aa0264a-0834-5b4f-b0dd-0c9be66a9b89
+  order: null
+id: f14600d7-8da8-5164-ba60-1a0fdc3347c2
+identity: '900404'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: dd7c14dd-2cc6-5d5e-8675-25b23c3fb0dd
+  order: null
+id: 2c6b2146-613e-5bf1-b421-dc8127c21cb4
+identity: '900405'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 2ec974d5-3e2a-5165-b711-6cc24de38a5f
+  order: null
+id: 680ce478-25a3-5362-a743-1ddac032780b
+identity: '900406'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 656d12da-5260-5716-bba1-d89f63a06337
+  order: null
+id: 95e11766-891d-5ec1-bd42-334b2406ed4a
+identity: '900407'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6f026dc7-7ce3-50de-8b1c-37e095a46e44
+  order: null
+id: b85311c8-ce6d-58dc-a48c-629aeff93ef8
+identity: '900408'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 5cbda0bf-f1bb-5c21-9e4b-c9094c058080
+  order: null
+id: 88bcd594-b530-5f10-8953-28cf11492730
+identity: '900409'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b53bc64b-7a34-52ff-b149-b7f361a0f7ba
+  order: null
+id: a16a0c71-d3e0-5b5a-b890-08d83abd5520
+identity: '900410'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 7b003b54-108c-5b5c-947e-20892b714a6f
+  order: null
+id: c661a6f8-e611-5427-89f2-1daed60d5fa7
+identity: '900411'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: a588eee1-63a0-51cf-8cdb-f2e2cddbaf99
+  order: 1
+id: 2a257a49-2732-5a3d-b13b-828f5d0610f2
+identity: '900412'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 3584b152-e9c1-5461-bd7e-574fb2eef141
+  order: null
+id: 4def2063-11a5-5341-9b62-ee9e78a26e4b
+identity: '900413'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d2dc2ff4-f666-5232-a359-24f76fc2f98b
+  order: null
+id: 8acd64b3-83e2-5790-9300-77163680be9c
+identity: '900414'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 933a8b4e-0fde-5ccd-a9c5-de0b62b47fc5
+  order: null
+id: fd1e4561-9138-5354-9833-0462c3867353
+identity: '900415'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3293bd73-3c79-56f9-b878-feb33735d29c
+  order: null
+id: ed2075dd-a56d-5402-8d65-f564c617e4fc
+identity: '900416'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 23bcd6de-b0f1-5f9e-a720-e343ce43007b
+  order: null
+id: d1e051a2-e07c-5541-b98e-39031e95e37b
+identity: '900417'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: b36efd86-7062-51f0-a2c9-c0df70aaea2d
+  order: 1
+id: e6bd8e7d-cb18-5d12-9125-a17235ee76ed
+identity: '900418'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 16a8d626-b5fa-5e7e-8618-25454abf21a1
+  order: 1
+id: 02dbd2a0-f7a2-53cf-8cce-3fb3548acf44
+identity: '900419'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 34ba6ab4-7d75-5d4e-acc4-f666cde580a0
+  order: null
+id: 33e668a8-0127-5da9-a39f-c9712b994955
+identity: '900420'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 7c46b7e8-d2d2-59de-8fed-f335c6ce1d61
+  order: null
+id: 9821ccf4-f1ba-5837-9598-c8c05a183669
+identity: '900421'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e3d956c4-fa71-5ab9-bec4-13ccbe09c2e0
+  order: null
+id: 5203b838-a819-571f-a2f4-bc89d7da6809
+identity: '900422'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 87904f85-2756-56b9-a8ba-831e643cca19
+  order: null
+id: 2bb01361-6e2d-5a11-b340-69b5c5c621c2
+identity: '900423'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a97ec3d3-1758-52cc-b80d-1e202c00fbd9
+  order: null
+id: 5bf94800-529d-5256-aac5-57ce2782f438
+identity: '900424'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: d70e5e90-f4d2-5252-a01a-75fc4cd78fce
+  order: null
+id: 8b6e081e-c5ec-527f-9f99-b7da59e659e5
+identity: '900425'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cff5d380-8691-54b2-b2a7-ac5dc4d06c9c
+  order: null
+id: 8789677e-e887-5bf0-adfb-e387994396e1
+identity: '900426'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8080a49d-0805-55e5-ad53-0f46ab2fc7cf
+  order: null
+id: 866db603-4be6-5411-9e78-91398b65692e
+identity: '900427'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 94f52a11-8b22-5c8f-bab1-7c41183a4f2f
+  order: null
+id: a5d39ef6-fe94-5b64-b4e5-fc3138300fba
+identity: '900428'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1fcc93d0-fa80-5bf0-b5eb-e6dd72de6d23
+  order: null
+id: 94dc97d5-1087-560f-9e6b-528f640a967e
+identity: '900429'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 0b38bbc0-558f-55c8-a650-42ddbb99690f
+  order: null
+id: 0b991272-40f2-55cd-82f0-dd4e660f48a2
+identity: '900430'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ae3fbc75-29ba-5ea2-913c-55840cdd06f9
+  order: null
+id: 5dbedf3d-2db9-564c-8cfa-e7b290b1dfc4
+identity: '900431'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 08059d45-e3d8-5422-bb3a-6a8ee0b62422
+  order: null
+id: 6f7965f8-d74f-5850-bfba-8993980644fd
+identity: '900432'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a83ae5a5-faf1-5510-b793-52fea0d83a4f
+  order: null
+id: 5678aca7-5fcd-5af4-9970-ac8143a2a3c2
+identity: '900433'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: a0633f15-c2d2-5a67-9cd7-7076e6fd5de7
+  order: 1
+id: f76ba51a-fb2c-535b-a6b5-3bf9dfb12897
+identity: '900434'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 1830d60c-c188-521f-af76-6935309dc27d
+  order: null
+id: b16b4e06-f6d1-5b03-b693-49c20e2df18f
+identity: '900435'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4b26514e-8012-5d6e-84f8-4c2b59d11506
+  order: null
+id: b514d54c-9e6a-5263-a36b-ded33e931fd6
+identity: '900436'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 7ffa98b8-e245-5c53-a43b-75b3715fc762
+  order: null
+id: a17a893a-2927-5461-ac70-340f0936a314
+identity: '900437'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f283e6b0-ee20-500d-aeba-a67c2f48d0fe
+  order: null
+id: 9ff41a1d-6657-567a-b6e7-c58ee6902a88
+identity: '900438'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: bf46e678-e611-563a-adf3-203901b5c77c
+  order: null
+id: 0bf0833d-b780-5ec4-8b59-5805c16d3a98
+identity: '900439'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f8fdf96b-a6bb-5933-8ee1-9d35df7a89db
+  order: null
+id: 4bcca6f5-de8e-5813-9a72-a730f0676053
+identity: '900440'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c810c2ab-9b85-58f1-a7ba-009eccd3b843
+  order: null
+id: 79153ada-4607-5077-a30d-93cc240aa7df
+identity: '900441'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 401b6a7c-39d8-511d-a2c3-9c7885d0e794
+  order: null
+id: 73642c17-bc22-5479-9596-4e8e5204cea8
+identity: '900442'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8e7de63b-a0c2-541f-b745-f342dbef45c4
+  order: null
+id: 6f0a5564-78df-558b-aaa7-931e7d48d0de
+identity: '900443'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 59413625-0e1a-51dc-b1ff-3861ee96a87d
+  order: null
+id: f7163a8b-2b2c-537f-bcda-dac64fbf81d4
+identity: '900444'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c8aab669-058c-51ac-9457-b5f5c1d6148a
+  order: null
+id: fafa03b2-d8fb-5034-ab26-60511ab6fedd
+identity: '900445'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 882959dc-efaa-5a11-93a1-a4598de1f262
+  order: null
+id: b4001741-1afc-5c3b-9199-0b30813f3c07
+identity: '900446'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 1ba37450-b25c-5a45-98ca-da515b5d0e6d
+  order: null
+id: ec91274e-cead-5074-ad65-e84b943e6cae
+identity: '900447'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c29032b0-f676-594c-9cea-8223183164ed
+  order: null
+id: e9ef0fbe-9faf-551a-a70a-933f6f63d532
+identity: '900448'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I20-I25
+  id: dec11e22-1e3d-5caa-8f2e-431632c49f26
+  order: 1
+id: 5dcbaad9-f657-5cfe-b8f3-c180aaf0fc56
+identity: '900449'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 2fb0d21f-2d76-55c0-8327-0ed5f96e1a23
+  order: null
+id: 96e54b92-111e-5f0f-9c5d-f45e4c576d97
+identity: '900450'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 29a12a15-ce98-5282-b252-6b555ea871b2
+  order: null
+id: dc5dc019-06a8-5c58-91e3-cdea7701b442
+identity: '900451'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 786c3f1d-9236-549f-8868-2dfe541b0a23
+  order: 1
+id: a29e4489-57d4-5973-801a-0398d64d4f12
+identity: '900452'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 0461e702-13d8-5f88-8c49-79bf741eef56
+  order: null
+id: a404f6ba-ee1c-574d-aa34-b514cad5953c
+identity: '900453'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 36716525-ab72-5fd8-be7a-c510ac58ec03
+  order: null
+id: 496290d4-8f51-569d-9d93-b717daec3816
+identity: '900454'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4d7e0846-65c9-59f2-b9b3-345206281bf1
+  order: null
+id: 3cd9217d-5304-57b3-bdfd-3be7e4e172cb
+identity: '900455'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ecf50913-5849-5185-afd2-9d3e28e01a01
+  order: null
+id: d73a5304-1ac5-5d0d-9a1d-f9df9451a63b
+identity: '900456'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 305286c9-0241-5646-bfb8-9e0d20995239
+  order: 1
+id: c9b80f2c-4be6-5746-9788-4dbc79167e36
+identity: '900457'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 7b84b4c4-e900-5aed-b57e-0b51967812af
+  order: null
+id: 8e89f861-a3b8-541c-bac1-9644dfe9117a
+identity: '900458'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 40e1b782-4022-5f82-9bdd-4aa4daf53336
+  order: null
+id: 7f54d8f3-38e0-5755-9a68-933bb8eec9fe
+identity: '900459'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 25643a5f-258e-5077-b89c-d35239e6f240
+  order: null
+id: 144b9998-ec18-5a98-8e2b-dbda2586cbe6
+identity: '900460'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: cf57eec1-b67e-55bc-ae2d-df10a50a8add
+  order: null
+id: d62b5837-a506-5cfd-ab39-c4eaa886323e
+identity: '900461'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 207290bd-df24-596c-a97f-5d0e65912df1
+  order: null
+id: eb955623-e11c-512d-a1fc-652d88e47a4a
+identity: '900462'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 6e7a1ff8-1d92-51ff-a3a5-f5f20b744c15
+  order: null
+id: 0f4b5328-39f7-56f9-a681-401d9ae52d86
+identity: '900463'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 457b24d1-529e-5e61-8f11-ced6db1184f5
+  order: null
+id: c84ef024-2363-58d7-a549-dc99683906d3
+identity: '900464'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 31b621e1-9418-5f29-b843-7d33fdb0ad27
+  order: null
+id: c39f46a6-f607-5881-b7aa-1973580403d0
+identity: '900465'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 67ed0251-f5ba-533a-a19b-cf3f285c3e40
+  order: null
+id: 11d78599-5436-5210-b0fc-fb2e522ce610
+identity: '900466'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 9793bb7a-4218-570b-a3e6-aec23d6dd186
+  order: null
+id: 43d9b586-95cf-58da-87af-4b519c4e01ce
+identity: '900467'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f85b8463-7196-5c71-9109-e6d991e801f2
+  order: null
+id: a7b47658-c96b-5210-8fe8-b226577880e2
+identity: '900468'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 3be85139-f5a4-5ae0-9228-e14cbcab07e1
+  order: null
+id: 54a680db-7e1f-5d15-a234-afb4168e2860
+identity: '900469'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 461587b7-1bde-50d9-a81e-df7624b3390e
+  order: null
+id: 4dc2e514-ec57-595b-8eb8-bda0556da9c2
+identity: '900470'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: b67fff7e-77a3-52b3-93ca-f67eb5c7deef
+  order: null
+id: 66a3060b-9400-5b51-be85-88128c9367c8
+identity: '900471'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: eeb961ef-a773-5aba-bc7a-b1949e99f72c
+  order: null
+id: 724eb3e8-ce36-515e-967c-a9d2874ea2f5
+identity: '900472'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: f7505cc8-2768-525e-a51f-aa65a0074078
+  order: null
+id: da9034e7-fadd-5dbb-9aa0-45d6c6b878f5
+identity: '900473'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 49a405ea-1314-5b35-b567-168cd3f3713b
+  order: null
+id: 042b4c5b-c981-5dca-86ea-1653e3ade379
+identity: '900474'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 702409ec-88a2-5cc9-aeef-8f6d27fb702c
+  order: null
+id: feb2419c-6f77-583e-9173-db3c5bf330b0
+identity: '900475'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 82a8d960-8300-5d17-b7c3-b8e8a628e5f4
+  order: null
+id: 1e02bf4c-b421-5abb-a87d-a1195d87e470
+identity: '900476'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e0315063-9ed6-51f0-89a4-4e3b384cdf16
+  order: null
+id: 4d868a4c-42d1-50e0-b046-5be42ad5a597
+identity: '900477'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 13729717-90d5-58ca-bd67-94f030849295
+  order: null
+id: 160356b7-b7ea-5b89-b06a-c9ad3e73fc41
+identity: '900478'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 72abc79e-db38-58ff-86d8-1ea5bbe4ce43
+  order: null
+id: 67db4491-9efb-53dd-b0d1-a9650e8a8910
+identity: '900479'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: 2a676de2-e205-5240-ac95-9879cac0a104
+  order: 1
+id: 5ff45f68-4382-5d47-a9e7-fe792fe0727b
+identity: '900480'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 25e62e75-09e5-5200-ba12-b64d8215c396
+  order: null
+id: dc1c671d-daa5-51bd-9eea-87be4db2cec4
+identity: '900481'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: e01a9023-4f22-5cd7-915d-7b7e1ccb53e0
+  order: null
+id: e37b25dd-c202-5fb8-9647-9670bec31fe2
+identity: '900482'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 77455809-ed44-58e7-8916-5fb170defbf4
+  order: null
+id: 383327ec-dd83-5a40-a8a5-07aa34bd31d6
+identity: '900483'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 31626e65-14f2-5add-a187-eab333c54149
+  order: null
+id: b4ece49d-72e5-5326-bc60-8a408e0300a2
+identity: '900484'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 742d1593-bef5-5248-893a-fe26d7f01256
+  order: null
+id: 5b4354dc-b4cc-5dce-ae39-ec79d465474f
+identity: '900485'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 8c2e529a-3fa7-5881-9007-88727e594bd4
+  order: null
+id: d5c06d4e-1fd7-597a-8909-c6b8e05b0308
+identity: '900486'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a735dd41-0ca3-51c5-a58f-a503c09dea62
+  order: null
+id: c4d3fc8d-de69-5118-98b4-7301e7281da2
+identity: '900487'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 46643d49-2e6c-5324-b2b1-6cded58dd591
+  order: null
+id: bb33391b-26c4-5bbd-99ec-6f0859dca192
+identity: '900488'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: ecf940b1-7893-574e-b196-34d5ff1ac2ba
+  order: null
+id: 2fbb2213-50a9-54be-a6b8-1b4266540d3e
+identity: '900489'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 933647a8-12c7-5559-b927-2f518fa40ec7
+  order: null
+id: 3909a4fe-f073-501e-b42e-9c9ce877754c
+identity: '900490'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: c2f7b888-b835-566d-b856-7c0defcc0752
+  order: null
+id: fc367b36-a66a-571c-bc8b-9655027feb47
+identity: '900491'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 534b3114-abf5-52bb-add9-3a493a4d27c8
+  order: null
+id: ebf8d730-70a9-59f2-888c-f5a28a2f2dc7
+identity: '900492'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 049c6fb5-adee-52b9-91c4-cabed71677a3
+  order: null
+id: 6c2beae9-2815-5bf9-a297-dcbbcae5494b
+identity: '900493'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 4f5cf73e-0217-58c6-a340-2c4cf38f2e96
+  order: null
+id: 9b3288ba-c652-52ea-9a7d-c597435b14e1
+identity: '900494'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 03b34276-f6f2-5569-973f-90333e5d6c1c
+  order: null
+id: 5877f0df-72d2-5eaa-ae53-0fb0985bc8d4
+identity: '900495'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 75ce2830-cd6d-53e3-b362-5f2b568e1231
+  order: null
+id: 3c07daf7-2505-5492-9fcc-cb02fdf44394
+identity: '900496'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: 21891d15-a427-53d6-894b-92a3ed6e3d9c
+  order: null
+id: 4d44c721-7181-5661-9410-4429c3c3f93c
+identity: '900497'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: ICD10CM:I00-I99
+  id: d859f1a8-eb57-51d9-be97-66d82ad30381
+  order: 1
+id: ae2bd4e4-85f0-5433-a002-8040ba1291ab
+identity: '900498'
+species: NCBITaxon:9606
+vital_status: OMOP:434489
+---
+cause_of_death:
+- cause: null
+  id: 174d68bb-8af3-5125-9dba-9422b9bdf838
+  order: null
+id: 01549fa3-9ae7-5e06-b2a4-c0cdaa30398f
+identity: '900499'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---
+cause_of_death:
+- cause: null
+  id: a969202b-fb24-5898-8c6a-cf8d0e508edd
+  order: null
+id: 65966bd0-c493-52d9-b6a2-40bc7490d771
+identity: '900500'
+species: NCBITaxon:9606
+vital_status: OMOP:4230556
+---

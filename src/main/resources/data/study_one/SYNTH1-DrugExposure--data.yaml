@@ -1,0 +1,3000 @@
+associated_participant: ded1d538-866f-5c18-8aa2-0b24f1f08a5a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f9592e79-ad0d-5e45-b130-a5823ecc447a
+---
+associated_participant: e805802b-da55-5d52-9db3-810ad3ed2058
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 5f34642a-0636-5a84-a778-a3ba54d8f45f
+---
+associated_participant: 76ddc4d5-1fc4-58bd-ad55-01f7a7ea0bdd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: adc108b8-dcc1-5ef5-96d0-91e5a79cbc20
+---
+associated_participant: 9e9b7cbd-07b5-5ea9-9912-6cc95a1e8ca5
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: b212494d-7834-5629-bce4-549d6b9d3aab
+---
+associated_participant: 1e3b97bf-f17d-53ab-b05b-da66139cf65a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7fc4827f-9dc4-5513-9fbe-88d208d536ae
+---
+associated_participant: 8841a826-06f8-5cf3-bcaa-6b3716f7b2d4
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 3cc4dd68-f50b-5de4-bc23-5fb880f7c3ab
+---
+associated_participant: ef5ed250-8f4a-57d1-944c-7014e0a1d72e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9fe76655-1167-550b-9b70-9802fc3b65d6
+---
+associated_participant: 13ba9e01-681e-5cbb-8161-bdb1663ff2b0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 35a255aa-d9fb-596a-865a-09c6ebbbf8fd
+---
+associated_participant: 48283378-7599-5fe3-a867-88ee4b96a6e7
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7920ca17-fcf0-5a6b-8e86-7c3ee6d4e238
+---
+associated_participant: 42cb5acd-f935-5ef0-b764-51a7b7c48990
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 2dc39902-ed12-5226-a063-4fa65407442b
+---
+associated_participant: 94fb4483-3f53-553a-a7fb-90803da717ba
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c80ce04e-ab11-51ec-a651-7f9ac083f728
+---
+associated_participant: c8e6037d-91d3-55b0-83d1-280117b83f3e
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 83f22144-8a39-52bb-9cc1-44a42d88bc84
+---
+associated_participant: 207978be-4cde-5507-9532-d4505b71b30c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0412b239-b30e-5501-afc6-cc2aa5f21bf0
+---
+associated_participant: e3220976-db09-513c-b9cd-a3aea7779d26
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: cfedd7bb-45aa-57af-8462-2af0d0b47476
+---
+associated_participant: 8b278014-e09d-5b44-93c4-0e48ecea15fb
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a3433746-d692-5a66-91c9-c457034ad3eb
+---
+associated_participant: ec86d54b-4810-5eb9-9bcc-09998e669c84
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 28d528c7-3823-5c04-a946-e8cca90f0d00
+---
+associated_participant: 94470960-2d15-5ae5-8eb7-664b56478e73
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ee0381df-f5c5-5b44-8fc5-b1b9aa1e9036
+---
+associated_participant: 1bdfae0a-27a6-5c07-99e2-2fbc8d5d5045
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 40f421fc-aac0-530b-9bb0-35a0f330accc
+---
+associated_participant: ab1506fa-17ae-5ccf-96d5-54b606dddd58
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9dd79d52-01ed-519b-bd3a-ed54a9656163
+---
+associated_participant: f9736b20-69e0-58e6-9690-cdaa74adcaa9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 655a9d74-bbab-5156-bb23-521536bba886
+---
+associated_participant: cd4d4059-c255-59cb-9426-4017975164fc
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6bb7b559-2c69-57de-bfc1-992eaf67847b
+---
+associated_participant: 46d7742b-462e-5868-8451-8bce49486faf
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 8c2bc0c7-8421-5469-87be-324f515bc9b4
+---
+associated_participant: c033e47e-9147-55f9-a2f2-d9aee07f19d9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ea6271ce-e1e7-561f-8ac9-7c5d4909b03a
+---
+associated_participant: 7f986de1-8780-51f0-90b1-49bb7fe99006
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b67eb5d0-b1b4-5498-9df1-122bde162600
+---
+associated_participant: 1a98194c-8c49-5173-a73d-79e843262c43
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 2863876d-ae2b-5704-8b92-24fd10a838b6
+---
+associated_participant: 340949c2-731d-52fe-befa-a7a54c8109f2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3bffa8c8-2703-5c97-8e48-ecee06090236
+---
+associated_participant: 06cf772c-8fa8-5cd6-932a-34b4b1b23e9b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bba67c13-2e50-5627-8f69-ab501e0a837b
+---
+associated_participant: 5654bc8a-f6ae-56c7-a426-dfb427d38232
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0d944515-4a7e-5ecb-87d2-381852e53b23
+---
+associated_participant: d8dbccd8-f2c2-5150-85c4-8350be03f698
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 2a3da6a4-b6d7-51f9-b5f0-fc75f030cd53
+---
+associated_participant: cdee7bfa-54df-5704-92b4-2bc29ca6cb27
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 66933e11-baab-5579-aad7-5590503bfd9e
+---
+associated_participant: 55e38871-5784-50b5-a19e-7eded8576cf2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 70e1b5c4-340d-5b18-8229-bc788fff4f5e
+---
+associated_participant: 5250cde5-d7bf-549a-bd51-288049034f15
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 230e915f-38a9-5f4b-a90e-8ab91e4dc2ef
+---
+associated_participant: a9e61c39-1169-58b8-a4f3-4632b4ebae0c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 63840e01-16bd-56ae-8230-4b4ba85eb432
+---
+associated_participant: a88ada0d-3ebc-5771-9d1f-28c8fd6273fd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ac0f5520-8aa5-53e4-b364-bb370f09a336
+---
+associated_participant: 1f03766f-69cc-510c-8a28-61592f4d6b03
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ba0a4b3d-3348-5191-9a2f-ff844a902157
+---
+associated_participant: cef8ab2a-04d2-5b05-9c6e-0475fc8c8277
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b1230890-71af-580d-b4f1-606639de12a1
+---
+associated_participant: 74b8fbdf-5280-5cf2-8335-b50b1270a012
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: dcd8b6ea-f7f5-51e0-a64d-ce2478578e45
+---
+associated_participant: 2d83e9ea-2eef-5542-bbf4-5d72b547bcf4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7f2fba9c-99a1-560a-b028-fb320be436e2
+---
+associated_participant: 41b391b8-937d-557e-bdae-bb427cbd5f6f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c0308955-d42a-5aaf-92cc-565e539dcdb0
+---
+associated_participant: ace624ee-c926-5c32-bf69-09299ac29a54
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8aa3160e-b9c5-521c-bf91-da631eb803a8
+---
+associated_participant: 65ab9d42-7fb9-5af9-ba63-8585e4892e13
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9f73cfc9-b633-537d-abb5-d730d1186ce3
+---
+associated_participant: f26423c9-f808-5799-a9d7-007764391022
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8f3b585f-84b1-54ec-a7b5-381ebae1c155
+---
+associated_participant: 0db888f3-f2e6-5b6c-9419-d9dd59667ac7
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1723c611-260e-56de-81d1-a82de25bdf80
+---
+associated_participant: dd37092b-1515-5c8b-aebf-18507b1f98f6
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: c3ca7450-bc1d-5882-8d82-3b562ee689a4
+---
+associated_participant: a520da4f-b508-560f-a923-68920835a8eb
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f6fcf42a-4447-57d2-bb50-bd0e482f8a3b
+---
+associated_participant: ef079f97-383e-5a9a-8540-d5259f9a7376
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 49bfb82d-e60a-5c76-a0c1-bd132b8152ab
+---
+associated_participant: e10d6b14-bf83-52a8-a084-20d03dd10421
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: e6c455c8-0610-55a0-8b88-e6b68150ea23
+---
+associated_participant: 8374540a-e040-57f1-9e61-f0f971b8200c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 52a1084c-8cc1-5d7e-ab46-377598aea005
+---
+associated_participant: 8ed94af0-7bba-57ad-93cc-cb695080a0a6
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 18f09081-54b4-5938-804c-d4e7242a658b
+---
+associated_participant: 0b096acc-a465-58c9-a7c6-0d8b410d6ae5
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 10628b02-0e61-57cb-8385-1dc3084d2a4d
+---
+associated_participant: 3ef07bb7-5e53-55ce-b245-3a8d9c0cc210
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1f23e32a-91ea-50d0-89b0-bd32ba9a2603
+---
+associated_participant: ceb1eabc-6a59-5250-bd39-4ae27a017a7b
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 27d7dfa4-dd55-5cc6-858a-34ac21f179bb
+---
+associated_participant: f9cbceb6-d841-5d77-a844-f8c5b998b05f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9f21b969-6d47-52ef-99b5-6f415efaecbe
+---
+associated_participant: 4cbb7a46-9398-5d35-8c47-69f7ec44027a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 05e92928-550b-50f2-bd5d-79a41f259e0b
+---
+associated_participant: 0875292e-8eee-572d-9876-7a3d49bb7e6a
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 1602ab66-1122-5946-8468-a75832f07608
+---
+associated_participant: e44433a4-07eb-5abb-a92a-37fee34797df
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: dcd4866f-df33-5831-8d85-309b402329f4
+---
+associated_participant: c176a1b3-5bae-5d8b-887e-5f18fc1e0c87
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1a5aab3c-22a1-59e3-b36d-d2d7dd0c7c91
+---
+associated_participant: 1c01c885-fca6-5086-817a-0f8ed6d6ca1d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 83437b6a-00c4-525e-85e0-9bbe763a5523
+---
+associated_participant: 88dffb9d-ffb5-599b-b090-4de3af8203c1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d6ffbc12-6ae6-58ff-b55e-8852ba235663
+---
+associated_participant: 0e8043e3-6186-5016-a39c-30f841b97d9b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: af29dd17-7b68-5fff-990a-ae1cec90fd36
+---
+associated_participant: 983a95a8-98cc-5a94-ad2f-e1f9c2c4a113
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 560b021f-e153-590b-9f6d-77ab758de933
+---
+associated_participant: 1f39d355-beed-5a59-8fbf-8eb0d013e426
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 6b19e10b-1b80-58ab-8718-9379d2533de8
+---
+associated_participant: 9c4779b8-785a-51f5-b1da-b09e776d4d04
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c440dc27-1f4d-5e82-90ab-865a95ae0b8f
+---
+associated_participant: 5a96f027-ac3c-5583-ba42-3dea68b217fa
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: f1ad684b-6f63-51bd-a07a-fb943a0c439d
+---
+associated_participant: 8718ac89-7fe1-525c-9a06-9756ea93bae4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 89c74f9c-e0bf-5d17-a0fc-53b7ae1122d1
+---
+associated_participant: 7d30028c-b348-54ae-97ba-b6a668dc5588
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0460b940-9ba3-5da3-a61e-149757b0c5a8
+---
+associated_participant: 2e7339be-1e36-546f-8169-92700acbf74b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d0603e63-616d-53ab-b09d-d0597fc40f53
+---
+associated_participant: 87c552eb-6108-521c-a24a-ef33e8ded223
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 48490346-e5d4-5f09-b5b7-072586b8baa1
+---
+associated_participant: db03485d-dae5-5f38-af2d-2a3a385451c0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 40738e9d-f94f-539f-a3b8-51d1c4e3e2ed
+---
+associated_participant: d1907e2a-02d7-5eb3-a8f1-3d7d133fe81f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4074a73a-be4a-5816-873a-a97f6c90a617
+---
+associated_participant: 03c89b34-379b-5361-8c32-e17e40bc962c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 49451473-dc57-5946-8c6b-d4bf95110855
+---
+associated_participant: e8697e79-7638-5150-95a7-cfc58096f67d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5319dad1-6cc7-58fc-bdde-1bc723156952
+---
+associated_participant: 8b3a13fc-caf8-56c0-8306-36e93c29171c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 43c63715-48dc-5d36-be2d-d10058239dfe
+---
+associated_participant: 360af6b6-01a4-5b07-b0ef-73b043b29ccd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3a819fe2-667b-51e6-9ef3-c21d65f2b773
+---
+associated_participant: 85bcaf6c-134d-5b62-8756-cf9623581908
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 489f44b9-78a8-50b1-b967-fc79ffe9d6b9
+---
+associated_participant: 27f4d267-d8c7-53f9-ad37-409ba1ac63b0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 26f42180-71af-5e85-990f-0f9962445957
+---
+associated_participant: 161a3327-cd8f-5d53-b3fd-1e0d94063646
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ffb3b62b-05ba-5699-a95c-c95fdc69197d
+---
+associated_participant: c234dc07-2c43-5c3b-937a-7d6d5629ecca
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 15bac38c-919a-5e7b-8c01-9b3afd253b33
+---
+associated_participant: 4ad4889d-f22f-561c-be96-804b3ed3d92e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 54e53d59-99a7-5da0-8b3b-b50841130d9c
+---
+associated_participant: 47816cb3-ca16-5f84-ac6f-ebf6aa33818d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8e48d940-e0ca-59e7-9099-f052f87c2cbb
+---
+associated_participant: ea7f34ff-a551-509c-b8ff-a365f061a893
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b9d20dc2-e210-59a4-b54f-222afd629a3c
+---
+associated_participant: b08f20b1-80fe-5d82-b59a-ebd9bf21b01f
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 2681da65-c148-5af0-af0e-7c7334161fc2
+---
+associated_participant: e1b32e38-40d4-5b61-b1ac-53447412bd6d
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 65618ea7-3ba3-5079-a8e1-930bd6b1c83c
+---
+associated_participant: 37fee67a-d088-57d2-ab56-2c180d5066f4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6ff15568-f9ed-5de2-8d3a-9c4ab09a161b
+---
+associated_participant: d2e101e6-0d5e-5408-8711-c09963082e41
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 4188d27a-d07a-5dbd-b6e1-a1849f4973f6
+---
+associated_participant: e8a03e3e-64c2-5934-8fc5-14c8a19c52ec
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 6d2e3997-a73d-5a49-ab50-8a35a9f5fe0a
+---
+associated_participant: 101de1b4-4c6c-50db-aafb-53d3350e2e9e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6e9c4a8b-1aad-5e53-988c-50391a2df358
+---
+associated_participant: c8e0b81d-1a44-5847-afb4-6e0752164ce3
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: be833f83-4a1f-528f-90e1-10de64e240e6
+---
+associated_participant: 2950277d-9317-5459-b449-88f1158b61ce
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a77b71a7-ef5c-5a79-8795-a7fae18221a4
+---
+associated_participant: cdcb747e-27f6-53fe-a6c7-0fbe0a6ec1fd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a91ac4d1-4873-501e-8992-0840102691b5
+---
+associated_participant: b096a74e-78b3-52c6-b2d9-0b9a8ddc39e4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9afc05fb-4a41-58d4-bccf-fa5f47c8f2e3
+---
+associated_participant: 6adaa80f-2611-5552-9ce7-599333cbd954
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 7fa0815e-d01b-5efd-8ef8-cae6eca210c8
+---
+associated_participant: 42834666-3ca1-5797-ab58-f19729174142
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: cecb2b19-fb66-5269-aeff-f3110c4c078d
+---
+associated_participant: 6264879d-a98e-556a-8e41-5aed7a7a1e45
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c5a33404-be56-51c4-bf79-5839e2f2c87a
+---
+associated_participant: 2dc6f387-9774-5c5f-bacb-9c8632a2340a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 89f7ffb2-73c1-5162-915a-2f23a813f99b
+---
+associated_participant: e4ce4e37-f92d-5160-a254-7c3c8563d4da
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: db6261c3-5011-5669-9f0c-aa7af6d0bb2b
+---
+associated_participant: b8b136ac-e99f-54c2-a3a5-857d4a5454af
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 554518b3-0f4f-5dda-ae81-5f1d0d8f8288
+---
+associated_participant: c74672d6-ff38-58a2-b1e3-4be205d8bda1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0e209367-1607-5d4d-b5a1-8f295bc8b7d2
+---
+associated_participant: 9def49a0-50c7-5088-9783-2169906cf68d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7bc4511e-f4b9-56d0-853e-669ad48edaa2
+---
+associated_participant: 85799bc4-e190-523e-b202-0f810ac01986
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: af8ed5c5-ab24-5e49-bb44-570827908fba
+---
+associated_participant: 136e19f0-78ad-5df3-9da8-aaa70c5ba63d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1988188e-3d48-5be4-b423-f47910e91b90
+---
+associated_participant: f6530f55-e133-5f2c-9a19-9e2cb4df5194
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b6604bc2-7086-5d8b-9a06-0505700beddc
+---
+associated_participant: 1931cc25-d706-52e2-91b4-146525c57827
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 44832b5a-df5e-5129-bb53-c07add4c40f8
+---
+associated_participant: 68861c1d-aaaf-5deb-909b-b5533913a1f8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9fbe7600-75d9-5840-9307-74676edb30e1
+---
+associated_participant: a4ca74a3-89cf-56eb-ac10-2df42e8c35b9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d93a8699-9c80-52a9-9b7e-d06578549357
+---
+associated_participant: c150deeb-adce-5fc2-8724-9735be4c3308
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4a115c88-0396-57e8-8d86-eb4133f04fee
+---
+associated_participant: 115e4950-e19b-5dc2-8d2d-118381c1fa65
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b88fdd90-a39a-57fc-95ae-f8c3b39bdce6
+---
+associated_participant: 2aec59c1-63a3-5f12-8edf-2309e19b2bc0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4819473f-eb72-57f7-a7de-2959fbd0a141
+---
+associated_participant: 592f42d9-88ec-56ce-857a-e5c3ec22676e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: abc348fc-dc62-5373-bc02-b63cf952b403
+---
+associated_participant: 5e5b32cc-735e-5af3-9f7c-8789a9351927
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 2dd80e31-0c64-580e-86f1-d3dc533b735a
+---
+associated_participant: 4bf678da-a746-5d29-a100-2814a8973b28
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c05163f1-7fe4-5c39-9295-ebc5f453a668
+---
+associated_participant: 005f1434-9203-5c31-8d4f-4426ea0d1edc
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e9b6a952-7324-5132-8549-c8779e646970
+---
+associated_participant: f2699ec3-3d62-5779-b737-767e36525df1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 390a3dfb-050a-5acd-87ff-bc84d20bfde1
+---
+associated_participant: 5a021d8d-69e9-5917-8182-c06a19ffa8db
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a916a7e8-a352-5810-820f-6fbd7ca66e59
+---
+associated_participant: cad95307-1e29-5f5e-afb9-ab66b47b8422
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c29a97aa-62ee-5753-bb60-0f516f2b0532
+---
+associated_participant: 4fecdb5a-bf06-596d-97ac-aa0d12bb6361
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 622ab3bd-6e90-5a3f-8c61-c0acb47ada31
+---
+associated_participant: ff427677-c718-5d2a-8d71-0bb361f4e676
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 6d9603db-731a-5cfe-9fb3-434572d071bb
+---
+associated_participant: d968b26d-5a65-5657-b0f5-7e8bc905cde0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f777f7d4-20b5-5380-9d0a-0dbe4c4eb57f
+---
+associated_participant: fe01696a-d20e-5072-9de3-becd0089d2f7
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 20cafef2-079a-5b6e-9863-c05ab6abfed4
+---
+associated_participant: 6133c22b-4ceb-5249-8921-456ed769118c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: eef4ee1d-6fec-50c7-a77c-a0c6b69f9422
+---
+associated_participant: 875c00dd-5017-5a8e-b8ee-ffdde79f31dc
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4cd2adea-97d2-5131-a03e-9edc49e732b3
+---
+associated_participant: 32161409-2c00-54bd-897b-676fea398712
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6b8a7b6f-b3be-592a-abf6-3de0735b98a7
+---
+associated_participant: 0d74aaf9-a727-50fd-8378-eb0898955a62
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 79df3986-7859-54e5-b10c-6081c28848b5
+---
+associated_participant: 3601538e-011f-57fa-b403-823df80c801c
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 8d9a1b4e-0800-56ac-8f79-8f482d82244e
+---
+associated_participant: f909ed50-9190-5749-8365-e0b177183a0a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4f499702-5972-549e-b7ce-0a63139230d4
+---
+associated_participant: 859c5c46-5f8a-5f46-83d0-f98156f94924
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: eb5bf1e0-661e-57ac-ab70-e046c7c6648c
+---
+associated_participant: 5148619b-b027-5fb9-bb84-fc861eaab83e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3b414498-373c-55c2-8aef-3ca04a6601c1
+---
+associated_participant: fb385334-c713-505f-ab43-abae7d1f3f68
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a3cfc4f9-2635-56a0-8a19-430711b84edd
+---
+associated_participant: dde8a904-8a02-5a7a-94ed-25e89bdb4ebf
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 49169df8-c843-5eea-ad4f-c7afc2e6e0f9
+---
+associated_participant: db39cda0-cede-52c3-a620-108846d595de
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8e2a71c0-e705-59e0-a9f4-4eda8f95f602
+---
+associated_participant: 34fc060d-4e19-54d1-bf8d-d5d32572f722
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e8fd34db-febb-519d-831e-4fc4329d0549
+---
+associated_participant: 343d5027-eb2b-5fd4-b7dc-506a0749c06a
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 012ef352-f49d-523f-ba03-a5c8082fbecc
+---
+associated_participant: 558b524f-8ca0-5c91-96e9-f0541ac75ed2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4e638be5-942c-5833-bb47-f2aa96c63d35
+---
+associated_participant: 10c4a6ad-9739-511d-be76-ebd65bb82aaf
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 689361fa-2868-55a1-add9-f059c9bf732c
+---
+associated_participant: 03e2b47c-2d3c-515e-9050-c89d1b4d1117
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7cf5ad03-b401-5bd0-b1b9-10f0f41060da
+---
+associated_participant: 1253da0a-3872-55a7-836e-34c5006d3b09
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 4cc1d3bb-b8b0-5e2f-b60f-56f663720c75
+---
+associated_participant: 742495b1-833f-5fa2-be28-9d9202e17f69
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d20847cb-a3ff-5545-804f-1fbea5c43515
+---
+associated_participant: 7d75d88f-fcd9-58e8-9dbe-d23ab10c5591
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: facf4fce-c3c8-57ec-b317-7393b4a46065
+---
+associated_participant: 44fa0e64-286e-5a41-ab85-932d82ffc574
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ecf3a3ad-c39c-50e3-9db9-9b5c4656b9aa
+---
+associated_participant: 690779ea-5d3f-5005-9496-0343be293517
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d71c051c-3a0e-584a-af09-a7568b283032
+---
+associated_participant: 9350886d-2a20-5553-80cd-aff8f3e6d154
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0dc59513-d84f-5063-9fa8-66af29b229e6
+---
+associated_participant: 4ff9b08e-e266-54d3-8f99-b8006ec32300
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 863b282a-24fc-5a16-9c07-8db99fb88bae
+---
+associated_participant: c3df89fa-3f79-59f2-bd0a-a45c75fdc6bd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 592074b1-531e-5a4c-b91b-ec1fdfb1311e
+---
+associated_participant: ba103793-88eb-5bea-842f-86906a910181
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: adca9341-5f48-5e3d-a3b9-9357bba5055d
+---
+associated_participant: 1b370294-dbc8-5471-8896-ac996457bd03
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8282581d-26e1-5b98-9c78-98e5471b54b3
+---
+associated_participant: 02056926-3926-5051-a903-2595e6035aad
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 2e614d37-de5a-551b-af26-ae185ae765a8
+---
+associated_participant: b85fa5c0-d5e6-5683-b0d5-052eef1d90f1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 55cfb82d-9ffd-5632-a61a-9d675a774892
+---
+associated_participant: 0da862d7-dabb-5c91-be69-ad65608c4240
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 33ec2357-5923-5423-b034-de0d15a6e177
+---
+associated_participant: 9b708e59-b8ba-599b-923e-1a52ddfecf5a
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 3bf4f5fd-0f83-57de-88e4-df026385125a
+---
+associated_participant: 7e91b7c9-b398-5f52-bb8d-c22c8b5cc788
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7daa8cc0-4864-5346-8c35-500eabb441b3
+---
+associated_participant: 562b23f7-abc6-5563-a6e8-e3f3a4dbcbb7
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 51064988-e2ec-52cd-a25c-727bcec24429
+---
+associated_participant: 7b7d35aa-1765-5548-b34d-529d9daa9ca4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 86fbb194-0594-5fdb-a9d2-88e71f7c84c5
+---
+associated_participant: c739fc73-86e8-56f3-85bb-b4a9eed662e5
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 1bc3e51f-8615-5347-bcc6-115b1a2882b8
+---
+associated_participant: 9d2bcb90-626d-5ad3-9a20-e7416a55921a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e162cac1-ca75-51c2-8f92-32dfb4bfca31
+---
+associated_participant: 4bd8429a-9189-5421-898f-cc362236a662
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7c8d7317-9f86-560f-82ed-96b0071caefb
+---
+associated_participant: 584462b5-b049-576b-9981-5d1c9d456dde
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 83b66b85-7851-5232-9fc0-c4a84e3c3865
+---
+associated_participant: 3d17a040-d8dd-528f-9793-3e9318dcf421
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ae131624-e06c-51e4-b41e-ea4f0dc80436
+---
+associated_participant: 846b2a81-b243-52bc-89c4-b8f3f83cb621
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 99d49be1-b91a-546d-a0dd-1d27dc9083bd
+---
+associated_participant: bd6616fd-9ecb-55ba-9990-9fd27d67b361
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9d3d216e-8e47-5914-8185-4ee0d40a1857
+---
+associated_participant: 67a5f610-0d3b-513d-86de-4dadf2c792e1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 96765547-3b18-57b2-983e-d8edb2d9b303
+---
+associated_participant: bd0ffbab-9bd8-54ab-9de8-e48df9a6b2e7
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6706ee3e-4190-55fe-ab33-4945c07d47d3
+---
+associated_participant: ec041f8e-ecca-56e0-a720-51ac22c215e3
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c0530131-8ba9-571f-8d5f-4565feadddf5
+---
+associated_participant: 50197f27-51e6-5147-b555-acd372e0b458
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: cd19c133-6921-52a1-9f85-cf90a2621892
+---
+associated_participant: 99130c4a-d199-5a19-9d5d-d8d4a64a43db
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1b96d41f-abfa-571b-9a84-960ff11adfab
+---
+associated_participant: 637e0c6d-b832-5080-b184-9cce91fba544
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 76d1cb78-b549-5761-bf82-808a0027c235
+---
+associated_participant: 21803d1b-76a9-5aaa-8530-494692d69844
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 1165dbb2-822f-5863-9853-7f06e3ee9343
+---
+associated_participant: 86907df5-a683-5e53-a271-cee2da6c1e54
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 2ec0edf8-aad0-5f99-b8df-7ffe60cd297a
+---
+associated_participant: 08fe0d63-9a33-52d9-bb74-bb584afa4a6a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3862abef-ce19-5681-96a2-fff86e3abeb9
+---
+associated_participant: 194ff1a8-e012-520c-be3d-08a8bcf17f98
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8d1528d9-f8e0-5d31-93b5-5054ad781101
+---
+associated_participant: 9b55f60c-5dbf-5e85-bb1d-eefb1c2db8f2
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 4eb081f6-7ba7-5d0d-aba6-07279635bc7d
+---
+associated_participant: 3926372b-7f9d-5f00-a323-cc5a615394a4
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: a23e2822-f466-543a-949c-130d757b862a
+---
+associated_participant: 5fc8c0c9-3e7f-58b9-9054-92160aea907e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 528d69da-9982-5023-9a75-e347b03dc0a2
+---
+associated_participant: bef93dbe-b1fd-53b5-9500-d11dd6e17c2b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c5b5644a-2f13-5a3b-9a41-5fb1f5223de1
+---
+associated_participant: f00cba4d-94af-5fe0-902d-6a3b0c966495
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e2a10374-6063-5261-8496-5b44baa79266
+---
+associated_participant: 0c0bc6b2-8588-5221-980d-3907cb4d0449
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 88e1345a-7453-59c7-923e-56703610f9f0
+---
+associated_participant: 8d5b1be8-7b1b-5ed2-b687-9ea4b888a379
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4086d949-96db-5409-82b0-ae5f425fbbe5
+---
+associated_participant: 9a1ca0a7-078e-5250-b001-a8d086dd5d14
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d61d8c36-d35c-510c-b719-3a889d749081
+---
+associated_participant: 15e597ca-3181-527c-ad9f-594be382bc46
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bc1e0369-02a3-5b0d-a015-a33b87abdd0f
+---
+associated_participant: d1bca80c-541d-5874-8c83-b8792fde7897
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 870fe062-2cd5-599a-9c45-9168080454c0
+---
+associated_participant: 749e68e6-23a3-504b-b899-1f9dd4dc92c1
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 4086a901-3681-535b-8229-3570e7000efe
+---
+associated_participant: ae8af453-8348-54b3-96dc-c196c4f6cd7e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: eeaebf25-7cb0-50dd-ad08-4dbc6958d9a3
+---
+associated_participant: d3a13968-0c59-5aab-a7cf-00749861b39b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8d9c9d9e-ef03-5930-9664-8ae48c8d0b28
+---
+associated_participant: f5b372ef-9e39-56c1-ae44-760c1748b1b0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 092dcb4d-231a-54a9-a333-4989a33de45b
+---
+associated_participant: 4855e582-ba0f-54bb-af4d-a41abbf66d2c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bf6b1bfa-fbf5-5319-8ed2-249b21c2d5a2
+---
+associated_participant: db9e5917-344a-5955-80e9-7fbe07e6751d
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: c4826dd8-24b8-52ca-af5a-cbefff7d15c1
+---
+associated_participant: bddf2cd3-7efd-5ee2-96ad-06d7fec2b5f8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8bcffaf2-0bea-5128-bd1f-8ad26c67979a
+---
+associated_participant: 019857b7-7379-51c5-b682-742655fce4a3
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bce641ed-7ae8-5ae0-a90a-502a71e1a311
+---
+associated_participant: 8a14c23e-8154-5453-a5f7-354ada55cbab
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ee9352f2-365b-5989-bb6f-17f33d4becc6
+---
+associated_participant: c18c98e4-c55a-5d2d-90a5-ff26da7b128c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6accb568-2ad4-59c7-91fb-cfce4a1a3c56
+---
+associated_participant: f3c30efb-bd43-577e-91ef-bf442884e8fe
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 696e7bf4-0c78-5b68-aea3-9d3687ac6a8e
+---
+associated_participant: 6bb801f4-6e01-5928-a5bd-cf6938b4ad59
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bd973793-9642-5166-a057-4a67b6e0446f
+---
+associated_participant: 80a7aaac-bd0b-5146-be79-c5569eed1d00
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9ce4116b-2cfd-5955-908b-5294c24d89eb
+---
+associated_participant: ad2d54a5-83bb-5616-8728-1c8316badacc
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b245abb3-fa3f-5bb6-b611-754124962a9e
+---
+associated_participant: 6d0aca5a-1c28-5b6d-99b7-520769c2d631
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d8c70b9e-f586-5f11-bdfc-3beb3ddd5409
+---
+associated_participant: 0cbc2787-7dea-5b92-82f5-9f948b9c3219
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9c9abcdf-01dc-5024-871e-f9f7bf97d989
+---
+associated_participant: 02a855ee-091c-54da-955c-b877dc0dffe1
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 5253b3bc-fad5-5b45-a42d-e8f78bb3ff6c
+---
+associated_participant: 734e02d7-df70-597b-b655-fdaf348d11f2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 953360f0-0b31-54e0-ad01-c9921fb305bc
+---
+associated_participant: beccef1d-411f-5106-a443-6397597e4229
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5a4d81a9-9080-5214-a861-59e025841e62
+---
+associated_participant: 3f8192bf-9acb-54d7-bdd7-bd95444b258b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7770cc7a-69b3-5317-8d11-1ddc00f407d9
+---
+associated_participant: 553cda6d-2765-5c42-8efb-0776e0b6f0c0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e961ce6c-cd0e-53cc-a2be-a221ed6c4489
+---
+associated_participant: 71005f64-d3f6-5655-8468-68ae61cf424c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: daae21f3-5fed-5e25-b56b-a562a218900e
+---
+associated_participant: 1c2e2d65-1ea1-589b-a938-f0792c78e788
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: d5d93824-3168-5ba7-9809-907c60663c39
+---
+associated_participant: c3d0d2ce-0278-5386-94c1-21eb14973b63
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7b5c23c3-b58c-5ecb-abb1-58740d4e4953
+---
+associated_participant: 230a513b-41a3-5cce-86ec-080ec7ffc18e
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 9e152e86-1a67-59a9-bcdf-d1c3e4274517
+---
+associated_participant: df1063b0-93cf-56eb-9e78-f02cef8e5131
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f0a54c37-7e68-513f-a80e-f8806fcc40ab
+---
+associated_participant: a6a8cfe0-5576-57f2-88af-ab95fbbe625d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 630aa818-664d-5a4d-b9e5-598730dfe702
+---
+associated_participant: 274bf89f-7207-546d-9d01-27caa304c369
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 81173a2f-cd08-5404-a8aa-113c6c25953c
+---
+associated_participant: 2bcfd744-2697-5345-a546-1d7fa03cfe26
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9b5265b3-74ca-519d-ae01-318906795330
+---
+associated_participant: 5818cb57-fc53-53de-9ffb-69e00d41b633
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b696a1f4-df76-596d-ad85-766beda66825
+---
+associated_participant: 2b740b3b-d4f8-5d41-a97f-1923d1a8926d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bf34ac81-b0e5-5311-9d9c-942c4bca99fe
+---
+associated_participant: 1994d39f-d2ff-573a-b628-90b4352b3e76
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: aa13b8af-9132-526c-97a1-bae05df10236
+---
+associated_participant: 0d75fbde-e427-5804-bcb8-765778d3b050
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6e76332d-970c-5693-9764-ba1e54f5f483
+---
+associated_participant: 991d2cf1-92e8-5379-bbf4-4be388277474
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a5f60249-1e9d-5403-81b8-97a5048041ac
+---
+associated_participant: 705f9c12-47d9-534c-9bef-3b1225b8927b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 29e42ca8-5833-563d-b3ed-e3c78cc6fc0b
+---
+associated_participant: 7f50db90-736e-5881-a303-dad12a5d2a3a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a8cec50a-3937-500a-8fd0-38b3df6e2e45
+---
+associated_participant: 177a9c2e-46c8-5626-8493-832da42c38fd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9709ecef-d90c-59cd-9ca5-9c1d7af79875
+---
+associated_participant: 90490ccd-7bda-5936-8764-17590a6425f8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 79341488-27a3-5914-b0d4-bf78975452a4
+---
+associated_participant: 1ed4f409-e47d-5cc6-86dc-f380d6e97015
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 888ae791-bc23-5718-8292-425da6248301
+---
+associated_participant: 7951f700-8957-55bc-9f86-18added4b528
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 97b134c6-2bd2-542e-a431-7da04b12837c
+---
+associated_participant: 619fbc12-1ac1-5dcd-bb6f-1fc7c37e98f9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8b859916-cd29-5b4f-bb58-160ca0b8525e
+---
+associated_participant: 35cc8452-45a3-544a-b792-ae51ba6031c9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 10cc523e-e0a1-5db9-b452-989961de4f89
+---
+associated_participant: ed05dbcf-512d-5ce4-9ba0-4d4376ee8549
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0c331fe6-ad75-59de-837c-210a2517e95d
+---
+associated_participant: 33d5a82c-07f6-506e-9ef9-412e7a24a497
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1fcb02ad-c316-5058-bd8a-2f2560c18f78
+---
+associated_participant: 089eb47e-a0ca-5ea3-820a-26b3c3249325
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 6885dccc-bec9-51cb-b2c2-e28208b02d8e
+---
+associated_participant: 7031e385-a336-553e-89bd-ac9645e5c82c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4383aa08-4b4c-5a86-9bc2-6c96b24a3682
+---
+associated_participant: 234195bc-9ca1-5a9d-bcaa-a2bf2daa93e8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7aa9bdb7-ed03-5182-a700-28b840779194
+---
+associated_participant: cff212bb-4317-5f50-a6ac-7ea15acf685e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9ea48f7a-06d0-5544-92a8-94b3e03e302b
+---
+associated_participant: 2b4b218c-979a-59cc-8a9a-8d05a7afb3af
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 87092107-102e-5dbf-acc5-841212bc0db3
+---
+associated_participant: 4e7edc7b-6332-556a-8f51-a80d94c7f1a8
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: a63c4cac-a41c-5595-98dc-e03ede3fa749
+---
+associated_participant: a44764d3-f9ce-5613-aedf-0ff555fba941
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: cc075723-c831-5587-8c99-7b3ecb9299d4
+---
+associated_participant: 8f970044-8736-5f86-b280-82d346b828d1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6873ee5f-a5d3-55c6-a4f2-12d4800c3dee
+---
+associated_participant: cccff1b4-cb7d-5cba-a96f-2af8065ea00b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 22404791-a7a9-5922-ac57-776972c8ee7f
+---
+associated_participant: ddcec14b-711a-5cbf-b612-a4b42a6ec33b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 209c5263-19d1-5ca6-a9e8-ec2e3b91430c
+---
+associated_participant: 2943e2e5-efde-5f84-8557-6c5b224305eb
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1a96b122-8714-5697-8c82-32dc1d32cd90
+---
+associated_participant: 45febd24-b8f3-52f9-86d1-85d46ae65f37
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9a713dfc-da37-5ae3-b3e8-e10f01d4bba5
+---
+associated_participant: cea01968-596b-5676-b23d-73d8954c3b74
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: a719f24c-bc21-5d05-9c98-3c05e292a5d4
+---
+associated_participant: 15d0b852-bba5-5c31-bf56-87b1bccb48ec
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 62d1d28c-9090-5365-bc61-c05838bb80aa
+---
+associated_participant: 91288c9a-4c69-5818-a9fd-c10afe6921ec
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b3bb0850-1ef0-5c23-9352-a5875a8b81bf
+---
+associated_participant: b9af0dcb-3119-5cd8-af87-8a82ec36c814
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 3c0856b9-6d86-5fa1-99f8-b33a144916d8
+---
+associated_participant: d8a221be-ff42-50a9-a9e3-82549a54774d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c7b170d0-bc7c-51b8-a539-2a485bcc40d1
+---
+associated_participant: 8c273697-0877-5357-ac3d-e77ffad8533f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1c2ebcbc-97bd-5982-a32e-4c22120acf9b
+---
+associated_participant: 7f513fff-6a39-5936-b0f5-20cd5228e752
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 82a3a0c4-1f7e-50e3-818c-8545c2986d96
+---
+associated_participant: f9915a8e-0bbf-5490-90ac-840d123dacda
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 35cab198-d40f-51c2-b883-3ff65b62cd14
+---
+associated_participant: 957e5a19-fc5c-5dfd-8574-fcfa53d61845
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: a767fc1a-4f08-57be-b86f-66eb7b358bf7
+---
+associated_participant: dc5a7766-6ba2-5643-ba08-e49408a02974
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f4d7acfe-73b6-5582-ab52-db2e3fa0b8c1
+---
+associated_participant: 51bf0e6b-a7b1-5cc7-bb81-7d11506ca9dd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 84de316d-2792-5014-8cab-74b64217bcdd
+---
+associated_participant: 24cfb805-f309-598f-84c5-57d90cadfe32
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9bfc5311-afb2-5d12-ad52-5d1a10d6f962
+---
+associated_participant: 712548ff-40f7-59a0-896c-695905d20bb2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6c80b2f4-9ae4-5ae0-b944-7e5f642a266a
+---
+associated_participant: cd0aad80-503e-5cc9-86ec-f625dddb0050
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f6e2bf56-5765-5dca-9433-4c22389b2e72
+---
+associated_participant: d7e4df17-c85c-53c0-bed0-745a86a4c22f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ac245bd5-bc1e-51f5-a624-081c14471ff7
+---
+associated_participant: 72b9e12a-9b79-529b-8bad-021d3dfc91e9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f697c06b-d9d4-58c7-a593-5c3f2370c69f
+---
+associated_participant: 336c4376-a511-5363-9901-5fc961034a6a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4b682cc2-1491-5376-82c3-d4508dadbc80
+---
+associated_participant: 5a87b362-bb21-52f1-9597-8b57c994bd7f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a687d101-950d-5205-8e80-6b8f3916bb33
+---
+associated_participant: b00b7bde-8cbb-5ee6-85bf-c7fff8804d97
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0e3e935d-3862-5507-9e39-530a3db93f1c
+---
+associated_participant: 7abcda14-f7eb-54f4-8c96-cc5f8c8d56bc
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f31e5cd0-7b0a-5f69-84ff-3dfb9410056f
+---
+associated_participant: ea236a8a-e7ee-5adf-97c8-184129506578
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4191757e-b855-5af9-972f-bb84df9912c1
+---
+associated_participant: f33a6a6e-f91f-5e1f-82c1-87ccd268aa6c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5ba7b0dd-7182-5800-bbdc-d0000f590885
+---
+associated_participant: 393a399b-e4b3-5825-850c-94bd3ff7547b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 53fdae96-5183-5fa7-95f6-0218b103da58
+---
+associated_participant: ba64b47a-e689-53b5-8b52-54fbcad5835a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a6c9510b-8bd4-56ee-89bb-b5be48e9d25e
+---
+associated_participant: 585655c2-c531-557c-86ca-5e541f8f8a49
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: d02e37b7-e4ac-585a-af6c-ea140b72abd1
+---
+associated_participant: d04bf999-fd1a-555c-91ab-e75eb18e10ea
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8771ed3d-dfea-5ce0-a3d6-689a0419a2bb
+---
+associated_participant: 8e4bc1ac-83d0-5ff3-be90-248d6c1f1f5d
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: f077cf7d-0f38-53e5-8ab2-e548e6cb56d6
+---
+associated_participant: 371c41c0-2932-55cf-96c2-d63b00c617d7
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3d698231-0713-512c-ad0b-fde40a4585e3
+---
+associated_participant: ddb6feb5-8f49-5359-9ad3-4c3a85721910
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: dcc30bb4-c2aa-5343-8a0a-f4f9ab744beb
+---
+associated_participant: 551220b8-2518-5f2c-b940-a06c77888246
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5d8f4917-1ba0-501d-80b7-3c826c41abe1
+---
+associated_participant: 07ba941b-07ed-524f-9f8c-7bcc366cbf5d
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: a470e660-907d-54dc-8896-6ce6d67a710b
+---
+associated_participant: abfbc8ca-637f-5b02-abb1-c74c8f856f3e
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 3021773a-36a5-5885-a508-e471f923e462
+---
+associated_participant: 7236fbe2-f7b3-5834-b743-36bb85157821
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b6dbb66d-2b70-5216-b5af-da3b470c5aed
+---
+associated_participant: 7a7c24c7-324a-5e5f-94ac-fbd427eaed09
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 205c2c7a-2bb1-5b64-8061-984059b640bc
+---
+associated_participant: 31178147-26de-5406-8500-c1ed5d83797f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 05f2e893-4ce4-5daf-928c-689ce66b60f2
+---
+associated_participant: 39c96457-d2ac-5529-82a2-fad3fb1132c1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5eb77b32-13d9-5b46-ba2d-12e492df1631
+---
+associated_participant: 466788b6-a99e-5339-a0f6-24f576ac8dae
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 38264073-a388-5763-b52d-f913026f4510
+---
+associated_participant: 01d9cdac-2ff9-5bc1-b079-a527e26f8ed1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 04fbf3ad-36df-558e-9afe-5b6ac2cf3a18
+---
+associated_participant: 08df835a-95b5-5831-98cb-d7e1a7dd3d19
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 729e7e56-d65b-590d-9b4b-47ff8349105a
+---
+associated_participant: d740541f-8b22-5841-a019-a0260150baa5
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1dc2c770-64bf-506c-82ec-39abc6024864
+---
+associated_participant: e3ae6e0f-3dea-5856-9b01-07f06b539f09
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a2a473d5-cda4-542e-855a-948192ed68c6
+---
+associated_participant: f6aa99c7-ffe7-5a77-9096-fee6368b2d9e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b6cf4b08-0a9d-5838-a093-3ef1d168ba51
+---
+associated_participant: 8586862f-6a1d-5b5c-95e8-cdb8b7bd1ba5
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: da009b62-cb44-563e-8121-3d7df817e600
+---
+associated_participant: bd5739f6-231e-5689-bc31-ff244497ad8d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f13fd374-ad7c-5a0b-a254-0a22476c72e1
+---
+associated_participant: 44f4fb47-ee77-534b-a1c7-bc485269460c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6c93db1a-2d3b-5904-8a64-a77b55634fa2
+---
+associated_participant: a8d704df-cef6-5fc0-98d8-ba7434d595f2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3912e36d-7836-5617-9458-b63cd713592d
+---
+associated_participant: 5ea830ac-1b15-5e64-8d9d-7693f68fdc05
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: cf104067-a7c5-5f8c-8e5b-da67e484dd02
+---
+associated_participant: 6fab51bb-97e8-5f6e-adce-6f47caff9d35
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 5a109a95-f43e-539a-9422-1071c8d73b55
+---
+associated_participant: 6152094a-18d0-5e1b-9ca5-f4aacd915edf
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 685b27cd-75b6-5e84-b42a-77188e7f6335
+---
+associated_participant: 2729e9a4-cc39-54ab-a5a2-f5f732038427
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f08970d0-042a-5ae7-8bc0-bb221414462b
+---
+associated_participant: 3e3846c6-ad56-5d90-b271-4d8dfc20e595
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7239754c-a80b-5ad1-a4ed-e7cb3436af4d
+---
+associated_participant: ceecf7eb-8860-53a6-8ab7-c47d61e52714
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: cc7ceca4-1f5f-524d-8309-991fc2666686
+---
+associated_participant: 7b2668b8-90ce-52bd-918d-f82e69574d9c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: fc668428-857b-546c-9274-a8ad500502e9
+---
+associated_participant: 9db5cc90-f868-5057-8d8c-3b3c4035446e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1663f3bc-c49b-5afb-8da7-258be0059502
+---
+associated_participant: 0a0d209b-36e8-5f6b-8bdb-e364aa8bae5d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1fb46f0b-bcac-5043-b8a8-040f1f1de746
+---
+associated_participant: 90dcc82c-fc1e-5e41-81de-2d065bbbd71c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a6469fc6-1fa7-5cd3-af1c-f1a3cda84431
+---
+associated_participant: 735563e1-4c6b-582e-83e2-6e21a2da6a73
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f9190842-3fa6-59e1-bb00-fe1cc1e70f26
+---
+associated_participant: 9e57039e-f416-5ecd-91d1-751a2ecc692a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8c48f145-03c1-5a73-8f6f-289b30df50bc
+---
+associated_participant: a076c2ed-52c8-579a-a292-8303b487674c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 11ea5431-e2ed-5ffc-973d-e4b1b4259880
+---
+associated_participant: 6df233ac-f56f-521d-8f03-804a9f3fdb61
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7139df5a-1132-5adf-8088-fae84d951e18
+---
+associated_participant: 83793217-802e-5a5e-bfcc-9669a72637b7
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a8670643-53b7-58dd-a811-498ff639062b
+---
+associated_participant: 829629f4-cf38-500c-89a3-2fe4018e0d0d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a67d8248-b336-5cb1-8dcc-e0281f5d0e52
+---
+associated_participant: 779a377e-b1f1-56dd-b045-ea505ccbd5b8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c29d40d3-70eb-5c09-b069-05418179f715
+---
+associated_participant: fb295ad6-f92d-52da-935b-4fc3e0fd191c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: fa1b7872-8f6c-5cb0-8cc7-0cf088f8b5b2
+---
+associated_participant: 43c587d1-e194-5751-9872-8c96065aebe3
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 45c38b40-110e-5f4d-a10b-4ac5798d39d3
+---
+associated_participant: 87c792cb-0542-5ab5-8e00-484b803c787e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3203c601-5a8e-5e43-b3f8-b1d4c67ce457
+---
+associated_participant: 4e569e0e-a4a2-531b-8f42-b89e85b2b88d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: cfd91605-8866-58f3-bcec-bfd90eef8ea8
+---
+associated_participant: bb9c0fe1-ac51-5626-883c-6c60360e4c2f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8dec2fc2-f17c-5a1b-97c1-b2c1a25b1ccf
+---
+associated_participant: 3b9c2f2c-db3d-56f1-8aff-e6b67b4b3a2f
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: a87c70fe-2ae8-571a-8d27-b6c442f30d94
+---
+associated_participant: e5843c19-6ce8-57f2-9dc6-0df537f29c87
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 89db321e-b0ca-55bf-ac5f-5106aafb98f6
+---
+associated_participant: 57a72c40-8205-5973-8237-b14a8aa8eae2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e73c87a5-63f0-58ed-969b-b1650582d3be
+---
+associated_participant: 9bfcd9e2-cd8d-5f6e-a67e-b2ba050fe5f4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5e52dd83-0464-52c6-b03f-3d43b24d38df
+---
+associated_participant: c6f16dcb-5502-5067-a2d5-3d8b30b3b6da
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4cb05e5e-b92b-5645-b15c-e698ce3ff511
+---
+associated_participant: fdc4bf22-44e3-56e1-a336-45c96650dbda
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8bf3fb17-b4af-5345-8a63-d395188c7760
+---
+associated_participant: 7f083a1e-c18c-56f2-95a6-05cd3f9d6945
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c31661c2-a8c7-505d-8232-233e6acf1a2a
+---
+associated_participant: b0041e81-3543-5d2c-9535-9af62bd81c40
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d24949c2-ea8b-55ac-821d-33fce25e6c73
+---
+associated_participant: bb82e9f4-2edb-5f77-b518-f0593e711e1c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 318971a8-0b89-52a3-88e5-31f8aa7b0108
+---
+associated_participant: 6c64cdb7-3843-58ce-96fb-212330a5ba53
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: fcdd251a-eb3c-5973-ab04-1035d85a5d03
+---
+associated_participant: a839473b-b67b-5669-8a33-aac4d110bba2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6812453c-ca4e-527d-bb96-992e22267c0b
+---
+associated_participant: f35b6c5b-4a13-5330-8e5b-c0b289de431f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d7c513ab-fb15-5303-9c60-955e94af8957
+---
+associated_participant: ae870501-3bfc-5d04-8392-9e1367b278b3
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 398946f0-789d-5505-981e-c413f0c6bf07
+---
+associated_participant: 1d175601-53d8-5cd9-a021-4aa7169759d9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: aed190b7-13c2-5a7b-bfdd-6cc395a98451
+---
+associated_participant: 6f8d86f6-9305-5493-9ac2-4bd429f87ee0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0abea694-3a4c-5816-86f0-7acdc93f7dcc
+---
+associated_participant: 873e7da0-3043-509d-8d39-ec0aa774b266
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5a795771-d84f-595f-b8ed-b53696902109
+---
+associated_participant: 6cc9360a-6588-5d5b-a1a8-868f71d935fc
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 91726c90-bdef-5e77-a3b7-1dbe656238f4
+---
+associated_participant: cd47ca7c-e892-5568-af3a-dd2ca8bdb2d0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4d3ee220-8171-501b-996c-74e65c5bf94e
+---
+associated_participant: 52b67f01-3647-557f-86f2-ae94c9c6b0e8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7105628e-75fa-5f8e-91ea-8cf72a8e978d
+---
+associated_participant: 35c98f68-3245-5916-95fc-0dd86a6455a0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 21f29583-8d33-5a30-95ae-2e940a7128cf
+---
+associated_participant: 481fbe60-3728-5c57-a2b9-d041868e62a2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 518ccc1c-1e3d-5ed9-bd7c-0ecd97371906
+---
+associated_participant: 9c1adfdb-bb61-579f-8ef7-10e8c8935c57
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9e40b6a2-0ebe-55db-b759-7cbebf4517b4
+---
+associated_participant: e43c7585-dc9f-5705-bfe7-08d6cfc48b83
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f1d6f261-39fd-5883-b53a-109f66f6b782
+---
+associated_participant: fb3ef04b-25ba-572e-b119-161f3ff0b04b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e4569800-6c56-5a6a-8290-43189baf626d
+---
+associated_participant: 130cb7df-b010-594a-9336-7076a57c5330
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ffe35e0c-f03a-59f5-b89f-fe346837cee2
+---
+associated_participant: 477f0860-73db-5bf8-8144-4ee4d1ffc041
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 963ed04e-2388-5595-b5de-d1017ca96d05
+---
+associated_participant: c3014335-8d07-5d28-92fc-1f5d4f445262
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 92876457-b313-54a0-86ca-94818491715f
+---
+associated_participant: 3cf45e79-5059-5853-b969-a4997ef5bcbd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5b1cb5cb-ff4e-5eb6-bc10-eac2f2dcf136
+---
+associated_participant: 06593455-c25a-5c6b-8932-8c5c330f4ad7
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 57abb54c-95bc-52ad-8287-224d2cce3c9c
+---
+associated_participant: e829b4a9-37fc-55b6-8ab2-0bd4fd7fe69f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4481391a-2994-50e0-a0cb-e54afb49bf40
+---
+associated_participant: 85d35c0e-df40-50bf-8dd3-9c95ce30cd5b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 36b72340-9907-5fda-984a-88b326089de4
+---
+associated_participant: d38eaff2-4433-5577-ba22-bb85dc86beae
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 93bc159c-6aae-5681-b715-ca9e0557eb09
+---
+associated_participant: 5e46cdd7-9bbb-5b5e-9353-9ad1760c0e72
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 84884ac9-59f1-55e4-b9b8-146d7bb298c5
+---
+associated_participant: 5334d178-4985-5ec8-97e9-d03da4c4e7ec
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b426c424-af3f-5b4f-9258-616aab16b446
+---
+associated_participant: 6b200ab1-28af-585c-9b67-f5123d82336a
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: cf837079-1fe3-5de7-b9da-5483e8ed9f52
+---
+associated_participant: cac11b41-7cc3-539f-9e80-32839d4774e5
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f4b99f71-ae6d-50a6-96ef-12e756ab4e54
+---
+associated_participant: ed70e8b3-c8bb-54c9-bb6e-db2dc79c90b6
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 749efb2d-ceb5-58d6-b3ca-4c4325480dfb
+---
+associated_participant: a674d48a-4645-594f-a640-03bc8a086446
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e53abf8f-2b2e-53f4-a7c1-cc2978543a77
+---
+associated_participant: f31f0c43-07d4-5656-8b04-44209aa9aa22
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: db621557-e6cb-5648-b528-f9f4cb7672f9
+---
+associated_participant: 3120469d-af0b-5cb8-886c-f5da7aeef36c
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: ad09cf5a-a45a-5a65-a8c4-dfa2c9ae2dae
+---
+associated_participant: 9c51be92-2403-5cf3-b2a8-d78662ef7653
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 59028c39-885e-5fe4-8be2-6d7ca92b9449
+---
+associated_participant: ecda980e-6d28-59d5-af51-41a89a9a85d9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ba7f0d70-eaee-5478-8d9a-9e62aa56f68d
+---
+associated_participant: 0a493651-e5cd-56b2-a96f-97670cb33816
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 26ea2b2b-f441-5843-b7e5-a50262291fac
+---
+associated_participant: 178c4208-a3a7-5845-8c8a-123c2326e852
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f63b324f-288d-55c4-b778-59fdb39d3a35
+---
+associated_participant: ed48b064-9ecd-5f10-b4e3-c86f8807af36
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 43a0463e-6ae9-5673-9747-af291d1f7b4c
+---
+associated_participant: 69dc94be-7ba2-5660-aaab-36950046f23f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 22edec24-276a-52bc-bd6c-70cfdf48df1f
+---
+associated_participant: 16796ad7-b1cd-583b-8072-6eee14594a50
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 603ed71b-afe8-56ae-b5c7-e31680f342e0
+---
+associated_participant: 6861a44e-fa93-54c3-b420-fbc6bc3a8728
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a1ca6b1e-b255-50f5-a048-6fdd02abaeb1
+---
+associated_participant: 5ace984c-34bb-59d7-b499-9ae89bc63f62
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b9004bde-fdb8-5e53-a0ea-e1ed1879c87d
+---
+associated_participant: 37b4eada-06a3-5693-b3f4-aec43226b090
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 378539b8-188a-574e-9fad-0215e3688d01
+---
+associated_participant: bec3b2e4-5274-563f-b175-dd3c07eeaa4a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b2193161-dfae-5478-864f-dbb0ef8a321d
+---
+associated_participant: 45cffb50-8a0e-59fd-9564-6d7867b45972
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: eeef36af-bdd9-5d69-9f6b-30e96e953157
+---
+associated_participant: 8be839be-733c-53e0-b86d-2fdb01eed4e0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9a4bae16-5d9d-594f-b546-151e52f67bed
+---
+associated_participant: eb83b368-25e5-5f1d-a815-ca9245024dd9
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d061df38-af1a-59cd-a412-6d110eeaa61a
+---
+associated_participant: c560fad2-2953-51de-b4d5-a1b383979968
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3de4104e-61c7-583e-a622-e363c9dda05c
+---
+associated_participant: 74025454-4946-55e7-92cf-21d0566ac1f6
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 02da970e-f6f8-5c53-aaf8-f129f55e74f3
+---
+associated_participant: 71d6e3e9-bf08-5021-89ad-01d20972e897
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 231438db-d7a2-557b-94b0-ed9c77377dcb
+---
+associated_participant: 06aa2d4c-6c87-5dcc-84d9-01b00bf08bb2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d87a34fc-8e91-5904-9042-504fa0b64053
+---
+associated_participant: e681d0f5-e13f-5bb4-8d0d-b38dca4d99fd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 59d4f05d-0988-5ee1-81f6-d0c1ba3d190c
+---
+associated_participant: 83eb04e0-27ad-5988-aac4-679dc8300791
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e2bf04f6-a982-53a7-b9fc-7cd5f67511cf
+---
+associated_participant: feb43fbf-fab0-5d98-99a8-d92cd77e14be
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7ccb7543-fb0c-514f-95a9-ecd894d67d2a
+---
+associated_participant: 2a642d43-bd37-5679-8f28-af76b573c95f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a02f7b26-d19a-5f78-b872-b4df8a513c1f
+---
+associated_participant: 1ec241a9-2868-5bcd-a41a-2a05b26aa7c6
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ef09ebe4-afc1-5df8-a6f6-a0b9c42362ad
+---
+associated_participant: 7f6a4d27-4ed1-5cf8-96eb-8e0a2171dc49
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: e2d6204f-2db2-506c-8b44-351aa9f03b6b
+---
+associated_participant: bfa9cf8e-9cff-5bb2-955b-e582bb121e9f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9cf34e32-ec86-5d5c-afd5-ebff8e517370
+---
+associated_participant: 834d8d1e-30e2-5876-9516-338ec8de3209
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5bd2411c-fdcc-5ef7-a92e-673bdcb7b4ee
+---
+associated_participant: b3f8e9f6-962d-5d32-9721-f0f5759f93cb
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: cabb6d96-2e95-5b00-bb8b-ed0c0ddc5cc6
+---
+associated_participant: 32645dbe-5cf4-5680-8af7-06bc46b122fb
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6847218f-c037-50e4-adcf-80c5c165165a
+---
+associated_participant: 3e796d2f-ec0b-5660-9e2d-852ba1d117ca
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 91ad34b1-86c0-5715-a97d-d59e6e7bde18
+---
+associated_participant: ee6127e5-4555-525c-8cc9-3e4e904b84a4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7b09fec0-e3df-59cb-89f4-69ccd00dfcff
+---
+associated_participant: 120936ff-dc72-5284-9e8b-f7b2c909cbfa
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 2f831a2c-3e53-5cd3-9923-26c84095576d
+---
+associated_participant: bbc140d1-4a14-5487-b18e-47ae4734d5b1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 54b05a38-3a01-53df-a644-1b3f731e7378
+---
+associated_participant: e2dd1a4b-e3b5-588b-8690-94387904bdcd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 06649811-e0d0-55ee-9130-1528c464e6bb
+---
+associated_participant: 498dc68d-c9b9-5777-aa95-78c368f3378f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 63d218c4-708a-523a-a32f-d69843500099
+---
+associated_participant: 73cd761c-9b76-5d84-bf41-41625aa6742d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9c91df7d-4ab1-58e9-9d9b-8d3cc5c9b931
+---
+associated_participant: 161a2f9d-8803-547a-890c-cb4f5b886be8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 92594baa-b57a-5b1b-b216-5e16ebe47ace
+---
+associated_participant: 063b844c-d6dd-5381-8fd7-288cfc73db0e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 22a72956-dfea-580c-a2a6-003a752859e1
+---
+associated_participant: 59a65bf8-a52c-50dc-a40f-830bf558d599
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 8859c312-1f0d-54c2-a7db-0958a6500f93
+---
+associated_participant: 13de12f8-fcfc-5553-a3d8-4bcc9b5de624
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5d78ea79-e541-546b-ab4f-4cf2eb99eb00
+---
+associated_participant: 61ba72a8-ce7c-5eba-872b-a147abc0ed72
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: be2cbd64-e758-5095-8600-100bcb25f614
+---
+associated_participant: cf5b014a-b5e1-5735-874d-a9b7431a9177
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6119c483-25a2-53f3-9288-fec979930966
+---
+associated_participant: c14b6ab7-4799-5f0e-9888-21f48cd2c4c8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1d986b43-07a0-560c-8eb3-10e996c873fd
+---
+associated_participant: 683188ae-cbed-53c6-8f4c-d019a1f135f0
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 596f603e-fba7-5f50-ad35-6ea85808e59e
+---
+associated_participant: a5d8b7e3-878c-5c82-9677-c15810b64f92
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 35cea262-a091-5e50-89af-2336b7ab87d1
+---
+associated_participant: 3053426c-bd1a-5d01-9047-4b7a0293df63
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f6abf5eb-b10a-513d-9185-62fe0901977e
+---
+associated_participant: 1db5e736-9f20-578c-a79d-6a744d4596a5
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 285acad2-9b30-5f86-9d8e-5dbae635165a
+---
+associated_participant: de0b5c5e-eca5-5cb4-9184-449f9fd89a1b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: fc5b6374-504f-53da-a8c9-0b6ff5d541df
+---
+associated_participant: 19d75ca9-bce7-54f1-b6a0-38f269894b7c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a2cfae35-59d7-5c9f-b3ad-e66d2834e3ba
+---
+associated_participant: b8c98599-34bb-5aaa-bd08-6b53b7d99cc4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 9adb87c5-a4e7-5088-99d4-f8d3f5247ab8
+---
+associated_participant: e7932dad-5b8e-5b60-b875-3b3bec90944c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 28e14040-34f0-5e2a-aa72-7838946cdb7c
+---
+associated_participant: e09fb694-a769-5897-bc6d-5b950cd795d0
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1db76c21-814a-5587-8c43-8d92e064dac8
+---
+associated_participant: 2763a50d-56d3-53ff-af73-219ea32905e7
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d8073b8f-9380-512a-9455-e427e774730d
+---
+associated_participant: a17ec839-3484-55ba-a9c6-98d94f1a1753
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3be4b74e-dfcf-5794-a825-8ac9bad99e50
+---
+associated_participant: d81d2475-ea2b-5fa2-8863-9c2384998383
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 23ca03fb-c40a-5806-ae53-cb18a4d710df
+---
+associated_participant: 6a8f4749-ad95-5aa4-aa67-2c6b2832d07b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 19f010b4-b4f9-53f0-8de1-fcd1f112a7f0
+---
+associated_participant: a8beea38-5b00-5d5e-86cf-94c7b9a5043c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7ff3ad5d-8861-581b-bf02-812e53dbcc54
+---
+associated_participant: 81a3f733-a0f4-5df0-a6c0-01f03fffd91d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 35f2a7e5-1cb4-58b8-9366-837475628017
+---
+associated_participant: 019b447b-512b-56cc-a1d8-d054b8bef3a8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6c10181b-41c0-56e6-a180-8bbcd81dc747
+---
+associated_participant: 66c34cac-eca3-503e-a85f-695ad411e146
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 1ab33b7b-a465-5fed-a299-f23f5c29ac18
+---
+associated_participant: 9b34447d-f1b9-5921-bc33-32a59e124707
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ad0b77e5-357d-54ca-b191-2f0eefb01687
+---
+associated_participant: e5161b6c-8ad7-53d6-8f27-b736c40b6a69
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a610f6cf-911d-5a22-9fa7-4896355dcf89
+---
+associated_participant: 0d68eb83-ae74-573f-9947-ac863dde9318
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: c319ce70-f4d6-5c7b-ab63-95c63e63b304
+---
+associated_participant: e6618537-8260-506d-90a7-23696912e8b8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6cd831e7-7dba-557e-855e-224c7038c8ac
+---
+associated_participant: 8e35cbe4-975e-56cb-9973-07da75146f61
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0a733b9e-5e1b-5a0a-b4c6-14eeba70b34a
+---
+associated_participant: 293a5445-e455-528f-a8b2-5cf8d0b33ef4
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 8af6cb4e-155e-57d7-b7a7-3341a1ea3410
+---
+associated_participant: 6e6f05c9-0a4c-5af8-8a07-69f72afd23ea
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: ea144aa1-9681-52f6-832f-a14e0a7de6ce
+---
+associated_participant: f102c53a-c311-5971-9ba7-d43a3fb68dfa
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 22437ea4-fe6c-5231-8cfb-330b81cab6df
+---
+associated_participant: 6ef9fdce-f529-515e-b8e4-f19eae2ec4dd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5f94f02b-5660-57d6-b1ea-3be80238bb59
+---
+associated_participant: def45d04-2ef7-58f5-be4e-d9183f5ee815
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a2b9d8fa-3469-50cb-afef-cc91590ad125
+---
+associated_participant: 32c13a51-7864-5b20-9236-950c0ab5abf6
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 46a48934-2a43-5bb6-b269-a77b5ffabaf7
+---
+associated_participant: 898832e4-206c-5781-b175-639ee07eb51e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5d79755d-320b-5412-a981-49f3e7357154
+---
+associated_participant: 0a868a9d-c82a-5e30-879f-5d78536f2aaa
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bd055ff0-3597-5d8f-a797-f160d07b2e87
+---
+associated_participant: 95f2d483-a9a1-5f87-8332-77889f4d802c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3e0be38b-78d6-540a-971d-622516e0b08a
+---
+associated_participant: b5315492-5660-5232-b29d-0bbf47b13087
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d45261cc-bfb5-5694-8db8-a20ca34699e3
+---
+associated_participant: 73d62973-3e28-55e4-9b11-fe4340c0d1e5
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: f0cfa615-faf2-574f-bf50-ea36ad12bdaa
+---
+associated_participant: 9f874cd5-e61e-5b60-9505-b0a6ac32197c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 75fe61a1-e7b9-55c1-b1a7-a207ddd00fc9
+---
+associated_participant: 381a0593-8c31-56ae-a589-38362dfa137c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 1a23c01c-ce58-5c9d-8aa4-2bcd09607b72
+---
+associated_participant: 7c314688-79c0-5694-b51b-5b2230273b72
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 50361cfd-e844-538b-aa91-b669fd7ebc73
+---
+associated_participant: 46c1ebd6-c5f3-5c2b-b9cc-c34ba8888bbe
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0bcf8877-e52d-565a-a03c-99a39220d1c5
+---
+associated_participant: f5465219-52ce-5b5f-b962-155680deb453
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 7ecc1354-7009-59c4-b026-94dce655dfa5
+---
+associated_participant: e3c7690f-7545-5ad0-a6c0-d0bb00d8fa7d
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 7b2c6a3d-44ee-5267-a85a-2cf565d21cfc
+---
+associated_participant: c2ee59a0-0f30-50ee-a45e-1270ca36a239
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 11480c60-aaa8-5991-aded-ea6b4f3895ee
+---
+associated_participant: d7d6e9f6-8cde-5ffc-9ef6-516bf0d5ca53
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ddabbb26-8a50-5e49-a4a8-219179a46097
+---
+associated_participant: 068f9bec-bff1-55ee-b752-a249e20c7538
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: aa20948a-8435-549d-939a-9734841dcdc6
+---
+associated_participant: 547386a2-1a17-5cfb-827e-ad8a47750e64
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 58595006-862d-52df-aefc-dfedf6dd8bce
+---
+associated_participant: 5003e04a-603f-5973-b581-6104bb4f028f
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 6c28d8df-4928-5d2d-bbf5-b20607001471
+---
+associated_participant: 4de68a23-6533-5ad6-9900-2bed13c92134
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: eae200ba-52fb-5c9c-b40e-332834903c37
+---
+associated_participant: 6087030c-8f5f-555a-b51d-94a8b8d12ad1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a35505a1-4cd5-501b-8299-ef3d5c484d4d
+---
+associated_participant: 597f6be7-edad-56c3-ad06-dbea1724754a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 864d0c25-174e-56c2-adf7-b2348fb8f54c
+---
+associated_participant: ef658a9c-e71d-574e-aefa-9c2da3a5c6bb
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a4b8369d-1fcf-5ce9-9416-278a4bcd6daa
+---
+associated_participant: cb5fdb84-57ff-5aff-b6f7-dae7466b63db
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 31fd13d4-691f-50de-8aad-d30e4262d9bd
+---
+associated_participant: 82e7247e-7f53-59bd-bb89-738ce9129d42
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 415e7661-f099-5806-b3a3-1988ce4f5e51
+---
+associated_participant: c9ff1ccd-69bf-580f-9266-efa9470b5fb4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3be11cc2-40e8-5e48-9670-24d7d972da00
+---
+associated_participant: 2ab4ebc2-53f4-5981-bd91-c79876d72076
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 46a1c0f2-2f51-52c7-949c-a81fee8873a0
+---
+associated_participant: 57beacb6-71ef-5e83-80e6-50ddc13d22a4
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: acafa82d-b89a-5480-bcae-4a7935292e04
+---
+associated_participant: 8427a0db-439f-5d9e-9b31-3862468f14ea
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6eaf64ac-d72f-5790-9932-90235b031533
+---
+associated_participant: 48a29c51-f272-5b81-9405-893216919694
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 2dac8160-1ccc-5672-bebb-3876480a8ce2
+---
+associated_participant: fce20f13-40f9-5814-93f9-95154323af6b
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 18ab18ff-3133-58d0-b327-9b945f1eadec
+---
+associated_participant: 0b97536b-905d-5aa6-8ad1-63e0a8c18b64
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: c58bdaf1-4c27-5260-89b2-380c463b6b61
+---
+associated_participant: 8c4fca97-14e0-5dc6-af4b-0f3ecdc22981
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 991db089-5f39-5477-9227-a70b7af5245c
+---
+associated_participant: 85c17e4d-ef43-5744-89cf-7901367ec30c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: fbfa440a-abe9-5576-ad26-f81166012abd
+---
+associated_participant: 85e63a37-aace-5185-82a1-1f4ef72b25b5
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 42ec1af4-020d-57d6-a7e3-da8bc29c1fee
+---
+associated_participant: 1a954917-627f-58cf-9211-7038ef7f302b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 79026849-d2f4-5558-a5c6-36e198cabed8
+---
+associated_participant: 9735036d-cda6-533a-ad81-1859d6106583
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 28ae62a1-994e-5623-a475-fc56754bf829
+---
+associated_participant: 2bd8cf20-e3c3-56bf-a5ea-bcbf72993ddf
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: abd7bd0b-29cc-5e6d-a007-9c03ad7f511d
+---
+associated_participant: 94e9200b-e8a8-5478-b3d3-c269d0a7edec
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 3d723ff4-99dc-5d23-81af-d7173faf5b44
+---
+associated_participant: 3b7d3792-1b94-5922-850e-59d33cba1a51
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f4cd698a-bf66-5935-ad8b-db894ab7bb30
+---
+associated_participant: 21a620b3-a0b2-59b4-a350-6ed42a4b19a2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bb2edd07-bc9b-5cc4-bfbb-0ad9e24a27f1
+---
+associated_participant: c5be1555-3c64-57a9-95a4-9254d233ce7b
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7e52a6f6-c778-595d-8706-0b3700ab1d1b
+---
+associated_participant: 3a3e38cb-fce7-5fb2-bb94-8d0ee188a361
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 896e4d74-2c62-54ec-82e0-b8b2422d61ee
+---
+associated_participant: 363cee09-f1e2-5f91-b5d6-7eacef0539fb
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ba86709e-0074-5fe7-b62f-928e9e341ae5
+---
+associated_participant: 5b62d5ab-ab22-5770-832f-fd6f2ce8efce
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: ff9a1572-302c-5860-9b7a-261dae56284e
+---
+associated_participant: 38eb8241-3d7a-5f54-a2df-a560caa4dd59
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 63f086f2-c63d-59bb-a78f-acd4878cdbf3
+---
+associated_participant: dba3e48c-fdfd-5d62-aad4-080e58e18c33
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: adb30696-d26c-5d23-babc-b8dc06847da0
+---
+associated_participant: c8246fe3-64a6-5208-b24e-5e0f5f8087c7
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 8529e7a1-075b-5e5a-9e21-8ec2d8518ce3
+---
+associated_participant: 1378a49f-8575-5bc7-ae5d-92469d098384
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 6d5cb691-be8a-5d34-8d4c-33ea6c7c3b01
+---
+associated_participant: c3184f9e-4e6e-545c-9f78-ae448cdd2452
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c3aa3fbd-70cf-500a-9ff7-8fcae87e4c49
+---
+associated_participant: 8bc68d17-1c0f-5248-8ac8-d273efb79779
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 97e41d5f-2816-5a54-890e-f5db1f6a7c2b
+---
+associated_participant: cde0619c-c701-50af-8e18-0db8f2e7a5e6
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 27b91d52-c37c-5efe-9375-2210d60dd730
+---
+associated_participant: 0189f803-b9ce-5d33-adab-69aac6fc970c
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 107eb39b-e484-5f95-93da-d6867b3878a9
+---
+associated_participant: 392d95dd-7632-523d-985a-96e121cbaaa8
+drug_concept: RxCUI:17767
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 7047cb8d-c834-53ae-9b57-5af70c989ab9
+---
+associated_participant: 385694ed-2c27-5917-ad6e-252c66b2780d
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bad528f4-121b-53b1-b628-fc6aa285a94a
+---
+associated_participant: 256a28fd-2a80-5014-9951-f0331340e2da
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 73df5e7f-5d27-50f1-8585-90cff3ecbf0b
+---
+associated_participant: 5f796e32-57cf-51f9-a36b-f1414ca94131
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: da11a805-b14b-57ce-85f4-c5702230314f
+---
+associated_participant: 273ae8b0-f5d3-5f19-97ce-0d44ad6b67c4
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: ec5ef7a7-b422-59e6-b60f-dfcbbce5e5ec
+---
+associated_participant: d52c1155-b48b-506d-acf1-08c7590f6efd
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 748ea8e3-fe85-5bfb-99f2-5f68040d592d
+---
+associated_participant: 300797cd-8050-511f-a880-518ccb6e1847
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 0edff4c6-7205-5f9c-a1c3-2215d3b73072
+---
+associated_participant: 4640b42d-3875-5771-8ffc-becfcd79f929
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5447cf0b-bb60-5ce5-a340-05e5edb711dd
+---
+associated_participant: 1ce934d8-d9fd-58b8-a0f7-396220ff369f
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: d5786a98-12a6-558d-ae5a-11e0feb80524
+---
+associated_participant: 95d7b445-92ae-5493-95eb-eeb753b384a8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 27d94826-7cd4-5250-932d-8c750a7e525f
+---
+associated_participant: 90e321fd-8888-5fed-8e97-d7c0d0dddb21
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 45a826e4-cb22-5d14-a52e-e65511aba349
+---
+associated_participant: 95e3efac-f6a1-57ce-af35-dd0fc43a9fee
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 64c609e9-bd36-5a98-a98e-d9cf56654149
+---
+associated_participant: 474ca7bd-f442-5c14-a017-86f4c99014e8
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: f9fc63c7-56d3-5ecc-9692-28943628034e
+---
+associated_participant: 47db1392-5a2a-5633-9a70-feb849860c78
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b3607e0a-5790-5175-9f5a-7b1d5b99d7e5
+---
+associated_participant: 06198f60-5b72-5ec9-9b29-6b31c9d6d435
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: de12d445-2a5c-55dd-a4e6-8e3a8689782a
+---
+associated_participant: 2cec19cb-f72d-5bfa-b3e0-bc1413625747
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 7c0a4bfc-f67b-5c89-bfc9-a55f02957973
+---
+associated_participant: c20b2c1a-409c-5ca9-833a-7de671878c7e
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: bb2515d7-4172-5ea2-8080-bb61ef640a41
+---
+associated_participant: 60769a1c-ce23-53b8-84ee-e2b94763d49a
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 5c6a587e-4011-5dfc-93d8-62e1fe8fd0cb
+---
+associated_participant: 447b46eb-8b36-5033-9df1-cb057bb7a145
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 2bdd44f2-74f1-587f-8321-a623140342b5
+---
+associated_participant: 4c821279-0ed6-56f0-bb8b-65a155c091fb
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4cee3061-08f9-522b-b600-52f0cd314275
+---
+associated_participant: bfe7eac0-d56b-5424-a8ec-09b2e39191ce
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 17aa7a95-8dbb-52b6-8748-39a4dae5b808
+---
+associated_participant: 8d338ba7-10fb-537a-a87b-8a4827d8ae33
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 610e1f96-5659-5ef8-92e6-be6d86e04de9
+---
+associated_participant: 236c2bb9-cd60-592c-89bc-ab7b4500551e
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: a7dc108c-eeab-5dbe-be86-10caab9542fb
+---
+associated_participant: 56eda87f-9fcd-55e6-bfcb-9c1827590e4f
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 2c28b283-9f4b-5191-bf98-ec886fdc0e45
+---
+associated_participant: d7a5a040-e0eb-530d-ae69-e9decc448f5c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 77e3f95d-aa8d-58b9-9df7-eec460e03a93
+---
+associated_participant: 90a1c23c-9dc9-542f-a460-b8549fb8bdc2
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: dcab2770-0eb5-5b2c-8399-5c8a9c502993
+---
+associated_participant: ee342b72-2de7-5163-afaf-46a7946eda14
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: f8ac015e-3e8f-5591-9b5b-cb9c8360b2e2
+---
+associated_participant: 4706d10c-5c08-58ff-b299-2a58b5d8ead1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: b0ca23c2-50f1-5758-81f3-ec7ded01d59d
+---
+associated_participant: 1fede920-437c-5a56-9c4f-e5f19bb58439
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 98487907-da6a-5a11-b769-2e84379baa11
+---
+associated_participant: db77607f-6714-5c6e-8e25-a40441c64b6c
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 82464885-a5ad-5ea7-9cc1-70f6a7eafeb0
+---
+associated_participant: 25d250d8-a20e-5989-aacc-c5e40358c281
+drug_concept: RxCUI:7417
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: cfa54a69-206c-53aa-a4de-d73de647cbe0
+---
+associated_participant: 9db1672c-8c4c-5c74-ba26-5ad8bf52f0d1
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: c79a7577-9f94-5311-9c59-779bd0e908d2
+---
+associated_participant: 232f0ff7-9cd4-54fb-b9be-3c1f731b9f1a
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 68b4631c-8d14-5766-a789-1f968f8a2af8
+---
+associated_participant: 598d65a9-4d86-5233-b7aa-628ac6b50ecf
+drug_concept: ATC:C08
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: b2759211-e267-56a6-b190-0d092e502fd5
+---
+associated_participant: 839ae684-ff98-5d9d-84d2-382605457eff
+drug_concept: NDFRT:N0000175421
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: PRESENT
+id: 76f105e7-2571-552e-b5e1-0e6d370c76d1
+---
+associated_participant: c6ddebea-9d4d-50a9-971f-412ebc897e11
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: a5b9c580-f3ac-5884-8590-32ec67106033
+---
+associated_participant: 3b941523-412a-5271-a7de-de383a8e15a2
+drug_concept: null
+exposure_provenance: PATIENT_SELF_REPORTED_MEDICATION
+exposure_status: ABSENT
+id: 4eb598b3-c788-53de-8834-891ce9b8aa59
+---
