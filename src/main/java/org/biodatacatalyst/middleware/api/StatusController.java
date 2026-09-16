@@ -1,26 +1,36 @@
 package org.biodatacatalyst.middleware.api;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import org.biodatacatalyst.middleware.service.StudyRepository;
 
 @Tag(name = "Health", description = "Application availability")
 @RestController
+@RequestMapping("/api/v1/health")
 public class StatusController {
 
-    @Operation(
-            summary = "Check application health",
-            description = "Confirms the middleware is responding."
-    )
-    @GetMapping("/api/v1/health")
-    public Map<String, String> health() {
-        return Map.of(
-                "service", "bdc-dp-middleware",
-                "status", "UP",
-                "message", "BDC Data Portal middleware is running"
-        );
+    private final StudyRepository repository;
+
+    public StatusController(StudyRepository repository) {
+        this.repository = repository;
+    }
+
+    @Operation(operationId = "health", summary = "Check the application and the loaded studies",
+            description = "Returns UP once the application is serving requests. The study data is read and "
+                    + "validated at startup, so the studies listed here are the ones available to every route.")
+    @GetMapping
+    public Map<String, Object> health() {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("service", "bdc-dp-middleware");
+        body.put("status", "UP");
+        body.put("studies", repository.studyIds());
+        return body;
     }
 }

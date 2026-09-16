@@ -1,6 +1,9 @@
 spring:
   application:
     name: bdc-dp-middleware
+  mvc:
+    problemdetails:
+      enabled: true
 
 server:
   port: ${PORT:8080}
@@ -22,11 +25,10 @@ app:
 
 springdoc:
   paths-to-match:
-    - /api/v1/cohorts
-    - /api/v1/cohorts/**
-    - /api/v1/health
+    - /api/v1/**
   show-actuator: false
   swagger-ui:
     path: /swagger-ui.html
     disable-swagger-default-url: true
     try-it-out-enabled: true
+    tags-sorter: alpha
