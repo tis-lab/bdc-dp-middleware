@@ -16,64 +16,64 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.biodatacatalyst.middleware.service.CohortService;
+import org.biodatacatalyst.middleware.service.DefinitionService;
 
-@Tag(name = "Cohorts", description = "Cohorts are defined by an explicit list of condition codes.")
+@Tag(name = "Definitions", description = "Definitions are defined by an explicit list of condition codes.")
 @RestController
-@RequestMapping("/api/v1/cohorts")
+@RequestMapping("/api/v1/definitions")
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Success", useReturnTypeSchema = true),
-        @ApiResponse(responseCode = "404", description = "Unknown cohort or study",
+        @ApiResponse(responseCode = "404", description = "Unknown definition or study",
                 content = @Content(mediaType = "application/problem+json",
                         schema = @Schema(implementation = ProblemDetail.class)))
 })
-public class CohortController {
+public class DefinitionController {
 
-    private static final String COHORT_EXAMPLE = "hypertension";
+    private static final String DEFINITION_EXAMPLE = "hypertension";
 
-    private final CohortService cohorts;
+    private final DefinitionService definitions;
 
-    public CohortController(CohortService cohorts) {
-        this.cohorts = cohorts;
+    public DefinitionController(DefinitionService definitions) {
+        this.definitions = definitions;
     }
 
-    @Operation(operationId = "listCohorts", summary = "List cohort definitions and their condition codes")
+    @Operation(operationId = "listDefinitions", summary = "List definitions and their condition codes")
     @GetMapping
-    public List<CohortService.CohortDefinition> cohorts() {
-        return cohorts.cohorts();
+    public List<DefinitionService.Definition> definitions() {
+        return definitions.definitions();
     }
 
-    @Operation(operationId = "getCohort", summary = "Get one cohort definition")
-    @GetMapping("/{cohortId}")
-    public CohortService.CohortDefinition cohort(
-            @Parameter(example = COHORT_EXAMPLE,
+    @Operation(operationId = "getDefinition", summary = "Get one definition")
+    @GetMapping("/{definitionId}")
+    public DefinitionService.Definition definition(
+            @Parameter(example = DEFINITION_EXAMPLE,
                     schema = @Schema(allowableValues = {"hypertension", "diabetes"}))
-            @PathVariable("cohortId") String cohortId) {
-        return cohorts.cohort(cohortId);
+            @PathVariable("definitionId") String definitionId) {
+        return definitions.definition(definitionId);
     }
 
-    @Operation(operationId = "getCohortCounts", summary = "Count matching participants per study",
+    @Operation(operationId = "getDefinitionCounts", summary = "Count matching participants per study",
             description = "A participant with several matching conditions is counted once. Studies with no "
                     + "matches are included with a count of zero.")
-    @GetMapping("/{cohortId}/counts")
-    public CohortService.CohortCounts counts(
-            @Parameter(example = COHORT_EXAMPLE,
+    @GetMapping("/{definitionId}/counts")
+    public DefinitionService.DefinitionCounts counts(
+            @Parameter(example = DEFINITION_EXAMPLE,
                     schema = @Schema(allowableValues = {"hypertension", "diabetes"}))
-            @PathVariable("cohortId") String cohortId) {
-        return cohorts.counts(cohortId);
+            @PathVariable("definitionId") String definitionId) {
+        return definitions.counts(definitionId);
     }
 
-    @Operation(operationId = "listCohortParticipants", summary = "List matching participants",
+    @Operation(operationId = "listDefinitionParticipants", summary = "List matching participants",
             description = "Returns each matching Participant record with the study it came from. Conditions are "
                     + "matched inside their own study only. No matches returns 200 with count zero.")
-    @GetMapping("/{cohortId}/participants")
-    public CohortService.CohortParticipants participants(
-            @Parameter(example = COHORT_EXAMPLE,
+    @GetMapping("/{definitionId}/participants")
+    public DefinitionService.DefinitionParticipants participants(
+            @Parameter(example = DEFINITION_EXAMPLE,
                     schema = @Schema(allowableValues = {"hypertension", "diabetes"}))
-            @PathVariable("cohortId") String cohortId,
+            @PathVariable("definitionId") String definitionId,
             @Parameter(description = "Restrict to one study. Omit or leave blank to search every study.",
                     schema = @Schema(allowableValues = {"study_one", "study_two"}))
             @RequestParam(name = "studyId", required = false) String studyId) {
-        return cohorts.participants(cohortId, studyId);
+        return definitions.participants(definitionId, studyId);
     }
 }

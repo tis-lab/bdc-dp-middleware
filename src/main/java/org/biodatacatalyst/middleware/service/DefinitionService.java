@@ -17,65 +17,65 @@ import org.biodatacatalyst.middleware.service.StudyRepository.Study;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
-public class CohortService {
+public class DefinitionService {
 
     /** Only conditions the participant has themselves, currently recorded, are counted. */
     private static final String REQUIRED_STATUS = "PRESENT";
     private static final String REQUIRED_RELATIONSHIP = "ONESELF";
 
-    private static final List<CohortDefinition> COHORTS = List.of(
-            cohort("hypertension", "Hypertension",
+    private static final List<Definition> DEFINITIONS = List.of(
+            definition("hypertension", "Hypertension",
                     "MONDO:0005044", "MONDO:0001134", "MONDO:0001200", "MONDO:0006947", "MONDO:0001105",
                     "MONDO:0001302", "MONDO:0100078", "MONDO:1030007", "MONDO:0006846", "MONDO:0006796",
                     "MONDO:0005081", "MONDO:0015924", "MONDO:0005080",
                     "HP:0000822", "HP:0100817", "HP:0100735", "HP:0100602", "HP:0002092", "HP:0001409"),
-            cohort("diabetes", "Diabetes",
+            definition("diabetes", "Diabetes",
                     "MONDO:0005015", "MONDO:0005148", "MONDO:0005827", "MONDO:0005406",
                     "HP:0000819", "HP:0005978"));
 
     private final StudyRepository repository;
 
-    public CohortService(StudyRepository repository) {
+    public DefinitionService(StudyRepository repository) {
         this.repository = repository;
     }
 
-    public List<CohortDefinition> cohorts() {
-        return COHORTS;
+    public List<Definition> definitions() {
+        return DEFINITIONS;
     }
 
-    public CohortDefinition cohort(String cohortId) {
-        return COHORTS.stream()
-                .filter(cohort -> cohort.cohortId().equals(cohortId))
+    public Definition definition(String definitionId) {
+        return DEFINITIONS.stream()
+                .filter(definition -> definition.definitionId().equals(definitionId))
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unknown cohort: " + cohortId
-                        + ". Known cohorts: " + COHORTS.stream().map(CohortDefinition::cohortId).toList()));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unknown definition: " + definitionId
+                        + ". Known definitions: " + DEFINITIONS.stream().map(Definition::definitionId).toList()));
     }
 
     /** Matching participants, optionally restricted to one study. Never joins across studies. */
-    public CohortParticipants participants(String cohortId, String studyId) {
-        CohortDefinition cohort = cohort(cohortId);
+    public DefinitionParticipants participants(String definitionId, String studyId) {
+        Definition definition = definition(definitionId);
         List<ParticipantMatch> matches = new ArrayList<>();
         for (String id : studiesToSearch(studyId)) {
             Study study = repository.study(id);
-            for (String participantId : matchingParticipantIds(study, cohort)) {
+            for (String participantId : matchingParticipantIds(study, definition)) {
                 matches.add(new ParticipantMatch(study.id(), study.participant(participantId)));
             }
         }
-        return new CohortParticipants(cohort.cohortId(), blank(studyId) ? null : studyId.trim(),
+        return new DefinitionParticipants(definition.definitionId(), blank(studyId) ? null : studyId.trim(),
                 matches.size(), matches);
     }
 
     /** Distinct matching participants per study, including studies with no matches. */
-    public CohortCounts counts(String cohortId) {
-        CohortDefinition cohort = cohort(cohortId);
+    public DefinitionCounts counts(String definitionId) {
+        Definition definition = definition(definitionId);
         Map<String, Integer> byStudy = new LinkedHashMap<>();
         int total = 0;
         for (String id : repository.studyIds()) {
-            int matched = matchingParticipantIds(repository.study(id), cohort).size();
+            int matched = matchingParticipantIds(repository.study(id), definition).size();
             byStudy.put(id, matched);
             total += matched;
         }
-        return new CohortCounts(cohort.cohortId(), total,
+        return new DefinitionCounts(definition.definitionId(), total,
                 byStudy.entrySet().stream().map(e -> new StudyCount(e.getKey(), e.getValue())).toList());
     }
 
@@ -83,8 +83,8 @@ public class CohortService {
      * Identifiers of participants in one study with at least one matching condition. A set, so a
      * participant with several matching conditions is counted once.
      */
-    private Set<String> matchingParticipantIds(Study study, CohortDefinition cohort) {
-        Set<String> codes = Set.copyOf(cohort.conditionCodes());
+    private Set<String> matchingParticipantIds(Study study, Definition definition) {
+        Set<String> codes = Set.copyOf(definition.conditionCodes());
         Set<String> matched = new LinkedHashSet<>();
         for (JsonNode condition : study.records("conditions")) {
             if (!codes.contains(condition.path("condition_concept").asText(""))
@@ -112,15 +112,15 @@ public class CohortService {
         return value == null || value.isBlank();
     }
 
-    private static CohortDefinition cohort(String cohortId, String name, String... codes) {
-        return new CohortDefinition(cohortId, name, REQUIRED_STATUS, REQUIRED_RELATIONSHIP,
+    private static Definition definition(String definitionId, String name, String... codes) {
+        return new Definition(definitionId, name, REQUIRED_STATUS, REQUIRED_RELATIONSHIP,
                 List.copyOf(new LinkedHashSet<>(List.of(codes))));
     }
 
-    @Schema(description = "A cohort rule. A participant matches when any of their conditions has one of "
+    @Schema(description = "A definition rule. A participant matches when any of their conditions has one of "
             + "conditionCodes with the required status and relationship.")
-    public record CohortDefinition(
-            @Schema(example = "hypertension") String cohortId,
+    public record Definition(
+            @Schema(example = "hypertension") String definitionId,
             @Schema(example = "Hypertension") String name,
             @Schema(example = "PRESENT") String requiredConditionStatus,
             @Schema(example = "ONESELF") String requiredRelationshipToParticipant,
@@ -132,7 +132,7 @@ public class CohortService {
 
     @Schema(description = "Distinct matching participants per study. A participant with several matching "
             + "conditions is counted once.")
-    public record CohortCounts(String cohortId, int matchedParticipantCount, List<StudyCount> byStudy) {
+    public record DefinitionCounts(String definitionId, int matchedParticipantCount, List<StudyCount> byStudy) {
     }
 
     public record ParticipantMatch(
@@ -143,8 +143,8 @@ public class CohortService {
             JsonNode participant) {
     }
 
-    public record CohortParticipants(
-            String cohortId,
+    public record DefinitionParticipants(
+            String definitionId,
             @Schema(nullable = true, description = "Set when the search was restricted to one study.")
             String studyId,
             int matchedParticipantCount,
