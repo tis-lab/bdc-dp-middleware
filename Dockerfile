@@ -4,7 +4,7 @@ USER 0
 WORKDIR /workspace
 COPY pom.xml ./
 COPY src/ src/
-RUN mvn --batch-mode --no-transfer-progress --offline clean package -DskipTests
+RUN mvn --batch-mode --no-transfer-progress clean package -DskipTests
 
 FROM registry.access.redhat.com/ubi9/openjdk-25-runtime:latest
 USER 0
