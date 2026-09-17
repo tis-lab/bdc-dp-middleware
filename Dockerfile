@@ -3,7 +3,6 @@ FROM registry.access.redhat.com/ubi9/openjdk-25:latest AS build
 USER 0
 WORKDIR /workspace
 COPY pom.xml ./
-RUN mvn --batch-mode --no-transfer-progress dependency:go-offline
 COPY src/ src/
 RUN mvn --batch-mode --no-transfer-progress --offline clean package -DskipTests
 
