@@ -1,9 +1,22 @@
+# Default profile: term resolution only. The synthetic study feature is OFF here and is switched on
+# by activating the "synthetic" profile, which layers application-synthetic.yml over this file.
 spring:
   application:
     name: bdc-dp-middleware
-  mvc:
-    problemdetails:
-      enabled: true
+
+  graphql:
+    http:
+      path: /graphql
+    schema:
+      locations: classpath:graphql/core/
+      inspection:
+        enabled: true
+    graphiql:
+      enabled: ${GRAPHIQL_ENABLED:true}
+    cors:
+      allowed-origins: ${FRONTEND_ORIGINS:http://localhost:3000,http://localhost:5173}
+      allowed-methods: POST
+      allowed-headers: Content-Type
 
 server:
   port: ${PORT:8080}
@@ -20,15 +33,11 @@ management:
       probes:
         enabled: true
 
-app:
-  data-location: ${APP_DATA_LOCATION:classpath:data/}
+monarch:
+  base-url: ${MONARCH_BASE_URL:https://api.monarchinitiative.org/v3/api}
+  connect-timeout: ${MONARCH_CONNECT_TIMEOUT:5s}
+  read-timeout: ${MONARCH_READ_TIMEOUT:15s}
 
-springdoc:
-  paths-to-match:
-    - /api/v1/**
-  show-actuator: false
-  swagger-ui:
-    path: /swagger-ui.html
-    disable-swagger-default-url: true
-    try-it-out-enabled: true
-    tags-sorter: alpha
+logging:
+  level:
+    org.biodatacatalyst.middleware: ${APP_LOG_LEVEL:INFO}

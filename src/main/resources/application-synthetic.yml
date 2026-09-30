@@ -1,0 +1,12 @@
+# Activated with SPRING_PROFILES_ACTIVE=synthetic (or --spring.profiles.active=synthetic).
+#
+# The profile is the single switch for the whole feature, and it moves two things together:
+#   1. every synthetic bean, each annotated @Profile("synthetic"), and
+#   2. the synthetic half of the schema, added to spring.graphql.schema.locations below.
+spring:
+  graphql:
+    schema:
+      locations: classpath:graphql/core/,classpath:graphql/synthetic/
+app:
+  # Study folders, one per study, each holding the eight LinkML data files. Read at startup only.
+  data-location: ${APP_DATA_LOCATION:classpath:data/}

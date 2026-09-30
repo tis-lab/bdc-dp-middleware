@@ -1,4 +1,4 @@
-package org.biodatacatalyst.middleware.service;
+package org.biodatacatalyst.middleware.synthetic.service;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -8,14 +8,16 @@ import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import org.biodatacatalyst.middleware.service.StudyRepository.Study;
+import org.biodatacatalyst.middleware.synthetic.service.StudyRepository.Study;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+@Profile("synthetic")
 @Service
 public class DefinitionService {
 
@@ -35,7 +37,7 @@ public class DefinitionService {
 
     private final StudyRepository repository;
 
-    public DefinitionService(StudyRepository repository) {
+    public DefinitionService(@Lazy StudyRepository repository) {
         this.repository = repository;
     }
 
@@ -117,35 +119,29 @@ public class DefinitionService {
                 List.copyOf(new LinkedHashSet<>(List.of(codes))));
     }
 
-    @Schema(description = "A definition rule. A participant matches when any of their conditions has one of "
-            + "conditionCodes with the required status and relationship.")
     public record Definition(
-            @Schema(example = "hypertension") String definitionId,
-            @Schema(example = "Hypertension") String name,
-            @Schema(example = "PRESENT") String requiredConditionStatus,
-            @Schema(example = "ONESELF") String requiredRelationshipToParticipant,
+            String definitionId,
+            String name,
+            String requiredConditionStatus,
+            String requiredRelationshipToParticipant,
             List<String> conditionCodes) {
     }
 
     public record StudyCount(String studyId, int matchedParticipantCount) {
     }
 
-    @Schema(description = "Distinct matching participants per study. A participant with several matching "
-            + "conditions is counted once.")
     public record DefinitionCounts(String definitionId, int matchedParticipantCount, List<StudyCount> byStudy) {
     }
 
     public record ParticipantMatch(
             String studyId,
-            @Schema(implementation = Map.class, type = "object",
-                    additionalProperties = Schema.AdditionalPropertiesValue.TRUE,
-                    description = "The original Participant record, including nested fields and null values.")
+
             JsonNode participant) {
     }
 
     public record DefinitionParticipants(
             String definitionId,
-            @Schema(nullable = true, description = "Set when the search was restricted to one study.")
+
             String studyId,
             int matchedParticipantCount,
             List<ParticipantMatch> participants) {

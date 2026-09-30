@@ -1,4 +1,4 @@
-package org.biodatacatalyst.middleware.service;
+package org.biodatacatalyst.middleware.synthetic.service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,6 +38,9 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
  * Records are indexed by identifier and by {@code associated_participant}, which keeps every join
  * inside a single study and avoids re-parsing ~45,000 YAML documents on each request.
  */
+// Defer file access until a synthetic query; terms and probes never require YAML.
+@Lazy
+@Profile("synthetic")
 @Repository
 public class StudyRepository {
 

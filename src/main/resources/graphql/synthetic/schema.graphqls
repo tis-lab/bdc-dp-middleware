@@ -1,0 +1,50 @@
+"""Original synthetic YAML values, preserving nested structures and nulls. Output only."""
+scalar JSON
+"""Record types supported by the synthetic corpus."""
+enum Entity { persons participants demography conditions visits drugExposures measurements measurementSets }
+extend type Query {
+  """Study selector. Available only with the synthetic profile."""
+  studies: [StudySummary!]!
+  study(studyId: ID!): StudyDetail
+  """All participants in one study; currently unpaginated for this small synthetic corpus."""
+  participants(studyId: ID!): RecordList
+  entityRecords(studyId: ID!, entity: Entity!): RecordList
+  participant(studyId: ID!, participantId: ID!): JSON
+  """All linked data, joined only within the selected study."""
+  participantDetail(studyId: ID!, participantId: ID!): ParticipantDetail
+  """Exact filters: concept for conditions/drugs/measurements, status for conditions/drugs, relationship for conditions."""
+  participantRecords(studyId: ID!, participantId: ID!, entity: Entity!, concept: String, status: String, relationship: String): RecordList
+  """Standalone observations plus observations nested in sets, with provenance."""
+  measurements(studyId: ID!, participantId: ID!, concept: String, visitId: ID): MeasurementList
+  """Existing explicit synthetic cohort rules; no clinical inference or Monarch expansion."""
+  definitions: [Definition!]!
+  definition(definitionId: ID!): Definition
+  definitionCounts(definitionId: ID!): DefinitionCounts
+  definitionParticipants(definitionId: ID!, studyId: ID): DefinitionParticipants
+}
+type StudySummary { studyId: ID!, name: String!, participantCount: Int! }
+type StudyDetail {
+  studyId: ID!, name: String!, participantCount: Int!, recordCounts: [RecordCount!]!
+  """Nested observations, separate from top-level file counts."""
+  embeddedObservationCount: Int!
+}
+type RecordCount { entity: String!, count: Int! }
+type RecordList { studyId: ID!, participantId: ID, entity: String!, count: Int!, records: [JSON!]! }
+type Observation { source: String!, measurementSetId: ID, visitId: ID, observation: JSON! }
+type MeasurementList { studyId: ID!, participantId: ID!, count: Int!, standaloneCount: Int!, measurementSetCount: Int!, observations: [Observation!]! }
+type ParticipantDetail {
+  studyId: ID!, participant: JSON!, person: JSON, demography: [JSON!]!, conditions: [JSON!]!
+  visits: [JSON!]!, drugExposures: [JSON!]!, measurements: [Observation!]!
+  """Raw sets; their nested observations already appear in measurements. Do not count twice."""
+  measurementSets: [JSON!]!
+  counts: ParticipantCounts!
+}
+type ParticipantCounts {
+  demography: Int!, conditions: Int!, visits: Int!, drugExposures: Int!, measurementSets: Int!
+  standaloneMeasurements: Int!, measurementSetObservations: Int!, measurements: Int!
+}
+type Definition { definitionId: ID!, name: String!, requiredConditionStatus: String!, requiredRelationshipToParticipant: String!, conditionCodes: [String!]! }
+type StudyCount { studyId: ID!, matchedParticipantCount: Int! }
+type DefinitionCounts { definitionId: ID!, matchedParticipantCount: Int!, byStudy: [StudyCount!]! }
+type ParticipantMatch { studyId: ID!, participant: JSON! }
+type DefinitionParticipants { definitionId: ID!, studyId: ID, matchedParticipantCount: Int!, participants: [ParticipantMatch!]! }

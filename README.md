@@ -31,43 +31,35 @@ Invoke-RestMethod http://localhost:8080/api/v1/health
 
 Then open <http://localhost:8080/swagger-ui.html>
 
-## Routes
+## Endpoints
 
-| Method | Path | Purpose |
-|---|---|---|
-| GET | `/actuator/health` | Liveness and readiness probe for CCA |
-| GET | `/api/v1/health` | Service status and the studies loaded at startup |
-| GET | `/api/v1/studies` | Study selector: id, name, participant count |
-| GET | `/api/v1/studies/{studyId}` | One study with per-file record counts |
-| GET | `/api/v1/studies/{studyId}/participants` | All Participant records in the study |
-| GET | `/api/v1/studies/{studyId}/entities/{entity}` | Browse the original records of any one file |
-| GET | `/api/v1/studies/{studyId}/participants/{participantId}` | One Participant record |
-| GET | `/api/v1/studies/{studyId}/participants/{participantId}/detail` | The participant joined with every related record type |
-| GET | `/api/v1/studies/{studyId}/participants/{participantId}/records/{entity}` | The participant's records of one type, with optional filters |
-| GET | `/api/v1/studies/{studyId}/participants/{participantId}/measurements` | Standalone and nested observations, with provenance |
-| GET | `/api/v1/cohorts` | Cohort definitions and their condition codes |
-| GET | `/api/v1/cohorts/{cohortId}` | One cohort definition |
-| GET | `/api/v1/cohorts/{cohortId}/counts` | Matching participants per study, and the total |
-| GET | `/api/v1/cohorts/{cohortId}/participants` | Matching Participant records, optionally one study |
+| Endpoint | Purpose |
+| --- | --- |
+| `POST /graphql` | The entire frontend API |
+| `GET /graphiql` | Interactive, schema-aware documentation and query console |
+| `GET /actuator/health` | Overall health |
+| `GET /actuator/health/liveness` | OpenShift liveness probe |
+| `GET /actuator/health/readiness` | OpenShift readiness probe |
 
-`{entity}` is one of `persons`, `participants`, `demography`, `conditions`, `visits`,
-`drug-exposures`, `measurements`, `measurement-sets`. On the participant `records` route,
-`participants` is not accepted (use the participant route itself) and `persons` resolves the
-participant's `associated_person` reference, returning zero or one record.
+### Queries
 
+Always available:
 
-### Filters
+| Query | Returns |
+| --- | --- |
+| `terms(query, limit, offset)` | `TermResults` — ranked candidates from Monarch |
+| `health` | `Health!` — process status only |
 
-Filters are exact and case sensitive. A blank value is ignored; a filter that does not apply to the
-entity returns 400 rather than being silently dropped.
+With the `synthetic` profile active: `studies`, `study`, `participants`, `entityRecords`,
+`participant`, `participantDetail`, `participantRecords`, `measurements`, `definitions`,
+`definition`, `definitionCounts`, `definitionParticipants`.
 
-| Parameter | Applies to | Matched field |
-|---|---|---|
-| `concept` | `conditions` | `condition_concept` |
-| `concept` | `drug-exposures` | `drug_concept` |
-| `concept` | `measurements` | `observation_type` |
-| `status` | `conditions` | `condition_status` |
-| `status` | `drug-exposures` | `exposure_status` |
-| `relationship` | `conditions` | `relationship_to_participant` |
-| `visitId` | measurements route | effective visit |
-| `studyId` | cohort participants | restricts to one study |
+## Optional synthetic feature
+
+Off by default. Synthetic data can be read by activating the profile:
+
+```powershell
+$env:SPRING_PROFILES_ACTIVE = "synthetic"
+$env:APP_DATA_LOCATION = "classpath:data/"
+mvn spring-boot:run
+```

@@ -1,0 +1,5 @@
+id: p1
+associated_person: person1
+---
+id: p2
+associated_person: null

@@ -1,7 +1,6 @@
-package org.biodatacatalyst.middleware.service;
+package org.biodatacatalyst.middleware.synthetic.service;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,21 +8,25 @@ import java.util.Optional;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import org.biodatacatalyst.middleware.model.ApiModels.MeasurementList;
-import org.biodatacatalyst.middleware.model.ApiModels.Observation;
-import org.biodatacatalyst.middleware.model.ApiModels.ParticipantDetail;
-import org.biodatacatalyst.middleware.model.ApiModels.RecordList;
-import org.biodatacatalyst.middleware.model.ApiModels.StudyDetail;
-import org.biodatacatalyst.middleware.model.ApiModels.StudySummary;
-import org.biodatacatalyst.middleware.service.StudyRepository.Study;
+import org.biodatacatalyst.middleware.synthetic.model.ApiModels.MeasurementList;
+import org.biodatacatalyst.middleware.synthetic.model.ApiModels.Observation;
+import org.biodatacatalyst.middleware.synthetic.model.ApiModels.ParticipantCounts;
+import org.biodatacatalyst.middleware.synthetic.model.ApiModels.ParticipantDetail;
+import org.biodatacatalyst.middleware.synthetic.model.ApiModels.RecordList;
+import org.biodatacatalyst.middleware.synthetic.model.ApiModels.StudyDetail;
+import org.biodatacatalyst.middleware.synthetic.model.ApiModels.StudySummary;
+import org.biodatacatalyst.middleware.synthetic.service.StudyRepository.Study;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 /** Study, participant and measurement views. Every join stays inside one study. */
+@Profile("synthetic")
 @Service
 public class StudyService {
 
@@ -46,7 +49,7 @@ public class StudyService {
     private final StudyRepository repository;
     private final ObjectMapper mapper;
 
-    public StudyService(StudyRepository repository, ObjectMapper mapper) {
+    public StudyService(@Lazy StudyRepository repository, ObjectMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -127,16 +130,18 @@ public class StudyService {
         List<JsonNode> sets = study.recordsFor(participantId, "measurement-sets");
         List<Observation> measurements = observations(study, participantId);
 
+        // Standalone observations and observations nested in sets are disjoint records, so the
+        // two counts sum to the total without double counting.
         int standalone = (int) measurements.stream().filter(o -> "standalone".equals(o.source())).count();
-        Map<String, Integer> counts = new LinkedHashMap<>();
-        counts.put("demography", demography.size());
-        counts.put("conditions", conditions.size());
-        counts.put("visits", visits.size());
-        counts.put("drugExposures", drugExposures.size());
-        counts.put("measurementSets", sets.size());
-        counts.put("standaloneMeasurements", standalone);
-        counts.put("measurementSetObservations", measurements.size() - standalone);
-        counts.put("measurements", measurements.size());
+        ParticipantCounts counts = new ParticipantCounts(
+                demography.size(),
+                conditions.size(),
+                visits.size(),
+                drugExposures.size(),
+                sets.size(),
+                standalone,
+                measurements.size() - standalone,
+                measurements.size());
 
         return new ParticipantDetail(study.id(), map(participant),
                 linkedPerson(study, participantId).map(this::map).orElse(null),

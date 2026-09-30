@@ -1,0 +1,40 @@
+"""Read-only middleware API. All business operations use POST /graphql."""
+type Query {
+  """Return ranked candidates from Monarch. The frontend/user chooses the intended concept."""
+  terms(
+    """Trimmed search text, 1–200 Unicode characters."""
+    query: String!
+    """Page size: 1–100. A value outside that range is rejected, not clamped."""
+    limit: Int! = 20
+    """Zero-based offset: 0–10000."""
+    offset: Int! = 0
+  ): TermResults
+  """Process status; does not load YAML or contact Monarch. Use Actuator for probes."""
+  health: Health!
+}
+"""One page, in Monarch's relevance order. An empty page is a successful result."""
+type TermResults {
+  items: [Term!]!
+  """Total matching candidates reported by Monarch, not the length of this page."""
+  total: Int!
+  limit: Int!
+  offset: Int!
+  """Whether offset + returned item count is less than total."""
+  hasMore: Boolean!
+}
+"""A candidate, not a confirmed resolution or diagnosis."""
+type Term {
+  """Monarch's identifier, usually a CURIE such as HP:0000822."""
+  id: ID!
+  """Monarch name."""
+  label: String!
+  """Monarch's single Biolink category."""
+  category: String!
+  """Null when upstream does not supply a description."""
+  description: String
+  """Monarch synonym array; null means unavailable, [] means explicitly empty."""
+  synonyms: [String!]
+  """Label and identifier combined for displaying a candidate."""
+  displayLabel: String!
+}
+type Health { service: String!, status: String! }
