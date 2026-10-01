@@ -1,0 +1,9 @@
+cluster.name: "docker-cluster"
+node.name: "es"
+network.host: 0.0.0.0
+discovery.type: single-node
+
+# Local development only: no authentication or TLS.
+xpack.security.enabled: false
+xpack.security.http.ssl.enabled: false
+xpack.security.transport.ssl.enabled: false
