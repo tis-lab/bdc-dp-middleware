@@ -10,7 +10,7 @@
    the green arrow next to the class, or use the generated **DataPortalMiddlewareApplication** run
    configuration.
 4. Wait for `Started DataPortalMiddlewareApplication` in the Run window, then open
-   <http://localhost:8080/swagger-ui.html>.
+   <http://localhost:8080/graphiql>.
 
 ### PowerShell
 
@@ -23,13 +23,13 @@ java -jar .\target\app.jar
 mvn spring-boot:run
 ```
 
-Check it is up and see which studies loaded:
+Check it is up and running:
 
 ```powershell
-Invoke-RestMethod http://localhost:8080/api/v1/health
+Invoke-RestMethod http://localhost:8080/actuator/health
 ```
 
-Then open <http://localhost:8080/swagger-ui.html>
+Then open <http://localhost:8080/graphiql>
 
 ## Endpoints
 
