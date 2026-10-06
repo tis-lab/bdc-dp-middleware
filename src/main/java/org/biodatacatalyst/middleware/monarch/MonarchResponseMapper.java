@@ -3,7 +3,7 @@ package org.biodatacatalyst.middleware.monarch;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -80,10 +80,10 @@ public class MonarchResponseMapper {
         if (value == null || value.isNull()) {
             return null;
         }
-        if (!value.isTextual()) {
+        if (!value.isString()) {
             throw malformed("field '" + field + "' is not a string");
         }
-        return value.textValue();
+        return value.stringValue();
     }
 
     private static List<String> synonyms(JsonNode value) {
@@ -95,10 +95,10 @@ public class MonarchResponseMapper {
         }
         List<String> result = new ArrayList<>();
         for (JsonNode item : value) {
-            if (!item.isTextual()) {
+            if (!item.isString()) {
                 throw malformed("field 'synonym' contains a non-string value");
             }
-            result.add(item.textValue());
+            result.add(item.stringValue());
         }
         return List.copyOf(result);
     }

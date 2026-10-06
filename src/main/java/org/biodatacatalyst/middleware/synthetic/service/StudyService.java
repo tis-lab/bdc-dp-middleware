@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -47,9 +47,9 @@ public class StudyService {
     private static final String RELATIONSHIP_FIELD = "relationship_to_participant";
 
     private final StudyRepository repository;
-    private final ObjectMapper mapper;
+    private final JsonMapper mapper;
 
-    public StudyService(@Lazy StudyRepository repository, ObjectMapper mapper) {
+    public StudyService(@Lazy StudyRepository repository, JsonMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -151,7 +151,7 @@ public class StudyService {
     // ----------------------------------------------------------------- joins
 
     private Optional<JsonNode> linkedPerson(Study study, String participantId) {
-        String personId = study.participant(participantId).path("associated_person").asText("");
+        String personId = study.participant(participantId).path("associated_person").asString("");
         if (personId.isBlank()) {
             return Optional.empty();
         }
@@ -201,7 +201,7 @@ public class StudyService {
                     "The " + parameter + " filter does not apply to " + entity);
         }
         String expected = value.trim();
-        return rows.stream().filter(row -> expected.equals(row.path(field).asText(""))).toList();
+        return rows.stream().filter(row -> expected.equals(row.path(field).asString(""))).toList();
     }
 
     private static boolean blank(String value) {
@@ -209,7 +209,7 @@ public class StudyService {
     }
 
     private static String text(JsonNode row, String field) {
-        String value = row.path(field).asText("");
+        String value = row.path(field).asString("");
         return value.isBlank() ? null : value;
     }
 

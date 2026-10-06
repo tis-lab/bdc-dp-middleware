@@ -3,7 +3,7 @@ package org.biodatacatalyst.middleware.monarch;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -55,7 +55,7 @@ public class MonarchClient {
                     .uri(uri)
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
-                    .onStatus(status -> !status.is2xxSuccessful(), (request, response) -> {
+                    .onStatus(status -> !status.is2xxSuccessful(), (_, response) -> {
                         log.warn("Monarch search returned HTTP {}", response.getStatusCode().value());
                         throw new ApiException(UPSTREAM_UNAVAILABLE, "Monarch could not complete the search.");
                     })

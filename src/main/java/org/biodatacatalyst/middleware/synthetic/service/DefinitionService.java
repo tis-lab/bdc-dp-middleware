@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -89,12 +89,12 @@ public class DefinitionService {
         Set<String> codes = Set.copyOf(definition.conditionCodes());
         Set<String> matched = new LinkedHashSet<>();
         for (JsonNode condition : study.records("conditions")) {
-            if (!codes.contains(condition.path("condition_concept").asText(""))
-                    || !REQUIRED_STATUS.equals(condition.path("condition_status").asText(""))
-                    || !REQUIRED_RELATIONSHIP.equals(condition.path("relationship_to_participant").asText(""))) {
+            if (!codes.contains(condition.path("condition_concept").asString(""))
+                    || !REQUIRED_STATUS.equals(condition.path("condition_status").asString(""))
+                    || !REQUIRED_RELATIONSHIP.equals(condition.path("relationship_to_participant").asString(""))) {
                 continue;
             }
-            String participantId = condition.path("associated_participant").asText("");
+            String participantId = condition.path("associated_participant").asString("");
             // Ignore references to participants that are not in this study's Participant file.
             if (study.participantsById().containsKey(participantId)) {
                 matched.add(participantId);

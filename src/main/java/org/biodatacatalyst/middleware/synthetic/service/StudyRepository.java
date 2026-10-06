@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import tools.jackson.core.StreamReadFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.MappingIterator;
+import tools.jackson.databind.ObjectReader;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +36,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
  * Each YAML file in that folder is matched to an entity by the LinkML class in its file name, so
  * both {@code SYNTH1-Condition--data.yaml} and {@code Condition.yaml} load as {@code conditions}.
  * Records are indexed by identifier and by {@code associated_participant}, which keeps every join
- * inside a single study and avoids re-parsing ~45,000 YAML documents on each request.
+ * inside a single study and avoids reparsing ~45,000 YAML documents on each request.
  */
 // Defer file access until a synthetic query; terms and probes never require YAML.
 @Lazy
@@ -177,7 +177,7 @@ public class StudyRepository {
                     continue;
                 }
                 String studyId = folderName(resource);
-                Resource clash = byStudy.computeIfAbsent(studyId, key -> new LinkedHashMap<>())
+                Resource clash = byStudy.computeIfAbsent(studyId, _ -> new LinkedHashMap<>())
                         .put(entity, resource);
                 if (clash != null) {
                     throw new IllegalStateException("Study " + studyId + " has two files for " + entity + ": "
@@ -219,7 +219,7 @@ public class StudyRepository {
 
     private static List<JsonNode> parse(String studyId, String entity, Resource file) {
         ObjectReader reader = YAMLMapper.builder()
-                .enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
+                .enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION)
                 .build()
                 .readerFor(JsonNode.class);
         List<JsonNode> records = new ArrayList<>();
@@ -246,7 +246,7 @@ public class StudyRepository {
                 throw new IllegalStateException("Expected a YAML object per record in "
                         + fileName(file) + " but found " + record.getNodeType());
             }
-            String id = record.path("id").asText("");
+            String id = record.path("id").asString("");
             if (id.isBlank()) {
                 throw new IllegalStateException("Record without an id in " + fileName(file));
             }
@@ -260,7 +260,7 @@ public class StudyRepository {
     private static Map<String, JsonNode> index(String studyId, String entity, List<JsonNode> rows) {
         Map<String, JsonNode> byId = new LinkedHashMap<>();
         for (JsonNode row : rows) {
-            byId.put(row.path("id").asText(), row);
+            byId.put(row.path("id").asString(), row);
         }
         log.debug("Indexed {} {} for {}", byId.size(), entity, studyId);
         return Collections.unmodifiableMap(byId);
@@ -269,12 +269,12 @@ public class StudyRepository {
     private static Map<String, List<JsonNode>> groupByParticipant(List<JsonNode> rows) {
         Map<String, List<JsonNode>> grouped = new LinkedHashMap<>();
         for (JsonNode row : rows) {
-            String participantId = row.path("associated_participant").asText("");
+            String participantId = row.path("associated_participant").asString("");
             if (!participantId.isBlank()) {
-                grouped.computeIfAbsent(participantId, key -> new ArrayList<>()).add(row);
+                grouped.computeIfAbsent(participantId, _ -> new ArrayList<>()).add(row);
             }
         }
-        grouped.replaceAll((participantId, rowsForParticipant) -> List.copyOf(rowsForParticipant));
+        grouped.replaceAll((_, rowsForParticipant) -> List.copyOf(rowsForParticipant));
         return Collections.unmodifiableMap(grouped);
     }
 
@@ -286,13 +286,13 @@ public class StudyRepository {
         }
         if (!nested.isArray()) {
             throw new IllegalStateException("observations must be a list in " + studyId
-                    + " measurement set " + set.path("id").asText());
+                    + " measurement set " + set.path("id").asString());
         }
         List<JsonNode> observations = new ArrayList<>();
         for (JsonNode observation : nested) {
             if (!observation.isObject()) {
                 throw new IllegalStateException("Nested observation must be an object in " + studyId
-                        + " measurement set " + set.path("id").asText());
+                        + " measurement set " + set.path("id").asString());
             }
             observations.add(observation);
         }
@@ -301,7 +301,7 @@ public class StudyRepository {
 
     private static String studyName(String studyId, List<JsonNode> participants) {
         return participants.stream()
-                .map(participant -> participant.path("member_of_research_study").asText(""))
+                .map(participant -> participant.path("member_of_research_study").asString(""))
                 .filter(name -> !name.isBlank())
                 .findFirst()
                 .orElse(studyId);
