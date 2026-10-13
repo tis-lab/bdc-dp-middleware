@@ -1,0 +1,34 @@
+- class_derivations:
+    DrugExposure:
+      populated_from: pht004096
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00206634}) + ":ARIC")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00206634}) + ":ARIC EXAM 4")'
+        drug_concept:
+          value: ATC:A10
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+        exposure_status:
+          populated_from: phv00206628
+          value_mappings:
+            N: ABSENT
+            Y: PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht004097
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00206643}) + ":ARIC")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00206643}) + ":ARIC EXAM 4")'
+        drug_concept:
+          value: ATC:A10
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+        exposure_status:
+          populated_from: phv00206636
+          value_mappings:
+            N: ABSENT
+            Y: PRESENT

@@ -1,0 +1,159 @@
+- class_derivations:
+    Condition:
+      populated_from: pht001967
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00128084}) + ":JHS")'
+        age_at_condition_start:
+          expr: case(({phv00128103} == 'Yes', {phv00128104} * 365))
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00128084}) + ":JHS Exam 1")'
+          range: string
+        condition_concept:
+          value: MONDO:0004979
+          range: string
+        condition_status:
+          populated_from: phv00128103
+          value_mappings:
+            'No': ABSENT
+            'Yes': PRESENT
+            Dont know: UNKNOWN
+        condition_provenance:
+          value: PATIENT_SELF_REPORT_DR_CONFIRMED
+        # associated_evidence:
+        #   value: "Personal and Family History Questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht001973
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00128330}) + ":JHS")'
+        age_at_condition_start:
+          expr: case(({phv00128344} == "Yes", {phv00128353} * 365))
+        age_at_condition_end:
+          expr: case(({phv00128346} == "No", {phv00128354} * 365))
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00128330}) + ":JHS Exam 1")'
+          range: string
+        condition_concept:
+          value: MONDO:0004979
+          range: string
+        condition_status:
+          expr: case(({phv00128344} == "No", "ABSENT"), ({phv00128346} == "Yes", "PRESENT"),
+            (True, "HISTORICAL"))
+        condition_provenance:
+          populated_from: phv00128345
+          value_mappings:
+            'Yes': PATIENT_SELF_REPORT_DR_CONFIRMED
+            'No': PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "Respiratory Disease Questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht008725
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00400849}) + ":JHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00400849}) + ":JHS AFU")'
+          range: string
+        condition_concept:
+          value: MONDO:0004979
+          range: string
+        condition_status:
+          expr: case(({phv00400910} == "N", "ABSENT"),({phv00400910} == "U", "UNKNOWN"),({phv00400911}
+            == "Y", "PRESENT"), ({phv00400911} == "U", "UNKNOWN"),(True, "HISTORICAL"))
+        condition_provenance:
+          value: PATIENT_SELF_REPORT_DR_CONFIRMED
+        # associated_evidence:
+        #   value: "Annual Follow-Up"
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht008729
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00401078}) + ":JHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00401078}) + ":JHS Exam 1")'
+          range: string
+        condition_concept:
+          value: MONDO:0004979
+          range: string
+        condition_status:
+          populated_from: phv00401161
+          value_mappings:
+            '0': ABSENT
+            '1': HISTORICAL
+            '2': PRESENT
+        condition_provenance:
+          value: STUDY_RECORD
+        associated_evidence:
+          value: "Analysis derived"
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht008753
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00402777}) + ":JHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00402777}) + ":JHS Exam 2")'
+          range: string
+        age_at_condition_start:
+          expr: case(({phv00402795} == '1', {phv00402796} * 365))
+        condition_concept:
+          value: MONDO:0004979
+          range: string
+        condition_status:
+          populated_from: phv00402795
+          value_mappings:
+            '1': PRESENT
+            '2': ABSENT
+            '7': UNKNOWN
+            '9': UNKNOWN
+        condition_provenance:
+          value: STUDY_RECORD
+        associated_evidence:
+          value: "Health History Questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht008778
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00403624}) + ":JHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00403624}) + ":JHS Exam 3")'
+          range: string
+        age_at_condition_start:
+          expr: case(({phv00403643} == 'Yes', {phv00403644} * 365))
+        condition_concept:
+          value: MONDO:0004979
+          range: string
+        condition_status:
+          populated_from: phv00403643
+          value_mappings:
+            'Yes': PRESENT
+            'No': ABSENT
+            Don't know: UNKNOWN
+            "Don't Know": UNKNOWN
+        condition_provenance:
+          value: STUDY_RECORD
+        associated_evidence:
+          value: "Personal and Family History Questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+          range: string

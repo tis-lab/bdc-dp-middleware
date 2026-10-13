@@ -1,0 +1,633 @@
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001452
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00100285}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00100285}) + ":CHS BASELINE BOTH")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00100529
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '.': UNKNOWN
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001452
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00100285}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00100285}) + ":CHS BASELINE BOTH")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00100546
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '.': UNKNOWN
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001452
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00100285}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00100285}) + ":CHS BASELINE BOTH")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00100560
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '.': UNKNOWN
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001474
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00101324}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00101324}) + ":CHS YEAR 10")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00102107
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001474
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00101324}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00101324}) + ":CHS YEAR 10")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00102124
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001474
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00101324}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00101324}) + ":CHS YEAR 10")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00102138
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001475
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00102174}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00102174}) + ":CHS YEAR 11")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00103080
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001475
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00102174}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00102174}) + ":CHS YEAR 11")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00103097
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001475
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00102174}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00102174}) + ":CHS YEAR 11")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00103111
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001488
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00103781}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00103781}) + ":CHS YEAR 3")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00104429
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001488
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00103781}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00103781}) + ":CHS YEAR 3")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00104398
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001488
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00103781}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00103781}) + ":CHS YEAR 3")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00104415
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001489
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00104468}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00104468}) + ":CHS YEAR 4")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00105028
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001489
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00104468}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00104468}) + ":CHS YEAR 4")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00105045
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001489
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00104468}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00104468}) + ":CHS YEAR 4")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00105059
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001491
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00106520}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00106520}) + ":CHS YEAR 5 OLD")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00107374
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001491
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00106520}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00106520}) + ":CHS YEAR 5 OLD")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00107391
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001491
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00106520}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00106520}) + ":CHS YEAR 5 OLD")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00107405
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001492
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00107443}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00107443}) + ":CHS YEAR 6")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00108235
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001492
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00107443}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00107443}) + ":CHS YEAR 6")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00108252
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001492
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00107443}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00107443}) + ":CHS YEAR 6")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00108266
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001493
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00108303}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00108303}) + ":CHS YEAR 7")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00108989
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001493
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00108303}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00108303}) + ":CHS YEAR 7")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00109006
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001493
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00108303}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00108303}) + ":CHS YEAR 7")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00109020
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001494
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00109056}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00109056}) + ":CHS YEAR 8")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00109700
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001494
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00109056}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00109056}) + ":CHS YEAR 8")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00109717
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001494
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00109056}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00109056}) + ":CHS YEAR 8")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00109731
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001495
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00109768}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00109768}) + ":CHS YEAR 9")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00110642
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001495
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00109768}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00109768}) + ":CHS YEAR 9")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00110659
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht001495
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00109768}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00109768}) + ":CHS YEAR 9")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00110673
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht003699
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00197394}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00197394}) + ":CHS PSG 1")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00197544
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht003699
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00197394}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00197394}) + ":CHS PSG 1")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00197545
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht003700
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00198805}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00198805}) + ":CHS PSG 2")'
+        drug_concept:
+          value: NDFRT:N0000180292
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00199045
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht003700
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00198805}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00198805}) + ":CHS PSG 2")'
+        drug_concept:
+          value: ATC:C10AB
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00199062
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht003700
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00198805}) + ":CHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00198805}) + ":CHS PSG 2")'
+        drug_concept:
+          value: NDFRT:N0000175594
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00199076
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT

@@ -1,0 +1,491 @@
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005399
+        condition_status:
+          populated_from: phv00121341
+          value_mappings:
+            '1': ABSENT
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121342
+          value_mappings:
+            '1': ABSENT
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121343
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121344
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121345
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121346
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121349
+          value_mappings:
+            '1': ABSENT
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00121350
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00121351
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001869
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121257}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121257}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00121352
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001870
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121454}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121454}) + ":CARDIA HOSPITALIZATIONS DIAGNOSIS")'
+        condition_concept:
+          value: MONDO:0005399
+        condition_status:
+          populated_from: phv00121466
+          value_mappings:
+            '1': ABSENT
+            '2': PRESENT
+        condition_provenance:
+          value: HEALTH_RECORD
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005399
+        condition_status:
+          populated_from: phv00121560
+          value_mappings:
+            '1': ABSENT
+            '2': PRESENT
+            '3': UNKNOWN
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121561
+          value_mappings:
+            '1': ABSENT
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121562
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121563
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121564
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121565
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00121566
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00121568
+          value_mappings:
+            '1': ABSENT
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00121569
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00121570
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00121571
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht001871
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00121473}) + ":CARDIA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00121473}) + ":CARDIA MEDICAL HISTORY")'
+        condition_concept:
+          value: MONDO:0005399
+        condition_status:
+          populated_from: phv00121572
+          value_mappings:
+            '2': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        #   range: string
+        relationship_to_participant:
+          value: ONESELF

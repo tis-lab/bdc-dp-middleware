@@ -1,0 +1,51 @@
+- class_derivations:
+    DrugExposure:
+      populated_from: pht004102
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00207055}) + ":ARIC")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00207055}) + ":ARIC Hospital Form")'
+        drug_concept:
+          value: RxCUI:5470
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+        exposure_status:
+          populated_from: phv00206993
+          value_mappings:
+            N: ABSENT
+            Y: PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht004102
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00207055}) + ":ARIC")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00207055}) + ":ARIC Hospital Form")'
+        drug_concept:
+          value: RxCUI:5470
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+        exposure_status:
+          populated_from: phv00206994
+          value_mappings:
+            N: ABSENT
+            Y: PRESENT
+- class_derivations:
+    DrugExposure:
+      populated_from: pht004102
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00207055}) + ":ARIC")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00207055}) + ":ARIC Hospital Form")'
+        drug_concept:
+          value: ATC:C01D
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+        exposure_status:
+          populated_from: phv00207048
+          value_mappings:
+            N: ABSENT
+            Y: PRESENT

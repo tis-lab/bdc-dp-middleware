@@ -2,6 +2,8 @@ package org.biodatacatalyst.middleware.monarch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import tools.jackson.databind.JsonNode;
 import org.slf4j.Logger;
@@ -9,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import org.biodatacatalyst.middleware.shared.ApiException;
+import org.biodatacatalyst.middleware.harmonized.BdcCoverage;
+import org.biodatacatalyst.middleware.terms.AutocompleteResults;
 import org.biodatacatalyst.middleware.terms.TermResults;
 import org.biodatacatalyst.middleware.terms.TermResults.Term;
 
@@ -40,11 +44,16 @@ public class MonarchResponseMapper {
         }
 
         List<Term> items = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
         for (JsonNode row : rows) {
             if (!row.isObject()) {
                 throw malformed("an item is not an object");
             }
             String id = requiredText(row, "id");
+            if (!seen.add(id)) {
+                log.warn("Dropped a repeated concept identifier from the upstream page");
+                continue;
+            }
             String label = requiredText(row, "name");
             items.add(new Term(
                     id,
@@ -52,11 +61,48 @@ public class MonarchResponseMapper {
                     requiredText(row, "category"),
                     optionalText(row, "description"),
                     synonyms(row.get("synonym")),
-                    label + " (" + id + ")"));
+                    label + " (" + id + ")",
+                    BdcCoverage.none()));
         }
 
-        boolean hasMore = (long) offset + items.size() < total;
-        return new TermResults(List.copyOf(items), total, limit, offset, hasMore);
+        boolean hasMore = (long) offset + rows.size() < total;
+        return TermResults.fromMonarch(List.copyOf(items), total, limit, offset, hasMore);
+    }
+
+
+    public AutocompleteResults mapAutocomplete(JsonNode root) {
+        if (root == null || !root.isObject() || !root.path("items").isArray()) {
+            throw malformed("autocomplete body is not an object with an items array");
+        }
+        JsonNode rows = root.get("items");
+
+        List<AutocompleteResults.Suggestion> items = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
+        for (JsonNode row : rows) {
+            if (!row.isObject()) {
+                throw malformed("an autocomplete item is not an object");
+            }
+            String id = requiredText(row, "id");
+            if (!seen.add(id)) {
+                log.warn("Dropped a repeated concept identifier from the upstream page");
+                continue;
+            }
+            String label = requiredText(row, "name");
+            items.add(new AutocompleteResults.Suggestion(
+                    id,
+                    label,
+                    requiredText(row, "category"),
+                    optionalText(row, "description"),
+                    label + " (" + id + ")",
+                    BdcCoverage.none()));
+        }
+
+        JsonNode total = root.get("total");
+        int reported = total == null || total.isNull() ? items.size() : nonnegativeInt(root, "total");
+
+        if (reported < rows.size()) throw malformed("autocomplete total is smaller than its items");
+
+        return AutocompleteResults.fromMonarch(List.copyOf(items), reported);
     }
 
     private static int nonnegativeInt(JsonNode row, String field) {

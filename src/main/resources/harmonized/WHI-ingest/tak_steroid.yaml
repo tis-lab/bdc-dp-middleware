@@ -1,0 +1,19 @@
+- class_derivations:
+    DrugExposure:
+      populated_from: pht002754
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00169602}) + ":WHI")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00169602}) + ":WHI MAIN 44")'
+          range: string
+        drug_concept:
+          value: VANDF:HS051
+        exposure_provenance:
+          value: PATIENT_SELF_REPORTED_MEDICATION
+          range: string
+        exposure_status:
+          populated_from: phv00169610
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT

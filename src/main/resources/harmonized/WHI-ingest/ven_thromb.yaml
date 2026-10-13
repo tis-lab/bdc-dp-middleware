@@ -1,0 +1,552 @@
+- class_derivations:
+    Condition:
+      populated_from: pht000998
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00078435}) + ":WHI")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00078435}) + ":WHI SCREENING")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          expr: case(({phv00078472} == 0, "ABSENT"), ({phv00078473} == 0, "HISTORICAL"),
+            (True, "PRESENT"))
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "self-report questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht000998
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00078435}) + ":WHI")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00078435}) + ":WHI SCREENING")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          expr: case(({phv00078475} == 0, "ABSENT"), ({phv00078476} == 0, "HISTORICAL"),
+            (True, "PRESENT"))
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "self-report questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht002769
+      joins:
+        pht000998:
+          source_key: phv00170566
+          lookup_key: phv00078435
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00170566}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00170567} == 1, ({pht000998.phv00078437} * 365) + {phv00170568}))'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00170567
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht002769
+      joins:
+        pht000998:
+          source_key: phv00170566
+          lookup_key: phv00078435
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00170566}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00170569} == 1, ({pht000998.phv00078437} * 365) + {phv00170570}))'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00170569
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht002770
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00170648}) + ":WHI")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00170648}) + ":WHI SCREENING")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00170649
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht002770
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00170648}) + ":WHI")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00170648}) + ":WHI SCREENING")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00170651
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003402
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00192476}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00192501} == 1, ({phv00078437} * 365) + {phv00192502}))'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00192501
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "self-report questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003407
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193141}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00193178} == 1, ({phv00078437} * 365) + {phv00193179}))'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00193178
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        # associated_evidence:
+        #   value: "adjudicated event"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00193554
+          value_mappings:
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00193555
+          value_mappings:
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00193557
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00193558
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00193559
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00193560
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00193561
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00193565
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00193566
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00193567
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00193568
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003410
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193552}) + ":WHI")'
+        # excluded: age_at_condition_start -- pht003410 (WHI Form 121/126/132 outcome table) has no day variable; timing of the form is not documented (#799)
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00193569
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PHYSICIAN_ADJUDICATION
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003414
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193686}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00202394} == 1, ({phv00078437} * 365) + {phv00202395}))'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00202394
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "self-report questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003414
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193686}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00193691} == 1, ({phv00078437} * 365) + {phv00193692}))'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00193691
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "self-report questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003414
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193686}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00193693} == 1, ({phv00078437} * 365) + {phv00193694}))'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00193693
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "self-report questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003414
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193686}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00193695} == 1, ({phv00078437} * 365) + {phv00193696}))'
+        condition_concept:
+          value: MONDO:0005399
+        condition_status:
+          populated_from: phv00193695
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "self-report questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht003414
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00193686}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00193697} == 1, ({phv00078437} * 365) + {phv00193698}))'
+        condition_concept:
+          value: MONDO:0005399
+        condition_status:
+          populated_from: phv00193697
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "self-report questionnaire"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht006223
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00283451}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00283512} == 1, ({phv00078437} * 365) + {phv00283452}))'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00283451}) + ":WHI UNC HEART FAILURE DETAILS")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00283512
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht006223
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00283451}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00283701} == 1, ({phv00078437} * 365) + {phv00283452}))'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00283451}) + ":WHI UNC HEART FAILURE DETAILS")'
+        condition_concept:
+          value: HP:0002625
+        condition_status:
+          populated_from: phv00283701
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        relationship_to_participant:
+          value: ONESELF
+- class_derivations:
+    Condition:
+      populated_from: pht006223
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00283451}) + ":WHI")'
+        age_at_condition_start:
+          expr: 'case(({phv00283703} == 1, ({phv00078437} * 365) + {phv00283452}))'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00283451}) + ":WHI UNC HEART FAILURE DETAILS")'
+        condition_concept:
+          value: MONDO:0005279
+        condition_status:
+          populated_from: phv00283703
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: PATIENT_SELF_REPORT
+        # associated_evidence:
+        #   value: "hospital record abstraction"
+        relationship_to_participant:
+          value: ONESELF

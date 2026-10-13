@@ -1,0 +1,108 @@
+- class_derivations:
+    SdohObservation:
+      populated_from: pht001111
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00082638}) + ":MESA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00082638}) + ":MESA AIR EXAM")'
+        category:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string
+        value_enum:
+          populated_from: phv00083223
+          value_mappings:
+            '0': 8TH_GRADE_OR_LESS
+            '1': 8TH_GRADE_OR_LESS
+            '2': HIGH_SCHOOL_NO_DIPLOMA
+            '3': HIGH_SCHOOL_GRADUATE_GED
+            '4': SOME_COLLEGE_OR_TECH_NO_DEGREE
+            '5': COLLEGE_OR_TECH_WITH_DEGREE
+            '6': COLLEGE_OR_TECH_WITH_DEGREE
+            '7': COLLEGE_OR_TECH_WITH_DEGREE
+            '8': MASTERS_OR_DOCTORAL_DEGREE
+        observation_type:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string
+- class_derivations:
+    SdohObservation:
+      populated_from: pht001116
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00084441}) + ":MESA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00084441}) + ":MESA CLASSIC EXAM 1")'
+        category:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string
+        value_enum:
+          populated_from: phv00085554
+          value_mappings:
+            '0': 8TH_GRADE_OR_LESS
+            '1': 8TH_GRADE_OR_LESS
+            '2': HIGH_SCHOOL_NO_DIPLOMA
+            '3': HIGH_SCHOOL_GRADUATE_GED
+            '4': SOME_COLLEGE_OR_TECH_NO_DEGREE
+            '5': COLLEGE_OR_TECH_WITH_DEGREE
+            '6': COLLEGE_OR_TECH_WITH_DEGREE
+            '7': COLLEGE_OR_TECH_WITH_DEGREE
+            '8': MASTERS_OR_DOCTORAL_DEGREE
+        observation_type:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string
+- class_derivations:
+    SdohObservation:
+      populated_from: pht003087
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00175794}) + ":MESA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00175794}) + ":MESA LUNG CT")'
+        age_at_observation:
+          expr: '{phv00175854} * 365'
+        category:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string
+        value_enum:
+          populated_from: phv00175873
+          value_mappings:
+            '0': 8TH_GRADE_OR_LESS
+            '1': 8TH_GRADE_OR_LESS
+            '2': HIGH_SCHOOL_NO_DIPLOMA
+            '3': HIGH_SCHOOL_GRADUATE_GED
+            '4': SOME_COLLEGE_OR_TECH_NO_DEGREE
+            '5': COLLEGE_OR_TECH_WITH_DEGREE
+            '6': COLLEGE_OR_TECH_WITH_DEGREE
+            '7': COLLEGE_OR_TECH_WITH_DEGREE
+            '8': MASTERS_OR_DOCTORAL_DEGREE
+        observation_type:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string
+- class_derivations:
+    SdohObservation:
+      populated_from: pht004326
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00219018}) + ":MESA")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00219018}) + ":MESA STRESS")'
+        age_at_observation:
+          expr: '{phv00219024} * 365'
+        category:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string
+        value_enum:
+          populated_from: phv00219019
+          value_mappings:
+            '0': 8TH_GRADE_OR_LESS
+            '1': 8TH_GRADE_OR_LESS
+            '2': HIGH_SCHOOL_NO_DIPLOMA
+            '3': HIGH_SCHOOL_GRADUATE_GED
+            '4': SOME_COLLEGE_OR_TECH_NO_DEGREE
+            '5': COLLEGE_OR_TECH_WITH_DEGREE
+            '6': COLLEGE_OR_TECH_WITH_DEGREE
+            '7': COLLEGE_OR_TECH_WITH_DEGREE
+            '8': MASTERS_OR_DOCTORAL_DEGREE
+        observation_type:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string

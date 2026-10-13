@@ -1,0 +1,32 @@
+- class_derivations:
+    ResearchStudy:
+      populated_from: pht001440
+      slot_derivations:
+        name:
+          value: 'Atherosclerosis Risk in Communities (ARIC)'
+        name_shortened:
+          value: ARIC
+        description:
+          value: 'Prospective epidemiologic study of atherosclerosis and cardiovascular disease in four US communities: Forsyth County NC, Jackson MS, suburban Minneapolis MN, and Washington County MD.'
+        sponsor:
+          value: NHLBI
+        accession_number:
+          value: phs000280
+        accession_authority:
+          value: dbGaP
+        version:
+          value: '8'
+        url:
+          value: https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000280.v8.p2
+        year_range:
+          class_derivations:
+          - TimePeriod:
+              slot_derivations:
+                period_start:
+                  class_derivations:
+                  - TimePoint:
+                      slot_derivations:
+                        date_time:
+                          value: '1987-01-01T00:00:00'
+        research_project_type:
+          value: STUDY

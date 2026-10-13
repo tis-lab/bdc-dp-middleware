@@ -1,0 +1,25 @@
+- class_derivations:
+    MeasurementObservation:
+      populated_from: pht000085
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00021746}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00021746}) + ":FHS OFFSPRING EXAM 6")'
+        age_at_observation:
+          expr: '{pht003099.phv00177940} * 365'
+        observation_type:
+          value: OMOP:37393605
+          range: string
+        method_type:
+          value: 'blood assay'
+        value_quantity:
+          class_derivations:
+          - Quantity:
+              populated_from: pht000085
+              slot_derivations:
+                value_decimal:
+                  expr: '{phv00021744} * 0.001'
+                unit:
+                  value: ug/mL
+                  range: string

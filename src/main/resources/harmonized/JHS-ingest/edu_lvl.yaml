@@ -1,0 +1,20 @@
+- class_derivations:
+    SdohObservation:
+      populated_from: pht008729
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00401078}) + ":JHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00401078}) + ":JHS Exam 1")'
+          range: string
+        observation_type:
+          value: EDUCATIONAL_ATTAINMENT
+        category:
+          value: EDUCATIONAL_ATTAINMENT
+          range: string
+        value_enum:
+          populated_from: phv00401231
+          value_mappings:
+            '1': OMOP:37079292
+            '2': OMOP:45882538
+            '0': OMOP:1990362

@@ -1,0 +1,23 @@
+- class_derivations:
+    MeasurementObservation:
+      populated_from: pht004080
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00205949}) + ":ARIC")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00205949}) + ":ARIC EXAM 1")'
+        observation_type:
+          value: OMOP:4273023
+        body_position:
+          value: "SUPINE_BODY_POSITION"
+        method_type:
+          value: "Electrocardiogram"
+        value_quantity:
+          class_derivations:
+          - Quantity:
+              populated_from: pht004080
+              slot_derivations:
+                value_decimal:
+                  expr: 'None if {phv00205943} is None or str({phv00205943}) == "" or not (0 < float({phv00205943}) < 9.99) else round(float({phv00205943}) * 1000)'
+                unit:
+                  value: "ms"

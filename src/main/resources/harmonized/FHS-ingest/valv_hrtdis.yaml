@@ -1,0 +1,273 @@
+- class_derivations:
+    Condition:
+      populated_from: pht000031
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00008378}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00008378}) + ":FHS OFFSPRING EXAM 2")'
+        condition_concept:
+          value: MONDO:0002869
+          range: string
+        condition_status:
+          populated_from: phv00008002
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Electrocardiogram
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht007776
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00369587}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00369587}) + ":" + case(({phv00369637} == ''0'', ''FHS ORIGINAL CHF''), ({phv00369637} == ''1'', ''FHS OFFSPRING CHF''), ({phv00369637} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00369637} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00369637} == ''7'', ''FHS OMNI 1 CHF''), ({phv00369637} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: MONDO:0002869
+          range: string
+        condition_status:
+          populated_from: phv00369621
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+            '9': UNKNOWN
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Laboratory Test
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht006018
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00276803}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00276803}) + ":" + case(({phv00276845} == ''0'', ''FHS ORIGINAL CHF''), ({phv00276845} == ''1'', ''FHS OFFSPRING CHF''), ({phv00276845} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00276845} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00276845} == ''7'', ''FHS OMNI 1 CHF''), ({phv00276845} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: MONDO:0042981
+          range: string
+        condition_status:
+          populated_from: phv00276882
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Medical History
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht007776
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00369587}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00369587}) + ":" + case(({phv00369637} == ''0'', ''FHS ORIGINAL CHF''), ({phv00369637} == ''1'', ''FHS OFFSPRING CHF''), ({phv00369637} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00369637} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00369637} == ''7'', ''FHS OMNI 1 CHF''), ({phv00369637} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: MONDO:0042981
+          range: string
+        condition_status:
+          populated_from: phv00369618
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+            '9': UNKNOWN
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Laboratory Test
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht006018
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00276803}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00276803}) + ":" + case(({phv00276845} == ''0'', ''FHS ORIGINAL CHF''), ({phv00276845} == ''1'', ''FHS OFFSPRING CHF''), ({phv00276845} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00276845} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00276845} == ''7'', ''FHS OMNI 1 CHF''), ({phv00276845} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: MONDO:0005648
+          range: string
+        condition_status:
+          populated_from: phv00276881
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Medical History
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht007776
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00369587}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00369587}) + ":" + case(({phv00369637} == ''0'', ''FHS ORIGINAL CHF''), ({phv00369637} == ''1'', ''FHS OFFSPRING CHF''), ({phv00369637} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00369637} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00369637} == ''7'', ''FHS OMNI 1 CHF''), ({phv00369637} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: MONDO:0005648
+          range: string
+        condition_status:
+          populated_from: phv00369617
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+            '9': UNKNOWN
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Laboratory Test
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht006018
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00276803}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00276803}) + ":" + case(({phv00276845} == ''0'', ''FHS ORIGINAL CHF''), ({phv00276845} == ''1'', ''FHS OFFSPRING CHF''), ({phv00276845} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00276845} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00276845} == ''7'', ''FHS OMNI 1 CHF''), ({phv00276845} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: HP:0001653
+          range: string
+        condition_status:
+          populated_from: phv00276883
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Medical History
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht007776
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00369587}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00369587}) + ":" + case(({phv00369637} == ''0'', ''FHS ORIGINAL CHF''), ({phv00369637} == ''1'', ''FHS OFFSPRING CHF''), ({phv00369637} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00369637} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00369637} == ''7'', ''FHS OMNI 1 CHF''), ({phv00369637} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: HP:0001653
+          range: string
+        condition_status:
+          populated_from: phv00369619
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+            '9': UNKNOWN
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Laboratory Test
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht006018
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00276803}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00276803}) + ":" + case(({phv00276845} == ''0'', ''FHS ORIGINAL CHF''), ({phv00276845} == ''1'', ''FHS OFFSPRING CHF''), ({phv00276845} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00276845} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00276845} == ''7'', ''FHS OMNI 1 CHF''), ({phv00276845} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: HP:0001718
+          range: string
+        condition_status:
+          populated_from: phv00276884
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Medical History
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string
+- class_derivations:
+    Condition:
+      populated_from: pht007776
+      slot_derivations:
+        associated_participant:
+          expr: 'uuid5("https://w3id.org/bdchm/Participant", str({phv00369587}) + ":FHS")'
+        associated_visit:
+          expr: 'uuid5("https://w3id.org/bdchm/Visit", str({phv00369587}) + ":" + case(({phv00369637} == ''0'', ''FHS ORIGINAL CHF''), ({phv00369637} == ''1'', ''FHS OFFSPRING CHF''), ({phv00369637} == ''2'', ''FHS NEW OFFSPRING SPOUSE CHF''), ({phv00369637} == ''3'', ''FHS GENERATION 3 CHF''), ({phv00369637} == ''7'', ''FHS OMNI 1 CHF''), ({phv00369637} == ''72'', ''FHS OMNI 2 CHF''), (True, ''FHS UNKNOWN VISIT'')))'
+        condition_concept:
+          value: HP:0001718
+          range: string
+        condition_status:
+          populated_from: phv00369620
+          value_mappings:
+            '0': ABSENT
+            '1': PRESENT
+            '2': PRESENT
+            '3': PRESENT
+            '9': UNKNOWN
+        condition_provenance:
+          value: STUDY_RECORD
+          range: string
+        associated_evidence:
+          value: Laboratory Test
+          range: string
+        relationship_to_participant:
+          value: ONESELF
+          range: string

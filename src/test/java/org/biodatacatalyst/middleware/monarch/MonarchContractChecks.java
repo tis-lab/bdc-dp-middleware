@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.biodatacatalyst.middleware.harmonized.HarmonizedVariableLibrary;
 import org.biodatacatalyst.middleware.shared.ApiException;
 import org.biodatacatalyst.middleware.terms.TermService;
 
@@ -21,7 +22,7 @@ public final class MonarchContractChecks {
          "description":null,"synonym":["High blood pressure"]}
         """;
 
-    public static void main(String[] args) throws Exception {
+    static void main() throws Exception {
         run();
     }
 
@@ -37,7 +38,7 @@ public final class MonarchContractChecks {
         var count = new AtomicInteger();
         var request = new AtomicReference<URI>();
 
-        server.createContext("/v3/api/search", exchange -> {
+        com.sun.net.httpserver.HttpHandler handler = exchange -> {
             count.incrementAndGet();
             request.set(exchange.getRequestURI());
             try {
@@ -53,7 +54,9 @@ public final class MonarchContractChecks {
             } finally {
                 exchange.close();
             }
-        });
+        };
+        server.createContext("/v3/api/search", handler);
+        server.createContext("/v3/api/autocomplete", handler);
         server.start();
 
         try {
@@ -61,14 +64,16 @@ public final class MonarchContractChecks {
             var props = new MonarchProperties(
                     URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/v3/api"),
                     Duration.ofMillis(500), Duration.ofMillis(500));
-            var service = new TermService(new MonarchClient(props, new MonarchResponseMapper()));
+
+            var service = new TermService(new MonarchClient(props, new MonarchResponseMapper()),
+                    HarmonizedVariableLibrary.disabled());
 
             // ---- successful mapping -------------------------------------------------------
             var result = service.terms(" Hypertension ", 20, 0);
             require(result.total() == 2 && result.items().size() == 1 && result.hasMore(), "success pagination");
-            require(result.items().get(0).description() == null, "null description");
-            require(result.items().get(0).synonyms().get(0).equals("High blood pressure"), "synonym mapping");
-            require(result.items().get(0).displayLabel().equals("Hypertension (HP:0000822)"), "display label mapping");
+            require(result.items().getFirst().description() == null, "null description");
+            require(result.items().getFirst().synonyms().getFirst().equals("High blood pressure"), "synonym mapping");
+            require(result.items().getFirst().displayLabel().equals("Hypertension (HP:0000822)"), "display label mapping");
             // The surrounding spaces above must not survive into the upstream request.
             require(request.get().getRawQuery().equals("q=Hypertension&limit=20&offset=0"), "request parameters");
 
@@ -92,9 +97,9 @@ public final class MonarchContractChecks {
 
             // ---- null versus empty is preserved -------------------------------------------
             body.set(page(ITEM.replace("[\"High blood pressure\"]", "null"), 1, 20, 0));
-            require(service.terms("x", 20, 0).items().get(0).synonyms() == null, "null synonyms");
+            require(service.terms("x", 20, 0).items().getFirst().synonyms() == null, "null synonyms");
             body.set(page(ITEM.replace("[\"High blood pressure\"]", "[]"), 1, 20, 0));
-            require(service.terms("x", 20, 0).items().get(0).synonyms().isEmpty(), "empty synonyms");
+            require(service.terms("x", 20, 0).items().getFirst().synonyms().isEmpty(), "empty synonyms");
 
             // ---- input validation happens before any upstream call ------------------------
             int before = count.get();
@@ -120,7 +125,50 @@ public final class MonarchContractChecks {
                 expect("UPSTREAM_INVALID_RESPONSE", () -> service.terms("x", 20, 0));
             }
 
-            // ---- upstream failure modes ---------------------------------------------------
+            // ---- autocomplete: a second upstream route on the same client -----------------
+            status.set(200);
+            body.set(page(ITEM, 1, 20, 0));
+            var suggestions = service.autocomplete("Hyper");
+            require(suggestions.items().size() == 1, "autocomplete mapping");
+            require(suggestions.items().getFirst().displayLabel().equals("Hypertension (HP:0000822)"),
+                    "autocomplete display label");
+            require(request.get().getPath().endsWith("/autocomplete"), "autocomplete route");
+            // Only q: the upstream route accepts nothing else, so nothing else may be sent.
+            require(request.get().getRawQuery().equals("q=Hyper"), "autocomplete sends only q");
+
+            require(suggestions.items().getFirst().description() == null, "null autocomplete description");
+            body.set(page(ITEM.replace("\"description\":null", "\"description\":\"A description\""), 1, 20, 0));
+            require("A description".equals(service.autocomplete("Hyper").items().getFirst().description()),
+                    "description survives mapping and BDC annotation");
+            for (String bad : new String[]{
+                    page(ITEM.replace("\"description\":null", "\"description\":{}"), 1, 20, 0),
+                    page(ITEM, -1, 20, 0), page(ITEM, 0, 20, 0),
+                    page(ITEM, 1, 20, 0).replace("\"total\":1", "\"total\":\"bad\"")}) {
+                body.set(bad);
+                expect("UPSTREAM_INVALID_RESPONSE", () -> service.autocomplete("Hyper"));
+            }
+
+            body.set(page(ITEM + "," + ITEM, 2, 20, 0));
+            var deduped = service.autocomplete("Hyper");
+            require(deduped.items().size() == 1, "autocomplete drops a repeated identifier");
+            require(deduped.total() == 2, "autocomplete total still reflects the upstream page");
+
+            var dedupedTerms = service.terms("Hyper", 20, 0);
+            require(dedupedTerms.items().size() == 1, "search drops a repeated identifier");
+            require(!dedupedTerms.hasMore(), "paging uses the upstream row count, not the short list");
+
+
+            body.set("{\"items\":[" + ITEM + "]}");
+            require(service.autocomplete("Hyper").total() == 1, "autocomplete total falls back");
+
+            for (String bad : new String[]{"{}", "{\"items\":{}}",
+                    "{\"items\":[" + ITEM.replace("\"HP:0000822\"", "null") + "]}"}) {
+                body.set(bad);
+                expect("UPSTREAM_INVALID_RESPONSE", () -> service.autocomplete("Hyper"));
+            }
+            expect("BAD_USER_INPUT", () -> service.autocomplete(" "));
+
+            // ---- upstream failure modes ------------------------------
             body.set(page("", 0, 20, 0));
             for (int code : new int[]{400, 404, 429, 500, 503}) {
                 status.set(code);
@@ -136,7 +184,7 @@ public final class MonarchContractChecks {
             expect("UPSTREAM_UNAVAILABLE", () -> service.terms("x", 20, 0));
 
             System.out.println("PASS: success, candidates, encoding, nulls, pagination, validation, "
-                    + "malformed bodies, HTTP errors, timeout and connection failure");
+                    + "malformed bodies, HTTP errors, timeout, connection failure and autocomplete");
         } finally {
             server.stop(0);
             executor.shutdownNow();
