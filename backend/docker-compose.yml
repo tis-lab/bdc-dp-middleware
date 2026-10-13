@@ -1,0 +1,51 @@
+name: backend
+
+services:
+  es:
+    build:
+      context: ./es
+      args:
+        ES_VERSION: ${ES_VERSION}
+    image: backend-es:${ES_VERSION}
+    # Run as the invoking user (set by bin/compose.sh); group 0 is needed for
+    # write access to directories the image makes group-root-writable.
+    user: "${UID:?run via bin/compose.sh}:${GID:?run via bin/compose.sh}"
+    group_add:
+      - "0"
+    environment:
+      ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./data/es:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s' || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ES_VERSION}
+    # Run as the invoking user (set by bin/compose.sh); group 0 is needed for
+    # write access to directories the image makes group-root-writable.
+    user: "${UID:?run via bin/compose.sh}:${GID:?run via bin/compose.sh}"
+    group_add:
+      - "0"
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://es:9200"]'
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./data/kibana:/usr/share/kibana/data
+    depends_on:
+      es:
+        condition: service_healthy
