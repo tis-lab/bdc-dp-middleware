@@ -7,8 +7,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 public record HarmonizedVariableProperties(
 
         @DefaultValue("true") boolean enabled,
-        @DefaultValue("classpath*:harmonized/*-ingest/*.yaml") String ingest,
-        @DefaultValue("classpath:harmonized/harmonized_vars.tsv") String variableTable,
+        @DefaultValue("classpath:harmonized/harmonized-index.json") String index,
         @DefaultValue("25") int maxMatches) {
 
     public HarmonizedVariableProperties {

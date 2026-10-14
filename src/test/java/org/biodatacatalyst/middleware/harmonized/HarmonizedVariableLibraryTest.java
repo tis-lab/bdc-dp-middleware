@@ -7,15 +7,13 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-
 class HarmonizedVariableLibraryTest {
 
-    private static final String INGEST = "classpath*:harmonized/*-ingest/*.yaml";
-    private static final String TABLE = "classpath:harmonized/harmonized_vars.tsv";
+    private static final String INDEX = "classpath:harmonized/harmonized-index.json";
 
     private static HarmonizedVariableLibrary library() {
         return HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, INGEST, TABLE, 25));
+                new HarmonizedVariableProperties(true, INDEX, 25));
     }
 
     private static BdcVariable variable(HarmonizedVariableLibrary library, String name) {
@@ -153,7 +151,7 @@ class HarmonizedVariableLibraryTest {
     @Test
     void capsTheNumberOfMatches() {
         HarmonizedVariableLibrary capped = HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, INGEST, TABLE, 2));
+                new HarmonizedVariableProperties(true, INDEX, 2));
 
         assertThat(capped.search("hyper")).extracting("name")
                 .containsExactly("hypert_trt", "hyperten");
@@ -171,19 +169,23 @@ class HarmonizedVariableLibraryTest {
     }
 
     @Test
-    void loadsWithoutTheQaTableAndLogsRatherThanFailing() {
-        HarmonizedVariableLibrary withoutTable = HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, INGEST, "classpath:harmonized/no-such.tsv", 25));
-
-        assertThat(withoutTable.variableCount()).isEqualTo(179);
-        assertThat(variable(withoutTable, "hyperten").label()).isEqualTo("hyperten");
+    void failsFastWhenTheIndexIsMissing() {
+        assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
+                new HarmonizedVariableProperties(true, "classpath:harmonized/no-such.json", 25)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("build_harmonized_index.py");
     }
 
     @Test
-    void failsFastWhenNoSpecificationsAreFound() {
+    void failsFastWhenTheIndexIsNotAnIndex() {
         assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, "classpath*:no-such/*-ingest/*.yaml", TABLE, 25)))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("harmonized.enabled=false");
+                new HarmonizedVariableProperties(true, "classpath:harmonized/README.md", 25)))
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    /** 49 of the 179 variables have no row in the QA table; label falls back to the machine name. */
+    @Test
+    void fallsBackToTheMachineNameForVariablesWithNoLabel() {
+        assertThat(variable(library(), "hypertension").label()).isEqualTo("hypertension");
     }
 }

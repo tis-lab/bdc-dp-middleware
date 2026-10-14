@@ -1,48 +1,58 @@
-# Vendored data — do not edit by hand
+# harmonized-index.json
 
-Copied from <https://github.com/RTIInternational/NHLBI-BDC-DMC-HV> (`main`).
+A pre-built index of BDC harmonized variables, read once at startup by
+`HarmonizedVariableLibrary`. Generated using Claude, not hand-edited.
 
-| Path here | Source in that repository |
-| --- | --- |
-| `<STUDY>-ingest/*.yaml` | `priority_variables_transform/<STUDY>-ingest/` |
-| `harmonized_vars.tsv` | `transform_assessment/harmonized_qaqc/harmonized_vars.tsv` |
+## Where it comes from
 
-As vendored: 826 ingest specs across 11 studies, folding into **179 distinct variables**, of which
-168 carry at least one ontology concept and 130 have a label in the QA table.
+`tools/build_harmonized_index.py` reads the transformation specs in
+[RTIInternational/NHLBI-BDC-DMC-HV](https://github.com/RTIInternational/NHLBI-BDC-DMC-HV)
+and folds them into two views:
 
-The ingest specs are LinkML-Map transformation rules, not a catalogue. `HarmonizedVariableLibrary`
-extracts five things from them — study, BDCHM class, ontology CURIE, `pht` and `phv` accessions —
-and ignores the mapping machinery. They are nevertheless the required source, because they are the
-only place MONDO and HP identifiers appear, and those are what Monarch returns.
+| Key         | One record per                                 | Fields                                                         |
+|-------------|------------------------------------------------|----------------------------------------------------------------|
+| `variables` | variable name, folded across study directories | `name`, `label`, `domain`, `studyCount`, `studies`, `concepts` |
+| `concepts`  | ontology CURIE, inverted from the above        | `id`, `studyCount`, `studies`, `variableNames`                 |
 
-`harmonized_vars.tsv` is an optional enrichment supplying label, definition, domain, data type and
-unit. If it is absent the variables still load with those fields null.
+`counts` and `generated` at the top of the file record what the run produced and when.
 
-## Refreshing
+## Refreshing it
 
-```powershell
+```bash
 git clone --depth 1 https://github.com/RTIInternational/NHLBI-BDC-DMC-HV.git
-Copy-Item -Recurse -Force NHLBI-BDC-DMC-HV\priority_variables_transform\*-ingest `
-  src\main\resources\harmonized\
-Copy-Item -Force NHLBI-BDC-DMC-HV\transform_assessment\harmonized_qaqc\harmonized_vars.tsv `
-  src\main\resources\harmonized\
+python tools/build_harmonized_index.py \
+    --repo ./NHLBI-BDC-DMC-HV \
+    --out src/main/resources/harmonized/harmonized-index.json
 mvn test
 ```
 
-`HarmonizedVariableLibraryTest` asserts the variable count and the shape of several known
-variables, so a refresh that changes the repository's structure fails the build rather than
-silently returning nothing. Expect the count assertion to need updating when variables are
-genuinely added.
+Diff the JSON before committing. The counts moving is normal as harmonization work
+continues; a count collapsing to zero means the repository changed shape and the script
+needs updating. `HarmonizedVariableLibraryTest` asserts the totals, so a structural change
+fails the build rather than silently returning nothing.
 
-## When the repository gets an API
+## Why an index rather than the spec files
 
-It is in development and expected to grow one. When it does, replace the loader inside
-`HarmonizedVariableLibrary` and delete this directory. `HarmonizedVariable`, `VariableMatch`,
-`TermService` and the GraphQL schema do not change — the matching rules and the response contract
-are independent of where the data is read from.
+The middleware previously read all 826 YAML files at startup: 7.8 MB in the jar, parsed on
+every boot. The index is about 100 KB and parsed once. The trade-off is a generated
+artifact that can drift from its source, which is why the script is checked in beside it
+and the tests assert the counts.
 
-## If startup time or image size becomes a problem
+## The one rule worth knowing
 
-Parsing 826 files at boot to produce 179 small records is wasteful but keeps a single source of
-truth with no generated artifact to drift. The next step, if needed, is a build-time extraction to
-one JSON index; because the loader is isolated behind this one class, that is a drop-in change.
+**A concept counts only the studies whose own file assigns it.** Several studies can share
+a variable file name while assigning different codes — `hyperten` is harmonized in seven
+studies, but only one of them assigns `MONDO:0005149`. Crediting a code with every study
+that has a file of that name overstated 41% of rows when the extraction was first written
+that way.
+
+So `variables[].studyCount` and `concepts[].studyCount` answer different questions and will
+differ. The first is "how widely is this variable harmonized"; the second is "how many
+studies assign this code".
+
+## What is deliberately not here
+
+dbGaP `pht`/`phv` accessions, BDCHM classes, data types, units and prose definitions all
+exist in the source and are excluded to keep the first version small. Adding any of them is
+a change to the script and the `BdcVariable` record; it breaks no client, since adding a
+field to a GraphQL type is backward compatible.
