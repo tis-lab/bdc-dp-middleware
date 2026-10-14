@@ -11,6 +11,7 @@ import org.biodatacatalyst.middleware.harmonized.HarmonizedVariableLibrary;
 import org.biodatacatalyst.middleware.harmonized.HarmonizedVariableProperties;
 import org.biodatacatalyst.middleware.monarch.ConceptPage;
 import org.biodatacatalyst.middleware.monarch.MonarchClient;
+import org.biodatacatalyst.middleware.monarch.SuggestionPage;
 import org.biodatacatalyst.middleware.shared.SearchItem;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -155,15 +156,17 @@ class TermServiceMergeTest {
     }
 
     @Test
-    void mergesAutocompleteTheSameWay() {
+    void addsNothingToAutocomplete() {
+        SuggestionPage upstream = new SuggestionPage(List.of(
+                new Suggestion("MONDO:0005044", "hypertensive disorder", "biolink:Disease", null,
+                        List.of(), "hypertensive disorder (MONDO:0005044)")), 10);
         MonarchClient monarch = mock(MonarchClient.class);
-        when(monarch.autocomplete(anyString())).thenReturn(page(10, 10));
+        when(monarch.autocomplete(anyString())).thenReturn(upstream);
 
         AutocompleteResults results = service(monarch).autocomplete("hyper");
 
-        assertThat(results.items()).hasSize(13);
-        assertThat(types(results.items()).subList(0, VARIABLES)).containsOnly("BdcVariable");
-        assertThat(results.bdcVariableCount()).isEqualTo(VARIABLES);
-        assertThat(results.total()).isEqualTo(13);
+        assertThat(results.items()).hasSize(1);
+        assertThat(results.total()).isEqualTo(10);
+        assertThat(results.items().getFirst().id()).isEqualTo("MONDO:0005044");
     }
 }

@@ -30,20 +30,7 @@ type Query {
 }
 """One page, in Monarch's relevance order. An empty page is a successful result."""
 type TermResults {
-  """
-  One page, in display order: harmonized BDC variables first, then knowledge-graph concepts.
-
-  A single list on purpose. Variables and concepts were once returned separately, which left
-  the client merging them and broke paging — twenty concepts plus three pinned variables is
-  twenty-three rows. Here `limit` means what it says: ask for twenty, get twenty.
-
-  Variables sit at the front of the whole result set, not of each page. With three matching
-  variables, the first twenty are 3 variables + 17 concepts and the next twenty are concepts
-  18–37. Nothing is repeated or skipped; page on `offset` alone.
-
-  Resolve with inline fragments — see SearchItem.
-  """
-  items: [SearchItem!]!
+   items: [SearchItem!]!
   """BDC variables plus the provider's concept total, so it counts what `items` counts."""
   total: Int!
   """The page size actually applied."""
@@ -77,21 +64,33 @@ type Term {
   bdc: BdcCoverage!
 }
 
-"""Suggestions for a partially typed term. Unpaginated: the upstream route takes only `q`."""
+"""
+Type-ahead suggestions: Monarch's autocomplete list, in its own order, with nothing added.
+"""
 type AutocompleteResults {
-  """
-  Suggestions in display order: harmonized BDC variables first, then concepts. The same shape as
-  TermResults minus the paging fields, so one code path renders both operations.
-  """
-  items: [SearchItem!]!
-  """BDC variables plus the provider's reported total."""
+  """The suggestions, in provider order."""
+  items: [Suggestion!]!
+  """The provider's reported total when it supplies one, otherwise the number returned."""
   total: Int!
-  """How many of `items` are harmonized variables."""
-  bdcVariableCount: Int!
+}
+
+type Suggestion {
+  """The concept's CURIE. Send this to `terms` when the user picks a suggestion."""
+  id: ID!
+  """Primary name from the knowledge graph."""
+  label: String!
+  """Biolink category, e.g. biolink:Disease."""
+  category: String!
+  """Null when the knowledge graph holds no description."""
+  description: String
+  """Null means not supplied; [] means known to have none."""
+  synonyms: [String!]
+  """`label (id)`, composed from the provider's own fields so every surface matches."""
+  displayLabel: String!
 }
 
 """
-An entry in a result list: either a harmonized BDC variable or a knowledge-graph concept.
+An entry in a `terms` result list: either a harmonized BDC variable or a knowledge-graph concept.
 
 They are genuinely different things — one has studies and a domain, the other an ontology
 category and synonyms — so they are a union rather than one type with half its fields null.

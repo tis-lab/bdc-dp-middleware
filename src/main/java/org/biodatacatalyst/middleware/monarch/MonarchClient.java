@@ -47,7 +47,7 @@ public class MonarchClient {
         return mapper.map(fetch(searchUri(query, limit, offset), "search"), limit, offset);
     }
 
-    public ConceptPage autocomplete(String query) {
+    public SuggestionPage autocomplete(String query) {
         return mapper.mapAutocomplete(fetch(autocompleteUri(query), "autocomplete"));
     }
 

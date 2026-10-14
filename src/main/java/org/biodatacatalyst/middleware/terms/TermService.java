@@ -11,6 +11,7 @@ import org.biodatacatalyst.middleware.harmonized.BdcVariable;
 import org.biodatacatalyst.middleware.harmonized.HarmonizedVariableLibrary;
 import org.biodatacatalyst.middleware.monarch.ConceptPage;
 import org.biodatacatalyst.middleware.monarch.MonarchClient;
+import org.biodatacatalyst.middleware.monarch.SuggestionPage;
 import org.biodatacatalyst.middleware.shared.ApiException;
 import org.biodatacatalyst.middleware.shared.SearchItem;
 
@@ -77,15 +78,13 @@ public class TermService {
     public AutocompleteResults autocomplete(String query) {
         String normalized = validatedQuery(query);
 
-        List<BdcVariable> variables = bdcVariables.search(normalized);
-        ConceptPage concepts = monarch.autocomplete(normalized);
+        SuggestionPage suggestions = monarch.autocomplete(normalized);
 
-        List<SearchItem> items = merge(variables, annotate(concepts));
+        log.debug("Autocompleted {} characters: {} suggestion(s)",
+                normalized.length(), suggestions.items().size());
 
-        log.debug("Autocompleted {} characters: {} variable(s), {} suggestion(s)",
-                normalized.length(), variables.size(), concepts.items().size());
-
-        return new AutocompleteResults(items, variables.size() + concepts.total(), variables.size());
+        // Nothing is attached. The BDC index is not consulted on this path at all.
+        return new AutocompleteResults(suggestions.items(), suggestions.total());
     }
 
     /** Variables first, then concepts. The order is the display order; nothing re-ranks it. */

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import org.biodatacatalyst.middleware.shared.ApiException;
 import org.biodatacatalyst.middleware.harmonized.BdcCoverage;
+import org.biodatacatalyst.middleware.terms.Suggestion;
 import org.biodatacatalyst.middleware.terms.Term;
 
 import static org.biodatacatalyst.middleware.shared.ApiException.Code.UPSTREAM_INVALID_RESPONSE;
@@ -65,13 +66,13 @@ public class MonarchResponseMapper {
         return new ConceptPage(List.copyOf(items), total, rows.size());
     }
 
-    public ConceptPage mapAutocomplete(JsonNode root) {
+    public SuggestionPage mapAutocomplete(JsonNode root) {
         if (root == null || !root.isObject() || !root.path("items").isArray()) {
             throw malformed("autocomplete body is not an object with an items array");
         }
         JsonNode rows = root.get("items");
 
-        List<Term> items = new ArrayList<>();
+        List<Suggestion> items = new ArrayList<>();
         Set<String> seen = new HashSet<>();
         for (JsonNode row : rows) {
             if (!row.isObject()) {
@@ -83,22 +84,27 @@ public class MonarchResponseMapper {
                 continue;
             }
             String label = requiredText(row, "name");
-            items.add(new Term(
+            items.add(new Suggestion(
                     id,
                     label,
                     requiredText(row, "category"),
                     optionalText(row, "description"),
+                    // The autocomplete route returns the same entity shape as search, so synonyms
+                    // are mapped when present rather than dropped; a type-ahead simply does not
+                    // select the field.
                     synonyms(row.get("synonym")),
-                    label + " (" + id + ")",
-                    BdcCoverage.none()));
+                    label + " (" + id + ")"));
         }
 
         JsonNode total = root.get("total");
+        // Missing counts are tolerated; explicitly invalid counts are upstream contract failures.
         int reported = total == null || total.isNull() ? items.size() : nonnegativeInt(root, "total");
-
+        // Compared against the raw row count: a total below it contradicts the page the upstream
+        // just sent. De-duplication happens on our side and must not turn a valid total into a
+        // contract failure.
         if (reported < rows.size()) throw malformed("autocomplete total is smaller than its items");
 
-        return new ConceptPage(List.copyOf(items), reported, rows.size());
+        return new SuggestionPage(List.copyOf(items), reported);
     }
 
     private static int nonnegativeInt(JsonNode row, String field) {

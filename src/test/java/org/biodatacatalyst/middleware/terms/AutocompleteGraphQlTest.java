@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AutocompleteGraphQlTest {
     @Test
-    void exposesTheMergedUnionThroughHttpGraphQl() throws Exception {
+    void exposesAutocompleteConceptsThroughHttpGraphQl() throws Exception {
         var body = new AtomicReference<>("""
             {"items":[{"id":"HP:0000822","name":"Hypertension",
              "category":"biolink:PhenotypicFeature","description":"Upstream description"}],"total":1}
@@ -41,12 +41,8 @@ class AutocompleteGraphQlTest {
             var json = JsonMapper.builder().build();
             var payload = json.writeValueAsString(Map.of("query", """
                 { autocomplete(query: "Hyper") {
-                    total bdcVariableCount
-                    items {
-                      __typename
-                      ... on Term { id description bdc { studyCount studies variableNames } }
-                      ... on BdcVariable { name label studyCount }
-                    }
+                    total
+                    items { id label category description displayLabel synonyms }
                 } }
                 """));
             var request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/graphql"))
@@ -57,19 +53,23 @@ class AutocompleteGraphQlTest {
                 assertThat(response.statusCode()).isEqualTo(200);
                 var root = json.readTree(response.body());
                 assertThat(root.has("errors")).as(response.body()).isFalse();
-                var autocomplete = root.path("data").path("autocomplete");
-                // The harmonized index is not active in this test, so every item is a concept.
-                assertThat(autocomplete.path("bdcVariableCount").asInt()).isZero();
-                var item = autocomplete.path("items").get(0);
-                assertThat(item.path("__typename").asString()).isEqualTo("Term");
+                var item = root.path("data").path("autocomplete").path("items").get(0);
                 assertThat(item.path("description").asString()).isEqualTo("Upstream description");
-                assertThat(item.path("bdc").path("studyCount").asInt()).isZero();
+                assertThat(item.path("displayLabel").asString()).isEqualTo("Hypertension (HP:0000822)");
 
-                assertThat(item.path("bdc").path("variableNames")).isEmpty();
                 body.set("{\"items\":[{\"id\":\"HP:0000822\",\"name\":\"Hypertension\",\"category\":\"biolink:PhenotypicFeature\"}],\"total\":1}");
                 root = json.readTree(http.send(request, HttpResponse.BodyHandlers.ofString()).body());
                 assertThat(root.has("errors")).isFalse();
                 assertThat(root.path("data").path("autocomplete").path("items").get(0).path("description").isNull()).isTrue();
+
+                var withBdc = json.writeValueAsString(Map.of("query",
+                        "{ autocomplete(query: \"Hyper\") { items { id bdc { studyCount } } } }"));
+                var rejected = json.readTree(http.send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/graphql"))
+                                .header("Content-Type", "application/json")
+                                .POST(HttpRequest.BodyPublishers.ofString(withBdc)).build(),
+                        HttpResponse.BodyHandlers.ofString()).body());
+                assertThat(rejected.has("errors")).isTrue();
             }
         } finally { upstream.stop(0); }
     }
