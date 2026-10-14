@@ -1,5 +1,6 @@
 package org.biodatacatalyst.middleware.terms;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import org.biodatacatalyst.middleware.harmonized.BdcVariable;
 import org.biodatacatalyst.middleware.harmonized.HarmonizedVariableLibrary;
+import org.biodatacatalyst.middleware.monarch.ConceptPage;
 import org.biodatacatalyst.middleware.monarch.MonarchClient;
 import org.biodatacatalyst.middleware.shared.ApiException;
+import org.biodatacatalyst.middleware.shared.SearchItem;
 
 import static org.biodatacatalyst.middleware.shared.ApiException.Code.BAD_USER_INPUT;
 
@@ -43,55 +46,64 @@ public class TermService {
             throw new ApiException(BAD_USER_INPUT, "offset must be between 0 and " + MAX_OFFSET + ".");
         }
 
-        log.debug("Resolving term of {} characters (limit={}, offset={})",
-                normalized.length(), limit, offset);
+        List<BdcVariable> variables = bdcVariables.search(normalized);
+        int variableCount = variables.size();
 
-        TermResults concepts = monarch.search(normalized, limit, offset);
-        return attachBdc(normalized, concepts);
+        int from = Math.min(offset, variableCount);
+        int to = Math.min(variableCount, offset + limit);
+        List<BdcVariable> onThisPage = variables.subList(from, Math.max(from, to));
+
+        int conceptsWanted = limit - onThisPage.size();
+        int conceptOffset = Math.max(0, offset - variableCount);
+
+        log.debug("Resolving term of {} characters (limit={}, offset={}): {} variable(s) then {} concept(s) from {}",
+                normalized.length(), limit, offset, onThisPage.size(), conceptsWanted, conceptOffset);
+
+        // conceptsWanted can be 0 when variables fill the page. The provider still reports its
+        // total for a zero-size page, which is what keeps `total` and `hasMore` correct.
+        ConceptPage concepts = monarch.search(normalized, conceptsWanted, conceptOffset);
+
+        List<SearchItem> items = merge(onThisPage, annotate(concepts));
+        int total = variableCount + concepts.total();
+
+        // Computed from what the provider actually advanced by, not from items.size(). A repeated
+        // identifier dropped by the mapper still consumed an upstream slot, and using the shorter
+        // list here would report a further page at the end of the result set.
+        boolean hasMore = (long) offset + onThisPage.size() + concepts.rowsReturned() < total;
+
+        return new TermResults(items, total, limit, offset, hasMore, variableCount);
     }
-
-
-    private TermResults attachBdc(String normalized, TermResults concepts) {
-        List<BdcVariable> matching = bdcVariables.search(normalized);
-
-        List<TermResults.Term> annotated = concepts.items().stream()
-                .map(term -> term.withBdc(bdcVariables.coverageFor(term.id())))
-                .toList();
-
-        if (log.isDebugEnabled()) {
-            log.debug("Matched {} BDC variable(s); annotated {} concept(s), {} carrying RTI mappings",
-                    matching.size(), annotated.size(),
-                    annotated.stream().filter(t -> t.bdc().studyCount() > 0).count());
-        }
-
-        return concepts.withBdc(matching, annotated);
-    }
-
 
     public AutocompleteResults autocomplete(String query) {
         String normalized = validatedQuery(query);
 
-        log.debug("Autocompleting {} characters", normalized.length());
+        List<BdcVariable> variables = bdcVariables.search(normalized);
+        ConceptPage concepts = monarch.autocomplete(normalized);
 
-        AutocompleteResults suggestions = monarch.autocomplete(normalized);
+        List<SearchItem> items = merge(variables, annotate(concepts));
 
-        // Found by searching BDC's own index on the typed text, not by filtering the suggestions.
-        List<BdcVariable> matching = bdcVariables.search(normalized);
+        log.debug("Autocompleted {} characters: {} variable(s), {} suggestion(s)",
+                normalized.length(), variables.size(), concepts.items().size());
 
-        List<AutocompleteResults.Suggestion> annotated = suggestions.items().stream()
-                .map(suggestion -> suggestion.withBdc(bdcVariables.coverageFor(suggestion.id())))
-                .toList();
-
-        if (log.isDebugEnabled()) {
-            log.debug("Matched {} BDC variable(s); annotated {} suggestion(s), {} carrying RTI mappings",
-                    matching.size(), annotated.size(),
-                    annotated.stream().filter(s -> s.bdc().studyCount() > 0).count());
-        }
-
-        return suggestions.withBdc(matching, annotated);
+        return new AutocompleteResults(items, variables.size() + concepts.total(), variables.size());
     }
 
+    /** Variables first, then concepts. The order is the display order; nothing re-ranks it. */
+    private static List<SearchItem> merge(List<BdcVariable> variables, List<Term> concepts) {
+        List<SearchItem> items = new ArrayList<>(variables.size() + concepts.size());
+        items.addAll(variables);
+        items.addAll(concepts);
+        return List.copyOf(items);
+    }
 
+    /** Attaches each concept's BDC coverage. A map lookup per concept; no upstream traffic. */
+    private List<Term> annotate(ConceptPage page) {
+        return page.items().stream()
+                .map(term -> term.withBdc(bdcVariables.coverageFor(term.id())))
+                .toList();
+    }
+
+    /** Shared by both operations: the term itself is validated identically either way. */
     private static String validatedQuery(String query) {
         if (query == null || query.isBlank()) {
             throw new ApiException(BAD_USER_INPUT, "query must not be blank.");

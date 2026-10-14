@@ -193,6 +193,7 @@ public class HarmonizedVariableLibrary {
         return tokens;
     }
 
+    /** A variable with its searchable text pre-tokenized. */
     private record Indexed(BdcVariable variable, Set<String> tokens) {
     }
 

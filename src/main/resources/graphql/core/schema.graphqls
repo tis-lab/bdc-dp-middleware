@@ -31,24 +31,32 @@ type Query {
 """One page, in Monarch's relevance order. An empty page is a successful result."""
 type TermResults {
   """
-  BDC variables matching the search text, broadest study coverage first — display these at the
-  top of the page.
+  One page, in display order: harmonized BDC variables first, then knowledge-graph concepts.
 
-  Found by searching BDC's own index on the query, NOT by filtering `items`. That distinction is
-  the point: searching "hyper" ranks the harmonized concepts hundreds of results deep in the
-  knowledge graph's ordering, where no user will page to.
+  A single list on purpose. Variables and concepts were once returned separately, which left
+  the client merging them and broke paging — twenty concepts plus three pinned variables is
+  twenty-three rows. Here `limit` means what it says: ask for twenty, get twenty.
 
-  Derived from the query alone, so it is identical on every page — select it once and stop
-  selecting it when paging. The same field, with the same meaning, as on `AutocompleteResults`.
+  Variables sit at the front of the whole result set, not of each page. With three matching
+  variables, the first twenty are 3 variables + 17 concepts and the next twenty are concepts
+  18–37. Nothing is repeated or skipped; page on `offset` alone.
+
+  Resolve with inline fragments — see SearchItem.
   """
-  bdcVariables: [BdcVariable!]!
-  items: [Term!]!
-  """Total matching candidates reported by Monarch, not the length of this page. Does not count `bdcVariables`."""
+  items: [SearchItem!]!
+  """BDC variables plus the provider's concept total, so it counts what `items` counts."""
   total: Int!
+  """The page size actually applied."""
   limit: Int!
+  """The offset actually applied."""
   offset: Int!
-  """Whether offset + returned item count is less than total."""
+  """Whether a further page exists. Use this rather than arithmetic on `total`."""
   hasMore: Boolean!
+  """
+  How many of `total` are harmonized variables. Lets you label the pinned section without
+  counting `__typename` yourself.
+  """
+  bdcVariableCount: Int!
 }
 """A biomedical concept from the knowledge graph, with whatever BDC holds for it."""
 type Term {
@@ -72,35 +80,33 @@ type Term {
 """Suggestions for a partially typed term. Unpaginated: the upstream route takes only `q`."""
 type AutocompleteResults {
   """
-  BDC variables matching the typed text, broadest study coverage first — display at the top of
-  the suggestion list.
-
-  Found by searching BDC's own index, NOT by filtering `items`. That is the point: a half-typed
-  "hyper" ranks the harmonized concepts far down the knowledge graph's ordering, and a
-  suggestion list cannot page to them.
+  Suggestions in display order: harmonized BDC variables first, then concepts. The same shape as
+  TermResults minus the paging fields, so one code path renders both operations.
   """
-  bdcVariables: [BdcVariable!]!
-  """Monarch's suggestions, in its own order, each annotated with BDC availability."""
-  items: [Suggestion!]!
-  """Upstream total when supplied; otherwise returned item count. Does not count bdcVariables."""
+  items: [SearchItem!]!
+  """BDC variables plus the provider's reported total."""
   total: Int!
+  """How many of `items` are harmonized variables."""
+  bdcVariableCount: Int!
 }
 
-"""Monarch suggestion with optional description and transformation metadata."""
-type Suggestion {
-  """The concept's CURIE. Send this to `terms` when the user picks a suggestion."""
-  id: ID!
-  """Primary name from the knowledge graph."""
-  label: String!
-  """Biolink category, e.g. biolink:Disease."""
-  category: String!
-  """`label (id)`, computed so every surface identifies a concept identically."""
-  displayLabel: String!
-  """Description supplied by Monarch; null when absent. No per-item lookup is performed."""
-  description: String
-  """What BDC has harmonized for this concept. Never null; zero when nothing is harmonized."""
-  bdc: BdcCoverage!
+"""
+An entry in a result list: either a harmonized BDC variable or a knowledge-graph concept.
+
+They are genuinely different things — one has studies and a domain, the other an ontology
+category and synonyms — so they are a union rather than one type with half its fields null.
+Select with inline fragments and branch on `__typename`:
+
+```
+items {
+__typename
+... on BdcVariable { name label domain studyCount studies concepts }
+... on Term { id label category description displayLabel bdc { studyCount studies } }
 }
+```
+"""
+union SearchItem = BdcVariable | Term
+
 
 """
 What BDC has harmonized for one concept.

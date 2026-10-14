@@ -38,6 +38,8 @@ public final class MonarchContractChecks {
         var count = new AtomicInteger();
         var request = new AtomicReference<URI>();
 
+        // Both upstream routes are served by the same handler; the checks assert on the path and
+        // query string the client actually built.
         com.sun.net.httpserver.HttpHandler handler = exchange -> {
             count.incrementAndGet();
             request.set(exchange.getRequestURI());
@@ -64,22 +66,22 @@ public final class MonarchContractChecks {
             var props = new MonarchProperties(
                     URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/v3/api"),
                     Duration.ofMillis(500), Duration.ofMillis(500));
-
-            var service = new TermService(new MonarchClient(props, new MonarchResponseMapper()),
-                    HarmonizedVariableLibrary.disabled());
+            var client = new MonarchClient(props, new MonarchResponseMapper());
+            var service = new TermService(client, HarmonizedVariableLibrary.disabled());
 
             // ---- successful mapping -------------------------------------------------------
-            var result = service.terms(" Hypertension ", 20, 0);
-            require(result.total() == 2 && result.items().size() == 1 && result.hasMore(), "success pagination");
+            var result = client.search("Hypertension", 20, 0);
+            require(result.total() == 2 && result.items().size() == 1, "success mapping");
             require(result.items().getFirst().description() == null, "null description");
             require(result.items().getFirst().synonyms().getFirst().equals("High blood pressure"), "synonym mapping");
             require(result.items().getFirst().displayLabel().equals("Hypertension (HP:0000822)"), "display label mapping");
-            // The surrounding spaces above must not survive into the upstream request.
+            // Surrounding spaces must not survive into the upstream request.
+            require(service.terms(" Hypertension ", 20, 0).hasMore(), "hasMore across the merged set");
             require(request.get().getRawQuery().equals("q=Hypertension&limit=20&offset=0"), "request parameters");
 
             // Several candidates are all returned; none is chosen on the user's behalf.
             body.set(page(ITEM + "," + ITEM.replace("HP:0000822", "MONDO:0005044"), 2, 20, 0));
-            require(service.terms("Hypertension", 20, 0).items().size() == 2, "multiple candidates");
+            require(client.search("Hypertension", 20, 0).items().size() == 2, "multiple candidates");
 
             // ---- URL encoding -------------------------------------------------------------
             // Every character here would break the query string if it were not escaped.
@@ -90,16 +92,17 @@ public final class MonarchContractChecks {
 
             // ---- empty results are a success, not a failure -------------------------------
             body.set(page("", 0, 20, 0));
-            result = service.terms("no match", 20, 0);
-            require(result.items().isEmpty() && result.total() == 0 && !result.hasMore(), "empty result");
+            result = client.search("no match", 20, 0);
+            require(result.items().isEmpty() && result.total() == 0, "empty result");
+            require(!service.terms("no match", 20, 0).hasMore(), "empty result reports no further page");
             body.set(page("", 2, 20, 20));
             require(!service.terms("past last page", 20, 20).hasMore(), "offset beyond total");
 
             // ---- null versus empty is preserved -------------------------------------------
             body.set(page(ITEM.replace("[\"High blood pressure\"]", "null"), 1, 20, 0));
-            require(service.terms("x", 20, 0).items().getFirst().synonyms() == null, "null synonyms");
+            require(client.search("x", 20, 0).items().getFirst().synonyms() == null, "null synonyms");
             body.set(page(ITEM.replace("[\"High blood pressure\"]", "[]"), 1, 20, 0));
-            require(service.terms("x", 20, 0).items().getFirst().synonyms().isEmpty(), "empty synonyms");
+            require(client.search("x", 20, 0).items().getFirst().synonyms().isEmpty(), "empty synonyms");
 
             // ---- input validation happens before any upstream call ------------------------
             int before = count.get();
@@ -128,7 +131,7 @@ public final class MonarchContractChecks {
             // ---- autocomplete: a second upstream route on the same client -----------------
             status.set(200);
             body.set(page(ITEM, 1, 20, 0));
-            var suggestions = service.autocomplete("Hyper");
+            var suggestions = client.autocomplete("Hyper");
             require(suggestions.items().size() == 1, "autocomplete mapping");
             require(suggestions.items().getFirst().displayLabel().equals("Hypertension (HP:0000822)"),
                     "autocomplete display label");
@@ -138,7 +141,7 @@ public final class MonarchContractChecks {
 
             require(suggestions.items().getFirst().description() == null, "null autocomplete description");
             body.set(page(ITEM.replace("\"description\":null", "\"description\":\"A description\""), 1, 20, 0));
-            require("A description".equals(service.autocomplete("Hyper").items().getFirst().description()),
+            require("A description".equals(client.autocomplete("Hyper").items().getFirst().description()),
                     "description survives mapping and BDC annotation");
             for (String bad : new String[]{
                     page(ITEM.replace("\"description\":null", "\"description\":{}"), 1, 20, 0),
@@ -148,27 +151,32 @@ public final class MonarchContractChecks {
                 expect("UPSTREAM_INVALID_RESPONSE", () -> service.autocomplete("Hyper"));
             }
 
+            // A repeated identifier is dropped, not treated as a broken response: it is a cosmetic
+            // upstream quirk we can handle losslessly, and failing would be a total outage. The
+            // reported total still describes the page the upstream sent, so paging stays honest.
             body.set(page(ITEM + "," + ITEM, 2, 20, 0));
-            var deduped = service.autocomplete("Hyper");
+            var deduped = client.autocomplete("Hyper");
             require(deduped.items().size() == 1, "autocomplete drops a repeated identifier");
             require(deduped.total() == 2, "autocomplete total still reflects the upstream page");
 
-            var dedupedTerms = service.terms("Hyper", 20, 0);
-            require(dedupedTerms.items().size() == 1, "search drops a repeated identifier");
-            require(!dedupedTerms.hasMore(), "paging uses the upstream row count, not the short list");
+            require(client.search("Hyper", 20, 0).items().size() == 1, "search drops a repeated identifier");
+            require(!service.terms("Hyper", 20, 0).hasMore(), "a dropped repeat does not invent a further page");
 
-
+            // total is optional on this route; it falls back to the number of suggestions returned.
             body.set("{\"items\":[" + ITEM + "]}");
-            require(service.autocomplete("Hyper").total() == 1, "autocomplete total falls back");
+            require(client.autocomplete("Hyper").total() == 1, "autocomplete total falls back");
 
+            // An envelope without items is still rejected, and a suggestion without an id with it.
             for (String bad : new String[]{"{}", "{\"items\":{}}",
                     "{\"items\":[" + ITEM.replace("\"HP:0000822\"", "null") + "]}"}) {
                 body.set(bad);
                 expect("UPSTREAM_INVALID_RESPONSE", () -> service.autocomplete("Hyper"));
             }
+            // Validation applies to both routes alike.
             expect("BAD_USER_INPUT", () -> service.autocomplete(" "));
 
-            // ---- upstream failure modes ------------------------------
+            // ---- upstream failure modes, which must run last ------------------------------
+            // The refused-connection check stops the server, so nothing below it can reach one.
             body.set(page("", 0, 20, 0));
             for (int code : new int[]{400, 404, 429, 500, 503}) {
                 status.set(code);

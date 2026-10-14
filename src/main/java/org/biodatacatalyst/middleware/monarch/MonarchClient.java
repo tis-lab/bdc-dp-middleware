@@ -15,8 +15,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import org.biodatacatalyst.middleware.shared.ApiException;
-import org.biodatacatalyst.middleware.terms.AutocompleteResults;
-import org.biodatacatalyst.middleware.terms.TermResults;
 
 import static org.biodatacatalyst.middleware.shared.ApiException.Code.UPSTREAM_TIMEOUT;
 import static org.biodatacatalyst.middleware.shared.ApiException.Code.UPSTREAM_UNAVAILABLE;
@@ -45,11 +43,11 @@ public class MonarchClient {
     }
 
     /** Full concept search, paginated and ranked. */
-    public TermResults search(String query, int limit, int offset) {
+    public ConceptPage search(String query, int limit, int offset) {
         return mapper.map(fetch(searchUri(query, limit, offset), "search"), limit, offset);
     }
 
-    public AutocompleteResults autocomplete(String query) {
+    public ConceptPage autocomplete(String query) {
         return mapper.mapAutocomplete(fetch(autocompleteUri(query), "autocomplete"));
     }
 

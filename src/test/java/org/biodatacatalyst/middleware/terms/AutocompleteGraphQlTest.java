@@ -8,6 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import org.biodatacatalyst.middleware.DataPortalMiddlewareApplication;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AutocompleteGraphQlTest {
     @Test
-    void exposesDescriptionAndCoverageThroughHttpGraphQl() throws Exception {
+    void exposesTheMergedUnionThroughHttpGraphQl() throws Exception {
         var body = new AtomicReference<>("""
             {"items":[{"id":"HP:0000822","name":"Hypertension",
              "category":"biolink:PhenotypicFeature","description":"Upstream description"}],"total":1}
@@ -36,11 +37,16 @@ class AutocompleteGraphQlTest {
                 "--server.port=0", "--spring.profiles.active=", "--harmonized.enabled=false",
                 "--app.data-location=file:/nonexistent/synthetic/",
                 "--monarch.base-url=http://127.0.0.1:" + upstream.getAddress().getPort())) {
-            int port = ((WebServerApplicationContext) app).getWebServer().getPort();
+            int port = Objects.requireNonNull(((WebServerApplicationContext) app).getWebServer()).getPort();
             var json = JsonMapper.builder().build();
             var payload = json.writeValueAsString(Map.of("query", """
                 { autocomplete(query: "Hyper") {
-                    total items { id description bdc { studyCount studies variableNames } }
+                    total bdcVariableCount
+                    items {
+                      __typename
+                      ... on Term { id description bdc { studyCount studies variableNames } }
+                      ... on BdcVariable { name label studyCount }
+                    }
                 } }
                 """));
             var request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/graphql"))
@@ -51,7 +57,11 @@ class AutocompleteGraphQlTest {
                 assertThat(response.statusCode()).isEqualTo(200);
                 var root = json.readTree(response.body());
                 assertThat(root.has("errors")).as(response.body()).isFalse();
-                var item = root.path("data").path("autocomplete").path("items").get(0);
+                var autocomplete = root.path("data").path("autocomplete");
+                // The harmonized index is not active in this test, so every item is a concept.
+                assertThat(autocomplete.path("bdcVariableCount").asInt()).isZero();
+                var item = autocomplete.path("items").get(0);
+                assertThat(item.path("__typename").asString()).isEqualTo("Term");
                 assertThat(item.path("description").asString()).isEqualTo("Upstream description");
                 assertThat(item.path("bdc").path("studyCount").asInt()).isZero();
 

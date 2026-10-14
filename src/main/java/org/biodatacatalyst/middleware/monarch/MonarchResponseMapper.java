@@ -12,9 +12,7 @@ import org.springframework.stereotype.Component;
 
 import org.biodatacatalyst.middleware.shared.ApiException;
 import org.biodatacatalyst.middleware.harmonized.BdcCoverage;
-import org.biodatacatalyst.middleware.terms.AutocompleteResults;
-import org.biodatacatalyst.middleware.terms.TermResults;
-import org.biodatacatalyst.middleware.terms.TermResults.Term;
+import org.biodatacatalyst.middleware.terms.Term;
 
 import static org.biodatacatalyst.middleware.shared.ApiException.Code.UPSTREAM_INVALID_RESPONSE;
 
@@ -24,7 +22,7 @@ public class MonarchResponseMapper {
 
     private static final Logger log = LoggerFactory.getLogger(MonarchResponseMapper.class);
 
-    public TermResults map(JsonNode root, int requestedLimit, int requestedOffset) {
+    public ConceptPage map(JsonNode root, int requestedLimit, int requestedOffset) {
         if (root == null || !root.isObject() || !root.path("items").isArray()) {
             throw malformed("body is not an object with an items array");
         }
@@ -34,7 +32,7 @@ public class MonarchResponseMapper {
         int offset = nonnegativeInt(root, "offset");
         JsonNode rows = root.get("items");
 
-        boolean emptyPageInsideTheResultSet = rows.isEmpty() && offset < total;
+        boolean emptyPageInsideTheResultSet = rows.isEmpty() && limit > 0 && offset < total;
         boolean pagingDoesNotMatchTheRequest = limit != requestedLimit || offset != requestedOffset;
         boolean pageOverflowsItsOwnBounds = rows.size() > limit
                 || (!rows.isEmpty() && (long) offset + rows.size() > total);
@@ -64,19 +62,16 @@ public class MonarchResponseMapper {
                     label + " (" + id + ")",
                     BdcCoverage.none()));
         }
-
-        boolean hasMore = (long) offset + rows.size() < total;
-        return TermResults.fromMonarch(List.copyOf(items), total, limit, offset, hasMore);
+        return new ConceptPage(List.copyOf(items), total, rows.size());
     }
 
-
-    public AutocompleteResults mapAutocomplete(JsonNode root) {
+    public ConceptPage mapAutocomplete(JsonNode root) {
         if (root == null || !root.isObject() || !root.path("items").isArray()) {
             throw malformed("autocomplete body is not an object with an items array");
         }
         JsonNode rows = root.get("items");
 
-        List<AutocompleteResults.Suggestion> items = new ArrayList<>();
+        List<Term> items = new ArrayList<>();
         Set<String> seen = new HashSet<>();
         for (JsonNode row : rows) {
             if (!row.isObject()) {
@@ -88,11 +83,12 @@ public class MonarchResponseMapper {
                 continue;
             }
             String label = requiredText(row, "name");
-            items.add(new AutocompleteResults.Suggestion(
+            items.add(new Term(
                     id,
                     label,
                     requiredText(row, "category"),
                     optionalText(row, "description"),
+                    synonyms(row.get("synonym")),
                     label + " (" + id + ")",
                     BdcCoverage.none()));
         }
@@ -102,7 +98,7 @@ public class MonarchResponseMapper {
 
         if (reported < rows.size()) throw malformed("autocomplete total is smaller than its items");
 
-        return AutocompleteResults.fromMonarch(List.copyOf(items), reported);
+        return new ConceptPage(List.copyOf(items), reported, rows.size());
     }
 
     private static int nonnegativeInt(JsonNode row, String field) {
