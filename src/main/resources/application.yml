@@ -15,6 +15,7 @@ spring:
       enabled: ${GRAPHIQL_ENABLED:true}
     cors:
       allowed-origins: ${FRONTEND_ORIGINS:http://localhost:3000,http://localhost:5173}
+      allowed-origin-patterns: ${FRONTEND_ORIGIN_PATTERNS:https://*.netlify.app}
       allowed-methods: POST
       allowed-headers: Content-Type
 
@@ -46,16 +47,6 @@ logging:
     org.biodatacatalyst.middleware: ${APP_LOG_LEVEL:INFO}
 
 harmonized:
-  # BDC concept annotations: which harmonized variables carry each ontology concept, and across how
-  # many studies. false turns the feature off — mapping status is DISABLED and mapping coverage is unknown.
   enabled: ${HARMONIZED_ENABLED:true}
-  # Ingest transformation specs, one file per study and variable. Point at
-  # file:/path/to/priority_variables_transform/*-ingest/*.yaml to run against a working copy.
-  ingest: ${HARMONIZED_INGEST:classpath*:harmonized/*-ingest/*.yaml}
-  # QA spreadsheet supplying labels, definitions and units. Optional enrichment: if it is missing
-  # the variables still load with those fields null.
-  variable-table: ${HARMONIZED_VARIABLE_TABLE:classpath:harmonized/harmonized_vars.tsv}
-  # Ceiling on bdcVariables per search. The field is meant to list everything that matches, so this
-  # is a safety valve against a very broad query rather than a tuning knob. Does not affect the
-  # per-concept annotation, which always returns every variable carrying the concept.
+  index: ${HARMONIZED_INDEX:classpath:harmonized/harmonized-index.json}
   max-matches: ${HARMONIZED_MAX_MATCHES:25}
