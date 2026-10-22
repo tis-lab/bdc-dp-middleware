@@ -30,7 +30,7 @@ type Query {
 }
 """One page, in Monarch's relevance order. An empty page is a successful result."""
 type TermResults {
-   items: [SearchItem!]!
+  items: [SearchItem!]!
   """BDC variables plus the provider's concept total, so it counts what `items` counts."""
   total: Int!
   """The page size actually applied."""

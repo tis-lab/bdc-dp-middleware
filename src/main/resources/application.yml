@@ -35,9 +35,6 @@ management:
         enabled: true
 
 monarch:
-  # Serves both upstream routes: /search (terms) and /autocomplete (autocomplete).
-  # https://api-v3.monarchinitiative.org/v3/api is the version-pinned alias for the same API; set
-  # MONARCH_BASE_URL to it if you need to pin away from whatever /v3 currently points at.
   base-url: ${MONARCH_BASE_URL:https://api.monarchinitiative.org/v3/api}
   connect-timeout: ${MONARCH_CONNECT_TIMEOUT:5s}
   read-timeout: ${MONARCH_READ_TIMEOUT:15s}
