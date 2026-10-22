@@ -1,4 +1,4 @@
-package org.biodatacatalyst.middleware.synthetic.graphql;
+package org.biodatacatalyst.middleware.shared.graphql;
 
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -12,22 +12,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 
-import org.springframework.context.annotation.Profile;
-
 import java.util.Locale;
 
-/**
- * The JSON scalar used for records returned exactly as they appear in the source YAML.
- *
- * <p>Those records have no fixed shape — they are whatever the study files hold — so they cannot
- * be described as GraphQL object types without either inventing a schema they may not follow or
- * dropping fields. A scalar keeps them intact, nulls and nested structures included.
- *
- * <p>Output only: the API is read-only, so the scalar never has to parse client input.
- */
-@Profile("synthetic")
 @Configuration
-public class GraphQlConfig {
+public class JsonScalarConfiguration {
 
     @Bean
     public RuntimeWiringConfigurer jsonScalarConfigurer(ObjectMapper mapper) {

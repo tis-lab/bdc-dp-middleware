@@ -1,5 +1,3 @@
-"""Original synthetic YAML values, preserving nested structures and nulls. Output only."""
-scalar JSON
 """Record types supported by the synthetic corpus."""
 enum Entity { persons participants demography conditions visits drugExposures measurements measurementSets }
 extend type Query {
