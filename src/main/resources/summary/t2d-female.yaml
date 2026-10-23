@@ -1,0 +1,221 @@
+# SYNTHETIC: illustrative counts for two fictional studies, not derived from
+# participant data.
+#
+# The follow-up fetched when the user selects female in
+# SYNTHETIC.SummaryResponse-t2d.yaml: the same filter, narrowed to female.
+# It merges with that response by id, and their shared counts agree.
+
+release: example-release
+seed: MONDO:0005148
+filter:
+  - palette:measurement/FAST_GLUC_BLD
+  - palette:demography/sex/FEMALE
+min_count: 10
+
+terms:
+  - curie: MONDO:0005148
+    label: type 2 diabetes mellitus
+    vocabulary: MONDO
+    parents: [MONDO:0005015]
+  - curie: MONDO:0005015
+    label: diabetes mellitus
+    vocabulary: MONDO
+  - curie: MONDO:0005267
+    label: heart disorder
+    vocabulary: MONDO
+  - curie: MONDO:0024643
+    label: myocardial disorder
+    vocabulary: MONDO
+    parents: [MONDO:0005267]
+  - curie: MONDO:0005068
+    label: myocardial infarction
+    vocabulary: MONDO
+    parents: [MONDO:0024643]
+
+research_studies:
+  - id: palette:study_one
+    name: Example Study One
+    research_project_type: STUDY
+    program: Example Program
+    principal_investigator: [Example Investigator]
+  - id: palette:study_two
+    name: Example Study Two
+    research_project_type: STUDY
+    program: Example Program
+    principal_investigator: [Example Investigator]
+
+studies:
+  - research_study: palette:study_one
+    participant_count: 230
+
+    demographics:
+      - id: palette:demography/sex
+        summarized_slot: sex
+        participant_count: 230
+        values:
+          - id: palette:demography/sex/FEMALE
+            summarized_slot: sex
+            sex: FEMALE
+            participant_count: 230
+      - id: palette:demography/race
+        summarized_slot: race
+        participant_count: 227
+        values:
+          - id: palette:demography/race/WHITE
+            summarized_slot: race
+            race: [WHITE]
+            participant_count: 115
+          - id: palette:demography/race/BLACK_OR_AFRICAN_AMERICAN
+            summarized_slot: race
+            race: [BLACK_OR_AFRICAN_AMERICAN]
+            participant_count: 70
+          - id: palette:demography/race/ASIAN
+            summarized_slot: race
+            race: [ASIAN]
+            participant_count: 22
+          - id: palette:demography/race/AMERICAN_INDIAN_OR_ALASKA_NATIVE
+            summarized_slot: race
+            race: [AMERICAN_INDIAN_OR_ALASKA_NATIVE]
+            participant_count: 20
+
+    conditions:
+      - id: palette:condition/MONDO_0005148
+        condition_concept: MONDO:0005148
+        participant_count: 225
+        values:
+          - id: palette:condition/MONDO_0005148/PRESENT
+            condition_concept: MONDO:0005148
+            condition_status: PRESENT
+            participant_count: 40
+          - id: palette:condition/MONDO_0005148/ABSENT
+            condition_concept: MONDO:0005148
+            condition_status: ABSENT
+            participant_count: 185
+      - id: palette:condition/MONDO_0005068
+        condition_concept: MONDO:0005068
+        participant_count: 230
+        values:
+          - id: palette:condition/MONDO_0005068/PRESENT
+            condition_concept: MONDO:0005068
+            condition_status: PRESENT
+            participant_count: 15
+          - id: palette:condition/MONDO_0005068/ABSENT
+            condition_concept: MONDO:0005068
+            condition_status: ABSENT
+            participant_count: 215
+
+    measurements:
+      - id: palette:measurement/FAST_GLUC_BLD
+        observation_type: FAST_GLUC_BLD
+        participant_count: 230
+        values:
+          - id: palette:measurement/FAST_GLUC_BLD/-70mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_high: 70
+            bin_unit: mg/dL
+            participant_count: 11
+          - id: palette:measurement/FAST_GLUC_BLD/70-100mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 70
+            bin_high: 100
+            bin_unit: mg/dL
+            participant_count: 115
+          - id: palette:measurement/FAST_GLUC_BLD/100-126mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 100
+            bin_high: 126
+            bin_unit: mg/dL
+            participant_count: 54
+          - id: palette:measurement/FAST_GLUC_BLD/126-mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 126
+            bin_unit: mg/dL
+            participant_count: 50
+
+  - research_study: palette:study_two
+    participant_count: 250
+
+    demographics:
+      - id: palette:demography/sex
+        summarized_slot: sex
+        participant_count: 250
+        values:
+          - id: palette:demography/sex/FEMALE
+            summarized_slot: sex
+            sex: FEMALE
+            participant_count: 250
+      - id: palette:demography/race
+        summarized_slot: race
+        participant_count: 246
+        values:
+          - id: palette:demography/race/WHITE
+            summarized_slot: race
+            race: [WHITE]
+            participant_count: 150
+          - id: palette:demography/race/BLACK_OR_AFRICAN_AMERICAN
+            summarized_slot: race
+            race: [BLACK_OR_AFRICAN_AMERICAN]
+            participant_count: 50
+          - id: palette:demography/race/MIDDLE_EASTERN_OR_NORTH_AFRICAN
+            summarized_slot: race
+            race: [MIDDLE_EASTERN_OR_NORTH_AFRICAN]
+            participant_count: 22
+          - id: palette:demography/race/NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER
+            summarized_slot: race
+            race: [NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER]
+            participant_count: 24
+
+    conditions:
+      # 8 women have T2D UNKNOWN, below min_count, so not shown.
+      - id: palette:condition/MONDO_0005148
+        condition_concept: MONDO:0005148
+        participant_count: 250
+        values:
+          - id: palette:condition/MONDO_0005148/PRESENT
+            condition_concept: MONDO:0005148
+            condition_status: PRESENT
+            participant_count: 38
+          - id: palette:condition/MONDO_0005148/ABSENT
+            condition_concept: MONDO:0005148
+            condition_status: ABSENT
+            participant_count: 204
+      - id: palette:condition/MONDO_0005267
+        condition_concept: MONDO:0005267
+        participant_count: 250
+        values:
+          - id: palette:condition/MONDO_0005267/PRESENT
+            condition_concept: MONDO:0005267
+            condition_status: PRESENT
+            participant_count: 45
+          - id: palette:condition/MONDO_0005267/ABSENT
+            condition_concept: MONDO:0005267
+            condition_status: ABSENT
+            participant_count: 205
+
+    measurements:
+      - id: palette:measurement/FAST_GLUC_BLD
+        observation_type: FAST_GLUC_BLD
+        participant_count: 250
+        values:
+          - id: palette:measurement/FAST_GLUC_BLD/-70mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_high: 70
+            bin_unit: mg/dL
+            participant_count: 10
+          - id: palette:measurement/FAST_GLUC_BLD/70-100mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 70
+            bin_high: 100
+            bin_unit: mg/dL
+            participant_count: 120
+          - id: palette:measurement/FAST_GLUC_BLD/100-126mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 100
+            bin_high: 126
+            bin_unit: mg/dL
+            participant_count: 70
+          - id: palette:measurement/FAST_GLUC_BLD/126-mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 126
+            bin_unit: mg/dL
+            participant_count: 50
