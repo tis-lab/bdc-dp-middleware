@@ -1,84 +1,28 @@
 package org.biodatacatalyst.middleware.summary;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 public final class SummaryModels {
-
-    private SummaryModels() {
-    }
+    private SummaryModels() {}
 
     public record SummaryResponse(
-            CohortSnapshot snapshot,
-            List<String> notices,
             String release,
             String seed,
             List<String> filter,
-            Integer minCount,
+            BigInteger min_count,
             List<SummaryTerm> terms,
             List<TermRelation> relations,
-            List<ResearchStudy> researchStudies,
-            List<StudyCounts> studies,
-            ParticipantRecords records) {
-
-        public SummaryResponse with(CohortSnapshot snapshot, List<String> notices) {
-            return new SummaryResponse(snapshot, List.copyOf(notices), release, seed, filter,
-                    minCount, terms, relations, researchStudies, studies, records);
+            List<ResearchStudy> research_studies,
+            List<StudySummary> studies) {
+        public SummaryResponse {
+            filter = filter == null ? List.of() : List.copyOf(filter);
+            terms = terms == null ? List.of() : List.copyOf(terms);
+            relations = relations == null ? List.of() : List.copyOf(relations);
+            research_studies = research_studies == null ? List.of() : List.copyOf(research_studies);
+            studies = studies == null ? List.of() : List.copyOf(studies);
         }
-
-        public List<String> notices() {
-            return notices == null ? List.of() : notices;
-        }
-    }
-
-    public record ParticipantRecords(
-            List<ConditionRecord> recordConditions,
-            List<DemographyRecord> recordDemographics,
-            List<MeasurementRecord> recordMeasurements) {
-
-        public List<ConditionRecord> recordConditions() {
-            return recordConditions == null ? List.of() : recordConditions;
-        }
-
-        public List<DemographyRecord> recordDemographics() {
-            return recordDemographics == null ? List.of() : recordDemographics;
-        }
-
-        public List<MeasurementRecord> recordMeasurements() {
-            return recordMeasurements == null ? List.of() : recordMeasurements;
-        }
-    }
-
-    public record ConditionRecord(
-            String id,
-            String associatedParticipant,
-            String conditionConcept,
-            String conditionProvenance,
-            String conditionStatus,
-            String relationshipToParticipant) {
-    }
-
-    public record DemographyRecord(
-            String id,
-            String associatedParticipant,
-            String sex,
-            List<String> race,
-            String ethnicity) {
-
-        public List<String> race() {
-            return race == null ? List.of() : race;
-        }
-    }
-
-    public record MeasurementRecord(
-            String id,
-            String associatedParticipant,
-            String observationType,
-            Integer ageAtObservation,
-            String valueQuantity) {
-    }
-
-    public record CohortSnapshot(int estimatedParticipants, int studyCount, int minCount) {
     }
 
     public record SummaryTerm(
@@ -86,9 +30,8 @@ public final class SummaryModels {
             String label,
             String vocabulary,
             List<String> parents) {
-
-        public List<String> parents() {
-            return parents == null ? List.of() : parents;
+        public SummaryTerm {
+            parents = parents == null ? List.of() : List.copyOf(parents);
         }
     }
 
@@ -96,140 +39,116 @@ public final class SummaryModels {
             String subject,
             String predicate,
             String object,
-            String relationSource) {
+            String relation_source) {
     }
 
     public record ResearchStudy(
             String id,
             String name,
-            String researchProjectType,
+            String research_project_type,
             String program,
-            List<String> principalInvestigator) {
-
-        public List<String> principalInvestigator() {
-            return principalInvestigator == null ? List.of() : principalInvestigator;
+            List<String> principal_investigator) {
+        public ResearchStudy {
+            principal_investigator = principal_investigator == null ? List.of() : List.copyOf(principal_investigator);
         }
     }
 
-    public record StudyCounts(
-            String researchStudy,
-            Integer participantCount,
+    public record StudySummary(
+            String research_study,
+            BigInteger participant_count,
             List<ParticipantSummary> participants,
             List<DemographySummary> demographics,
             List<ConditionSummary> conditions,
             List<ProcedureSummary> procedures,
-            List<DrugExposureSummary> drugExposures,
+            List<DrugExposureSummary> drug_exposures,
             List<MeasurementObservationSummary> measurements) {
-
-        public List<ParticipantSummary> participants() {
-            return participants == null ? List.of() : participants;
-        }
-
-        public List<DemographySummary> demographics() {
-            return demographics == null ? List.of() : demographics;
-        }
-
-        public List<ConditionSummary> conditions() {
-            return conditions == null ? List.of() : conditions;
-        }
-
-        public List<ProcedureSummary> procedures() {
-            return procedures == null ? List.of() : procedures;
-        }
-
-        public List<DrugExposureSummary> drugExposures() {
-            return drugExposures == null ? List.of() : drugExposures;
-        }
-
-        public List<MeasurementObservationSummary> measurements() {
-            return measurements == null ? List.of() : measurements;
+        public StudySummary {
+            participants = participants == null ? List.of() : List.copyOf(participants);
+            demographics = demographics == null ? List.of() : List.copyOf(demographics);
+            conditions = conditions == null ? List.of() : List.copyOf(conditions);
+            procedures = procedures == null ? List.of() : List.copyOf(procedures);
+            drug_exposures = drug_exposures == null ? List.of() : List.copyOf(drug_exposures);
+            measurements = measurements == null ? List.of() : List.copyOf(measurements);
         }
     }
 
     public record ParticipantSummary(
             String id,
-            String summarizedSlot,
-            Integer participantCount,
-            Integer recordCount,
-            BigDecimal binLow,
-            BigDecimal binHigh,
-            String binUnit,
+            String summarized_slot,
+            BigInteger participant_count,
+            BigInteger record_count,
+            BigDecimal bin_low,
+            BigDecimal bin_high,
+            String bin_unit,
             List<ParticipantSummary> values) {
-
-        public List<ParticipantSummary> values() {
-            return values == null ? List.of() : values;
+        public ParticipantSummary {
+            values = values == null ? List.of() : List.copyOf(values);
         }
     }
 
     public record DemographySummary(
             String id,
-            String summarizedSlot,
-            Integer participantCount,
-            Integer recordCount,
+            String summarized_slot,
+            BigInteger participant_count,
+            BigInteger record_count,
             String sex,
             List<String> race,
             String ethnicity,
             List<DemographySummary> values) {
-
-        public List<String> race() {
-            return race == null ? List.of() : race;
-        }
-
-        public List<DemographySummary> values() {
-            return values == null ? List.of() : values;
+        public DemographySummary {
+            race = race == null ? List.of() : List.copyOf(race);
+            values = values == null ? List.of() : List.copyOf(values);
         }
     }
 
     public record ConditionSummary(
             String id,
-            String conditionConcept,
-            String conditionStatus,
-            Integer participantCount,
-            Integer recordCount,
+            String condition_concept,
+            String condition_status,
+            BigInteger participant_count,
+            BigInteger record_count,
             List<ConditionSummary> values) {
-
-        public List<ConditionSummary> values() {
-            return values == null ? List.of() : values;
+        public ConditionSummary {
+            values = values == null ? List.of() : List.copyOf(values);
         }
     }
 
     public record ProcedureSummary(
             String id,
-            String procedureConcept,
-            String procedureStatus,
-            Integer participantCount,
-            Integer recordCount,
+            String procedure_concept,
+            String procedure_status,
+            BigInteger participant_count,
+            BigInteger record_count,
             List<ProcedureSummary> values) {
-
-        public List<ProcedureSummary> values() {
-            return values == null ? List.of() : values;
+        public ProcedureSummary {
+            values = values == null ? List.of() : List.copyOf(values);
         }
     }
 
     public record DrugExposureSummary(
             String id,
-            String drugConcept,
-            Integer participantCount,
-            Integer recordCount,
+            String drug_concept,
+            BigInteger participant_count,
+            BigInteger record_count,
             List<DrugExposureSummary> values) {
-
-        public List<DrugExposureSummary> values() {
-            return values == null ? List.of() : values;
+        public DrugExposureSummary {
+            values = values == null ? List.of() : List.copyOf(values);
         }
     }
 
     public record MeasurementObservationSummary(
             String id,
-            String observationType,
-            Integer participantCount,
-            Integer recordCount,
-            BigDecimal binLow,
-            BigDecimal binHigh,
-            String binUnit,
+            String observation_type,
+            BigInteger participant_count,
+            BigInteger record_count,
+            BigDecimal bin_low,
+            BigDecimal bin_high,
+            String bin_unit,
+            BigDecimal range_low,
+            BigDecimal range_high,
             List<MeasurementObservationSummary> values) {
-
-        public List<MeasurementObservationSummary> values() {
-            return values == null ? List.of() : values;
+        public MeasurementObservationSummary {
+            values = values == null ? List.of() : List.copyOf(values);
         }
     }
 }
