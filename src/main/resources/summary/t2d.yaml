@@ -1,0 +1,356 @@
+# SYNTHETIC: illustrative counts for two fictional studies, not derived from
+# participant data.
+#
+# A search for type 2 diabetes, over participants with a fasting glucose
+# measurement. Glucose is related through a curated biomarker link. Study One
+# records heart conditions as subtypes and Study Two as heart disorder, so
+# comparing them would need a roll-up, which this draft leaves out.
+
+release: example-release
+seed: MONDO:0005148
+filter:
+  - palette:measurement/FAST_GLUC_BLD
+min_count: 10
+
+terms:
+  - curie: MONDO:0005148
+    label: type 2 diabetes mellitus
+    vocabulary: MONDO
+    parents: [MONDO:0005015]
+  - curie: MONDO:0005015
+    label: diabetes mellitus
+    vocabulary: MONDO
+  - curie: MONDO:0005267
+    label: heart disorder
+    vocabulary: MONDO
+  - curie: MONDO:0024643
+    label: myocardial disorder
+    vocabulary: MONDO
+    parents: [MONDO:0005267]
+  - curie: MONDO:0005068
+    label: myocardial infarction
+    vocabulary: MONDO
+    parents: [MONDO:0024643]
+  - curie: MONDO:0005252
+    label: heart failure
+    vocabulary: MONDO
+    parents: [MONDO:0005267]
+  - curie: OMOP:4156660
+    label: Fasting blood glucose measurement
+    vocabulary: SNOMED
+
+relations:
+  - subject: MONDO:0005015
+    predicate: biolink:has_biomarker
+    object: OMOP:4156660
+    relation_source: CURATED
+
+research_studies:
+  - id: palette:study_one
+    name: Example Study One
+    research_project_type: STUDY
+    program: Example Program
+    principal_investigator: [Example Investigator]
+  - id: palette:study_two
+    name: Example Study Two
+    research_project_type: STUDY
+    program: Example Program
+    principal_investigator: [Example Investigator]
+
+studies:
+  - research_study: palette:study_one
+    participant_count: 480
+
+    participants:
+      - id: palette:participant/age_at_index
+        summarized_slot: age_at_index
+        participant_count: 480
+        values:
+          - id: palette:participant/age_at_index/45-55a
+            summarized_slot: age_at_index
+            bin_low: 45
+            bin_high: 55
+            bin_unit: a
+            participant_count: 130
+          - id: palette:participant/age_at_index/55-65a
+            summarized_slot: age_at_index
+            bin_low: 55
+            bin_high: 65
+            bin_unit: a
+            participant_count: 165
+          - id: palette:participant/age_at_index/65-80a
+            summarized_slot: age_at_index
+            bin_low: 65
+            bin_high: 80
+            bin_unit: a
+            participant_count: 185
+
+    demographics:
+      # 5 participants have sex UNKNOWN, below min_count, so not shown.
+      - id: palette:demography/sex
+        summarized_slot: sex
+        participant_count: 480
+        values:
+          - id: palette:demography/sex/FEMALE
+            summarized_slot: sex
+            sex: FEMALE
+            participant_count: 230
+          - id: palette:demography/sex/MALE
+            summarized_slot: sex
+            sex: MALE
+            participant_count: 245
+      - id: palette:demography/race
+        summarized_slot: race
+        participant_count: 470
+        values:
+          - id: palette:demography/race/WHITE
+            summarized_slot: race
+            race: [WHITE]
+            participant_count: 235
+          - id: palette:demography/race/BLACK_OR_AFRICAN_AMERICAN
+            summarized_slot: race
+            race: [BLACK_OR_AFRICAN_AMERICAN]
+            participant_count: 141
+          - id: palette:demography/race/ASIAN
+            summarized_slot: race
+            race: [ASIAN]
+            participant_count: 47
+          - id: palette:demography/race/AMERICAN_INDIAN_OR_ALASKA_NATIVE
+            summarized_slot: race
+            race: [AMERICAN_INDIAN_OR_ALASKA_NATIVE]
+            participant_count: 47
+      - id: palette:demography/ethnicity
+        summarized_slot: ethnicity
+        participant_count: 480
+        values:
+          - id: palette:demography/ethnicity/HISPANIC_OR_LATINO
+            summarized_slot: ethnicity
+            ethnicity: HISPANIC_OR_LATINO
+            participant_count: 70
+          - id: palette:demography/ethnicity/NOT_HISPANIC_OR_LATINO
+            summarized_slot: ethnicity
+            ethnicity: NOT_HISPANIC_OR_LATINO
+            participant_count: 410
+
+    conditions:
+      - id: palette:condition/MONDO_0005148
+        condition_concept: MONDO:0005148
+        participant_count: 470
+        values:
+          - id: palette:condition/MONDO_0005148/PRESENT
+            condition_concept: MONDO:0005148
+            condition_status: PRESENT
+            participant_count: 90
+            record_count: 215
+          - id: palette:condition/MONDO_0005148/ABSENT
+            condition_concept: MONDO:0005148
+            condition_status: ABSENT
+            participant_count: 380
+      - id: palette:condition/MONDO_0005068
+        condition_concept: MONDO:0005068
+        participant_count: 480
+        values:
+          - id: palette:condition/MONDO_0005068/PRESENT
+            condition_concept: MONDO:0005068
+            condition_status: PRESENT
+            participant_count: 40
+          - id: palette:condition/MONDO_0005068/ABSENT
+            condition_concept: MONDO:0005068
+            condition_status: ABSENT
+            participant_count: 440
+      - id: palette:condition/MONDO_0005252
+        condition_concept: MONDO:0005252
+        participant_count: 480
+        values:
+          - id: palette:condition/MONDO_0005252/PRESENT
+            condition_concept: MONDO:0005252
+            condition_status: PRESENT
+            participant_count: 35
+          - id: palette:condition/MONDO_0005252/ABSENT
+            condition_concept: MONDO:0005252
+            condition_status: ABSENT
+            participant_count: 445
+
+    measurements:
+      - id: palette:measurement/FAST_GLUC_BLD
+        observation_type: FAST_GLUC_BLD
+        participant_count: 480
+        record_count: 1830
+        values:
+          - id: palette:measurement/FAST_GLUC_BLD/-70mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_high: 70
+            bin_unit: mg/dL
+            participant_count: 18
+          - id: palette:measurement/FAST_GLUC_BLD/70-100mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 70
+            bin_high: 100
+            bin_unit: mg/dL
+            participant_count: 240
+          - id: palette:measurement/FAST_GLUC_BLD/100-126mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 100
+            bin_high: 126
+            bin_unit: mg/dL
+            participant_count: 112
+          - id: palette:measurement/FAST_GLUC_BLD/126-mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 126
+            bin_unit: mg/dL
+            participant_count: 110
+
+  - research_study: palette:study_two
+    participant_count: 460
+
+    participants:
+      - id: palette:participant/age_at_index
+        summarized_slot: age_at_index
+        participant_count: 460
+        values:
+          - id: palette:participant/age_at_index/45-55a
+            summarized_slot: age_at_index
+            bin_low: 45
+            bin_high: 55
+            bin_unit: a
+            participant_count: 130
+          - id: palette:participant/age_at_index/55-65a
+            summarized_slot: age_at_index
+            bin_low: 55
+            bin_high: 65
+            bin_unit: a
+            participant_count: 165
+          - id: palette:participant/age_at_index/65-80a
+            summarized_slot: age_at_index
+            bin_low: 65
+            bin_high: 80
+            bin_unit: a
+            participant_count: 165
+
+    demographics:
+      - id: palette:demography/sex
+        summarized_slot: sex
+        participant_count: 460
+        values:
+          - id: palette:demography/sex/FEMALE
+            summarized_slot: sex
+            sex: FEMALE
+            participant_count: 250
+          - id: palette:demography/sex/MALE
+            summarized_slot: sex
+            sex: MALE
+            participant_count: 205
+      - id: palette:demography/race
+        summarized_slot: race
+        participant_count: 455
+        values:
+          - id: palette:demography/race/WHITE
+            summarized_slot: race
+            race: [WHITE]
+            participant_count: 275
+          - id: palette:demography/race/BLACK_OR_AFRICAN_AMERICAN
+            summarized_slot: race
+            race: [BLACK_OR_AFRICAN_AMERICAN]
+            participant_count: 90
+          - id: palette:demography/race/MIDDLE_EASTERN_OR_NORTH_AFRICAN
+            summarized_slot: race
+            race: [MIDDLE_EASTERN_OR_NORTH_AFRICAN]
+            participant_count: 45
+          - id: palette:demography/race/NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER
+            summarized_slot: race
+            race: [NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER]
+            participant_count: 45
+      - id: palette:demography/ethnicity
+        summarized_slot: ethnicity
+        participant_count: 460
+        values:
+          - id: palette:demography/ethnicity/HISPANIC_OR_LATINO
+            summarized_slot: ethnicity
+            ethnicity: HISPANIC_OR_LATINO
+            participant_count: 70
+          - id: palette:demography/ethnicity/NOT_HISPANIC_OR_LATINO
+            summarized_slot: ethnicity
+            ethnicity: NOT_HISPANIC_OR_LATINO
+            participant_count: 390
+
+    conditions:
+      - id: palette:condition/MONDO_0005148
+        condition_concept: MONDO:0005148
+        participant_count: 460
+        values:
+          - id: palette:condition/MONDO_0005148/PRESENT
+            condition_concept: MONDO:0005148
+            condition_status: PRESENT
+            participant_count: 80
+            record_count: 190
+          - id: palette:condition/MONDO_0005148/ABSENT
+            condition_concept: MONDO:0005148
+            condition_status: ABSENT
+            participant_count: 365
+          - id: palette:condition/MONDO_0005148/UNKNOWN
+            condition_concept: MONDO:0005148
+            condition_status: UNKNOWN
+            participant_count: 15
+      - id: palette:condition/MONDO_0005267
+        condition_concept: MONDO:0005267
+        participant_count: 460
+        values:
+          - id: palette:condition/MONDO_0005267/PRESENT
+            condition_concept: MONDO:0005267
+            condition_status: PRESENT
+            participant_count: 95
+          - id: palette:condition/MONDO_0005267/ABSENT
+            condition_concept: MONDO:0005267
+            condition_status: ABSENT
+            participant_count: 365
+
+    measurements:
+      - id: palette:measurement/FAST_GLUC_BLD
+        observation_type: FAST_GLUC_BLD
+        participant_count: 460
+        record_count: 2280
+        values:
+          - id: palette:measurement/FAST_GLUC_BLD/-70mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_high: 70
+            bin_unit: mg/dL
+            participant_count: 17
+          - id: palette:measurement/FAST_GLUC_BLD/70-100mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 70
+            bin_high: 100
+            bin_unit: mg/dL
+            participant_count: 230
+          - id: palette:measurement/FAST_GLUC_BLD/100-126mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 100
+            bin_high: 126
+            bin_unit: mg/dL
+            participant_count: 93
+          - id: palette:measurement/FAST_GLUC_BLD/126-mg_dL
+            observation_type: FAST_GLUC_BLD
+            bin_low: 126
+            bin_unit: mg/dL
+            participant_count: 120
+
+# Participant-level records sit apart from summaries, for authorized callers.
+records:
+  record_conditions:
+    - id: palette:example/condition-1
+      associated_participant: palette:example/participant-1
+      condition_concept: MONDO:0005148
+      condition_provenance: PATIENT_SELF_REPORT
+      condition_status: PRESENT
+      relationship_to_participant: ONESELF
+  record_demographics:
+    - id: palette:example/demography-1
+      associated_participant: palette:example/participant-1
+      sex: FEMALE
+      race: [WHITE]
+      ethnicity: NOT_HISPANIC_OR_LATINO
+  record_measurements:
+    # No value_quantity: BDCHM v1.3.0 doesn't declare it inlined (an upstream fix).
+    - id: palette:example/glucose-1
+      associated_participant: palette:example/participant-1
+      observation_type: FAST_GLUC_BLD
+      age_at_observation: 22280

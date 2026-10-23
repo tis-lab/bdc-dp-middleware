@@ -1,0 +1,5 @@
+id: c1
+associated_participant: p1
+condition_concept: HP:0000822
+condition_status: PRESENT
+relationship_to_participant: ONESELF
