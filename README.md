@@ -33,13 +33,13 @@ Then open <http://localhost:8080/graphiql>
 
 ## Endpoints
 
-| Endpoint | Purpose |
-| --- | --- |
-| `POST /graphql` | The entire frontend API |
-| `GET /graphiql` | Interactive, schema-aware documentation and query console |
-| `GET /actuator/health` | Overall health |
-| `GET /actuator/health/liveness` | OpenShift liveness probe |
-| `GET /actuator/health/readiness` | OpenShift readiness probe |
+| Endpoint                         | Purpose                                                   |
+|----------------------------------|-----------------------------------------------------------|
+| `POST /graphql`                  | The entire frontend API                                   |
+| `GET /graphiql`                  | Interactive, schema-aware documentation and query console |
+| `GET /actuator/health`           | Overall health                                            |
+| `GET /actuator/health/liveness`  | OpenShift liveness probe                                  |
+| `GET /actuator/health/readiness` | OpenShift readiness probe                                 |
 
 ### Queries
 
