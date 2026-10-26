@@ -1,0 +1,14 @@
+extend type Query {
+  """
+  Developer smoke test.
+  Disabled by default. Does not return cohort data or implement the summary contract.
+  """
+  searchProbe: SearchProbeResult!
+}
+
+type SearchProbeResult {
+  status: String!
+  backend: String!
+  httpStatus: Int!
+  elapsedMillis: Int!
+}

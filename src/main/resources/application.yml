@@ -47,3 +47,12 @@ harmonized:
   enabled: ${HARMONIZED_ENABLED:true}
   index: ${HARMONIZED_INDEX:classpath:harmonized/harmonized-index.json}
   max-matches: ${HARMONIZED_MAX_MATCHES:25}
+
+# Developer smoke test only; no connection is attempted at startup.
+search:
+  enabled: ${SEARCH_ENABLED:false}
+  endpoint: ${SEARCH_ENDPOINT:}
+  index: ${SEARCH_INDEX:}
+  api-key: ${SEARCH_API_KEY:}
+  connect-timeout: ${SEARCH_CONNECT_TIMEOUT:5s}
+  read-timeout: ${SEARCH_READ_TIMEOUT:15s}
