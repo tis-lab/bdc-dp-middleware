@@ -11,10 +11,7 @@ type Query {
   ): TermResults
 
   """
-  Type-ahead suggestions for a partially typed term, each annotated with what BDC holds, plus
-  the BDC variables matching the text.
-
-  Both operations attach transformation metadata. Study counts describe mapping specifications.
+  Type-ahead concept suggestions from Monarch; no local index results or BDC coverage.
 
   No limit or offset: the upstream autocomplete route accepts only the query, so the suggestion
   list is as long as it chooses to make it and cannot be sized or paged. For a longer, paginated
@@ -31,7 +28,7 @@ type Query {
 """One page, in Monarch's relevance order. An empty page is a successful result."""
 type TermResults {
   items: [SearchItem!]!
-  """BDC variables plus the provider's concept total, so it counts what `items` counts."""
+  """Local concept matches plus the provider's concept total, so it counts what `items` counts."""
   total: Int!
   """The page size actually applied."""
   limit: Int!
@@ -40,7 +37,7 @@ type TermResults {
   """Whether a further page exists. Use this rather than arithmetic on `total`."""
   hasMore: Boolean!
   """
-  How many of `total` are harmonized variables. Lets you label the pinned section without
+  How many of `total` are local concept matches. Lets you label the pinned section without
   counting `__typename` yourself.
   """
   bdcConceptCount: Int!
@@ -90,10 +87,10 @@ type Suggestion {
 }
 
 """
-An entry in a `terms` result list: either a harmonized BDC variable or a knowledge-graph concept.
+An entry in a `terms` result list: either a local concept with mapping coverage or a knowledge-graph concept.
 
-They are genuinely different things — one has studies and a domain, the other an ontology
-category and synonyms — so they are a union rather than one type with half its fields null.
+These are two source projections of concepts: local mapping coverage and provider metadata.
+They may refer to the same CURIE; this prototype does not deduplicate across sources.
 Select with inline fragments and branch on `__typename`:
 
 ```
@@ -120,33 +117,37 @@ type BdcCoverage {
   """Those studies by name, e.g. ["ARIC", "FHS"]."""
   studies: [String!]!
   """
-  Names of the variables that assign it. Look them up in the operation's `bdcVariables` list for
-  the full record; they are names here so the same type does not appear in two places meaning
-  two different things.
+  Specification file-stem aliases that assign this concept. Not source-variable accessions.
   """
   variableNames: [String!]!
 }
 
+"""Vocabulary from linkml/bdc-variable-library BdchmTypeEnum; lowercase names are intentional."""
+enum BdchmTypeEnum {
+  observation
+  condition
+  procedure
+  exposure
+  drugexposure
+}
+
 """
-An ontology concept BDC has harmonized, with the variables that carry it.
-Mirrors `IntegratedVariable` in linkml/bdc-variable-library, where `concept_type` is the key and
-`integrates` lists the per-study variables.
+A concept with transformation-specification coverage, not an IntegratedVariable instance.
+Interim concept-first representation, not a serialization of the DMC variable-library model.
 """
 type BdcConcept {
   """The CURIE, e.g. MONDO:0005044. The key, and what joins to a knowledge-graph concept."""
   conceptType: ID!
-  """
-  A human label. The specs give concepts no label of their own, so this is the first one its
-  carrying variables supply. Null where none exists.
-  """
+  """Verified concept label when supplied; never inferred from specification variable labels."""
   conceptLabel: String
   """`conceptLabel` when present, otherwise the CURIE. Never null, and never a bare file name."""
   displayLabel: String!
-  """
-  condition, observation, drugexposure, procedure or exposure, from the BDCHM class the
-  specification uses. Matches the `bdchm_type` enum in linkml/bdc-variable-library.
-  """
-  bdchmType: String
+  """LinkML category; null when source classes are unknown or disagree. See bdchmClasses for exact classes."""
+  bdchmType: BdchmTypeEnum
+  """All exact BDCHM classes assigning this concept; no majority selection."""
+  bdchmClasses: [String!]!
+  """Explicit study/class/slot/file associations from the source specifications."""
+  sourceMappings: [BdcSourceMapping!]!
   """How many studies assign this concept."""
   studyCount: Int!
   """
@@ -161,18 +162,25 @@ type BdcConcept {
   variables: [BdcCarrier!]!
 }
 
-"""One variable that assigns a concept, and the studies where it does."""
+"""Legacy specification-alias grouping; not a per-study variable or integrated-variable identity."""
 type BdcCarrier {
   """The transformation spec file name, e.g. `hyperten`. Provenance, not an identity."""
   variableName: String!
-  """Its label from the QA table, null for the 49 variables that have none."""
+  """Specification-alias label from an explicitly supplied TSV; not an ontology label. Null when absent."""
   variableLabel: String
   """
-  Only the studies where this variable assigns this concept. `asthma` is harmonized in ten
-  studies but assigns HP:0012393 in one, so this is not the variable's whole study list.
+  Only the studies where this specification alias assigns this exact concept.
   """
   studies: [String!]!
 }
 
+
+"""A specification assignment, not a participant record or source-variable accession."""
+type BdcSourceMapping {
+  study: String!
+  bdchmClass: String!
+  conceptSlot: String!
+  sourceFile: String!
+}
 
 type Health { service: String!, status: String! }

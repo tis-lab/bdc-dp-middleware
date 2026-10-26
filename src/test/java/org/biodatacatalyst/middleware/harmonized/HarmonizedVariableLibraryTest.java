@@ -25,16 +25,16 @@ class HarmonizedVariableLibraryTest {
 
     @Test
     void loadsEveryConceptFromTheIndex() {
-        assertThat(library().conceptCount()).isEqualTo(240);
+        assertThat(library().conceptCount()).isEqualTo(242);
     }
 
     @Test
     void keysOnTheConceptAndCarriesItsProvenance() {
         BdcConcept hypertension = concept("MONDO:0005044");
 
-        assertThat(hypertension.conceptLabel()).isEqualTo("Hypertension");
-        assertThat(hypertension.displayLabel()).isEqualTo("Hypertension");
-        assertThat(hypertension.bdchmType()).isEqualTo("condition");
+        assertThat(hypertension.conceptLabel()).isNull();
+        assertThat(hypertension.displayLabel()).isEqualTo("MONDO:0005044");
+        assertThat(hypertension.bdchmType()).isEqualTo(BdchmTypeEnum.condition);
         assertThat(hypertension.studyCount()).isEqualTo(10);
         assertThat(hypertension.studies()).containsExactly(
                 "ARIC", "CARDIA", "CHS", "COPDGene", "FHS", "HCHS", "JHS", "MESA", "SPIROMICS", "WHI");
@@ -69,14 +69,15 @@ class HarmonizedVariableLibraryTest {
 
     @Test
     void derivesTheBdchmTypeFromTheSpecification() {
-        assertThat(concept("MONDO:0005044").bdchmType()).isEqualTo("condition");
-        assertThat(concept("OBA:VT0001253").bdchmType()).isEqualTo("observation");
-        assertThat(concept("ATC:C02").bdchmType()).isEqualTo("drugexposure");
+        assertThat(concept("MONDO:0005044").bdchmType()).isEqualTo(BdchmTypeEnum.condition);
+        assertThat(concept("OBA:VT0001253").bdchmClasses())
+                .containsExactly("MeasurementObservation");
+        assertThat(concept("ATC:C02").bdchmType()).isEqualTo(BdchmTypeEnum.drugexposure);
     }
 
     @Test
-    void namesItsLabelConceptLabel() {
-        assertThat(concept("MONDO:0005044").conceptLabel()).isEqualTo("Hypertension");
+    void doesNotPromoteVariableLabelsToConceptLabels() {
+        assertThat(concept("MONDO:0005044").conceptLabel()).isNull();
     }
 
     /** A concept never displays a file name, even where no label could be derived. */
@@ -86,6 +87,18 @@ class HarmonizedVariableLibraryTest {
             assertThat(concept.displayLabel()).isNotBlank();
             assertThat(concept.displayLabel())
                     .isNotEqualTo(concept.variables().getFirst().variableName());
+        });
+    }
+
+    @Test
+    void preservesExplicitSourceAssociations() {
+        BdcConcept c = concept("MONDO:0005044");
+        assertThat(c.bdchmClasses()).containsExactly("Condition");
+        assertThat(c.sourceMappings()).isNotEmpty().allSatisfy(mapping -> {
+            assertThat(c.studies()).contains(mapping.study());
+            assertThat(mapping.bdchmClass()).isEqualTo("Condition");
+            assertThat(mapping.conceptSlot()).isEqualTo("condition_concept");
+            assertThat(mapping.sourceFile()).startsWith("priority_variables_transform/");
         });
     }
 
@@ -131,7 +144,7 @@ class HarmonizedVariableLibraryTest {
         assertThat(matches).isNotEmpty();
         assertThat(matches).extracting("conceptType").contains("MONDO:0005044", "ATC:C02");
         assertThat(matches).extracting("displayLabel")
-                .contains("Hypertension", "Hypertension treatment");
+                .contains("MONDO:0005044", "ATC:C02");
     }
 
     @Test
@@ -194,7 +207,26 @@ class HarmonizedVariableLibraryTest {
     @Test
     void failsFastWhenTheIndexIsNotAnIndex() {
         assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, "classpath:harmonized/README.md", 25)))
-                .isInstanceOf(IllegalStateException.class);
+                new HarmonizedVariableProperties(
+                        true, "classpath:harmonized/missing-concepts.json", 25)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("has no concepts array");
+    }
+
+    @Test
+    void rejectsInvalidEnumValues() {
+        assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
+                new HarmonizedVariableProperties(
+                        true, "classpath:harmonized/invalid-type.json", 25)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Unknown bdchmType");
+    }
+
+    @Test
+    void usesCurieFallbackForEveryPreviouslyMislabelledConcept() {
+        for (String id : List.of("HP:0012393", "MONDO:0005149", "ATC:C10AA")) {
+            assertThat(concept(id).conceptLabel()).isNull();
+            assertThat(concept(id).displayLabel()).isEqualTo(id);
+        }
     }
 }

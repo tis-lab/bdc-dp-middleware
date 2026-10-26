@@ -10,19 +10,13 @@ Reads `priority_variables_transform/<STUDY>-ingest/<variable>.yaml` — LinkML-M
 transformation specs — and inverts them so the ontology concept is the key and the
 variables that carry it hang off it.
 
-WHY CONCEPT-FIRST. An earlier version keyed on the spec file name (`hyperten.yaml` ->
-`hyperten`). File names carry no meaning: they are an artefact of how the specs are
-organised, two studies can name the same thing differently, and 49 of 179 have no
-human label at all, so a portal ends up showing a raw stem like `basophil_ct` to a
-researcher. The meaning lives in the ontology identifier the spec assigns, which is
-also the only thing that joins to a knowledge graph. This mirrors `IntegratedVariable`
-in linkml/bdc-variable-library, where `concept_type` is the key and `integrates` lists
-the per-study variables.
+Concept CURIEs are identities; filenames remain searchable provenance aliases only.
+Exact BDCHM classes and study/class/slot/file assignments are preserved. QA labels
+are variable labels, never concept labels. This index is a prototype projection,
+not a serialization of the DMC variable-library model. The future source is undecided.
 
-THE COUNTING RULE. A concept counts only the studies whose own spec assigns it. Several
-studies can share a variable file name while assigning different codes, so crediting a
-code with every study that has a file of that name overstates coverage badly — it was
-wrong on 41% of rows when first written that way.
+Study counts include only specifications assigning the exact concept; they are
+mapping coverage, not participant counts or authorization to access a dataset.
 
 Requires PyYAML:  pip install pyyaml
 """
@@ -31,10 +25,12 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
 import sys
-from collections import Counter, defaultdict
+import subprocess
+from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
@@ -61,7 +57,6 @@ BDCHM_TYPE = {
 }
 
 INGEST_GLOB = "priority_variables_transform/*-ingest/*.yaml"
-LABEL_TABLE = "transform_assessment/harmonized_qaqc/harmonized_vars.tsv"
 
 
 def concept_key(curie: str) -> str:
@@ -81,13 +76,15 @@ def read_specs(repo: Path):
     """
     Walk every ingest spec once.
 
-    Returns three things, all keyed so the counting rule can be applied afterwards:
+    Returns mappings and diagnostics, all keyed so the counting rule can be applied afterwards:
       assignments  (variable, study) -> {curie}
-      classes      curie -> Counter of the BDCHM classes that assigned it
+      classes      curie -> exact BDCHM classes that assigned it
+      mappings     curie -> (study, class, slot, source file) tuples
       studies      variable -> {study}, i.e. every study with a file of that name
     """
     assignments: dict[tuple[str, str], set[str]] = defaultdict(set)
-    classes: dict[str, Counter] = defaultdict(Counter)
+    classes: dict[str, set[str]] = defaultdict(set)
+    mappings: dict[str, set[tuple[str, str, str, str]]] = defaultdict(set)
     studies: dict[str, set[str]] = defaultdict(set)
     warnings: list[str] = []
 
@@ -127,16 +124,18 @@ def read_specs(repo: Path):
                         and not value.lower().startswith("http")
                     ):
                         assignments[(variable, study)].add(value)
-                        classes[concept_key(value)][bdchm_class] += 1
+                        classes[concept_key(value)].add(bdchm_class)
+                        mappings[concept_key(value)].add((study, bdchm_class, slot, path.relative_to(repo).as_posix()))
 
-    return assignments, classes, studies, warnings
+    return assignments, classes, mappings, studies, warnings
 
 
-def read_labels(repo: Path):
-    """Human label per variable, from the QA spreadsheet. Optional enrichment."""
-    path = repo / LABEL_TABLE
-    if not path.exists():
-        return {}, [f"{LABEL_TABLE} not found; labels will be null"]
+def read_labels(path: Path | None):
+    """Explicit optional variable-label TSV; never a source of ontology labels."""
+    if path is None:
+        return {}, []
+    if not path.is_file():
+        raise ValueError(f"Variable-label file does not exist: {path}")
 
     labels: dict[str, str] = {}
     with path.open(encoding="utf-8", newline="") as handle:
@@ -148,9 +147,9 @@ def read_labels(repo: Path):
     return labels, []
 
 
-def build(repo: Path) -> dict:
-    assignments, classes, studies, warnings = read_specs(repo)
-    labels, label_warnings = read_labels(repo)
+def build(repo: Path, variable_labels: Path | None = None, generated: str | None = None) -> dict:
+    assignments, classes, mappings, studies, warnings = read_specs(repo)
+    labels, label_warnings = read_labels(variable_labels)
     warnings += label_warnings
 
     # Invert: concept -> which variables assign it, and in which studies.
@@ -169,31 +168,24 @@ def build(repo: Path) -> dict:
         # The counting rule: only the studies that actually assign this concept.
         covering = sorted({s for group in by_variable.values() for s in group})
 
-        # A concept has no label of its own in the specs, so take the first its carrying
-        # variables supply. 213 of 240 get one this way; the rest fall back to the CURIE,
-        # which is still meaningful where a file name is not.
-        #
-        # Called conceptLabel, not label: GraphQL forbids two members of a union exposing one
-        # field name with different nullability, and Term.label is non-null. Keeping the JSON
-        # key, the Java component and the GraphQL field identical avoids a silent mismatch.
-        #
-        # Named conceptLabel, not label: Term.label is non-null in the GraphQL schema, and a
-        # union cannot expose one field name with two nullabilities.
-        label = next(
-            (labels[v] for v in sorted(by_variable) if v in labels),
-            None,
-        )
-
-        # The BDCHM class the specs most often use for this concept, mapped to the
-        # bdc-variable-library enum.
-        common = classes[key].most_common(1)
-        bdchm_type = BDCHM_TYPE.get(common[0][0]) if common else None
+        # QA labels describe specification aliases, not ontology concepts.
+        # Preserve them on carriers for search; never promote them to concept labels.
+        label = None
+        exact_classes = sorted(classes[key])
+        coarse = {BDCHM_TYPE.get(c) for c in exact_classes}
+        # Retain the old convenience field only when all classes agree.
+        bdchm_type = next(iter(coarse)) if len(coarse) == 1 else None
 
         concepts.append(
             {
                 "conceptType": original[key],
                 "conceptLabel": label,
                 "bdchmType": bdchm_type,
+                "bdchmClasses": exact_classes,
+                "sourceMappings": [
+                    {"study": study, "bdchmClass": cls, "conceptSlot": slot, "sourceFile": file}
+                    for study, cls, slot, file in sorted(mappings[key])
+                ],
                 "studyCount": len(covering),
                 "studies": covering,
                 "variables": [
@@ -217,13 +209,29 @@ def build(repo: Path) -> dict:
             "BDCHM classes with no bdchm_type mapping, left null: " + ", ".join(unmapped)
         )
 
+    try:
+        revision = subprocess.run(
+            ["git", "-C", str(repo), "rev-parse", "HEAD"], check=True,
+            capture_output=True, text=True).stdout.strip()
+        dirty = bool(subprocess.run(
+            ["git", "-C", str(repo), "status", "--porcelain"], check=True,
+            capture_output=True, text=True).stdout.strip())
+    except (OSError, subprocess.CalledProcessError):
+        revision, dirty = None, None
+
     return {
-        "generated": date.today().isoformat(),
+        "schemaVersion": 2,
+        "generated": generated or date.today().isoformat(),
         "source": {
             "repository": "RTIInternational/NHLBI-BDC-DMC-HV",
             "ingest": INGEST_GLOB,
-            "labelTable": LABEL_TABLE,
-            "alignedWith": "linkml/bdc-variable-library IntegratedVariable",
+            "variableLabels": None if variable_labels is None else {
+                "file": variable_labels.name,
+                "sha256": hashlib.sha256(variable_labels.read_bytes()).hexdigest(),
+            },
+            "revision": revision,
+            "dirty": dirty,
+            "representation": "interim concept index; not DMC model instances",
         },
         "counts": {
             "specFiles": sum(len(s) for s in studies.values()),
@@ -242,10 +250,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build a concept-keyed harmonized index.")
     parser.add_argument("--repo", type=Path, required=True, help="checkout of NHLBI-BDC-DMC-HV")
     parser.add_argument("--out", type=Path, help="write JSON here (default: stdout)")
+    parser.add_argument("--variable-labels", type=Path,
+                        help="Optional explicit TSV (var_name, var_label); variable labels only")
+    parser.add_argument("--generated-date", type=lambda value: date.fromisoformat(value).isoformat(),
+                        help="ISO date for reproducible generation; defaults to today")
     parser.add_argument("--quiet", action="store_true", help="suppress the summary on stderr")
     args = parser.parse_args()
 
-    index = build(args.repo)
+    index = build(args.repo, args.variable_labels, args.generated_date)
     text = json.dumps(index, indent=2, ensure_ascii=False)
 
     if args.out:

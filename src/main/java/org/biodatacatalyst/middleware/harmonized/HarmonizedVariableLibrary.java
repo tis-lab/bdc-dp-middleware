@@ -187,7 +187,11 @@ public class HarmonizedVariableLibrary {
         }
         if (index == null || !index.path("concepts").isArray()) {
             throw new IllegalStateException("The harmonized index at " + resource.getDescription()
-                    + " has no concepts array; regenerate it with "
+                    + " has no concepts array; regenerate with tools/build_harmonized_index.py");
+        }
+        if (index.path("schemaVersion").asInt() != 2) {
+            throw new IllegalStateException("The harmonized index at " + resource.getDescription()
+                    + " is not a version 2 concept index; regenerate it with "
                     + "tools/build_harmonized_index.py");
         }
         return index;
@@ -203,10 +207,18 @@ public class HarmonizedVariableLibrary {
                         optional(carrier, "variableLabel"),
                         strings(carrier.path("studies"))));
             }
+            List<BdcConcept.SourceMapping> mappings = new ArrayList<>();
+            for (JsonNode mapping : row.path("sourceMappings")) {
+                mappings.add(new BdcConcept.SourceMapping(
+                        required(mapping, "study"), required(mapping, "bdchmClass"),
+                        required(mapping, "conceptSlot"), required(mapping, "sourceFile")));
+            }
             concepts.add(new BdcConcept(
                     required(row, "conceptType"),
                     optional(row, "conceptLabel"),
-                    optional(row, "bdchmType"),
+                    BdchmTypeEnum.fromIndex(optional(row, "bdchmType")),
+                    strings(row.path("bdchmClasses")),
+                    List.copyOf(mappings),
                     strings(row.path("studies")),
                     List.copyOf(carriers)));
         }
