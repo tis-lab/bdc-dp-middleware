@@ -1,4 +1,4 @@
-package org.biodatacatalyst.middleware.api;
+package gov.nih.nhlbi.bdc.dataportal.cohortbuilder.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
