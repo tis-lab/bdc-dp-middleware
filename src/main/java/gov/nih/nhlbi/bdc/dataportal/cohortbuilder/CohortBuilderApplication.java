@@ -1,4 +1,4 @@
-package org.biodatacatalyst.middleware;
+package gov.nih.nhlbi.bdc.dataportal.cohortbuilder;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
