@@ -177,7 +177,7 @@ public class StudyRepository {
                     continue;
                 }
                 String studyId = folderName(resource);
-                Resource clash = byStudy.computeIfAbsent(studyId, _ -> new LinkedHashMap<>())
+                Resource clash = byStudy.computeIfAbsent(studyId, key -> new LinkedHashMap<>())
                         .put(entity, resource);
                 if (clash != null) {
                     throw new IllegalStateException("Study " + studyId + " has two files for " + entity + ": "
@@ -271,10 +271,10 @@ public class StudyRepository {
         for (JsonNode row : rows) {
             String participantId = row.path("associated_participant").asString("");
             if (!participantId.isBlank()) {
-                grouped.computeIfAbsent(participantId, _ -> new ArrayList<>()).add(row);
+                grouped.computeIfAbsent(participantId, key -> new ArrayList<>()).add(row);
             }
         }
-        grouped.replaceAll((_, rowsForParticipant) -> List.copyOf(rowsForParticipant));
+        grouped.replaceAll((key, rowsForParticipant) -> List.copyOf(rowsForParticipant));
         return Collections.unmodifiableMap(grouped);
     }
 
