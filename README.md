@@ -33,25 +33,25 @@ Then open <http://localhost:8080/graphiql>
 
 ## Endpoints
 
-| Endpoint | Purpose |
-| --- | --- |
-| `POST /graphql` | The entire frontend API |
-| `GET /graphiql` | Interactive, schema-aware documentation and query console |
-| `GET /actuator/health` | Overall health |
-| `GET /actuator/health/liveness` | OpenShift liveness probe |
-| `GET /actuator/health/readiness` | OpenShift readiness probe |
+| Endpoint                         | Purpose                                                   |
+|----------------------------------|-----------------------------------------------------------|
+| `POST /graphql`                  | The entire frontend API                                   |
+| `GET /graphiql`                  | Interactive, schema-aware documentation and query console |
+| `GET /actuator/health`           | Overall health                                            |
+| `GET /actuator/health/liveness`  | OpenShift liveness probe                                  |
+| `GET /actuator/health/readiness` | OpenShift readiness probe                                 |
 
 ### Queries
 
 Always available:
 
-| Query                         | Returns                                                                                                        |
-|-------------------------------|----------------------------------------------------------------------------------------------------------------|
-| `terms(query, limit, offset)` | `TermResults` - one paginated list: matching BDC harmonized variables first, then ranked concepts from Monarch |
-| `autocomplete(query)`         | `AutocompleteResults` - Monarch's suggestions unchanged, no BDC data, no pagination                            |
-| `health`                      | `Health!` - process status only                                                                                |
-| `summary(query)`              | `SummaryResponse` - participant counts for a cohort, study by study                                            |
-| `summaryJson(query)`          | the same response as a JSON scalar, with no selection set                                                      |
+| Query                         | Returns                                                                                                                        |
+|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| `terms(query, limit, offset)` | `TermResults` - one paginated list: matching BDC concepts with specification coverage first, then ranked concepts from Monarch |
+| `autocomplete(query)`         | `AutocompleteResults` - Monarch's suggestions unchanged, no BDC data, no pagination                                            |
+| `health`                      | `Health!` - process status only                                                                                                |
+| `summary(query)`              | `SummaryResponse` - participant counts for a cohort, study by study                                                            |
+| `summaryJson(query)`          | the same response as a JSON scalar, with no selection set                                                                      |
 
 With the `synthetic` profile active: `studies`, `study`, `participants`, `entityRecords`,
 `participant`, `participantDetail`, `participantRecords`, `measurements`, `definitions`,

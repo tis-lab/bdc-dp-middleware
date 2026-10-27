@@ -11,10 +11,7 @@ type Query {
   ): TermResults
 
   """
-  Type-ahead suggestions for a partially typed term, each annotated with what BDC holds, plus
-  the BDC variables matching the text.
-
-  Both operations attach transformation metadata. Study counts describe mapping specifications.
+  Type-ahead concept suggestions from Monarch; no local index results or BDC coverage.
 
   No limit or offset: the upstream autocomplete route accepts only the query, so the suggestion
   list is as long as it chooses to make it and cannot be sized or paged. For a longer, paginated
@@ -31,7 +28,7 @@ type Query {
 """One page, in Monarch's relevance order. An empty page is a successful result."""
 type TermResults {
   items: [SearchItem!]!
-  """BDC variables plus the provider's concept total, so it counts what `items` counts."""
+  """Local concept matches plus the provider's concept total, so it counts what `items` counts."""
   total: Int!
   """The page size actually applied."""
   limit: Int!
@@ -40,10 +37,10 @@ type TermResults {
   """Whether a further page exists. Use this rather than arithmetic on `total`."""
   hasMore: Boolean!
   """
-  How many of `total` are harmonized variables. Lets you label the pinned section without
+  How many of `total` are local concept matches. Lets you label the pinned section without
   counting `__typename` yourself.
   """
-  bdcVariableCount: Int!
+  bdcConceptCount: Int!
 }
 """A biomedical concept from the knowledge graph, with whatever BDC holds for it."""
 type Term {
@@ -90,21 +87,21 @@ type Suggestion {
 }
 
 """
-An entry in a `terms` result list: either a harmonized BDC variable or a knowledge-graph concept.
+An entry in a `terms` result list: either a local concept with mapping coverage or a knowledge-graph concept.
 
-They are genuinely different things — one has studies and a domain, the other an ontology
-category and synonyms — so they are a union rather than one type with half its fields null.
+These are two source projections of concepts: local mapping coverage and provider metadata.
+They may refer to the same CURIE; this prototype does not deduplicate across sources.
 Select with inline fragments and branch on `__typename`:
 
 ```
 items {
 __typename
-... on BdcVariable { name label domain studyCount studies concepts }
+... on BdcConcept { conceptType displayLabel bdchmType studyCount studies }
 ... on Term { id label category description displayLabel bdc { studyCount studies } }
 }
 ```
 """
-union SearchItem = BdcVariable | Term
+union SearchItem = BdcConcept | Term
 
 
 """
@@ -120,33 +117,70 @@ type BdcCoverage {
   """Those studies by name, e.g. ["ARIC", "FHS"]."""
   studies: [String!]!
   """
-  Names of the variables that assign it. Look them up in the operation's `bdcVariables` list for
-  the full record; they are names here so the same type does not appear in two places meaning
-  two different things.
+  Specification file-stem aliases that assign this concept. Not source-variable accessions.
   """
   variableNames: [String!]!
 }
 
-"""
-A variable harmonized across BDC studies.
+"""Vocabulary from linkml/bdc-variable-library BdchmTypeEnum; lowercase names are intentional."""
+enum BdchmTypeEnum {
+  observation
+  condition
+  procedure
+  exposure
+  drugexposure
+}
 
-A deliberately small view, read from files vendored from the harmonization repository. The
-source carries much more — dbGaP accessions, BDCHM classes, data types, units, definitions —
-and any of it can be added later without breaking a client.
 """
-type BdcVariable {
-  """Machine name from the specification files, e.g. "hyperten". Unique and stable; use as a key."""
-  name: String!
-  """Human-readable name, e.g. "Hypertension". Falls back to `name`, so it is never null."""
-  label: String!
-  """Coarse grouping, e.g. "DIAGNOSIS", "MEASUREMENT", "MEDICATION". Null when not categorised."""
-  domain: String
-  """How many studies harmonize this variable."""
+A concept with transformation-specification coverage, not an IntegratedVariable instance.
+Interim concept-first representation, not a serialization of the DMC variable-library model.
+"""
+type BdcConcept {
+  """The CURIE, e.g. MONDO:0005044. The key, and what joins to a knowledge-graph concept."""
+  conceptType: ID!
+  """Verified concept label when supplied; never inferred from specification variable labels."""
+  conceptLabel: String
+  """`conceptLabel` when present, otherwise the CURIE. Never null, and never a bare file name."""
+  displayLabel: String!
+  """LinkML category; null when source classes are unknown or disagree. See bdchmClasses for exact classes."""
+  bdchmType: BdchmTypeEnum
+  """All exact BDCHM classes assigning this concept; no majority selection."""
+  bdchmClasses: [String!]!
+  """Explicit study/class/slot/file associations from the source specifications."""
+  sourceMappings: [BdcSourceMapping!]!
+  """How many studies assign this concept."""
   studyCount: Int!
-  """Those studies by name."""
+  """
+  Those studies by name. Only the studies whose own specification assigns this concept - not
+  every study that happens to have a file of the same name.
+  """
   studies: [String!]!
-  """Ontology CURIEs its specifications assign, e.g. ["MONDO:0005044"]."""
-  concepts: [String!]!
+  """
+  The variables that carry it, as provenance back to the transformation specs. Names here are
+  spec file names.
+  """
+  variables: [BdcCarrier!]!
+}
+
+"""Legacy specification-alias grouping; not a per-study variable or integrated-variable identity."""
+type BdcCarrier {
+  """The transformation spec file name, e.g. `hyperten`. Provenance, not an identity."""
+  variableName: String!
+  """Specification-alias label from an explicitly supplied TSV; not an ontology label. Null when absent."""
+  variableLabel: String
+  """
+  Only the studies where this specification alias assigns this exact concept.
+  """
+  studies: [String!]!
+}
+
+
+"""A specification assignment, not a participant record or source-variable accession."""
+type BdcSourceMapping {
+  study: String!
+  bdchmClass: String!
+  conceptSlot: String!
+  sourceFile: String!
 }
 
 type Health { service: String!, status: String! }

@@ -9,5 +9,5 @@ public record TermResults(List<SearchItem> items,
                           int limit,
                           int offset,
                           boolean hasMore,
-                          int bdcVariableCount) {
+                          int bdcConceptCount) {
 }
