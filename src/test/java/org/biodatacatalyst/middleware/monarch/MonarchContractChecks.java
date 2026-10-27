@@ -22,7 +22,7 @@ public final class MonarchContractChecks {
          "description":null,"synonym":["High blood pressure"]}
         """;
 
-    static void main() throws Exception {
+    public static void main() throws Exception {
         run();
     }
 

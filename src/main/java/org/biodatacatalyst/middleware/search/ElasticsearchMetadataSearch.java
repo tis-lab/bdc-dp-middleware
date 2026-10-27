@@ -54,7 +54,7 @@ final class ElasticsearchMetadataSearch implements MetadataSearch {
                     })
                     .body(Map.of("size", 0, "track_total_hits", true,
                             "query", Map.of("match_all", Map.of())))
-                    .exchange((_, response) -> {
+                    .exchange((request, response) -> {
                         int status = response.getStatusCode().value();
                         // Do not follow redirects or expose backend error bodies/credentials.
                         if (status < 200 || status >= 300) {
