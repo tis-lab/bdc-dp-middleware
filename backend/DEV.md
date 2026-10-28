@@ -95,7 +95,7 @@ settings that compose adds must be in the image or in the OpenShift resources:
 | `user` + `group_add: ["0"]`     | OpenShift runs a random uid in group 0. The image ends with a numeric `USER 1000:0` so `runAsNonRoot` can be checked. |
 | `ES_JAVA_OPTS`                  | Not set. See below.                                              |
 | `ulimits`                       | Not needed: the default nofile limit is high enough, and memlock matters only with `bootstrap.memory_lock`, which is off. |
-| `ports`                         | The base image `EXPOSE`s 9200/9300. Publish them with a Service. |
+| `ports`                         | `EXPOSE 9200 9300`, repeated from the base image because the console's Import from Git form reads ports only from the Dockerfile text. 9200 comes first, so it is the default target port. Publish with a Service; 9300 (transport) isn't needed for a single node. |
 | `./data/es` bind mount          | A PVC at `/usr/share/elasticsearch/data`.                        |
 | `depends_on: pg`                | Dropped. ES doesn't use pg.                                      |
 | `healthcheck`                   | Kubernetes ignores `HEALTHCHECK`. Use a readiness probe on `/_cluster/health`. |

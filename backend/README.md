@@ -197,6 +197,11 @@ Differences from the compose setup:
   `ES_JAVA_OPTS` (e.g. `-Xms2g -Xmx2g`) to the Deployment's `env`.
 - **mmap is off** (`node.store.allow_mmap: false`), because OpenShift nodes
   usually don't have `vm.max_map_count` raised.
+- **Ports:** the Dockerfile `EXPOSE`s 9200 and 9300, so Import from Git
+  offers them and uses 9200 (HTTP) as the target port. 9300 is the transport
+  port between ES nodes and isn't needed for a single node. Don't create a
+  Route (see below). Use `oc port-forward svc/<name> 9200:9200` from your
+  machine, or `http://<name>:9200` from inside the project.
 - **Data:** mount a PVC at `/usr/share/elasticsearch/data`. Without one, data
   is lost when the pod restarts.
 - **Health:** use a readiness probe on

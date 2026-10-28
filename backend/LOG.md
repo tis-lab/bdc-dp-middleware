@@ -8,6 +8,8 @@ Newest first. Each section covers one set of development changes.
   (`contextDir: backend/es`). It matches `es/Dockerfile` except that it also
   copies `es/root-openshift/` and ends with numeric `USER 1000:0`.
   `es/Dockerfile` and compose are unchanged.
+- `EXPOSE 9200 9300` (also in the base image) so the console's Import from Git
+  form detects the ports, with 9200 as the default target port.
 - `es/root-openshift/.../elasticsearch.yml` replaces the shared one and adds
   `node.store.allow_mmap: false` (nodes usually keep `vm.max_map_count` at
   65530). Shared settings are duplicated and must be kept in sync.
