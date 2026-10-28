@@ -1,7 +1,7 @@
 # CLAUDE.md (backend/)
 
-A local Docker Compose stack (Elasticsearch + Kibana). Read `DEV.md` for how it
-works and `README.md` for how it's used.
+A local Docker Compose stack (Elasticsearch + Kibana + PostgreSQL). Read
+`DEV.md` for how it works and `README.md` for how it's used.
 
 ## Rules
 
@@ -10,24 +10,31 @@ works and `README.md` for how it's used.
   containers run as the invoking user.
 - Other scripts in `bin/` must call compose only through `bin/compose.sh`.
   They must never call `docker compose` or set `UID`/`GID` themselves.
-- Use `bin/clean-es.sh` to restart with an empty ES. It asks for confirmation;
-  never pass `-y` without the user's approval.
+- Use `bin/clean-es.sh` to restart with an empty ES, and `bin/clean-pg.sh` for
+  an empty pg. Both ask for confirmation; never pass `-y` without the user's
+  approval.
 - Each service that needs a custom image has its own directory named after the
   service. That directory is the build context, and its `root/` subdirectory is
   copied onto `/` of the image. Put config files under `root/` at their in-image
-  paths rather than using environment variables.
+  paths rather than using environment variables. Exception: `pg/init-sql/` is
+  user SQL that is bind-mounted, not built in (see DEV.md).
 - After any `COPY root/ /`, restore the owner and mode of existing directories
   the service writes to (see the `es/Dockerfile` `RUN` step and DEV.md).
 - Every service that bind-mounts data uses `./data/<service>`, has a committed
   `data/<service>/.gitkeep`, and sets the
   `user: "${UID:?...}:${GID:?...}"` + `group_add: ["0"]` block.
 - Pin Elastic versions with `ES_VERSION` in `.env`. Elastic publishes no
-  `latest` tag. Keep the Dockerfile `ARG` default the same.
+  `latest` tag. Pin PostgreSQL with `PG_VERSION` (exact minor version). Keep
+  each Dockerfile `ARG` default the same as `.env`.
 - The setup must work on Linux (incl. WSL2) and macOS. Keep every script in
   `bin/` compatible with Bash 3.2 and BSD tools (no `readlink -f`, no GNU-only
   flags).
 - Security is intentionally disabled (local development only).
 - Data in `data/` belongs to the user, so no `sudo` is needed. Ask before wiping it.
+- `model/` is a standalone Maven project, not a compose service. Its
+  `src/generated/java` is generated and committed: never edit it by hand.
+  After changing a `.graphqls` file, regenerate with
+  `./mvnw -Pgenerate generate-sources` and check with `bin/check-model-drift.sh`.
 
 ## After changes
 

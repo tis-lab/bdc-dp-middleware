@@ -26,6 +26,9 @@ services:
       - "9300:9300"
     volumes:
       - ./data/es:/usr/share/elasticsearch/data
+    depends_on:
+      pg:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s' || exit 1"]
       interval: 10s
@@ -49,3 +52,31 @@ services:
     depends_on:
       es:
         condition: service_healthy
+
+  pg:
+    build:
+      context: ./pg
+      args:
+        PG_VERSION: ${PG_VERSION}
+    image: backend-pg:${PG_VERSION}
+    # Run as the invoking user (set by bin/compose.sh); group 0 is needed for
+    # write access to directories the image makes group-root-writable.
+    user: "${UID:?run via bin/compose.sh}:${GID:?run via bin/compose.sh}"
+    group_add:
+      - "0"
+    ports:
+      - "5432:5432"
+    # PostgreSQL 18+ images keep PGDATA in a versioned subdirectory
+    # (/var/lib/postgresql/18/docker), so mount the parent.
+    volumes:
+      - ./data/pg:/var/lib/postgresql
+      # Run once at cluster creation, as dp, by 20-init-sql.sh in the image.
+      - ./pg/init-sql:/init-sql:ro
+    healthcheck:
+      # Over TCP: during init the entrypoint's temporary server listens only on
+      # the Unix socket, so this doesn't report ready too early.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U dp -d dp"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s

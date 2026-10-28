@@ -1,0 +1,16 @@
+# OpenShift version of root/usr/share/elasticsearch/config/elasticsearch.yml.
+# Dockerfile-OpenShift copies it over that file, so keep the shared settings
+# below in sync with it.
+cluster.name: "docker-cluster"
+node.name: "es"
+network.host: 0.0.0.0
+discovery.type: single-node
+
+# Local development only: no authentication or TLS.
+xpack.security.enabled: false
+xpack.security.http.ssl.enabled: false
+xpack.security.transport.ssl.enabled: false
+
+# OpenShift only: cluster nodes usually keep the default vm.max_map_count
+# (65530), and pods can't raise it. Use NIO instead of mmap for index files.
+node.store.allow_mmap: false

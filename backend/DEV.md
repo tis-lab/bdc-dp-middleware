@@ -7,7 +7,7 @@ how the setup works and the things that break easily when you change it.
 
 ```
 backend/
-├── .env                  # ES_VERSION, used by the es build arg and the kibana image tag
+├── .env                  # ES_VERSION (es build arg, kibana image tag), PG_VERSION (pg build arg)
 ├── .gitignore            # ignores data/*/* but keeps data/*/.gitkeep
 ├── README.md             # for users of the stack
 ├── DEV.md                # this file
@@ -15,15 +15,42 @@ backend/
 ├── CLAUDE.md             # guidance for Claude Code
 ├── bin/
 │   ├── compose.sh        # wrapper: exports UID/GID, then exec docker compose "$@"
-│   └── clean-es.sh       # confirm, compose down, empty data/es, compose up -d --wait
+│   ├── clean-es.sh       # confirm, compose down, empty data/es, compose up -d --wait
+│   ├── clean-pg.sh       # confirm, rm -sf pg, empty data/pg, compose up -d --wait pg
+│   └── check-model-drift.sh  # regenerate model sources, fail if they differ from git
 ├── docker-compose.yml
 ├── data/
 │   ├── es/.gitkeep       # bind mount -> /usr/share/elasticsearch/data
-│   └── kibana/.gitkeep   # bind mount -> /usr/share/kibana/data
-└── es/                   # build context for the es service
+│   ├── kibana/.gitkeep   # bind mount -> /usr/share/kibana/data
+│   └── pg/.gitkeep       # bind mount -> /var/lib/postgresql
+├── model/                # GraphQL data model, a standalone Maven project (not a service)
+│   ├── mvnw, .mvn/       # Maven wrapper
+│   ├── pom.xml           # codegen only in the `generate` profile
+│   └── src/
+│       ├── main/resources/graphql/model/  # common/query/response .graphqls (source of truth)
+│       ├── generated/java/                # generated, committed
+│       └── test/java/                     # ModelSchemaTest
+├── py-tools/             # uv project for Python tools (not a service)
+│   ├── pyproject.toml    # uv_build backend; tools go under [project.scripts]
+│   ├── .python-version   # 3.14
+│   ├── uv.lock           # committed
+│   └── src/py_tools/     # the package (empty)
+├── es/                   # build context for the es service
+│   ├── Dockerfile        # used by compose
+│   ├── Dockerfile-OpenShift  # used by an OpenShift BuildConfig (no compose)
+│   ├── root/             # copied onto / of the image (COPY root/ /)
+│   │   └── usr/share/elasticsearch/config/elasticsearch.yml
+│   └── root-openshift/   # copied after root/, by Dockerfile-OpenShift only
+│       └── usr/share/elasticsearch/config/elasticsearch.yml
+└── pg/                   # build context for the pg service
+    ├── .dockerignore     # keeps init-sql/ out of the build context
     ├── Dockerfile
-    └── root/             # copied onto / of the image (COPY root/ /)
-        └── usr/share/elasticsearch/config/elasticsearch.yml
+    ├── init-sql/         # user SQL, bind mount -> /init-sql (read-only)
+    │   └── .gitkeep
+    └── root/
+        └── docker-entrypoint-initdb.d/
+            ├── 10-dp.sql         # role + database dp, vector extension
+            └── 20-init-sql.sh    # runs /init-sql/*.sql as dp
 ```
 
 Each service that needs a custom image gets its own directory, named after the
@@ -50,9 +77,105 @@ its `root/` subdirectory mirrors the image filesystem.
   targeted. A recursive chmod over all of `/usr/share/elasticsearch` copies the
   whole tree into a new layer.
 - Configuration lives in `elasticsearch.yml` (in `root/`), not in environment
-  variables. The exception is `ES_JAVA_OPTS`, which is set in compose. This
+  variables. The exception is `ES_JAVA_OPTS`, which is set in compose (for
+  OpenShift, see the next section). This
   file replaces the base image's `elasticsearch.yml`, so it must keep
   `network.host: 0.0.0.0`.
+
+## The `es` image for OpenShift
+
+`es/Dockerfile-OpenShift` builds the same image for an OpenShift BuildConfig
+(`dockerStrategy`, `contextDir: backend/es`,
+`dockerfilePath: Dockerfile-OpenShift`). There is no compose there, so the
+settings that compose adds must be in the image or in the OpenShift resources:
+
+| Compose                         | OpenShift                                                        |
+|---------------------------------|------------------------------------------------------------------|
+| `build.args: ES_VERSION`        | The `ARG` default (or `buildArgs` in the BuildConfig). Keep it in sync with `.env`. |
+| `user` + `group_add: ["0"]`     | OpenShift runs a random uid in group 0. The image ends with a numeric `USER 1000:0` so `runAsNonRoot` can be checked. |
+| `ES_JAVA_OPTS`                  | Not set. See below.                                              |
+| `ulimits`                       | Not needed: the default nofile limit is high enough, and memlock matters only with `bootstrap.memory_lock`, which is off. |
+| `ports`                         | The base image `EXPOSE`s 9200/9300. Publish them with a Service. |
+| `./data/es` bind mount          | A PVC at `/usr/share/elasticsearch/data`.                        |
+| `depends_on: pg`                | Dropped. ES doesn't use pg.                                      |
+| `healthcheck`                   | Kubernetes ignores `HEALTHCHECK`. Use a readiness probe on `/_cluster/health`. |
+
+- **`root-openshift/`** is copied after `root/` and replaces
+  `elasticsearch.yml` with a copy that adds `node.store.allow_mmap: false`.
+  OpenShift nodes usually keep `vm.max_map_count` at 65530 and pods can't
+  change it. Elasticsearch doesn't refuse to start because of it
+  (`single-node` skips the bootstrap checks), but mmap-backed indices can fail
+  later. ES has a single `elasticsearch.yml`, so shared settings are
+  duplicated: **keep both copies in sync.** Both `COPY`s come before the
+  restore `RUN` step, so it covers both.
+- **Heap.** `ES_JAVA_OPTS` is deliberately not in the image. Without it, ES
+  sizes the heap from the container's memory limit (half of it for a
+  single node with all roles), so set the pod's memory limit to 4Gi to get
+  the same 2 GB heap as compose. To fix the heap explicitly, set
+  `ES_JAVA_OPTS` in the Deployment's `env` (`-Xms`/`-Xmx` equal, at most
+  about half the limit). It overrides the automatic sizing.
+- Tested with `docker run --user 1000770000:0 --memory 2g`: green, 1 GB heap,
+  `allow_mmap: false`, keystore written to `config/`.
+
+## The `pg` image
+
+- `FROM postgres:${PG_VERSION}` (Debian). As with `es`, keep the `ARG` default
+  in sync with `.env`.
+- pgvector is installed with apt as `postgresql-${PG_MAJOR}-pgvector` from the
+  PGDG repo that the base image already configures. `PG_MAJOR` is set by the
+  base image. The pgvector version isn't pinned; it's whatever PGDG has at
+  build time.
+- `ENV POSTGRES_HOST_AUTH_METHOD=trust` is set in the Dockerfile. It's the one
+  setting that isn't a file, because the entrypoint reads it only from the
+  environment. It writes `host all all all trust` into `pg_hba.conf` at initdb
+  time, so changing it later has no effect on an existing cluster.
+- `root/docker-entrypoint-initdb.d/10-dp.sql` creates the `dp` role and
+  database and the `vector` extension. The entrypoint runs these scripts only
+  when the data directory is empty. `COPY root/ /` resets
+  `/docker-entrypoint-initdb.d` to root:755, which is what the base image has
+  anyway, and postgres only reads it, so the Dockerfile has no restore step.
+- `root/docker-entrypoint-initdb.d/20-init-sql.sh` runs `/init-sql/*.sql`
+  (bind-mounted read-only from `pg/init-sql/`) with
+  `psql -v ON_ERROR_STOP=1 --no-psqlrc --username dp --dbname dp`.
+  - It's mounted at `/init-sql`, not inside `/docker-entrypoint-initdb.d`. The
+    entrypoint scans only the top level of that directory: a subdirectory
+    would just log "ignoring", and files mounted straight into it would sort
+    before `10-dp.sql` and run before `dp` exists.
+  - `LC_ALL=C` makes the glob sort by byte order whatever the locale.
+  - The script is executable (mode 755 in git; `COPY` keeps it), so the
+    entrypoint runs it as a separate process instead of sourcing it. A
+    non-zero exit aborts init and the container exits.
+  - It connects over the Unix socket of the entrypoint's temporary server,
+    where `local` auth is trust.
+  - This is a deliberate exception to "config goes under `root/`": the SQL is
+    user content that changes often, and mounting it means no rebuild.
+    `pg/.dockerignore` keeps it out of the build context.
+  - A failed init leaves a non-empty `PGDATA`, so the next start skips all
+    init scripts. Recovery is always `bin/clean-pg.sh`.
+- **Mount point:** since PostgreSQL 18, the official image puts `PGDATA` in
+  `/var/lib/postgresql/<major>/docker` and declares `/var/lib/postgresql` as
+  the volume. Compose mounts `./data/pg` there, not at the old
+  `/var/lib/postgresql/data`. After a major-version bump, the entrypoint
+  finds the old `data/pg/<old major>/docker/PG_VERSION` and exits with
+  "there appears to be PostgreSQL data in ..." instead of starting a new,
+  empty cluster next to it (`docker_error_old_databases`). The layout is
+  meant for `pg_upgrade --link`. For local development, dump what you need
+  and run `bin/clean-pg.sh`.
+- Running as an arbitrary uid works: the entrypoint creates `PGDATA` inside
+  the user-owned mount, and uses `nss_wrapper` when the uid has no
+  `/etc/passwd` entry. `group_add: ["0"]` isn't needed by postgres but is kept
+  for consistency with the other services.
+- The healthcheck runs `pg_isready -h 127.0.0.1` over TCP. While the
+  entrypoint runs the init scripts, its temporary server listens only on the
+  Unix socket, so a socket check would report ready before `dp` exists.
+
+## Start order
+
+`es` depends on `pg` (`condition: service_healthy`) and `kibana` depends on
+`es` (`service_healthy`), so `up` starts pg → es → kibana, and each one waits
+for the previous one's healthcheck. pg's healthcheck passes only after its init
+scripts have run, so a failed init blocks es and kibana. `depends_on` affects
+only `up`/`start`: a running es keeps running if pg stops or is recreated.
 
 ## Running as the invoking user
 
@@ -90,7 +213,7 @@ group_add:
   `config/` for the keystore. Making root the *primary* group would also work,
   but files would then get group root. Adding it as a supplementary group
   means files belong to the user's own group.
-- Both images run as uid 1000 by default. A developer whose uid is 1000 won't
+- The Elastic images run as uid 1000 by default (postgres runs as 999). A developer whose uid is 1000 won't
   notice ownership bugs, so test with another uid, e.g.:
 
   ```bash
@@ -133,6 +256,54 @@ already set in Docker Desktop's VM.
 - `--wait` waits for `es` to be healthy. Kibana has no healthcheck, so for it
   `--wait` only waits until the container is running.
 
+## `clean-pg.sh`
+
+Follows the same rules as `clean-es.sh` (compose only through `compose.sh`,
+`-y` handling, keeps `.gitkeep` and the directory), with two differences:
+
+- It stops and removes only the `pg` container (`rm --stop --force pg`) and
+  starts only `pg` (`up -d --wait <args> pg`), because restarting ES would be
+  slow for no reason. `es` has `depends_on: pg` (`service_healthy`), but that
+  only affects start order: removing pg doesn't stop es, and `up ... pg` only
+  touches pg. The dependency has no `restart: true`, so es isn't restarted
+  either.
+- Emptying `data/pg` removes every major-version subdirectory, so the next
+  start runs initdb and the scripts in `docker-entrypoint-initdb.d` again
+  (including `pg/init-sql/`, read from the mount at that moment).
+
+## `model/` code generation
+
+The Java in `model/src/generated/java` is generated from the SDL and committed.
+How the pom keeps the normal build from running codegen:
+
+- `build-helper-maven-plugin` (`add-source`) adds `src/generated/java` as a
+  source root in every build.
+- The codegen plugin is only in the `generate` profile. In that profile,
+  `maven-clean-plugin` first deletes `src/generated/java` (phase `initialize`),
+  so classes for removed or renamed types don't linger.
+- `onlyGenerateChanged` is `false`. With the default `true`, the plugin's
+  change manifest in `target/graphqlcodegen` makes it skip generation after
+  the wipe, which leaves the directory empty.
+- `autoAddSource` is `false`, because build-helper already adds the directory.
+- `addGeneratedAnnotation` with `disableDatesInGeneratedAnnotation` puts a
+  marker `@Generated` (codegen also generates the annotation class itself)
+  without a timestamp on every class. Regenerating unchanged schemas is
+  byte-identical, which the drift check depends on.
+- Codegen doesn't validate the schemas: a field of an unknown type is
+  generated without complaint. `ModelSchemaTest` builds the merged schema with
+  graphql-java, using a stub `Query`, and catches that.
+
+## `check-model-drift.sh`
+
+- Runs `./mvnw -q -B -Pgenerate generate-sources` in `model/`, then
+  `git status --porcelain --untracked-files=all -- src/generated`. Any output
+  is drift: modified (`M`), deleted (`D`, a removed type) or new (`??`) files.
+- Exit codes: 0 no drift, 1 drift, 2 generating failed (Maven's exit status is
+  1, so it's mapped to 2 to keep it apart from drift).
+- It compares against `HEAD`, so regenerated but uncommitted files count as
+  drift. It leaves the regenerated files in place.
+- It doesn't use compose, so the `compose.sh` rule doesn't apply.
+
 ## Security
 
 Disabled on purpose (`xpack.security.*.enabled: false`) to keep local
@@ -150,7 +321,10 @@ bin/compose.sh up -d --build
 docker inspect -f '{{.State.Health.Status}}' backend-es-1   # healthy
 curl -s localhost:9200/_cluster/health                       # status green
 curl -s -o /dev/null -w '%{http_code}\n' localhost:5601/api/status   # 200
+docker inspect -f '{{.State.Health.Status}}' backend-pg-1   # healthy
+bin/compose.sh exec pg psql -U dp dp -Atc "select extversion from pg_extension where extname='vector'"
 bin/compose.sh exec es id                    # your uid/gid, plus group 0
+bin/compose.sh exec pg id                    # same
 find data ! \( -user $(id -u) -group $(id -g) \)   # should print nothing (meaningful on Linux only)
 ```
 
