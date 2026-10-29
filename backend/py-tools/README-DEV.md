@@ -401,3 +401,304 @@ dangling reference with FKs on) and check the log. Finally, Ctrl-C during
 `SYNTH1-MeasurementObservation` should leave that table empty and earlier
 files loaded.
 
+## `pg-export-participants` (`src/py_tools/pg_export_participants.py`)
+
+### Reading
+
+All tables (from the `Mapper`'s `Generator` tables, enums-as-varchar) are read
+into memory once: `rows[table][id]` for class tables, and
+`joins[(owner table, slot)][owner id] = [target ids]`. With the SYNTH1 data
+that's about 35,000 rows, and all 500 documents are built in under a second.
+Much larger data would need per-participant queries instead. Reading once
+also lets post-processors look anything up through `ctx.rows`.
+
+`referrers[target id]` lists every `(table, id, slot)` that references an id
+(reference columns and join tables), which drives the reverse lookups.
+
+### Homes (`Exporter.homes()`)
+
+- Members: `referrers[participant id]` entries whose slot's range tables
+  include the participant table (so `Entity`-range slots count). This is
+  decided per record, not per class.
+- Indirect records: breadth-first from the members, through `nestable()`. Only
+  records of non-member classes (no slot whose range can be a Participant) are
+  nested, through a slot whose range is exactly the container's table. Each
+  record gets one home: the first found, members first.
+- Why so narrow: every class that can be nested under another needs its
+  fields in the Elasticsearch mapping under that path. Allowing member-class
+  records (orphans such as a Condition with only `associated_visit`) took the
+  mapping from ~840 to ~3,200 fields and ~200 nested fields. Allowing
+  polymorphic slots (`Entity`-range `focus`) made it unbounded. Records of
+  member classes with no participant reference are counted in the log
+  (`homed_all` against all their rows).
+- Ids are assumed to be unique across tables, as bdchm's UUIDs are. Lookups by
+  id use the slot's range tables to tell where an id can live.
+
+### JSON type per slot (`id_slot()`)
+
+Elasticsearch maps a field from the first value it sees, and then rejects
+documents where the same field has another type. A rule that picked a string
+or an object depending on the data (homed here or not, polymorphic target
+class, cycle cut) gave mixed types: `associated_evidence` had an object and a
+string in the same array. So the type is fixed per slot, from the schema:
+
+- id slot: a single range table, whose class is the root or a "member class"
+  (a class with a slot whose range can be a Participant). Always the id
+  string, even if the record isn't in this document.
+- object slot: everything else. Always an object: inlined, or a stub
+  `{<identifier slot>: id}` when the record is homed here or is on the current
+  inlining path (`path`, which ends cycles such as `ResearchStudy.part_of`).
+  On a polymorphic slot, objects and stubs get `_class`.
+
+Accepted cost: through an id slot, a member-class record that isn't homed in
+this document (another participant's visit, or a Document with no focus) is
+only its id.
+
+The path guard compares classes (tables), not records: a record of a class
+already on the inlining path becomes a stub. That keeps the documents within
+the mapping's depth. The mapping has to stop recursing at a repeated class,
+and the exporter must not go deeper than the mapping.
+
+Full-union polymorphic slots (`union_slot()`): when no class of the range can
+belong to a participant, the objects are always inlined in full, so the
+mapping holds the union of the classes' fields. A slot whose range differs
+between the classes gets the range as a key suffix (`union_key()`), computed
+from the schema and applied to the inlined object's keys.
+
+To check it, export all participants, then walk every document and collect
+the JSON types seen at each path (`$.condition[].associated_visit`, ...). Each
+path should have one type, counting int and float as one.
+
+### Left out
+
+`OMIT` covers references to the root, references from a nested record to its
+container (redundant; it's the parent object), and ids that resolve to no
+table, which are counted in `unresolved` for the log. Null column values and
+empty arrays are skipped while building. `Decimal` becomes `float`, and
+dates and times become ISO strings (`json_value()`).
+
+### Post-processors (`participant_postprocess.py`)
+
+- Kept in their own module, so adding one doesn't touch the exporter.
+  `POST_PROCESSORS` holds functions or classes. `--post-processor module:name`
+  imports more by name (`load()`), so experiments don't need code changes.
+- Classes are instantiated once per run (`instantiate()`), so they can cache
+  lookups in `__init__` and hold state. `finish(summary)` is optional and
+  duck-typed.
+- A processor may mutate `doc` or return a replacement. Anything else
+  (non-dict) is a `TypeError`. Exceptions are caught per participant: that
+  file isn't written, its previous file is kept (stale removal only removes
+  files of ids that are no longer in the participant table), and the run exits
+  1.
+- `Context.extra` is a per-participant dict for passing values between
+  processors.
+- `add_condition_keys` (built in) builds `_conditions` from the document's
+  `condition` array, not from `ctx.rows`, so it sees exactly what's indexed.
+  The fields and separator are module constants (`CONDITION_KEY_FIELDS`,
+  `CONDITION_KEY_SEPARATOR`). None of the SYNTH1 values contain `|`; if a
+  future value could, the separator would need to change, because there's no
+  escaping.
+
+### Verifying changes
+
+On a throwaway server from the backend's `pg/` image, run `pg-bootstrap`,
+apply `01_tables__enums_as_varchar`, run `pg-load-data`, then
+`pg-export-participants`. All 500 should be written, and the log should list
+the three unresolved slots above. Then add rows for the cases SYNTH1 doesn't
+have, and export one participant:
+- a `research_study` 'Example Study One' with `part_of_id` pointing at itself
+  (inlined, `part_of` becomes a stub);
+- `condition__associated_evidence` rows pointing at a quantity (inlined with
+  `_class`) and at a visit (a `_class` stub);
+- a `questionnaire_response` pointing at a visit (nested under it, with no
+  `associated_visit`);
+- a `document` whose `focus_id` is an observation (nested under that
+  observation).
+
+Run with `--post-processor` modules on `PYTHONPATH`: a function, a class with
+`finish`, and one that raises for some participants (those fail, and their
+earlier files are kept). Finally, check that each JSON path has a single type
+over all documents.
+
+## `es-participant-mapping` (`src/py_tools/es_participant_mapping.py`)
+
+- `MappingBuilder` walks the schema with the exporter's own decisions:
+  `Exporter.id_slot()`, `is_polymorphic()`, `union_slot()`, `union_key()`,
+  `nestable()`, `array_key()`, the slot order and `member_classes`. It's built
+  on an `Exporter` with empty rows, so no database is needed. A change to
+  the exporter's rules is therefore picked up by the mapping. Anything the
+  exporter decides from data (stubs for homed records) is covered because a
+  stub's fields (`id`, `_class`) are a subset of the full mapping.
+- Paths: the mapping's `path` is the set of tables inlined so far. A member
+  array, the root and each nested record start a new path, as in
+  `Exporter.build()`. Indirect nesting uses a separate `chain` to stop cycles.
+- `dynamic: strict` at the root is inherited by every object except the
+  polymorphic `_class`/`id` objects, which set `dynamic: false` because the
+  exporter can inline whole `Entity` objects there.
+- Union slots are merged class by class. A key mapped differently by two
+  classes without being renamed raises `MappingError`, rather than letting one
+  silently win.
+- Post-processor fields come from `es_properties` on each processor. A clash
+  with a mapped field is an error.
+- `measure()` counts fields the way Elasticsearch does for
+  `total_fields.limit` (objects and multi-fields included), plus nested fields
+  and depth. The limits are set to 1.25 times those, rounded up to 50, and
+  never below the defaults. `depth.limit` is only written when the default of
+  20 isn't enough.
+- File names: `<YYYYMMDD-HHMMSS>__participant.json`. A second run in the same
+  second fails instead of adding a suffix, because `-2` sorts before `_` and
+  would break the order.
+
+### Verifying changes
+
+Generate a file. Export from a test database that also has rows for the cases
+SYNTH1 lacks: a questionnaire response on a visit with boolean, decimal,
+string and TimePoint answers; a study that is `part_of` itself; polymorphic
+evidence pointing at a quantity and at a visit; and a condition with only a
+visit. Then start a throwaway Elasticsearch of the backend's version:
+
+```sh
+docker run -d --rm --name es-map-es -p 127.0.0.1:59201:9200 -e discovery.type=single-node \
+  -e xpack.security.enabled=false -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+  docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+```
+
+Create an index from the file, bulk-index every document, and expect 0 errors
+(strict mapping). Run nested, `_conditions`, range, `value_boolean` and `.text`
+queries, and check that a document with an extra field is rejected
+(`strict_dynamic_mapping_exception`).
+
+## `es-recreate-index` (`src/py_tools/es_recreate_index.py`)
+
+- Uses the official `elasticsearch` client (9.x, matching the server major
+  version; the client sends compatibility headers for its major version). It
+  handles basic auth, API keys and TLS options, so the same command works
+  against a secured or hosted cluster. Connection defaults come from `ES_*`
+  variables, like the `PG*` defaults of the database tools.
+- The definition file's `settings` (the mapping limits) are merged with
+  `index.number_of_shards` and `index.number_of_replicas` from the options.
+  The options win if the file ever sets them too.
+- Checks before deleting: `exists_alias(name=index)` stops a delete through
+  an alias name, and an `--alias` that is an existing index is refused (ES
+  would reject it anyway, but only after the index had been recreated).
+- The alias is moved with a single `update_aliases` call (removes, then add),
+  which ES applies atomically (`point_alias()`, shared with the loader).
+- `add_es_options()`, `client()`, `log_folder()` and `new_log_path()` are shared
+  with `es-load-participants`. Logs go to `es/<index>/recreate/` and
+  `es/<index>/load/`, so each index's history is in one place.
+- Health: waits for green with 0 replicas, otherwise yellow, for up to 30
+  seconds, and logs a timeout rather than failing.
+- Confirmation follows `backend/bin/clean-*.sh`: ask on a terminal, `-y` to
+  skip, refuse (exit 1) without a terminal.
+
+### Verifying changes
+
+Run against a throwaway ES of the backend's version (see
+`es-participant-mapping` above). Cases:
+- a fresh index;
+- an existing index with documents, without a terminal and without `-y`
+  (refuses, unchanged), then with `-y`;
+- `--alias` moving from `participant_1` to `participant_2`;
+- `--index` naming an alias, and `--alias` naming an index (both refused);
+- a missing `--mapping` file;
+- index settings showing the limits, 1 shard and 0 replicas.
+
+For authentication, start the container with `-e xpack.security.enabled=true
+-e xpack.security.http.ssl.enabled=false -e ELASTIC_PASSWORD=...`, wait for
+green health (right after boot, `.security-7` isn't ready and auth returns
+503), then try no credentials (401), `ES_USERNAME`/`ES_PASSWORD`, and an API
+key from `POST /_security/api_key`. TLS (`--ca-cert`, `--insecure`) hasn't
+been tested against an HTTPS cluster yet.
+
+## `es-load-participants` (`src/py_tools/es_load_participants.py`)
+
+- `helpers.streaming_bulk` with `raise_on_error=False`, so a rejected document
+  is reported and the rest go on. `max_retries=3` retries 429s with back-off.
+  Documents are read lazily from the files (a generator), so memory doesn't
+  grow with the number of files.
+- `_op_type: index`, so a load replaces documents with the same `_id`; the
+  `_id` is the document's `id`. Files that can't be read or have no string
+  `id` are failures without an `_id`. Two files with the same `id` are
+  reported, and the later one wins.
+- The index must exist (`indices.exists`, which is also true for an alias).
+  Writing to a missing index would auto-create it with dynamic mappings,
+  which defeats the generated mapping.
+- After loading: `refresh`, so counts and searches see the documents at once.
+  `--delete-missing` scans the index ids (`_source: false`) and bulk-deletes
+  those not among the files read. Files that failed to index count as
+  present, so their earlier version isn't deleted.
+- `--alias` is moved only when nothing failed, so a partial load doesn't go
+  live.
+
+### Verifying changes
+
+Against a throwaway ES (see `es-participant-mapping`), with exported documents
+in a scratch folder:
+- load before the index exists (exit 2, with the hint);
+- `es-recreate-index`, then load (all loaded, `_id` = participant id);
+- load again (same count; documents at `_version` 2);
+- a folder that also has a document with an extra field (strict rejection),
+  a non-JSON file and a document without `id`, with `--alias` (3 failures,
+  the rest loaded, alias not moved);
+- a clean subset with `--delete-missing --alias` (the others deleted, alias
+  moved);
+- no arguments (loads `data/participants/`).
+
+## `bin/kibana-start.sh`, `bin/kibana-stop.sh`
+
+- Plain `docker run`, not compose: one container with settings that vary per
+  run. Bash 3.2 and BSD tools (macOS): arrays, `${var:-}`, `$SECONDS`, `sed`,
+  `awk`, no `readlink -f`. `--help` prints the header comment.
+- `host.docker.internal` comes from `--add-host
+  host.docker.internal:host-gateway`, which native Docker on Linux/WSL needs
+  (Docker Desktop has it anyway). It's the bridge gateway, so ES must be
+  published on an address the bridge reaches (`0.0.0.0`, as the backend stack
+  does), not only `127.0.0.1`.
+- The version comes from ES's `GET /` (parsed with `sed`, no `jq`). That's
+  also the connectivity check from the host.
+- Port check and readiness probe use `curl` with connect timeouts. Bash's
+  `/dev/tcp` was tried first and hung: on WSL2 with a VPN a closed port didn't
+  refuse, and `/dev/tcp` has no timeout. curl exit 7 (refused) or 28
+  (timed out) means nothing listens.
+- After `docker run`, `docker exec ... curl` from inside the container
+  checks that ES is reachable (any HTTP answer counts, even 401). Otherwise
+  Kibana just waits for ES and only its log says so.
+- The wait uses `$SECONDS` (elapsed time). Counting loop rounds understated
+  the time when each probe took several seconds.
+- Kibana 9.5's `/api/status` without credentials returns only
+  `{"status":{"overall":{"level":"available"}}}`; the script waits for HTTP
+  200.
+- Ownership: containers get the label `py-tools.kibana=true`. Start removes a
+  stopped container of its own with the same name, and refuses one that
+  isn't its own. Stop does the same, so a typo in `--name` can't remove an
+  unrelated container.
+- Configuration goes in through the Kibana image's environment variables
+  (`ELASTICSEARCH_HOSTS`, `ELASTICSEARCH_USERNAME`/`PASSWORD`,
+  `ELASTICSEARCH_SERVICEACCOUNTTOKEN`, `ELASTICSEARCH_SSL_*`). A CA file is
+  mounted read-only at `/usr/share/kibana/config/es-ca.crt`.
+
+### The VPN problem found while testing
+
+The first tests timed out everywhere: the container IP, published ports, and
+`host.docker.internal` from Kibana. Elasticsearch answered inside its own
+container. The cause was the VPN: with WSL in `mirrored` mode, its interface
+`eth0` had `172.17.21.33/18` and gateway `172.17.0.1`, the same as
+`docker0`. Its `/18` route was more specific than docker0's `/16`, so
+container traffic went into the VPN. Moving Docker to `192.168.200.0/24` and
+pools in `192.168.208.0/20` (`daemon.json`, see README) fixed it. Compose
+networks (`172.18+`) had kept working only because their own `/16` routes
+were more specific than the VPN's `172.16.0.0/12`.
+
+### Verifying changes
+
+With a throwaway ES published on all interfaces (`-p 59201:9200`):
+- `bin/kibana-start.sh --es-port 59201`: detects 9.5.3 and is ready in about a
+  minute; `/api/status` answers `available`, and `.kibana*` indices appear in ES.
+- Again: refused, already running.
+- `--name kib2`: refused, port taken.
+- `--name <a container it didn't create>`: both scripts refuse.
+- `bin/kibana-stop.sh`: removed, with the `.kibana*` indices kept. Again:
+  nothing to do.
+- `--version 9.5.3 --es-port 1 --no-wait`: the reachability warning.
+- Not tested yet: an ES with security on (user or service token) and https.
+
