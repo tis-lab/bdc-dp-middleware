@@ -1,2 +1,0 @@
-# SQL in init-sql/ is bind-mounted at runtime, not built into the image.
-init-sql

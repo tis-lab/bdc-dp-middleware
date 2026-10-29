@@ -10,7 +10,6 @@ RUN apt-get update \
 # reads this from the environment only, so it's set here rather than in a file.
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 
-# Overlay everything under pg/root onto the image filesystem root.
-# /docker-entrypoint-initdb.d is root:755 in the base image too, and postgres
-# only reads it, so nothing needs restoring after the COPY.
+# Overlay everything under pg/root onto the image filesystem root. It holds no
+# files the server writes to, so nothing needs restoring after the COPY.
 COPY root/ /

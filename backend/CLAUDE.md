@@ -16,8 +16,10 @@ A local Docker Compose stack (Elasticsearch + Kibana + PostgreSQL). Read
 - Each service that needs a custom image has its own directory named after the
   service. That directory is the build context, and its `root/` subdirectory is
   copied onto `/` of the image. Put config files under `root/` at their in-image
-  paths rather than using environment variables. Exception: `pg/init-sql/` is
-  user SQL that is bind-mounted, not built in (see DEV.md).
+  paths rather than using environment variables.
+- pg has no init scripts: a new cluster has only the `postgres` superuser.
+  `uv run pg-bootstrap` in `py-tools/` creates the `dp` role, database, `vector`
+  extension and `bdchm` schema. Don't add `docker-entrypoint-initdb.d` scripts.
 - After any `COPY root/ /`, restore the owner and mode of existing directories
   the service writes to (see the `es/Dockerfile` `RUN` step and DEV.md).
 - Every service that bind-mounts data uses `./data/<service>`, has a committed

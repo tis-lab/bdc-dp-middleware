@@ -70,12 +70,10 @@ services:
     # (/var/lib/postgresql/18/docker), so mount the parent.
     volumes:
       - ./data/pg:/var/lib/postgresql
-      # Run once at cluster creation, as dp, by 20-init-sql.sh in the image.
-      - ./pg/init-sql:/init-sql:ro
     healthcheck:
       # Over TCP: during init the entrypoint's temporary server listens only on
       # the Unix socket, so this doesn't report ready too early.
-      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U dp -d dp"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d postgres"]
       interval: 5s
       timeout: 5s
       retries: 30

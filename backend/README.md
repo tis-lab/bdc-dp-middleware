@@ -75,14 +75,27 @@ terminal, the script refuses to run unless you pass `-y`.
 
 ## PostgreSQL
 
-On first start (an empty `data/pg`), the image creates the cluster and runs
-`pg/root/docker-entrypoint-initdb.d/10-dp.sql`, which creates:
+A new cluster (an empty `data/pg`) has only the `postgres` superuser. The image
+runs no init scripts. Create the application's role, database and schema with
+`pg-bootstrap` from [py-tools](py-tools/README.md), a Python command that also
+works on Windows:
+
+```bash
+bin/compose.sh up -d --wait pg
+cd py-tools && uv run pg-bootstrap
+```
+
+It creates, only where missing:
 
 - role `dp` (login, not a superuser)
 - database `dp`, owned by `dp`, with the `vector` (pgvector) extension
+- schema `bdchm`, owned by `dp`
 
-The `postgres` superuser is still there for admin work. No password is needed
-for either role:
+It's safe to run any time; it reports what already exists and changes nothing
+there. `uv run pg-bootstrap --help` lists options for other names. Then apply
+the bdchm DDL with the scripts described in the py-tools README.
+
+No password is needed for either role:
 
 ```bash
 psql -h localhost -U dp dp                    # from the host, if psql is installed
@@ -91,24 +104,7 @@ bin/compose.sh exec pg psql -U dp dp          # from inside the container
 
 JDBC URL: `jdbc:postgresql://localhost:5432/dp` (user `dp`, no password).
 
-### Your own init SQL: `pg/init-sql/`
-
-Put `*.sql` files in `pg/init-sql/` with a zero-padded numeric prefix, e.g.
-`01-schema.sql`, `02-seed.sql`. When the cluster is created, they run right
-after `10-dp.sql`:
-
-- in filename order (byte order, so `02-` sorts before `10-`; use the same
-  number of digits throughout)
-- as role `dp`, connected to database `dp`, so the objects they create belong
-  to `dp`
-- once each, and the first error stops everything (`ON_ERROR_STOP`)
-
-Other files in the folder (e.g. `.gitkeep`) are ignored. The folder is mounted
-into the container, so changing a file needs no image rebuild, only a reset.
-
-Init scripts run only when the cluster is created. To run them again (after
-adding or changing a file in `pg/init-sql/`, or after changing `10-dp.sql`),
-start pg with an empty data directory:
+### Starting with an empty PostgreSQL
 
 ```bash
 bin/clean-pg.sh               # asks for confirmation
@@ -119,13 +115,8 @@ bin/clean-pg.sh -y --build    # other arguments go to `docker compose up`
 This stops and removes only the `pg` container, deletes everything in
 `data/pg` (all databases, roles and data), and starts `pg` again with
 `up -d --wait`. `es` and `kibana` keep running. They aren't restarted, even
-though `es` depends on `pg`. Changes to `10-dp.sql` also
-need `--build`; changes to `pg/init-sql/` don't.
-
-**If an init SQL file fails**, `pg` exits and `up --wait` reports it as
-unhealthy (`bin/compose.sh logs pg` shows the error). The cluster is then only
-partly set up, and a plain restart won't retry the scripts. Fix the SQL, then
-run `bin/clean-pg.sh` again.
+though `es` depends on `pg`. Run `pg-bootstrap` again afterwards; the script
+prints the command.
 
 ### Resetting all data
 

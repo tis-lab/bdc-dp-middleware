@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "linkml-runtime>=1.12.1",
+    "psycopg[binary]>=3.3.6",
 ]
 
 [build-system]
@@ -17,3 +18,5 @@ build-backend = "uv_build"
 
 [project.scripts]
 linkml-pg-ddl = "py_tools.linkml_pg_ddl:main"
+pg-apply-ddl = "py_tools.pg_apply_ddl:main"
+pg-bootstrap = "py_tools.pg_bootstrap:main"

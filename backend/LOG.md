@@ -2,6 +2,30 @@
 
 Newest first. Each section covers one set of development changes.
 
+## 2026-10-29 00:06 PDT: pg setup moved from init scripts to py-tools pg-bootstrap
+
+- pg runs no init scripts any more. The already-deleted `10-dp.sql` and
+  `20-init-sql.sh` are now followed by the removal of `pg/init-sql/`, its
+  bind mount in `docker-compose.yml`, and `pg/.dockerignore`. `pg/root/` keeps
+  only `.gitkeep`; the Dockerfile comment was updated.
+- A new cluster has only `postgres`. `uv run pg-bootstrap` in `py-tools/`
+  creates the `dp` role, the `dp` database, the `vector` extension and the
+  `bdchm` schema, each only if missing. This fixes "database dp does not exist":
+  `data/pg` had been re-initialized after `10-dp.sql` was deleted, leaving the
+  `dp` role but no `dp` database.
+- `bin/clean-pg.sh` no longer `exec`s the final `up`, so it can print the
+  `pg-bootstrap` command afterwards. Comments updated.
+- README (PostgreSQL section rewritten; "Your own init SQL" removed), DEV.md
+  (layout, pg image, healthcheck, clean-pg.sh, checklist) and CLAUDE.md (rule
+  replacing the `pg/init-sql/` exception) updated.
+- Verified: `config -q` ok; `up -d --build --wait` with es, pg and kibana
+  healthy, ES green, Kibana 200; `pg-bootstrap` created database `dp`, `vector`
+  0.8.7 and schema `bdchm` (role `dp` existed); `psql -U dp dp` sees the
+  extension; es and pg run as uid 1000 with group 0. `find data` lists 456
+  pre-existing files in `data/es` and `data/kibana` owned by the user but with
+  group `docker` (986) instead of 1000, dating from 2026-10-01. Unrelated to this
+  change and left as is.
+
 ## 2026-10-28 09:43 PDT: es image for OpenShift (Dockerfile-OpenShift)
 
 - New `es/Dockerfile-OpenShift` for an OpenShift BuildConfig from GitHub

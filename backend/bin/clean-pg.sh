@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# (Re)starts pg with an empty data/pg, so initdb and the init scripts in
-# pg/root/docker-entrypoint-initdb.d run again. Only pg is stopped; es and
-# kibana keep running.
+# (Re)starts pg with an empty data/pg, so initdb creates a new cluster with
+# only the postgres superuser. Run `uv run pg-bootstrap` in py-tools/ afterwards
+# to create the dp role, database and schema. Only pg is stopped; es and kibana
+# keep running.
 #
 # Usage: bin/clean-pg.sh [-y|--yes] [docker compose up options...]
 #   -y, --yes   don't ask for confirmation
@@ -51,4 +52,7 @@ fi
 touch "$data_dir/.gitkeep"
 
 # ${arr[@]+...} avoids an "unbound variable" error for an empty array in Bash 3.2.
-exec "$bin_dir/compose.sh" up -d --wait ${up_args[@]+"${up_args[@]}"} pg
+"$bin_dir/compose.sh" up -d --wait ${up_args[@]+"${up_args[@]}"} pg
+
+echo "pg is empty. Create the dp role, database and schema with:"
+echo "  (cd \"$project_dir/py-tools\" && uv run pg-bootstrap)"

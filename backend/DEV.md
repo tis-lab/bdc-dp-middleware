@@ -43,14 +43,9 @@ backend/
 │   └── root-openshift/   # copied after root/, by Dockerfile-OpenShift only
 │       └── usr/share/elasticsearch/config/elasticsearch.yml
 └── pg/                   # build context for the pg service
-    ├── .dockerignore     # keeps init-sql/ out of the build context
     ├── Dockerfile
-    ├── init-sql/         # user SQL, bind mount -> /init-sql (read-only)
-    │   └── .gitkeep
     └── root/
-        └── docker-entrypoint-initdb.d/
-            ├── 10-dp.sql         # role + database dp, vector extension
-            └── 20-init-sql.sh    # runs /init-sql/*.sql as dp
+        └── .gitkeep      # nothing to overlay yet; no init scripts (see "The pg image")
 ```
 
 Each service that needs a custom image gets its own directory, named after the
@@ -129,29 +124,17 @@ settings that compose adds must be in the image or in the OpenShift resources:
   setting that isn't a file, because the entrypoint reads it only from the
   environment. It writes `host all all all trust` into `pg_hba.conf` at initdb
   time, so changing it later has no effect on an existing cluster.
-- `root/docker-entrypoint-initdb.d/10-dp.sql` creates the `dp` role and
-  database and the `vector` extension. The entrypoint runs these scripts only
-  when the data directory is empty. `COPY root/ /` resets
-  `/docker-entrypoint-initdb.d` to root:755, which is what the base image has
-  anyway, and postgres only reads it, so the Dockerfile has no restore step.
-- `root/docker-entrypoint-initdb.d/20-init-sql.sh` runs `/init-sql/*.sql`
-  (bind-mounted read-only from `pg/init-sql/`) with
-  `psql -v ON_ERROR_STOP=1 --no-psqlrc --username dp --dbname dp`.
-  - It's mounted at `/init-sql`, not inside `/docker-entrypoint-initdb.d`. The
-    entrypoint scans only the top level of that directory: a subdirectory
-    would just log "ignoring", and files mounted straight into it would sort
-    before `10-dp.sql` and run before `dp` exists.
-  - `LC_ALL=C` makes the glob sort by byte order whatever the locale.
-  - The script is executable (mode 755 in git; `COPY` keeps it), so the
-    entrypoint runs it as a separate process instead of sourcing it. A
-    non-zero exit aborts init and the container exits.
-  - It connects over the Unix socket of the entrypoint's temporary server,
-    where `local` auth is trust.
-  - This is a deliberate exception to "config goes under `root/`": the SQL is
-    user content that changes often, and mounting it means no rebuild.
-    `pg/.dockerignore` keeps it out of the build context.
-  - A failed init leaves a non-empty `PGDATA`, so the next start skips all
-    init scripts. Recovery is always `bin/clean-pg.sh`.
+- **No init scripts.** `/docker-entrypoint-initdb.d` is empty, so a new
+  cluster has only the `postgres` superuser. The `dp` role, database,
+  `vector` extension and `bdchm` schema are created by `pg-bootstrap` in
+  `py-tools/`, a Python command run from the host as `postgres` (trust auth).
+  Unlike init scripts, it can be run at any time, re-run safely (it only
+  creates what's missing), and used from Windows. A failed run doesn't leave a
+  half-initialized cluster that needs `clean-pg.sh`. The earlier
+  `10-dp.sql`, `20-init-sql.sh` and `pg/init-sql/` bind mount were removed.
+- `pg/root/` holds only `.gitkeep`, and `COPY root/ /` is kept for the
+  directory convention. It writes nothing the server writes to, so there's no
+  restore step.
 - **Mount point:** since PostgreSQL 18, the official image puts `PGDATA` in
   `/var/lib/postgresql/<major>/docker` and declares `/var/lib/postgresql` as
   the volume. Compose mounts `./data/pg` there, not at the old
@@ -166,8 +149,9 @@ settings that compose adds must be in the image or in the OpenShift resources:
   `/etc/passwd` entry. `group_add: ["0"]` isn't needed by postgres but is kept
   for consistency with the other services.
 - The healthcheck runs `pg_isready -h 127.0.0.1` over TCP. While the
-  entrypoint runs the init scripts, its temporary server listens only on the
-  Unix socket, so a socket check would report ready before `dp` exists.
+  entrypoint initializes a new cluster, its temporary server listens only on
+  the Unix socket, so a socket check would report ready before the real
+  server has started.
 
 ## Start order
 
@@ -268,8 +252,9 @@ Follows the same rules as `clean-es.sh` (compose only through `compose.sh`,
   touches pg. The dependency has no `restart: true`, so es isn't restarted
   either.
 - Emptying `data/pg` removes every major-version subdirectory, so the next
-  start runs initdb and the scripts in `docker-entrypoint-initdb.d` again
-  (including `pg/init-sql/`, read from the mount at that moment).
+  start runs initdb and the cluster has only `postgres`. The script doesn't
+  `exec` the final `up`, so that it can print the `pg-bootstrap` command
+  afterwards. It still exits with `up`'s status, through `set -e`.
 
 ## `model/` code generation
 
@@ -322,6 +307,7 @@ docker inspect -f '{{.State.Health.Status}}' backend-es-1   # healthy
 curl -s localhost:9200/_cluster/health                       # status green
 curl -s -o /dev/null -w '%{http_code}\n' localhost:5601/api/status   # 200
 docker inspect -f '{{.State.Health.Status}}' backend-pg-1   # healthy
+(cd py-tools && uv run pg-bootstrap)        # role, database, extension, schema exist
 bin/compose.sh exec pg psql -U dp dp -Atc "select extversion from pg_extension where extname='vector'"
 bin/compose.sh exec es id                    # your uid/gid, plus group 0
 bin/compose.sh exec pg id                    # same
