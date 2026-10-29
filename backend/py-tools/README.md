@@ -328,3 +328,111 @@ Existing objects are reported but never changed, even if they differ (for
 example, a database owned by another role). Fix those by hand. Exit status: 0
 on success, 2 on any error. The steps before the error have already been done.
 
+### `pg-load-data`: load harmonized YAML data into the tables
+
+Loads LinkML instance data into the tables from `linkml-pg-ddl`, in
+**enums-as-varchar** mode: values of enum-range slots are loaded as plain
+strings, as they are in the data (for example `OMOP:8507` for `sex`).
+
+```sh
+uv run pg-bootstrap                                                               # once
+uv run python schema/pg-ddl/bdchm/enums-as-varchar/apply_01_tables__enums_as_varchar.py
+uv run pg-load-data                                  # all data/harmonized/*--data.yaml
+uv run pg-load-data path/to/other-dir                # all *--data.yaml in that directory
+uv run pg-load-data data/harmonized/SYNTH1-Person--data.yaml --no-truncate
+```
+
+Each data file holds records of one class, as YAML documents separated by
+`---`. The class comes from the file name, `<anything>-<ClassName>--data.yaml`,
+for example `SYNTH1-Person--data.yaml` → `Person` → table `person`.
+
+| Argument / option | Default                                        | Meaning                         |
+|-------------------|------------------------------------------------|---------------------------------|
+| `DATA ...`        | `data/harmonized/`                             | Data files and/or directories, at most one file per class. A directory means every `*--data.yaml` directly in it (not in subdirectories). |
+| `--host`, `--port`, `--dbname`, `--user`, `--password`, `--schema`, `--log-dir` | as for `pg-apply-ddl` | |
+| `--linkml-schema` | `schema/linkml/bdchm.yaml`                     | The schema the tables were generated from. |
+| `--truncate` / `--no-truncate` | `--truncate`                      | Empty the tables that receive rows before loading. |
+
+How records become rows:
+
+- **Scalar slots** go into their columns. A multivalued type or enum slot is an
+  array column (`race` → `{OMOP:8516}`). A single value for it is wrapped in a
+  one-element array (`identity: "900001"` → `{900001}`).
+- **References** go into `<slot>_id` (single-valued) or the join table
+  `<table>__<slot>` (multivalued). **Nested objects** (a mapping instead of an
+  id) are loaded into their own class's table first, and their id is used:
+  `value_quantity` → `quantity`, `associated_assay` → `assay` (and its limits
+  → `quantity`), `MeasurementObservationSet.observations` →
+  `measurement_observation`, `Person.cause_of_death` → `cause_of_death`.
+- **Values are stored as they are.** References aren't checked against other
+  tables, and enum values aren't checked against the schema. For example,
+  `member_of_research_study` = `Example Study One` and `body_site` =
+  `Right arm` go into `*_id` columns although no such rows exist, and
+  `associated_evidence` text goes into its join table.
+- **Duplicate ids** are skipped: a record whose id is already in its table, or
+  was already loaded in this run, isn't inserted again. The same goes for a
+  nested object (the 2 assays repeated across 2,916 observations are stored
+  once).
+- **Keys that aren't slots** of the class are ignored and listed in the log.
+
+Files are loaded so that referenced classes come first (Person before
+Participant, and so on), so loading also works after the FKs have been applied.
+
+**Truncating.** With `--truncate` (the default), the tables that will receive
+rows, including join tables and the tables of nested objects, are emptied
+first. Other tables that reference them through foreign keys are truncated
+with them if they're empty. If any of those has rows, the run stops without
+changing anything, rather than delete data it didn't load.
+
+**Failures.** Each record is loaded together with its nested objects and join
+rows, in a savepoint: if any of its rows fails, none of them are stored, and
+loading continues with the next record. Each file is one transaction,
+committed when the file is done. Ctrl-C rolls back the file being loaded;
+files loaded before it stay.
+
+Exit status: 0 if no record failed, 1 if any failed, 2 if the run couldn't
+start (bad file name, unknown class, tables missing, no connection, can't
+truncate), 130 if interrupted.
+
+#### Load logs
+
+One log per data file per run, next to the DDL logs for the same target:
+
+```
+logs/<host>-<port>/<db>/<schema>/load/<data-folder>/<data-file>/<timestamp>.log
+
+logs/localhost-5432/dp/bdchm/load/harmonized/SYNTH1-Person--data/20261029-002537.log
+```
+
+A log has the totals, the rows inserted and duplicates skipped per table, keys
+that were ignored, and each failed record with its number, starting line,
+error (SQLSTATE, message, DETAIL) and the record itself:
+
+```
+finished 2026-10-29T00:28:15: 2 loaded, 0 duplicate, 3 failed records
+
+rows inserted / duplicate rows skipped, per table:
+  person                                               2        0
+
+============================== failures ==============================
+
+record 2 (line 5), id 'bad-int':
+SQLSTATE 22P02: invalid input syntax for type integer: "abc"
+
+id: bad-int
+year_of_birth: abc
+```
+
+#### With the bdchm DDL and the SYNTH1 data
+
+Load after `01_tables`; then apply the rest one step at a time and read the logs:
+
+- `02_primary_keys`: applies (no duplicate ids).
+- `03_foreign_keys`: two FKs fail, as expected from the as-is references:
+  `participant.member_of_research_study_id` → `research_study` (no study data)
+  and `measurement_observation.body_site_id` → `body_site` (`Right arm` is
+  text, not a BodySite id).
+- `04_constraints`: in enums-as-varchar mode its CHECKs allow only the
+  schema's permissible value names (`MALE`, `ALIVE`, ...), while the data has
+  CURIEs (`OMOP:8507`), so those CHECKs fail. Skip this file for this data.
+

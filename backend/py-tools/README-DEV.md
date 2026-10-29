@@ -329,3 +329,75 @@ passed through.
   should report `created` and the second `exists`. Then run an `apply_*.py`
   script without options, and check that the new objects are owned by the role.
 
+## `pg-load-data` (`src/py_tools/pg_load_data.py`)
+
+### One schema analysis
+
+`Mapper` builds a `linkml_pg_ddl.Generator` in enums-as-varchar mode and reads
+its `Table`s: class tables (`class_name` set) and join tables (`class_name =
+None`, owner from the first FK's target, slot from the first column). It maps
+`(table, slot)` to a column or a join table. Table and column names, array
+columns, `<slot>_id` columns and join tables therefore always match the DDL,
+including shortened (`pg_name`) and quoted names. Varchar mode is used because
+the data's enum values are CURIEs, not the schema's permissible value names,
+so they must be stored as text.
+
+### Plan, then load
+
+All files are read and mapped first (`Mapper.plan()`), into a list of
+`RowOp`s per record: nested objects first (so FKs to them are satisfied),
+then the record's own row, then its join rows. A record that can't be mapped
+(no id, a list for a single-valued slot, a nested object whose class can't be
+told) is kept as a failure. Planning everything first gives the full set of
+target tables to check and truncate before anything is written.
+
+- A nested object's table: the single table of its range class (via
+  `tables_for_class()`), or the range class's own table when it's concrete but
+  has subclasses. Anything else is a record failure: there's no type field to
+  pick a subclass table (bdchm data doesn't need one).
+- YAML is read with `CSafeLoader` (the 4 MB file parses in about 0.3 s, against
+  2.8 s with the pure-Python loader), node by node, so each record keeps
+  the line its document starts on.
+
+### Loading
+
+- **Duplicates.** `seen[table]` holds the keys (the PK columns from the DDL:
+  `id`, or owner and target for join tables) present in the table at the start
+  (empty after truncation) plus everything inserted in this run. A record whose
+  own key is in it is skipped whole. A nested object or join row whose key is
+  in it is skipped individually and counted per table. This works with or
+  without PKs in the database. A failed record's keys are removed again,
+  because its savepoint was rolled back.
+- **Transactions.** The connection isn't in autocommit mode. Each file runs in
+  `conn.transaction()`, and each record in a nested one (a savepoint). psycopg
+  rolls back to the savepoint on an error and re-raises it, and the loop
+  records it and goes on. Per-record commits were avoided because 30,000+
+  commits are slow. With savepoints, the full load takes about 30 seconds.
+- **Inserts** are built per row from the keys present in the record
+  (`sql.Identifier`, placeholders). psycopg prepares repeated statements by
+  itself. Values go in as YAML gave them; PostgreSQL casts strings to the
+  column type and rejects bad ones (`22P02`), which is how type errors reach
+  the log.
+- **Truncate.** A single `TRUNCATE` of all target tables, because tables
+  referencing each other must be truncated together. `referencing_tables()`
+  walks `pg_constraint` for FKs into that set, transitively, and adds the
+  referencing tables if they're all empty. Otherwise it stops. `CASCADE` was
+  rejected because it would silently empty tables the load doesn't own.
+- **File order.** `load_order()` sorts the files' classes so that a class
+  comes after those its single-valued slots reference (a cycle falls back to
+  name order). Multivalued references are join rows, inserted after their
+  record, so they don't affect the order.
+
+### Verifying changes
+
+Use a throwaway server built from the backend's `pg/` image (it has
+pgvector, which `pg-bootstrap` creates). Then: `pg-bootstrap`; apply
+`apply_01_tables__enums_as_varchar.py`; run `pg-load-data` (all files load with
+0 failed). Run it again (same counts), and once with `--no-truncate` (every
+record duplicate). Apply 02 and 03 and load again (it should truncate the
+referencing tables, and refuse once one of them has a row). Then load a small
+file of bad records (bad integer, no id, unknown key, bad nested value,
+dangling reference with FKs on) and check the log. Finally, Ctrl-C during
+`SYNTH1-MeasurementObservation` should leave that table empty and earlier
+files loaded.
+

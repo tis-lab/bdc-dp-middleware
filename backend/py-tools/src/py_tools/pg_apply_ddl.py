@@ -357,11 +357,9 @@ def run(files: list[Path], args: argparse.Namespace) -> int:
     return 0
 
 
-def build_parser(description: str, with_files: bool) -> argparse.ArgumentParser:
+def add_connection_options(parser: argparse.ArgumentParser, maintenance_db: bool = True) -> None:
+    """The connection options and defaults shared by the database tools, plus --log-dir."""
     env = os.environ
-    parser = argparse.ArgumentParser(description=description)
-    if with_files:
-        parser.add_argument("ddl", type=Path, nargs="+", help="DDL files to apply, in the order given")
     parser.add_argument("--host", default=env.get("PGHOST", "localhost"), help="default: $PGHOST or localhost")
     parser.add_argument("--port", type=int, default=int(env.get("PGPORT", "5432")), help="default: $PGPORT or 5432")
     parser.add_argument("--dbname", default=env.get("PGDATABASE", "dp"), help="default: $PGDATABASE or dp")
@@ -371,18 +369,26 @@ def build_parser(description: str, with_files: bool) -> argparse.ArgumentParser:
         default=None,
         help="default: $PGPASSWORD or the password file; not needed for trust authentication",
     )
-    parser.add_argument("--schema", default="bdchm", help="schema to create the objects in (default: bdchm)")
-    parser.add_argument(
-        "--maintenance-db",
-        default="postgres",
-        help="database to connect to for creating the target database (default: postgres)",
-    )
+    parser.add_argument("--schema", default="bdchm", help="PostgreSQL schema to work in (default: bdchm)")
+    if maintenance_db:
+        parser.add_argument(
+            "--maintenance-db",
+            default="postgres",
+            help="database to connect to for creating the target database (default: postgres)",
+        )
     parser.add_argument(
         "--log-dir",
         type=Path,
         default=DEFAULT_LOG_DIR,
         help=f"root folder for the logs (default: {DEFAULT_LOG_DIR})",
     )
+
+
+def build_parser(description: str, with_files: bool) -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=description)
+    if with_files:
+        parser.add_argument("ddl", type=Path, nargs="+", help="DDL files to apply, in the order given")
+    add_connection_options(parser)
     return parser
 
 

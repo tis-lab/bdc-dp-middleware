@@ -369,12 +369,14 @@ source = { editable = "." }
 dependencies = [
     { name = "linkml-runtime" },
     { name = "psycopg", extra = ["binary"] },
+    { name = "pyyaml" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "linkml-runtime", specifier = ">=1.12.1" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.6" },
+    { name = "pyyaml", specifier = ">=6.0.2" },
 ]
 
 [[package]]
