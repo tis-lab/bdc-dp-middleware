@@ -48,11 +48,10 @@ harmonized:
   index: ${HARMONIZED_INDEX:classpath:harmonized/harmonized-index.json}
   max-matches: ${HARMONIZED_MAX_MATCHES:25}
 
-# Developer smoke test only; no connection is attempted at startup.
 search:
-  enabled: ${SEARCH_ENABLED:false}
-  endpoint: ${SEARCH_ENDPOINT:}
-  index: ${SEARCH_INDEX:}
+  enabled: ${SEARCH_ENABLED:true}
+  endpoint: ${SEARCH_ENDPOINT:https://bdc-elasticsearch:9200}
+  index: ${SEARCH_INDEX:participant_1}
   api-key: ${SEARCH_API_KEY:}
   connect-timeout: ${SEARCH_CONNECT_TIMEOUT:5s}
   read-timeout: ${SEARCH_READ_TIMEOUT:15s}

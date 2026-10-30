@@ -15,7 +15,7 @@ import tools.jackson.databind.json.JsonMapper;
 
 import static org.biodatacatalyst.middleware.shared.ApiException.Code.*;
 
-/** Mapping-independent smoke test, not a cohort query translator. */
+/** Shared Elasticsearch transport for the smoke test. */
 final class ElasticsearchMetadataSearch implements MetadataSearch {
     private static final int MAX_RESPONSE_BYTES = 1_048_576;
     private final SearchProperties properties;
@@ -38,6 +38,39 @@ final class ElasticsearchMetadataSearch implements MetadataSearch {
     }
 
     @Override public Execution executeProbe() {
+        return execute(Map.of("size", 0, "track_total_hits", true,
+                "query", Map.of("match_all", Map.of())));
+    }
+
+    @Override public Execution executeCondition(String keyword) {
+        if (keyword == null || keyword.length() > 500
+                || !keyword.matches("[^|\\s]+\\|[^|\\s]+\\|[^|\\s]+")) {
+            throw new ApiException(BAD_USER_INPUT,
+                    "keyword must be status|relationship|concept, for example PRESENT|ONESELF|MONDO:0005148 (maximum 500 characters).");
+        }
+        var result = execute(Map.of("size", 0, "track_total_hits", true,
+                "query", Map.of("term", Map.of("_conditions", keyword)),
+                "aggs", Map.of("counts", Map.of("terms", Map.of(
+                        "field", "_conditions", "size", 100, "exclude", java.util.List.of(keyword))))));
+        JsonNode counts = result.body().at("/aggregations/counts");
+        if (!counts.isObject() || !counts.path("buckets").isArray()
+                || counts.path("buckets").size() > 100) throw invalidResponse();
+        nonnegative(counts.path("sum_other_doc_count"));
+        nonnegative(counts.path("doc_count_error_upper_bound"));
+        for (JsonNode bucket : counts.path("buckets")) {
+            if (!bucket.path("key").isString() || bucket.path("key").asString().isBlank())
+                throw invalidResponse();
+            nonnegative(bucket.path("doc_count"));
+        }
+        return result;
+    }
+
+    private static void nonnegative(JsonNode value) {
+        if (!value.isIntegralNumber() || value.bigIntegerValue().signum() < 0)
+            throw invalidResponse();
+    }
+
+    private Execution execute(Map<String, Object> requestBody) {
         if (!properties.enabled()) {
             throw new ApiException(UPSTREAM_UNAVAILABLE, "Metadata search is disabled; configure and enable it after the index is available.");
         }
@@ -52,8 +85,7 @@ final class ElasticsearchMetadataSearch implements MetadataSearch {
                             headers.set("Authorization", "ApiKey " + properties.apiKey());
                         }
                     })
-                    .body(Map.of("size", 0, "track_total_hits", true,
-                            "query", Map.of("match_all", Map.of())))
+                    .body(requestBody)
                     .exchange((request, response) -> {
                         int status = response.getStatusCode().value();
                         // Do not follow redirects or expose backend error bodies/credentials.
@@ -101,7 +133,7 @@ final class ElasticsearchMetadataSearch implements MetadataSearch {
             throw new ApiException(UPSTREAM_UNAVAILABLE, "Metadata search returned partial shard results.");
         }
         JsonNode total = body.at("/hits/total/value");
-        if (!total.isIntegralNumber() || total.asLong() < 0
+        if (!total.isIntegralNumber() || total.bigIntegerValue().signum() < 0
                 || !"eq".equals(body.at("/hits/total/relation").asString())
                 || !body.at("/hits/hits").isArray() || !body.at("/hits/hits").isEmpty()) {
             throw invalidResponse();

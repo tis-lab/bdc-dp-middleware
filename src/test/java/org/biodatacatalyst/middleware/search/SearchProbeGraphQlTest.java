@@ -21,7 +21,7 @@ class SearchProbeGraphQlTest {
             var response = client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/graphql"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("""
-                        {"query":"{ searchProbe { status backend httpStatus elapsedMillis } }"}
+                        {"query":"{ searchProbe { status backend httpStatus elapsedMillis totalHits } searchConditions(keyword: \\"PRESENT|ONESELF|MONDO:0005148\\") { keyword totalHits buckets { conditionKey documentCount } sumOtherDocCount docCountErrorUpperBound } }"}
                         """)).build(), HttpResponse.BodyHandlers.ofString());
             return JsonMapper.builder().build().readTree(response.body());
         }
@@ -37,7 +37,7 @@ class SearchProbeGraphQlTest {
         var backend = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
         backend.createContext("/", exchange -> {
             exchange.getRequestBody().readAllBytes();
-            byte[] bytes = ElasticsearchMetadataSearchTest.OK.getBytes(StandardCharsets.UTF_8);
+            byte[] bytes = ElasticsearchMetadataSearchTest.countResponse().getBytes(StandardCharsets.UTF_8);
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, bytes.length);
             try (var out = exchange.getResponseBody()) { out.write(bytes); }
@@ -51,7 +51,11 @@ class SearchProbeGraphQlTest {
             assertThat(result.has("errors")).as(result.toString()).isFalse();
             assertThat(result.at("/data/searchProbe/status").asString()).isEqualTo("SUCCEEDED");
             assertThat(result.at("/data/searchProbe/httpStatus").asInt()).isEqualTo(200);
-            assertThat(result.at("/data/searchProbe").size()).isEqualTo(4);
+            assertThat(result.at("/data/searchProbe/totalHits").asString()).isEqualTo("500");
+            assertThat(result.at("/data/searchProbe").size()).isEqualTo(5);
+            assertThat(result.at("/data/searchConditions/totalHits").asString()).isEqualTo("500");
+            assertThat(result.at("/data/searchConditions/buckets/0/documentCount").asString()).isEqualTo("12");
+            assertThat(result.at("/data/searchConditions/sumOtherDocCount").asString()).isEqualTo("3");
         } finally { backend.stop(0); }
     }
 }

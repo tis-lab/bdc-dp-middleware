@@ -21,6 +21,14 @@ class ElasticsearchMetadataSearchTest {
         {"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},
          "hits":{"total":{"value":0,"relation":"eq"},"hits":[]}}
         """;
+    static final String COUNTS = OK.replace("\"value\":0", "\"value\":500").strip();
+    static String countResponse() {
+        String base = COUNTS;
+        return base.substring(0, base.length() - 1) + """
+            ,"aggregations":{"counts":{"doc_count_error_upper_bound":0,
+            "sum_other_doc_count":3,"buckets":[{"key":"PRESENT|ONESELF|MONDO:0005252","doc_count":12}]}}}
+            """;
+    }
     private HttpServer server;
     private final AtomicInteger status = new AtomicInteger(200);
     private final AtomicReference<String> reply = new AtomicReference<>(OK);
@@ -77,6 +85,52 @@ class ElasticsearchMetadataSearchTest {
         assertThat(result.httpStatus()).isEqualTo(200);
         assertThat(result.body().at("/hits/total/value").asInt()).isZero();
         assertThat(result.elapsedMillis()).isGreaterThanOrEqualTo(0);
+    }
+    @Test void returnsAnExactNonzeroCountWithoutCredentials() {
+        reply.set(OK.replace("\"value\":0", "\"value\":500"));
+        var configured = properties(true, Duration.ofSeconds(2));
+        var search = new ElasticsearchMetadataSearch(new SearchProperties(true,
+                configured.endpoint(), "participant_1", null,
+                configured.connectTimeout(), configured.readTimeout()));
+        assertThat(search.executeProbe().body().at("/hits/total/value").asInt()).isEqualTo(500);
+        assertThat(path.get()).isEqualTo("/participant_1/_search?allow_partial_search_results=false");
+        assertThat(authorization.get()).isNull();
+    }
+    @Test void queriesTheSuppliedKeywordAndMapsBackendBuckets() {
+        reply.set(countResponse());
+        for (String keyword : List.of("PRESENT|ONESELF|MONDO:0005148", "ABSENT|ONESELF|MONDO:0005252")) {
+            var result = new SearchProbeController(client()).searchConditions(keyword);
+            var sent = JsonMapper.builder().build().readTree(requestBody.get());
+            assertThat(sent.path("size").asInt()).isZero();
+            assertThat(sent.path("track_total_hits").asBoolean()).isTrue();
+            assertThat(sent.at("/query/term/_conditions").asString()).isEqualTo(keyword);
+            assertThat(sent.at("/aggs/counts/terms/exclude/0").asString()).isEqualTo(keyword);
+            assertThat(result.keyword()).isEqualTo(keyword);
+            assertThat(result.totalHits()).isEqualTo("500");
+            assertThat(result.buckets()).containsExactly(new SearchProbeController.ConditionCount(
+                    "PRESENT|ONESELF|MONDO:0005252", "12"));
+            assertThat(result.sumOtherDocCount()).isEqualTo("3");
+        }
+    }
+    @Test void rejectsMalformedKeywordBeforeSendingRequest() {
+        for (String keyword : List.of("", "diabetes", "MONDO:1|ABSENT", "PRESENT||MONDO:1", "a".repeat(501))) {
+            assertThatThrownBy(() -> client().executeCondition(keyword)).isInstanceOfSatisfying(
+                    ApiException.class, error -> assertThat(error.code()).isEqualTo(BAD_USER_INPUT));
+        }
+        assertThat(path.get()).isNull();
+    }
+    @Test void rejectsMissingOrMalformedAggregations() {
+        for (String bad : List.of(OK, countResponse().replace("\"doc_count\":12", "\"doc_count\":-1"),
+                countResponse().replace("\"buckets\":[", "\"wrong\":["))) {
+            reply.set(bad);
+            assertThatThrownBy(() -> client().executeCondition("PRESENT|ONESELF|MONDO:0005148"))
+                    .isInstanceOfSatisfying(ApiException.class,
+                            error -> assertThat(error.code()).isEqualTo(UPSTREAM_INVALID_RESPONSE));
+        }
+    }
+    @Test void acceptsEmptyBuckets() {
+        reply.set(countResponse().replace("{\"key\":\"PRESENT|ONESELF|MONDO:0005252\",\"doc_count\":12}", ""));
+        assertThat(new SearchProbeController(client()).searchConditions("PRESENT|ONESELF|MONDO:0005148").buckets()).isEmpty();
     }
     @Test void preservesActualSuccessfulHttpStatus() {
         status.set(201);
