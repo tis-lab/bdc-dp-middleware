@@ -50,7 +50,7 @@ harmonized:
 
 search:
   enabled: ${SEARCH_ENABLED:true}
-  endpoint: ${SEARCH_ENDPOINT:https://bdc-elasticsearch.dept-bdc-data-portal.svc.cluster.local:9200}
+  endpoint: ${SEARCH_ENDPOINT:http://bdc-elasticsearch.dept-bdc-data-portal.svc.cluster.local:9200}
   index: ${SEARCH_INDEX:participant_1}
   api-key: ${SEARCH_API_KEY:}
   connect-timeout: ${SEARCH_CONNECT_TIMEOUT:5s}
