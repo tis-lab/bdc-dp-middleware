@@ -1,0 +1,7 @@
+# Types shared by the query and response models. Must not depend on either.
+
+"""Sort order for a field."""
+enum SortDirection {
+  ASC
+  DESC
+}
