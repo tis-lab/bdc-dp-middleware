@@ -1,0 +1,58 @@
+# =============================================================================
+# NEW FILE on main.
+#
+# Named application.yml (not .yaml) to match dev, so the two files line up
+# when dev eventually merges into main instead of colliding as two separate
+# config files.
+#
+# Structure and the ${ENV_VAR:default} convention follow dev's
+# src/main/resources/application.yml. The GraphQL, Monarch and harmonized
+# blocks from dev are deliberately absent - main has none of that code.
+# =============================================================================
+
+spring:
+  application:
+    # Read by StatusController for the "service" field in the status payload.
+    name: bdc-data-portal-cohort-builder-service
+
+server:
+  port: ${PORT:8080}
+  # Finish in-flight requests on SIGTERM instead of dropping them. Matters
+  # during an OpenShift rolling update.
+  shutdown: graceful
+  # Honour X-Forwarded-* from the OpenShift router, which terminates TLS at
+  # the edge. Without this the app builds http:// absolute URLs behind an
+  # https:// route.
+  forward-headers-strategy: framework
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      # Exposes /actuator/health/liveness and /actuator/health/readiness,
+      # which the OpenShift Deployment's probes call. Without this they 404
+      # and the pod never becomes Ready.
+      probes:
+        enabled: true
+      show-details: never
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+
+info:
+  app:
+    name: bdc-data-portal-cohort-builder-service
+    environment: ${ENV:local}
+
+logging:
+  level:
+    root: INFO
+    # Logging levels match by PACKAGE PREFIX. This has to track the Java
+    # package - a stale prefix does not error, it silently stops applying and
+    # you lose application logs while everything still looks healthy.
+    gov.nih.nhlbi.bdc: ${APP_LOG_LEVEL:INFO}
