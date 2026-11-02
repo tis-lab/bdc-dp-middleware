@@ -1,300 +1,151 @@
-"""An arbitrary JSON value, returned whole. Output only."""
+"""Whole validated summary object, using the same snake_case field names as the typed API."""
 scalar JSON
+"""Nonnegative integral count, serialized as a JSON number; not limited to GraphQL Int's 32 bits."""
+scalar Count
+"""Decimal boundary serialized as a JSON number without conversion to a Java double."""
+scalar Decimal
 
 extend type Query {
-  """
-  Participant counts for a term, study by study. Mirrors the SummaryResponse class in
-  schema/summary.yaml.
-
-  Currently serves two bundled example responses; anything else is a BAD_USER_INPUT listing
-  what is available. Counts are illustrative, not derived from participant data.
-  """
-  summary(query: CohortQuery!): SummaryResponse
-
-  """
-  The same response as summary, returned whole as JSON. Useful for exploring; prefer summary
-  in application code, where the schema is worth having.
-  """
-  summaryJson(query: CohortQuery!): JSON
+  """Select concept summary sections. Includes use OR; exclusions hide matching sections. Counts and demographics retain their original population. No new cohort is calculated."""
+  summary(sourceId: ID! = "t2d", include: [ID!]! = [], exclude: [ID!]! = []): SummaryResponse
+  """The same validated summary as a JSON value."""
+  summaryJson(sourceId: ID! = "t2d", include: [ID!]! = [], exclude: [ID!]! = []): JSON
+  """Available precomputed summary source IDs."""
+  summarySources: [ID!]!
+  """The selected source's term catalog; presence does not imply a disease-positive count."""
+  summaryConcepts(sourceId: ID! = "t2d"): [SummaryTerm!]
 }
 
-"""
-What the cohort is: the criteria a participant has to satisfy, combined with AND.
+enum SummarizedSlot { sex race ethnicity age_at_index }
+enum RelationSource { KG CURATED }
 
-An input object rather than a list of CURIEs so that value and temporal conditions can be
-added later without breaking existing queries.
-"""
-input CohortQuery {
-  criteria: [Criterion!]!
-}
-
-"""
-One thing a participant must, or must not, have.
-
-Only concept with the default occurrence is applied today. The rest is declared so clients can
-build against it, and reported in notices when sent.
-"""
-input Criterion {
-  """A concept CURIE, or the id of a summary value such as palette:demography/sex/FEMALE."""
-  concept: ID!
-  occurrence: Occurrence = PRESENT
-  """Narrow by recorded value. Accepted but not yet applied."""
-  value: ValueFilter
-}
-
-enum Occurrence {
-  PRESENT
-  """Accepted but not yet applied."""
-  ABSENT
-}
-
-"""Bounds are inclusive on min and exclusive on max, matching how the summaries bin."""
-input ValueFilter {
-  min: Float
-  max: Float
-  """Required when a bound is given."""
-  unit: String
-  """An exact coded value. Mutually exclusive with the bounds."""
-  equals: String
-}
-
-"""
-Counts of the participants matching one filter, study by study.
-
-Every CURIE appearing anywhere in the response is described in terms, so a client never needs
-a vocabulary lookup to render it.
-"""
 type SummaryResponse {
-  """Headline counts for the cohort card, derived from studies."""
-  snapshot: CohortSnapshot!
-  """
-  Anything the caller should know about how these counts were produced, such as a criterion
-  that was not applied. Empty is the normal case.
-  """
-  notices: [String!]!
-  """The index release counted. Responses merge only within a release."""
   release: String!
-  """The term searched for. Look it up in terms."""
   seed: ID!
-  """The filter that was applied, echoed back."""
-  filter: [ID!]!
-  """The smallest count reported. Anything smaller is left out, so absent is not zero."""
-  minCount: Int!
-  """Every term referred to in this response, including parents."""
+  """Original summary IDs defining the population counted. Not arbitrary concept selections."""
+  filter: [String!]!
+  min_count: Count!
   terms: [SummaryTerm!]!
-  """Links between terms beyond their hierarchy, such as a disease and its biomarker."""
   relations: [TermRelation!]!
-  researchStudies: [ResearchStudy!]!
-  studies: [StudyCounts!]!
-  """Participant-level records. Null when the source carries none."""
-  records: ParticipantRecords
+  research_studies: [ResearchStudy!]!
+  studies: [StudySummary!]!
 }
 
-"""
-Headline counts for the current cohort.
-
-estimatedParticipants is summed across studies, not a distinct count of people: a participant
-in two studies is counted in both. Treat it as an upper bound.
-"""
-type CohortSnapshot {
-  estimatedParticipants: Int!
-  studyCount: Int!
-  """The smallest count the source reports."""
-  minCount: Int!
-}
-
-"""
-A concept from a source vocabulary. Called Term in schema/terms.yaml; renamed here because
-Term is already the knowledge-graph concept returned by the terms query.
-"""
 type SummaryTerm {
   curie: ID!
   label: String
-  """
-  The vocabulary owning the term. Usually the CURIE prefix, but an OMOP concept id wraps a
-  term from another vocabulary, so OMOP:4156660 is SNOMED's.
-  """
   vocabulary: String
-  """Direct parents in the owning ontology. Children are the inverse and are not stored."""
-  parents: [ID!]!
+  parents: [String!]!
 }
 
-"""A link between two terms outside their hierarchy."""
 type TermRelation {
   subject: ID!
-  """A Biolink predicate, e.g. biolink:has_biomarker."""
   predicate: String!
   object: ID!
-  """So a curated link never passes for a published one."""
-  relationSource: RelationSource!
-}
-
-enum RelationSource {
-  KG
-  CURATED
+  relation_source: RelationSource!
 }
 
 type ResearchStudy {
   id: ID!
   name: String
-  researchProjectType: String
+  research_project_type: String
   program: String
-  principalInvestigator: [String!]!
+  principal_investigator: [String!]!
 }
 
-"""
-The counts for one study. Called StudySummary in schema/summary.yaml; renamed because the
-synthetic schema already defines a StudySummary.
-"""
-type StudyCounts {
-  """Matches an entry in researchStudies."""
-  researchStudy: ID!
-  """How many of this study's participants pass the filter."""
-  participantCount: Int!
+type StudySummary {
+  research_study: ID!
+  """Estimated participants matching the source filter; recorded values include UNKNOWN."""
+  participant_count: Count!
+  """Aggregate age-at-index bins."""
   participants: [ParticipantSummary!]!
   demographics: [DemographySummary!]!
   conditions: [ConditionSummary!]!
-  """Empty in the current examples."""
   procedures: [ProcedureSummary!]!
-  """Empty in the current examples."""
-  drugExposures: [DrugExposureSummary!]!
+  drug_exposures: [DrugExposureSummary!]!
   measurements: [MeasurementObservationSummary!]!
 }
 
-"""Which BDCHM slot a summary counts, for classes with no concept of their own."""
-enum SummarizedSlot {
-  sex
-  race
-  ethnicity
-  age_at_index
-}
-
-"""Participants by age at index. A bin is [binLow, binHigh); either end may be open."""
 type ParticipantSummary {
-  """Stable across studies and responses within a release, so follow-ups merge by id."""
   id: ID!
-  summarizedSlot: SummarizedSlot!
-  participantCount: Int!
-  """Set where it differs from the participant count."""
-  recordCount: Int
-  """Null on the parent summary; set on each value."""
-  binLow: Float
-  binHigh: Float
-  """Ages are stored in days, so this may differ from the stored value's unit."""
-  binUnit: String
-  """
-  The summary split by value. These never sum to more than the parent, and may sum to less
-  when a value falls below minCount.
-  """
+  summarized_slot: SummarizedSlot!
+  """Estimated participants matching the source filter; recorded values include UNKNOWN."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Lower bin bound, inclusive. Null means open-ended."""
+  bin_low: Decimal
+  """Upper bin bound, exclusive. Null means open-ended."""
+  bin_high: Decimal
+  bin_unit: String
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
   values: [ParticipantSummary!]!
 }
 
-"""Participants by sex, race or ethnicity."""
 type DemographySummary {
   id: ID!
-  summarizedSlot: SummarizedSlot!
-  participantCount: Int!
-  recordCount: Int
+  summarized_slot: SummarizedSlot!
+  """Estimated participants matching the source filter; recorded values include UNKNOWN."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
   sex: String
-  """A list because BDCHM allows more than one, so race values can sum past the parent."""
   race: [String!]!
   ethnicity: String
   values: [DemographySummary!]!
 }
 
-"""
-Participants with a condition recorded, split by status.
-
-UNKNOWN is a recorded value: recorded is not the same as known. Each study is counted at the
-granularity it was harmonized to, so comparing a study that records subtypes with one that
-records the parent needs a roll-up this release does not do.
-"""
 type ConditionSummary {
   id: ID!
-  """Look it up in terms."""
-  conditionConcept: ID!
-  """PRESENT, ABSENT or UNKNOWN. Null on the parent summary; set on each value."""
-  conditionStatus: String
-  participantCount: Int!
-  recordCount: Int
+  condition_concept: ID
+  condition_status: String
+  """Estimated participants matching the source filter; recorded values include UNKNOWN."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
   values: [ConditionSummary!]!
 }
 
-"""Participants with a procedure recorded, split by status."""
 type ProcedureSummary {
   id: ID!
-  procedureConcept: ID
-  procedureStatus: String
-  participantCount: Int!
-  recordCount: Int
+  procedure_concept: ID
+  procedure_status: String
+  """Estimated participants matching the source filter; recorded values include UNKNOWN."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
   values: [ProcedureSummary!]!
 }
 
-"""Participants with a drug exposure recorded."""
 type DrugExposureSummary {
   id: ID!
-  drugConcept: ID
-  participantCount: Int!
-  recordCount: Int
+  drug_concept: ID
+  """Estimated participants matching the source filter; recorded values include UNKNOWN."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
   values: [DrugExposureSummary!]!
 }
 
-"""
-Participants with a measurement recorded, binned by value. A participant is binned by their
-most recent value; repeated measurements are out of scope for this release.
-"""
 type MeasurementObservationSummary {
   id: ID!
-  observationType: String!
-  participantCount: Int!
-  """Exceeds the participant count when values repeat."""
-  recordCount: Int
-  binLow: Float
-  binHigh: Float
-  binUnit: String
+  observation_type: String
+  """Estimated participants matching the source filter; recorded values include UNKNOWN."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Lower bin bound, inclusive. Null means open-ended."""
+  bin_low: Decimal
+  """Upper bin bound, exclusive. Null means open-ended."""
+  bin_high: Decimal
+  bin_unit: String
+  """Laboratory reference-range lower bound. This is not a bin boundary."""
+  range_low: Decimal
+  """Laboratory reference-range upper bound. This is not a bin boundary."""
+  range_high: Decimal
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
   values: [MeasurementObservationSummary!]!
-}
-
-"""
-Participant-level records, kept apart from the summaries: one row per participant rather than
-a count. schema/summary.yaml describes these as for callers authorized to see them.
-"""
-type ParticipantRecords {
-  recordConditions: [ConditionRecord!]!
-  recordDemographics: [DemographyRecord!]!
-  recordMeasurements: [MeasurementRecord!]!
-}
-
-"""A condition recorded for one participant."""
-type ConditionRecord {
-  id: ID!
-  associatedParticipant: ID
-  """Look it up in terms."""
-  conditionConcept: ID
-  """Where the record came from, e.g. PATIENT_SELF_REPORT."""
-  conditionProvenance: String
-  conditionStatus: String
-  """Whose condition it is, e.g. ONESELF for the participant's own."""
-  relationshipToParticipant: String
-}
-
-"""Demographics recorded for one participant."""
-type DemographyRecord {
-  id: ID!
-  associatedParticipant: ID
-  sex: String
-  """A list: BDCHM allows more than one race."""
-  race: [String!]!
-  ethnicity: String
-}
-
-"""A measurement taken for one participant."""
-type MeasurementRecord {
-  id: ID!
-  associatedParticipant: ID
-  observationType: String
-  """In days."""
-  ageAtObservation: Int
-  """Always null for now: BDCHM v1.3.0 does not declare the value inlined."""
-  valueQuantity: String
 }

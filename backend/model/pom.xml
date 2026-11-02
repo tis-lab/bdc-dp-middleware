@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.biodatacatalyst</groupId>
+    <artifactId>bdc-dp-model</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>bdc-dp-model</name>
+    <description>GraphQL data model (common, query, response) and the Java types generated from it</description>
+    <properties>
+        <java.version>25</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- The SDL files are the source of truth; they also ship in the jar. -->
+        <model.schema.dir>${project.basedir}/src/main/resources/graphql/model</model.schema.dir>
+        <!-- Generated Java, committed. Only the generate profile writes here. -->
+        <model.generated.dir>${project.basedir}/src/generated/java</model.generated.dir>
+        <graphqlcodegen.version>3.10.1</graphqlcodegen.version>
+        <graphql-java.version>26.1</graphql-java.version>
+        <junit.version>6.1.3</junit.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <!-- Test only: checks that the SDL files merge into a valid schema. -->
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java</artifactId>
+            <version>${graphql-java.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <!-- Compile the committed generated sources. They are only regenerated
+                 with the generate profile. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.2</version>
+                <executions>
+                    <execution>
+                        <id>add-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${model.generated.dir}</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.5.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.16.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <model.schema.dir>${model.schema.dir}</model.schema.dir>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <!-- Regenerate src/generated/java from the SDL: ./mvnw -Pgenerate generate-sources -->
+        <profile>
+            <id>generate</id>
+            <build>
+                <plugins>
+                    <!-- Wipe first, so classes for removed or renamed types don't linger. -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>3.5.0</version>
+                        <executions>
+                            <execution>
+                                <id>clean-generated-sources</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                                <configuration>
+                                    <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                                    <filesets>
+                                        <fileset>
+                                            <directory>${model.generated.dir}</directory>
+                                        </fileset>
+                                    </filesets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.github.deweyjose</groupId>
+                        <artifactId>graphqlcodegen-maven-plugin</artifactId>
+                        <version>${graphqlcodegen.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <schemaPaths>
+                                <param>${model.schema.dir}</param>
+                            </schemaPaths>
+                            <outputDir>${model.generated.dir}</outputDir>
+                            <!-- build-helper already adds the directory. -->
+                            <autoAddSource>false</autoAddSource>
+                            <!-- Always regenerate: the directory was just wiped, and the
+                                 plugin's change manifest in target/ would skip it. -->
+                            <onlyGenerateChanged>false</onlyGenerateChanged>
+                            <packageName>org.biodatacatalyst.model</packageName>
+                            <javaGenerateAllConstructor>true</javaGenerateAllConstructor>
+                            <!-- Mark files as generated, without a timestamp, so regenerating
+                                 unchanged schemas produces no diff. -->
+                            <addGeneratedAnnotation>true</addGeneratedAnnotation>
+                            <disableDatesInGeneratedAnnotation>true</disableDatesInGeneratedAnnotation>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

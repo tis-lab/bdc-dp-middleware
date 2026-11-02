@@ -47,3 +47,11 @@ harmonized:
   enabled: ${HARMONIZED_ENABLED:true}
   index: ${HARMONIZED_INDEX:classpath:harmonized/harmonized-index.json}
   max-matches: ${HARMONIZED_MAX_MATCHES:25}
+
+search:
+  enabled: ${SEARCH_ENABLED:true}
+  endpoint: ${SEARCH_ENDPOINT:http://bdc-elasticsearch.dept-bdc-data-portal.svc.cluster.local:9200}
+  index: ${SEARCH_INDEX:participant_1}
+  api-key: ${SEARCH_API_KEY:}
+  connect-timeout: ${SEARCH_CONNECT_TIMEOUT:5s}
+  read-timeout: ${SEARCH_READ_TIMEOUT:15s}

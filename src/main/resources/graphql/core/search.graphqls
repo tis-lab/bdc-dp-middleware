@@ -1,0 +1,38 @@
+extend type Query {
+  """
+  Smoke test.
+  """
+  searchProbe: SearchProbeResult!
+}
+
+type SearchProbeResult {
+  status: String!
+  backend: String!
+  httpStatus: Int!
+  elapsedMillis: Int!
+  """Exact number of matching index documents, as a string to preserve integer precision. Not a distinct-person or cohort count."""
+  totalHits: String!
+}
+
+extend type Query {
+  """Search the exact _conditions keyword and count other condition keywords among matches. No summary-schema formatting."""
+  searchConditions(keyword: String!): SearchCountResult!
+}
+
+type ConditionCount {
+  """Exact status|relationship|concept keyword, not a display label."""
+  conditionKey: String!
+  """Matching parent documents with this keyword. Buckets may overlap."""
+  documentCount: String!
+}
+
+type SearchCountResult {
+  keyword: String!
+  """Exact matching parent-document count."""
+  totalHits: String!
+  buckets: [ConditionCount!]!
+  """Sum of bucket document counts omitted by the top-100 limit, not distinct participants."""
+  sumOtherDocCount: String!
+  """Elasticsearch's upper bound on bucket count error for this terms aggregation."""
+  docCountErrorUpperBound: String!
+}

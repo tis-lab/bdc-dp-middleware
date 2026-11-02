@@ -57,7 +57,7 @@ public class MonarchClient {
                     .uri(uri)
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
-                    .onStatus(status -> !status.is2xxSuccessful(), (_, response) -> {
+                    .onStatus(status -> !status.is2xxSuccessful(), (request, response) -> {
                         log.warn("Monarch {} returned HTTP {}", route, response.getStatusCode().value());
                         throw new ApiException(UPSTREAM_UNAVAILABLE, "Monarch could not complete the search.");
                     })

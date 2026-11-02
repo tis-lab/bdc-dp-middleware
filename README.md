@@ -5,7 +5,7 @@
 ### IntelliJ IDEA
 
 1. **File > Open** and select the project folder. IntelliJ imports the Maven project automatically.
-2. **File > Project Structure > Project**: set the SDK to a JDK 25 install and the language level to 25.
+2. **File > Project Structure > Project**: set the SDK to a JDK 21 install and the language level to 21.
 3. Open `src/main/java/org/biodatacatalyst/middleware/DataPortalMiddlewareApplication.java` and click
    the green arrow next to the class, or use the generated **DataPortalMiddlewareApplication** run
    configuration.

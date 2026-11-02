@@ -1,0 +1,22 @@
+# Response model: output types only. May depend on common, never on query.
+
+"""Where a page sits in the full result set."""
+type PageInfo {
+  limit: Int!
+  offset: Int!
+  """Total matches, not the length of this page."""
+  total: Int!
+  hasMore: Boolean!
+}
+
+"""One result."""
+type Item {
+  id: ID!
+  name: String!
+}
+
+"""One page of results."""
+type SearchResult {
+  items: [Item!]!
+  page: PageInfo!
+}

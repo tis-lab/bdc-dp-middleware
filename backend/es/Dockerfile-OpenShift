@@ -1,0 +1,24 @@
+# Image for an OpenShift BuildConfig (dockerStrategy, contextDir backend/es).
+# The compose stack uses Dockerfile; see DEV.md for what differs.
+ARG ES_VERSION=9.5.3
+FROM docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
+
+# Overlay the shared config, then the OpenShift-only overrides.
+COPY root/ /
+COPY root-openshift/ /
+
+# COPY resets existing directories to the host's owner/mode; restore what the
+# base image expects (ES writes its keystore into config/ at startup).
+USER root
+RUN chown elasticsearch:root /usr/share/elasticsearch/config \
+ && chmod 775 /usr/share/elasticsearch /usr/share/elasticsearch/config \
+ && chmod -R g=u /usr/share/elasticsearch/config
+
+# Already exposed by the base image; repeated because the OpenShift "Import
+# from Git" form reads ports from this file's text only. 9200 (HTTP) first, so
+# it's the form's default target port.
+EXPOSE 9200 9300
+
+# Numeric, so OpenShift can verify runAsNonRoot. OpenShift replaces the uid
+# with a random one but keeps group 0, which the RUN step above relies on.
+USER 1000:0

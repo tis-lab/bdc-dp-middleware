@@ -1,0 +1,29 @@
+[project]
+name = "py-tools"
+version = "0.1.0"
+description = "Python command-line and other tools for the backend"
+readme = "README.md"
+authors = [
+    { name = "Shahim Essaid", email = "shahim@essaid.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "elasticsearch>=9.5.1,<10",
+    "linkml-runtime>=1.12.1",
+    "psycopg[binary]>=3.3.6",
+    "pyyaml>=6.0.2",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.24,<0.13.0"]
+build-backend = "uv_build"
+
+[project.scripts]
+linkml-pg-ddl = "py_tools.linkml_pg_ddl:main"
+pg-apply-ddl = "py_tools.pg_apply_ddl:main"
+pg-bootstrap = "py_tools.pg_bootstrap:main"
+pg-load-data = "py_tools.pg_load_data:main"
+pg-export-participants = "py_tools.pg_export_participants:main"
+es-participant-mapping = "py_tools.es_participant_mapping:main"
+es-recreate-index = "py_tools.es_recreate_index:main"
+es-load-participants = "py_tools.es_load_participants:main"

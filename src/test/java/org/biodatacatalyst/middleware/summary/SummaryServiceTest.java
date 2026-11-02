@@ -1,326 +1,132 @@
 package org.biodatacatalyst.middleware.summary;
 
-import java.util.List;
-
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.math.BigInteger;
+import java.util.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.DefaultResourceLoader;
-
 import org.biodatacatalyst.middleware.shared.ApiException;
-import org.biodatacatalyst.middleware.summary.CohortQuery.Criterion;
-import org.biodatacatalyst.middleware.summary.CohortQuery.ValueFilter;
-import org.biodatacatalyst.middleware.summary.SummaryModels.ConditionSummary;
-import org.biodatacatalyst.middleware.summary.SummaryModels.DemographySummary;
-import org.biodatacatalyst.middleware.summary.SummaryModels.MeasurementObservationSummary;
-import org.biodatacatalyst.middleware.summary.SummaryModels.StudyCounts;
-import org.biodatacatalyst.middleware.summary.SummaryModels.SummaryResponse;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 class SummaryServiceTest {
+    private SummaryService service() { return new SummaryService(new ExampleSummarySource(new DefaultResourceLoader())); }
+    private SummaryModels.SummaryResponse read(String yaml) {
+        return new SummaryReader().read(new ByteArrayInputStream(yaml.getBytes(StandardCharsets.UTF_8)));
+    }
+    private static final String HEADER="release: test\nseed: MONDO:0005148\nmin_count: 10\n";
 
-    private static final String SEED = "MONDO:0005148";
-    private static final String GLUCOSE = "palette:measurement/FAST_GLUC_BLD";
-    private static final String FEMALE = "palette:demography/sex/FEMALE";
-
-    private static SummaryService service() {
-        return new SummaryService(new ExampleSummarySource(new DefaultResourceLoader()));
+    @Test void preservesSourceContractAndCounts() {
+        var r=service().summary("t2d");
+        assertThat(r.filter()).containsExactly("palette:measurement/FAST_GLUC_BLD");
+        assertThat(r.studies()).extracting("participant_count").containsExactly(BigInteger.valueOf(480),BigInteger.valueOf(460));
+        assertThat(r.studies().getFirst().conditions().getFirst().values().getFirst().participant_count()).isEqualTo(BigInteger.valueOf(90));
+        assertThat(r.terms()).hasSize(7);
+    }
+    @Test void preservesFemaleSourceWithoutInventingMissingSections() {
+        var r=service().summary("t2d-female");
+        assertThat(r.filter()).contains("palette:demography/sex/FEMALE");
+        assertThat(r.studies()).extracting("participant_count").containsExactly(BigInteger.valueOf(230),BigInteger.valueOf(250));
+        assertThat(r.relations()).isEmpty();
+        assertThat(r.studies().getFirst().participants()).isEmpty();
+        assertThat(r.terms()).hasSize(5);
+    }
+    @Test void sourceSelectionIsAllowlisted() {
+        var s=service();
+        assertThat(s.sources()).containsExactly("t2d","t2d-female");
+        for (var id:Arrays.asList("../t2d","unknown",null))
+            assertThatThrownBy(()->s.summary(id)).isInstanceOf(ApiException.class);
+    }
+    @Test void ignoresIndividualSectionWithoutAddingDtoFields() {
+        var r=read(HEADER+"records:\n  private_payload:\n    - secret: DO_NOT_RETURN\n");
+        assertThat(r).isEqualTo(read(HEADER));
+        assertThat(SummaryModels.SummaryResponse.class.getRecordComponents()).extracting("name")
+                .containsExactly("release","seed","filter","min_count","terms","relations","research_studies","studies");
+    }
+    @Test void rejectsUnknownFieldsAtEveryBoundary() {
+        for (var yaml:List.of(HEADER+"future_field: x\n", HEADER+"terms: [{curie: 'MONDO:1', extra: x}]\n",
+                HEADER+"studies: [{research_study: 'study:1', participant_count: 10, extra: x}]\n"))
+            assertThatThrownBy(()->read(yaml)).isInstanceOf(IllegalStateException.class);
+    }
+    @Test void validatesRequiredTypesCountsAndSingleDocument() {
+        for (var yaml:List.of(HEADER.replace("min_count: 10","min_count: 0"), HEADER.replace("min_count: 10","min_count: 1.5"),
+                HEADER.replace("min_count: 10","min_count: '10'"), HEADER.replace("release: test\n",""),
+                HEADER+"terms: [null]\n",HEADER+"---\n"+HEADER,
+                HEADER+"release: duplicate\n",HEADER+"studies: [{research_study: 'study:1', participant_count: -1}]\n"))
+            assertThatThrownBy(()->read(yaml)).isInstanceOf(RuntimeException.class);
+    }
+    @Test void supportsRecursiveFutureSummaryClassesAndReferenceRanges() {
+        String yaml=HEADER+"""
+                research_studies: [{id: 'study:1'}]
+                studies:
+                - research_study: study:1
+                  participant_count: 3000000000
+                  procedures:
+                  - id: summary:procedure
+                    procedure_concept: concept:procedure
+                    participant_count: 20
+                    values:
+                    - id: summary:procedure_present
+                      participant_count: 10
+                      procedure_status: PRESENT
+                  drug_exposures:
+                  - id: summary:drug
+                    drug_concept: concept:drug
+                    participant_count: 12
+                  measurements:
+                  - id: summary:measurement
+                    participant_count: 20
+                    observation_type: glucose
+                    bin_low: 1.1234567890123456789
+                    bin_high: 3
+                    range_low: 0.5
+                    range_high: 5
+                """;
+        var r=read(yaml);
+        assertThat(r.studies().getFirst().participant_count()).isEqualTo(new BigInteger("3000000000"));
+        assertThat(r.studies().getFirst().procedures().getFirst().values()).hasSize(1);
+        var m=r.studies().getFirst().measurements().getFirst();
+        assertThat(m.bin_low().toPlainString()).isEqualTo("1.1234567890123456789");
+        assertThat(m.range_low()).isEqualByComparingTo("0.5");
+    }
+    @Test void rejectsDuplicateStudyAndTermIdentifiersAndInvalidBins() {
+        for (var yaml:List.of(HEADER+"terms: [{curie: 'MONDO:1'}, {curie: 'MONDO:1'}]\n",
+                HEADER+"research_studies: [{id: 'study:1'}, {id: 'study:1'}]\n",
+                HEADER+"studies: [{research_study: 'missing:1', participant_count: 10}]\n",
+                HEADER+"studies: [{research_study: 'study:1', participant_count: 10, participants: [{id: 'summary:1', summarized_slot: age_at_index, participant_count: 10, bin_low: 3, bin_high: 2}]}]\n"))
+            assertThatThrownBy(()->read(yaml)).isInstanceOf(IllegalStateException.class);
     }
 
-    private static CohortQuery present(String... concepts) {
-        return new CohortQuery(java.util.Arrays.stream(concepts)
-                .map(concept -> new Criterion(concept, "PRESENT", null))
-                .toList());
+    @Test void conceptSelectionPreservesContractAndPopulationCounts() {
+        var s=service(); var full=s.summary("t2d");
+        var selected=s.summary("t2d", List.of("MONDO:0005148", "MONDO:0005015"), List.of("MONDO:0005252"));
+        assertThat(selected.filter()).isEqualTo(full.filter());
+        assertThat(selected.terms()).isEqualTo(full.terms());
+        for (int i=0;i<full.studies().size();i++) {
+            assertThat(selected.studies().get(i).participant_count()).isEqualTo(full.studies().get(i).participant_count());
+            assertThat(selected.studies().get(i).demographics()).isEqualTo(full.studies().get(i).demographics());
+            assertThat(selected.studies().get(i).conditions()).extracting("condition_concept").containsExactly("MONDO:0005148");
+        }
+        assertThat(s.summary("t2d",List.of(),List.of())).isEqualTo(full);
+        assertThat(s.summary("t2d",List.of("MONDO:0005148"),List.of("MONDO:0005015")).studies())
+                .allMatch(study -> study.conditions().isEmpty());
+        assertThat(s.summary("t2d",List.of(),List.of("MONDO:0005252")).studies().getFirst().conditions())
+                .extracting("condition_concept").containsExactly("MONDO:0005148","MONDO:0005068");
+        assertThat(s.summary("t2d",List.of("OMOP:4156660"),List.of()).studies())
+                .allMatch(study -> study.measurements().size()==1 && study.conditions().isEmpty());
     }
 
-    private static StudyCounts study(SummaryResponse response) {
-        return response.studies().stream()
-                .filter(s -> s.researchStudy().equals("palette:study_one"))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("no study " + "palette:study_one"));
-    }
-
-    private static DemographySummary demographic(StudyCounts study, String slot) {
-        return study.demographics().stream()
-                .filter(d -> d.summarizedSlot().equals(slot))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("no " + slot + " summary"));
-    }
-
-    @Test
-    void readsTheEnvelopeOfTheUnfilteredExample() {
-        SummaryResponse response = service().summary(present(SEED));
-
-        assertThat(response.release()).isEqualTo("example-release");
-        assertThat(response.seed()).isEqualTo(SEED);
-        assertThat(response.filter()).containsExactly(GLUCOSE);
-        assertThat(response.snapshot().estimatedParticipants()).isEqualTo(940);
-        assertThat(response.snapshot().studyCount()).isEqualTo(2);
-        assertThat(response.snapshot().minCount()).isEqualTo(10);
-        assertThat(response.minCount()).isEqualTo(10);
-        assertThat(response.terms()).hasSize(7);
-        assertThat(response.studies()).hasSize(2);
-    }
-
-    @Test
-    void carriesEveryTermItRefersTo() {
-        SummaryResponse response = service().summary(present(SEED));
-
-        assertThat(response.terms()).extracting("curie").contains(SEED, "OMOP:4156660");
-        assertThat(response.terms()).filteredOn(t -> t.curie().equals(SEED))
-                .singleElement()
-                .satisfies(term -> {
-                    assertThat(term.label()).isEqualTo("type 2 diabetes mellitus");
-                    assertThat(term.vocabulary()).isEqualTo("MONDO");
-                    assertThat(term.parents()).containsExactly("MONDO:0005015");
-                });
-        // The vocabulary is not always the prefix: an OMOP concept id wraps another vocabulary's.
-        assertThat(response.terms()).filteredOn(t -> t.curie().equals("OMOP:4156660"))
-                .singleElement()
-                .satisfies(term -> assertThat(term.vocabulary()).isEqualTo("SNOMED"));
-    }
-
-    @Test
-    void readsRelationsWithTheirSource() {
-        SummaryResponse response = service().summary(present(SEED));
-
-        assertThat(response.relations()).singleElement().satisfies(relation -> {
-            assertThat(relation.subject()).isEqualTo("MONDO:0005015");
-            assertThat(relation.predicate()).isEqualTo("biolink:has_biomarker");
-            assertThat(relation.object()).isEqualTo("OMOP:4156660");
-            // A curated link must never pass for a published one.
-            assertThat(relation.relationSource()).isEqualTo("CURATED");
-        });
-    }
-
-    @Test
-    void readsStudyMetadataAlongsideTheCounts() {
-        SummaryResponse response = service().summary(present(SEED));
-
-        assertThat(response.researchStudies()).hasSize(2);
-        assertThat(response.researchStudies().getFirst().name()).isEqualTo("Example Study One");
-        assertThat(response.researchStudies().getFirst().principalInvestigator())
-                .containsExactly("Example Investigator");
-    }
-
-    @Test
-    void readsNestedCountsAndTheirSplits() {
-        StudyCounts one = study(service().summary(present(SEED)));
-
-        assertThat(one.participantCount()).isEqualTo(480);
-
-        DemographySummary sex = demographic(one, "sex");
-        assertThat(sex.participantCount()).isEqualTo(480);
-        assertThat(sex.values()).extracting("sex", "participantCount")
-                .containsExactly(tuple("FEMALE", 230), tuple("MALE", 245));
-    }
-
-    @Test
-    void keepsRaceAsAList() {
-        StudyCounts one = study(service().summary(present(SEED)));
-
-        assertThat(demographic(one, "race").values().getFirst().race()).containsExactly("WHITE");
-    }
-
-    @Test
-    void doesNotInventCountsForWhatTheSourceLeftOut() {
-        StudyCounts one = study(service().summary(present(SEED)));
-
-        ConditionSummary t2d = one.conditions().stream()
-                .filter(c -> c.conditionConcept().equals(SEED))
-                .findFirst().orElseThrow();
-        assertThat(t2d.participantCount()).isEqualTo(470);
-        assertThat(t2d.values()).extracting("conditionStatus", "participantCount")
-                .containsExactly(tuple("PRESENT", 90), tuple("ABSENT", 380));
-        // recordCount is set only where it differs from the participant count.
-        assertThat(t2d.values().getFirst().recordCount()).isEqualTo(215);
-        assertThat(t2d.values().getLast().recordCount()).isNull();
-
-        DemographySummary sex = demographic(one, "sex");
-        assertThat(sex.values()).extracting("participantCount").doesNotContain(5);
-    }
-
-    @Test
-    void readsOpenEndedBins() {
-        StudyCounts one = study(service().summary(present(SEED)));
-
-        MeasurementObservationSummary glucose = one.measurements().getFirst();
-        assertThat(glucose.observationType()).isEqualTo("FAST_GLUC_BLD");
-        assertThat(glucose.participantCount()).isEqualTo(480);
-        assertThat(glucose.recordCount()).isEqualTo(1830);
-
-        assertThat(glucose.values().getFirst().binLow()).isNull();
-        assertThat(glucose.values().getFirst().binHigh()).isEqualByComparingTo("70");
-        assertThat(glucose.values().getLast().binLow()).isEqualByComparingTo("126");
-        assertThat(glucose.values().getLast().binHigh()).isNull();
-        assertThat(glucose.values().getFirst().binUnit()).isEqualTo("mg/dL");
-    }
-
-    @Test
-    void agreesWithTheUnfilteredResponseWhereTheyOverlap() {
-        SummaryResponse all = service().summary(present(SEED));
-        SummaryResponse women = service().summary(present(SEED, FEMALE));
-
-        int femaleInAll = demographic(study(all), "sex").values().stream()
-                .filter(v -> "FEMALE".equals(v.sex()))
-                .findFirst().orElseThrow().participantCount();
-
-        assertThat(study(women).participantCount()).isEqualTo(femaleInAll);
-        assertThat(women.release()).isEqualTo(all.release());
-    }
-
-    @Test
-    void doesNotCareAboutCriterionOrder() {
-        SummaryResponse ordered = service().summary(present(SEED, FEMALE));
-        SummaryResponse reversed = service().summary(present(FEMALE, SEED));
-
-        assertThat(reversed.studies().getFirst().participantCount())
-                .isEqualTo(ordered.studies().getFirst().participantCount());
-    }
-
-    @Test
-    void narrowsTheSnapshotWhenABreakdownValueIsACriterion() {
-        assertThat(service().summary(present(SEED)).snapshot().estimatedParticipants())
-                .isEqualTo(940);
-        assertThat(service().summary(present(SEED, FEMALE))
-                .snapshot().estimatedParticipants()).isEqualTo(480);
-    }
-
-    @Test
-    void saysSoWhenAnAbsentCriterionWasNotApplied() {
-        SummaryResponse response = service().summary(new CohortQuery(List.of(
-                new Criterion(SEED, "PRESENT", null),
-                new Criterion("MONDO:0005068", "ABSENT", null))));
-
-        assertThat(response.notices()).anySatisfy(notice ->
-                assertThat(notice).contains("ABSENT criteria were not applied", "MONDO:0005068"));
-        // The counts ignore it, which is exactly why the notice has to be there.
-        assertThat(response.snapshot().estimatedParticipants()).isEqualTo(940);
-    }
-
-    @Test
-    void saysSoWhenAValueFilterWasNotApplied() {
-        SummaryResponse response = service().summary(new CohortQuery(List.of(
-                new Criterion(SEED, "PRESENT", null),
-                new Criterion("palette:measurement/FAST_GLUC_BLD", "PRESENT",
-                        new ValueFilter(new java.math.BigDecimal("126"), null, "mg/dL", null)))));
-
-        assertThat(response.notices()).anySatisfy(notice ->
-                assertThat(notice).contains("Value filters were not applied", ">= 126 mg/dL"));
-    }
-
-    @Test
-    void rejectsValueFiltersThatCannotMeanAnything() {
-        assertThatThrownBy(() -> service().summary(new CohortQuery(List.of(
-                new Criterion(SEED, "PRESENT",
-                        new ValueFilter(new java.math.BigDecimal("1"), null, null, null))))))
-                .isInstanceOf(ApiException.class)
-                .hasMessageContaining("must give a unit");
-
-        assertThatThrownBy(() -> service().summary(new CohortQuery(List.of(
-                new Criterion(SEED, "PRESENT", new ValueFilter(
-                        new java.math.BigDecimal("10"), new java.math.BigDecimal("5"), "mg/dL", null))))))
-                .isInstanceOf(ApiException.class)
-                .hasMessageContaining("min must be below its max");
-
-        assertThatThrownBy(() -> service().summary(new CohortQuery(List.of(
-                new Criterion(SEED, "PRESENT", new ValueFilter(
-                        new java.math.BigDecimal("1"), null, "mg/dL", "FEMALE"))))))
-                .isInstanceOf(ApiException.class)
-                .hasMessageContaining("cannot combine equals");
-    }
-
-    @Test
-    void rejectsAQueryWithNoPresentCriterion() {
-        assertThatThrownBy(() -> service().summary(new CohortQuery(List.of(
-                new Criterion(SEED, "ABSENT", null)))))
-                .isInstanceOf(ApiException.class)
-                .hasMessageContaining("At least one criterion must be PRESENT");
-    }
-
-    @Test
-    void alwaysSaysTheCountsAreIllustrative() {
-        assertThat(service().summary(present(SEED)).notices())
-                .anySatisfy(notice -> assertThat(notice).contains("illustrative example data"));
-    }
-
-    @Test
-    void saysSoWhenAConceptDidNotNarrowAnything() {
-        SummaryResponse response = service().summary(present(SEED, "MONDO:0005068"));
-
-        assertThat(response.notices()).anySatisfy(notice ->
-                assertThat(notice).contains("did not narrow the counts", "MONDO:0005068"));
-    }
-
-    @Test
-    void exposesTheParticipantRecords() {
-        SummaryResponse response = service().summary(present(SEED));
-
-        assertThat(response.records()).isNotNull();
-        assertThat(response.records().recordConditions()).singleElement().satisfies(record -> {
-            assertThat(record.conditionConcept()).isEqualTo(SEED);
-            assertThat(record.conditionProvenance()).isEqualTo("PATIENT_SELF_REPORT");
-            assertThat(record.conditionStatus()).isEqualTo("PRESENT");
-            assertThat(record.relationshipToParticipant()).isEqualTo("ONESELF");
-            assertThat(record.associatedParticipant()).isEqualTo("palette:example/participant-1");
-        });
-        assertThat(response.records().recordDemographics()).singleElement().satisfies(record -> {
-            assertThat(record.sex()).isEqualTo("FEMALE");
-            assertThat(record.race()).containsExactly("WHITE");
-            assertThat(record.ethnicity()).isEqualTo("NOT_HISPANIC_OR_LATINO");
-        });
-        assertThat(response.records().recordMeasurements()).singleElement().satisfies(record -> {
-            assertThat(record.observationType()).isEqualTo("FAST_GLUC_BLD");
-            assertThat(record.ageAtObservation()).isEqualTo(22280);
-            // BDCHM v1.3.0 does not declare the value inlined, so there is nothing to carry yet.
-            assertThat(record.valueQuantity()).isNull();
-        });
-    }
-
-    @Test
-    void returnsNoRecordsWhenTheSourceHasNone() {
-        assertThat(service().summary(present(SEED, FEMALE)).records()).isNull();
-    }
-
-    @Test
-    void returnsEmptyListsForTheBlocksTheExamplesDoNotCover() {
-        StudyCounts one = study(service().summary(present(SEED)));
-
-        assertThat(one.procedures()).isEmpty();
-        assertThat(one.drugExposures()).isEmpty();
-    }
-
-    @Test
-    void saysWhatIsAvailableWhenNothingMatches() {
-        assertThatThrownBy(() -> service().summary(present("MONDO:9999999")))
-                .isInstanceOf(ApiException.class)
-                .hasMessageContaining("example data only")
-                .hasMessageContaining(SEED);
-    }
-
-    @Test
-    void rejectsAnEmptyQueryBeforeLookingAnythingUp() {
-        assertThatThrownBy(() -> service().summary(new CohortQuery(List.of())))
-                .isInstanceOf(ApiException.class)
-                .hasMessageContaining("at least one criterion");
-    }
-
-    @Test
-    void rejectsABlankConcept() {
-        assertThatThrownBy(() -> service().summary(present(SEED, " ")))
-                .isInstanceOf(ApiException.class)
-                .hasMessageContaining("concept must not be blank");
-    }
-
-    @Test
-    void treatsAMissingOccurrenceAsPresent() {
-        SummaryResponse response = service().summary(
-                new CohortQuery(List.of(new Criterion(SEED, null, null))));
-
-        assertThat(response.snapshot().estimatedParticipants()).isEqualTo(940);
-    }
-
-    private static org.assertj.core.groups.Tuple tuple(Object... values) {
-        return org.assertj.core.groups.Tuple.tuple(values);
+    @Test void selectionValidatesCatalogAndDoesNotMutateSource() {
+        var s=service();var before=s.summary("t2d");
+        assertThat(s.summary("t2d",List.of(" MONDO:0005015 ","MONDO:0005015"),List.of()))
+                .isEqualTo(s.summary("t2d",List.of("MONDO:0005015"),List.of()));
+        assertThat(s.summary("t2d")).isEqualTo(before);
+        assertThatThrownBy(()->s.summary("t2d",List.of("MONDO:0005148"),List.of("MONDO:0005148"))).isInstanceOf(ApiException.class);
+        assertThatThrownBy(()->s.summary("t2d",List.of("UNKNOWN:1"),List.of())).isInstanceOf(ApiException.class);
+        assertThatThrownBy(()->s.summary("t2d",List.of(),List.of("UNKNOWN:1"))).isInstanceOf(ApiException.class);
+        assertThatThrownBy(()->s.summary("t2d",List.of(" "),List.of())).isInstanceOf(ApiException.class);
+        assertThatThrownBy(()->s.summary("t2d",null,List.of())).isInstanceOf(ApiException.class);
+        assertThatThrownBy(()->s.summary("t2d",Collections.nCopies(51,"MONDO:0005148"),List.of())).isInstanceOf(ApiException.class);
+        assertThatThrownBy(()->s.summary("t2d-female",List.of(),List.of("MONDO:0005252"))).isInstanceOf(ApiException.class);
     }
 }

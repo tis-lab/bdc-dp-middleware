@@ -1,0 +1,3706 @@
+{
+  "settings": {
+    "index.mapping.total_fields.limit": 1300,
+    "index.mapping.nested_fields.limit": 100
+  },
+  "mappings": {
+    "_meta": {
+      "generated_by": "es-participant-mapping (py-tools)",
+      "generated": "2026-10-29T02:29:46",
+      "linkml_schema": {
+        "name": "bdchm",
+        "version": null,
+        "file": "bdchm.yaml"
+      },
+      "post_processors": [
+        "add_condition_keys"
+      ],
+      "fields": 1011,
+      "nested_fields": 53,
+      "depth": 7
+    },
+    "dynamic": "strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "associated_person": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "species": {
+            "type": "keyword"
+          },
+          "breed": {
+            "type": "keyword"
+          },
+          "year_of_birth": {
+            "type": "integer"
+          },
+          "vital_status": {
+            "type": "keyword"
+          },
+          "age_at_death": {
+            "type": "integer"
+          },
+          "year_of_death": {
+            "type": "integer"
+          },
+          "cause_of_death": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "cause": {
+                "type": "keyword"
+              },
+              "order": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "identity": {
+        "type": "keyword"
+      },
+      "description": {
+        "type": "keyword",
+        "fields": {
+          "text": {
+            "type": "text"
+          }
+        }
+      },
+      "member_of_research_study": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "name_shortened": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "description": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "description_shortened": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "sponsor": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "date_started": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "date_time": {
+                "type": "date"
+              },
+              "index_time_point": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "offset_from_index": {
+                "type": "integer"
+              },
+              "event_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "date_ended": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "date_time": {
+                "type": "date"
+              },
+              "index_time_point": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "offset_from_index": {
+                "type": "integer"
+              },
+              "event_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "accession_number": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "accession_authority": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "version": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "url": {
+            "type": "keyword"
+          },
+          "part_of": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "research_project_type": {
+            "type": "keyword"
+          },
+          "program": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "associated_timepoint": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "date_time": {
+                "type": "date"
+              },
+              "index_time_point": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "offset_from_index": {
+                "type": "integer"
+              },
+              "event_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "principal_investigator": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "consents": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "consent_code": {
+                "type": "keyword"
+              },
+              "valid_from": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "valid_to": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "age_at_index": {
+        "type": "integer"
+      },
+      "index_timepoint": {
+        "type": "keyword",
+        "fields": {
+          "text": {
+            "type": "text"
+          }
+        }
+      },
+      "originating_site": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "alias": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "organization_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "study_arm": {
+        "type": "keyword",
+        "fields": {
+          "text": {
+            "type": "text"
+          }
+        }
+      },
+      "consents": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "consent_code": {
+            "type": "keyword"
+          },
+          "valid_from": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "date_time": {
+                "type": "date"
+              },
+              "index_time_point": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "offset_from_index": {
+                "type": "integer"
+              },
+              "event_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "valid_to": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "date_time": {
+                "type": "date"
+              },
+              "index_time_point": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "offset_from_index": {
+                "type": "integer"
+              },
+              "event_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "demography": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "sex": {
+            "type": "keyword"
+          },
+          "ethnicity": {
+            "type": "keyword"
+          },
+          "race": {
+            "type": "keyword"
+          }
+        }
+      },
+      "visit": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "visit_category": {
+            "type": "keyword"
+          },
+          "age_at_visit_start": {
+            "type": "integer"
+          },
+          "age_at_visit_end": {
+            "type": "integer"
+          },
+          "year_range": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "period_start": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "period_end": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "visit_provenance": {
+            "type": "keyword"
+          },
+          "questionnaire_response": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "associated_visit": {
+                "type": "keyword"
+              },
+              "age_at_response": {
+                "type": "integer"
+              },
+              "items": {
+                "type": "nested",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "has_questionnaire_item": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "identity": {
+                        "type": "keyword"
+                      },
+                      "ordinality": {
+                        "type": "integer"
+                      },
+                      "text": {
+                        "type": "keyword",
+                        "fields": {
+                          "text": {
+                            "type": "text"
+                          }
+                        }
+                      },
+                      "code": {
+                        "type": "keyword",
+                        "fields": {
+                          "text": {
+                            "type": "text"
+                          }
+                        }
+                      },
+                      "part_of": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "keyword"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "response_value": {
+                    "type": "object",
+                    "properties": {
+                      "_class": {
+                        "type": "keyword"
+                      },
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "code_concept": {
+                        "type": "keyword",
+                        "fields": {
+                          "text": {
+                            "type": "text"
+                          }
+                        }
+                      },
+                      "value_boolean": {
+                        "type": "boolean"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_time_point": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "keyword"
+                          },
+                          "date_time": {
+                            "type": "date"
+                          },
+                          "index_time_point": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "keyword"
+                              }
+                            }
+                          },
+                          "offset_from_index": {
+                            "type": "integer"
+                          },
+                          "event_type": {
+                            "type": "keyword",
+                            "fields": {
+                              "text": {
+                                "type": "text"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "value_string": {
+                        "type": "keyword",
+                        "fields": {
+                          "text": {
+                            "type": "text"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "condition": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "condition_concept": {
+            "type": "keyword"
+          },
+          "age_at_condition_start": {
+            "type": "integer"
+          },
+          "age_at_condition_end": {
+            "type": "integer"
+          },
+          "condition_provenance": {
+            "type": "keyword"
+          },
+          "condition_status": {
+            "type": "keyword"
+          },
+          "condition_severity": {
+            "type": "keyword"
+          },
+          "relationship_to_participant": {
+            "type": "keyword"
+          },
+          "associated_evidence": {
+            "type": "nested",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "affected_body_site": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "site": {
+                "type": "keyword"
+              },
+              "qualifier": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "procedure": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "procedure_concept": {
+            "type": "keyword"
+          },
+          "age_at_procedure": {
+            "type": "integer"
+          },
+          "procedure_provenance": {
+            "type": "keyword"
+          },
+          "procedure_status": {
+            "type": "keyword"
+          },
+          "quantity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "affected_body_site": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "site": {
+                "type": "keyword"
+              },
+              "qualifier": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "imaging_study": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_imaging_study": {
+            "type": "integer"
+          },
+          "number_of_series": {
+            "type": "integer"
+          },
+          "number_of_instances": {
+            "type": "integer"
+          },
+          "study_description": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "study_modality": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "study_uid": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "body_part_examined": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "site": {
+                "type": "keyword"
+              },
+              "qualifier": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "exposure": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_exposure_start": {
+            "type": "integer"
+          },
+          "age_at_exposure_end": {
+            "type": "integer"
+          },
+          "exposure_status": {
+            "type": "keyword"
+          }
+        }
+      },
+      "drug_exposure": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "drug_concept": {
+            "type": "keyword"
+          },
+          "exposure_provenance": {
+            "type": "keyword"
+          },
+          "refills": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "double"
+          },
+          "days_supply": {
+            "type": "integer"
+          },
+          "sig": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "route_concept": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_exposure_start": {
+            "type": "integer"
+          },
+          "age_at_exposure_end": {
+            "type": "integer"
+          },
+          "exposure_status": {
+            "type": "keyword"
+          }
+        }
+      },
+      "device_exposure": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "device_concept": {
+            "type": "keyword"
+          },
+          "exposure_provenance": {
+            "type": "keyword"
+          },
+          "quantity": {
+            "type": "double"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_exposure_start": {
+            "type": "integer"
+          },
+          "age_at_exposure_end": {
+            "type": "integer"
+          },
+          "exposure_status": {
+            "type": "keyword"
+          }
+        }
+      },
+      "dimensional_observation": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_observation": {
+            "type": "integer"
+          },
+          "category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "observation_type": {
+            "type": "keyword"
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "object",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "value_string": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "value_boolean": {
+            "type": "boolean"
+          },
+          "value_quantity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "value_enum": {
+            "type": "keyword"
+          },
+          "context": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "activity": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "activity_type": {
+                    "type": "keyword"
+                  },
+                  "time_duration": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "relative_timing": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "dimensional_observation_set": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "observations": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "nested",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "file": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "file_name": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "file_size": {
+            "type": "integer"
+          },
+          "file_location": {
+            "type": "keyword"
+          },
+          "md5sum": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "data_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "data_category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "format": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "description": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "derived_from": {
+            "type": "nested",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "imaging_file": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "imaging_modality": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "anatomical_site": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "site": {
+                "type": "keyword"
+              },
+              "qualifier": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "series_number": {
+            "type": "integer"
+          },
+          "series_uid": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "series_description": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "related_imaging_study": {
+            "type": "keyword"
+          },
+          "manufacturer": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "manufacturer_model": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "file_name": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "file_size": {
+            "type": "integer"
+          },
+          "file_location": {
+            "type": "keyword"
+          },
+          "md5sum": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "data_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "data_category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "format": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "description": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "derived_from": {
+            "type": "nested",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "document": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "document_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "description": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "object",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "url": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      },
+      "specimen": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "identity": {
+            "type": "keyword"
+          },
+          "description": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "specimen_type": {
+            "type": "keyword"
+          },
+          "analyte_type": {
+            "type": "keyword"
+          },
+          "source_material_type": {
+            "type": "keyword"
+          },
+          "parent_specimen": {
+            "type": "keyword"
+          },
+          "source_participant": {
+            "type": "keyword"
+          },
+          "creation_activity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "activity_type": {
+                "type": "keyword"
+              },
+              "date_started": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "date_ended": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "performed_by": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "identity": {
+                    "type": "keyword"
+                  },
+                  "name": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "alias": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "organization_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "collection_method_type": {
+                "type": "keyword"
+              },
+              "derivation_method_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "additive": {
+                "type": "nested",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "substance_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "role": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "substance_quantity": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "collection_site": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "site": {
+                    "type": "keyword"
+                  },
+                  "qualifier": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "quantity_collected": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "value_decimal": {
+                    "type": "double"
+                  },
+                  "value_integer": {
+                    "type": "integer"
+                  },
+                  "value_concept": {
+                    "type": "keyword"
+                  },
+                  "unit": {
+                    "type": "keyword"
+                  },
+                  "operator": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "specimen_order": {
+                "type": "integer"
+              }
+            }
+          },
+          "processing_activity": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "activity_type": {
+                "type": "keyword"
+              },
+              "date_started": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "date_ended": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "duration": {
+                "type": "nested",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "value_decimal": {
+                    "type": "double"
+                  },
+                  "value_integer": {
+                    "type": "integer"
+                  },
+                  "value_concept": {
+                    "type": "keyword"
+                  },
+                  "unit": {
+                    "type": "keyword"
+                  },
+                  "operator": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "method_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "additive": {
+                "type": "nested",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "substance_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "role": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "substance_quantity": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "storage_activity": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "date_started": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "date_ended": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "duration": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "value_decimal": {
+                    "type": "double"
+                  },
+                  "value_integer": {
+                    "type": "integer"
+                  },
+                  "value_concept": {
+                    "type": "keyword"
+                  },
+                  "unit": {
+                    "type": "keyword"
+                  },
+                  "operator": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "method_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "container": {
+                "type": "nested",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "container_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "container_number": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "additive": {
+                    "type": "nested",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "substance_type": {
+                        "type": "keyword",
+                        "fields": {
+                          "text": {
+                            "type": "text"
+                          }
+                        }
+                      },
+                      "role": {
+                        "type": "keyword",
+                        "fields": {
+                          "text": {
+                            "type": "text"
+                          }
+                        }
+                      },
+                      "substance_quantity": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "keyword"
+                          },
+                          "value_decimal": {
+                            "type": "double"
+                          },
+                          "value_integer": {
+                            "type": "integer"
+                          },
+                          "value_concept": {
+                            "type": "keyword"
+                          },
+                          "unit": {
+                            "type": "keyword"
+                          },
+                          "operator": {
+                            "type": "keyword"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "parent_container": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "transport_activity": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "date_started": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "date_ended": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "date_time": {
+                    "type": "date"
+                  },
+                  "index_time_point": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      }
+                    }
+                  },
+                  "offset_from_index": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "duration": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "transport_origin": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "identity": {
+                    "type": "keyword"
+                  },
+                  "name": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "alias": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "organization_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              },
+              "transport_destination": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "identity": {
+                    "type": "keyword"
+                  },
+                  "name": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "alias": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "organization_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "contained_in": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "container_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "container_number": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "additive": {
+                "type": "nested",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "substance_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "role": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "substance_quantity": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "parent_container": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  }
+                }
+              }
+            }
+          },
+          "dimensional_measures": {
+            "type": "keyword"
+          },
+          "quantity_measure": {
+            "type": "keyword"
+          },
+          "quality_measure": {
+            "type": "keyword"
+          },
+          "cellular_composition_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "related_document": {
+            "type": "keyword"
+          },
+          "section_location": {
+            "type": "keyword"
+          },
+          "derived_product": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "description": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "product_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "passage_number": {
+                "type": "integer"
+              },
+              "growth_rate": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "specimen_quality_observation": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_observation": {
+            "type": "integer"
+          },
+          "category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "observation_type": {
+            "type": "keyword"
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "object",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "value_string": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "value_boolean": {
+            "type": "boolean"
+          },
+          "value_quantity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "value_enum": {
+            "type": "keyword"
+          },
+          "context": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "activity": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "activity_type": {
+                    "type": "keyword"
+                  },
+                  "time_duration": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "relative_timing": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "specimen_quantity_observation": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_observation": {
+            "type": "integer"
+          },
+          "category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "observation_type": {
+            "type": "keyword"
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "object",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "value_string": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "value_boolean": {
+            "type": "boolean"
+          },
+          "value_quantity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "value_enum": {
+            "type": "keyword"
+          },
+          "context": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "activity": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "activity_type": {
+                    "type": "keyword"
+                  },
+                  "time_duration": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "relative_timing": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "observation_set": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "observations": {
+            "type": "nested",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "nested",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "observation": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_observation": {
+            "type": "integer"
+          },
+          "category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "observation_type": {
+            "type": "keyword"
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "object",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "value_string": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "value_boolean": {
+            "type": "boolean"
+          },
+          "value_quantity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "value_enum": {
+            "type": "keyword"
+          },
+          "context": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "activity": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "activity_type": {
+                    "type": "keyword"
+                  },
+                  "time_duration": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "relative_timing": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "measurement_observation_set": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "observations": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "nested",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "measurement_observation": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "range_low": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "range_high": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "observation_type": {
+            "type": "keyword"
+          },
+          "associated_assay": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "method": {
+                "type": "keyword"
+              },
+              "instrument": {
+                "type": "keyword"
+              },
+              "reagent": {
+                "type": "nested",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "substance_type": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "role": {
+                    "type": "keyword",
+                    "fields": {
+                      "text": {
+                        "type": "text"
+                      }
+                    }
+                  },
+                  "substance_quantity": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "lower_limit_of_detection": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "value_decimal": {
+                    "type": "double"
+                  },
+                  "value_integer": {
+                    "type": "integer"
+                  },
+                  "value_concept": {
+                    "type": "keyword"
+                  },
+                  "unit": {
+                    "type": "keyword"
+                  },
+                  "operator": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "upper_limit_of_detection": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "value_decimal": {
+                    "type": "double"
+                  },
+                  "value_integer": {
+                    "type": "integer"
+                  },
+                  "value_concept": {
+                    "type": "keyword"
+                  },
+                  "unit": {
+                    "type": "keyword"
+                  },
+                  "operator": {
+                    "type": "keyword"
+                  }
+                }
+              }
+            }
+          },
+          "body_site": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "site": {
+                "type": "keyword"
+              },
+              "qualifier": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "body_position": {
+            "type": "keyword"
+          },
+          "measured_by": {
+            "type": "keyword"
+          },
+          "qualifier": {
+            "type": "keyword"
+          },
+          "instrument": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_observation": {
+            "type": "integer"
+          },
+          "category": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "object",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "value_string": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "value_boolean": {
+            "type": "boolean"
+          },
+          "value_quantity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "value_enum": {
+            "type": "keyword"
+          },
+          "context": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "activity": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "activity_type": {
+                    "type": "keyword"
+                  },
+                  "time_duration": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "relative_timing": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "sdoh_observation_set": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "observations": {
+            "type": "keyword"
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "category": {
+            "type": "keyword"
+          },
+          "focus": {
+            "type": "nested",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "sdoh_observation": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "related_questionnaire_item": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "ordinality": {
+                "type": "integer"
+              },
+              "text": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "code": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "part_of": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  }
+                }
+              }
+            }
+          },
+          "associated_visit": {
+            "type": "keyword"
+          },
+          "associated_participant": {
+            "type": "keyword"
+          },
+          "age_at_observation": {
+            "type": "integer"
+          },
+          "category": {
+            "type": "keyword"
+          },
+          "observation_type": {
+            "type": "keyword"
+          },
+          "method_type": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "focus": {
+            "type": "object",
+            "dynamic": false,
+            "properties": {
+              "_class": {
+                "type": "keyword"
+              },
+              "id": {
+                "type": "keyword"
+              }
+            }
+          },
+          "performed_by": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "identity": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "alias": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              },
+              "organization_type": {
+                "type": "keyword",
+                "fields": {
+                  "text": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          },
+          "value_string": {
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text"
+              }
+            }
+          },
+          "value_boolean": {
+            "type": "boolean"
+          },
+          "value_quantity": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "value_decimal": {
+                "type": "double"
+              },
+              "value_integer": {
+                "type": "integer"
+              },
+              "value_concept": {
+                "type": "keyword"
+              },
+              "unit": {
+                "type": "keyword"
+              },
+              "operator": {
+                "type": "keyword"
+              }
+            }
+          },
+          "value_enum": {
+            "type": "keyword"
+          },
+          "context": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "keyword"
+              },
+              "activity": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "keyword"
+                  },
+                  "activity_type": {
+                    "type": "keyword"
+                  },
+                  "time_duration": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "keyword"
+                      },
+                      "value_decimal": {
+                        "type": "double"
+                      },
+                      "value_integer": {
+                        "type": "integer"
+                      },
+                      "value_concept": {
+                        "type": "keyword"
+                      },
+                      "unit": {
+                        "type": "keyword"
+                      },
+                      "operator": {
+                        "type": "keyword"
+                      }
+                    }
+                  }
+                }
+              },
+              "relative_timing": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "_conditions": {
+        "type": "keyword"
+      }
+    }
+  }
+}

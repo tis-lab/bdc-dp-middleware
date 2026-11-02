@@ -1,0 +1,24 @@
+# Query model: input types only. May depend on common, never on response.
+
+"""Which slice of the results to return."""
+input PageInput {
+  """Page size."""
+  limit: Int! = 20
+  """Zero-based offset."""
+  offset: Int! = 0
+}
+
+"""One sort key."""
+input SortInput {
+  field: String!
+  direction: SortDirection! = ASC
+}
+
+"""Search criteria."""
+input SearchQuery {
+  """Free text; null matches everything."""
+  text: String
+  page: PageInput
+  """Applied in list order."""
+  sort: [SortInput!]
+}
