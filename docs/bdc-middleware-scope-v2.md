@@ -14,7 +14,7 @@ The middleware supports three different kinds of information:
 | Bundled RTI transformation specifications | Harmonized-variable definitions, associated concept identifiers and study mapping metadata | Accessible datasets, participant counts or completed harmonization of actual data |
 | Bundled summary documents                 | Precomputed, study-level aggregate counts and breakdowns                                   | Newly calculated counts for arbitrary include/exclude combinations                |
 
-All business operations use **POST `/graphql`**.
+All business operations use **POST `/cb/query`**.
 
 ## 2. Term search
 

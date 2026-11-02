@@ -45,7 +45,7 @@ class AutocompleteGraphQlTest {
                     items { id label category description displayLabel synonyms }
                 } }
                 """));
-            var request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/graphql"))
+            var request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/cb/query"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(payload)).build();
             try (var http = HttpClient.newHttpClient()) {
@@ -65,7 +65,7 @@ class AutocompleteGraphQlTest {
                 var withBdc = json.writeValueAsString(Map.of("query",
                         "{ autocomplete(query: \"Hyper\") { items { id bdc { studyCount } } } }"));
                 var rejected = json.readTree(http.send(
-                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/graphql"))
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/cb/query"))
                                 .header("Content-Type", "application/json")
                                 .POST(HttpRequest.BodyPublishers.ofString(withBdc)).build(),
                         HttpResponse.BodyHandlers.ofString()).body());

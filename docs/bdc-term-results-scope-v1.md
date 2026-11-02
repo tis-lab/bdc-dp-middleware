@@ -13,7 +13,7 @@ This is a proposed response contract and acceptance scope, not a claim that ever
 
 ## 2. Request flow and source responsibility
 
-**Interface → POST /graphql → middleware `terms` query → Knowledge Graph search → normalized concept results → interface.**
+**Interface → POST /cb/query → middleware `terms` query → Knowledge Graph search → normalized concept results → interface.**
 
 Monarch is the initial verified upstream API. A future BDC Knowledge Graph may replace or supplement it after its endpoint, schema, content and access requirements are confirmed. Do not assume Monarch and BDC currently provide identical fields or search behavior. Version 1 uses one configured provider; cross-provider merging is deferred.
 

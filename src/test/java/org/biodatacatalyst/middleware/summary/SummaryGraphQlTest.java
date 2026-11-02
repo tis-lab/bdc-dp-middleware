@@ -3,6 +3,8 @@ package org.biodatacatalyst.middleware.summary;
 import java.net.URI;
 import java.net.http.*;
 import java.util.Map;
+import java.util.Objects;
+
 import org.biodatacatalyst.middleware.DataPortalMiddlewareApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +18,7 @@ class SummaryGraphQlTest {
         try (var app=SpringApplication.run(DataPortalMiddlewareApplication.class,
                 "--server.port=0","--spring.profiles.active=synthetic","--harmonized.enabled=false",
                 "--monarch.base-url=http://127.0.0.1:1"); var http=HttpClient.newHttpClient()) {
-            int port=((WebServerApplicationContext)app).getWebServer().getPort();
+            int port= Objects.requireNonNull(((WebServerApplicationContext) app).getWebServer()).getPort();
             var mapper=JsonMapper.builder().build();
             String q="""
                 query($sourceId:ID!) {
@@ -48,16 +50,16 @@ class SummaryGraphQlTest {
                 assertThat(result.at("/data/summaryJson").properties()).extracting(Map.Entry::getKey)
                         .containsExactlyInAnyOrder("release","seed","filter","min_count","terms","relations","research_studies","studies");
             }
-            String introspection = "";
+            StringBuilder introspection = new StringBuilder();
             for (String inspect : java.util.List.of(
                     "{ __type(name:\"SummaryResponse\") { fields { name } } }",
                     "{ __schema { queryType { fields { name } } } }")) {
                 var inspected = call(http,port,mapper,Map.of("query",inspect));
                 assertThat(inspected.has("errors")).as(inspected.toString()).isFalse();
-                introspection += inspected.toString();
+                introspection.append(inspected);
             }
             for (String forbidden:java.util.List.of("participantRecords","entityRecords","participantDetail","definitionParticipants","records","snapshot","cohortFilteringApplied"))
-                assertThat(introspection).doesNotContain("\""+forbidden+"\"");
+                assertThat(introspection.toString()).doesNotContain("\""+forbidden+"\"");
             JsonNode result;
             result=call(http,port,mapper,Map.of("query","{ summary { records } }"));
             assertThat(result.has("errors")).isTrue();
@@ -83,7 +85,7 @@ class SummaryGraphQlTest {
         }
     }
     private JsonNode call(HttpClient http,int port,JsonMapper mapper,Map<String,?> body) throws Exception {
-        var req=HttpRequest.newBuilder(URI.create("http://localhost:"+port+"/graphql"))
+        var req=HttpRequest.newBuilder(URI.create("http://localhost:"+port+"/cb/query"))
                 .header("Content-Type","application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(body))).build();
         var res=http.send(req,HttpResponse.BodyHandlers.ofString());
