@@ -1,0 +1,254 @@
+# ======================================================================================
+# Application: BioData Catalyst (BDC) Data Portal - Cohort Builder Service
+# Module: core
+# Based on NHLBI DeploymentConfig Template V1.3
+#
+# Last Update by: Rudra Patel   Last Update date: 10/28/2026
+# ======================================================================================
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: ${APPNAME}-${VERSION_NUM}-${ENV}
+metadata:
+  annotations:
+    description: This template is for application deployment
+    tags: java,general,springboot,pipeline
+  name: ${APPNAME}-${VERSION_NUM}-${ENV}
+
+objects:
+
+  # ---------------------------------------------------------------------
+  # Application deployment configuration details
+  # ---------------------------------------------------------------------
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+        env: ${ENV}
+      name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      namespace: ${NAMESPACE}
+    spec:
+      replicas: "${{REPLICA_COUNT}}"
+      selector:
+        matchLabels:
+          name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      template:
+        metadata:
+          labels:
+            name: ${APPNAME}-${VERSION_NUM}-${ENV}
+            app: ${APPNAME}
+            version: ${VERSION_NUM}
+            env: ${ENV}
+        spec:
+          containers:
+            - name: ${APPNAME}-${VERSION_NUM}-${ENV}
+              env:
+                - name: TZ
+                  value: America/New_York
+                - name: SPRING_CONFIG_ADDITIONAL_LOCATION
+                  value: "optional:file:/var/${APPNAME}/config/,optional:file:/var/${APPNAME}/config/secret/sensitive.properties"
+                - name: _JAVA_OPTIONS
+                  valueFrom:
+                    secretKeyRef:
+                      name: nih-ca-certs
+                      key: java-options
+
+                - name: APP_LOG_LEVEL
+                  value: ${APP_LOG_LEVEL}
+
+              ports:
+                - name: web-http
+                  containerPort: "${{CONTAINER_PORT}}"
+                  protocol: TCP
+
+              image: ${IMAGE_REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APPNAME}:${VERSION_NUM}-${ENV}
+              imagePullPolicy: Always
+              startupProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: web-http
+                periodSeconds: 5
+                failureThreshold: 30
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: web-http
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: web-http
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+              resources:
+                requests:
+                  cpu: "${CPU_REQUEST}"
+                  memory: "${MEMORY_REQUEST}"
+                limits:
+                  cpu: "${CPU_LIMIT}"
+                  memory: "${MEMORY_LIMIT}"
+
+              securityContext:
+                capabilities:
+                  drop:
+                    - KILL
+                    - MKNOD
+                    - SETGID
+                    - SETUID
+                privileged: false
+                runAsUser: "${{RUN_AS_USER_ID}}"
+
+              # Mount the external volumes to container paths, plus configMaps and secrets.
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /var/${APPNAME}/config/
+                - name: secret-volume
+                  mountPath: /var/${APPNAME}/config/secret/
+                - name: nih-ca-certs
+                  readOnly: true
+                  mountPath: /nihchaincerts
+
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+
+          # Volume definitions
+          volumes:
+            - name: config-volume
+              configMap:
+                name: ${APPNAME}-${VERSION_NUM}-${ENV}
+                optional: true
+            - name: secret-volume
+              secret:
+                secretName: ${APPNAME}-${VERSION_NUM}-${ENV}
+                optional: true
+            - name: nih-ca-certs
+              secret:
+                secretName: nih-ca-certs
+
+  # ---------------------------------------------------------------------
+  # Service
+  # ---------------------------------------------------------------------
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+        env: ${ENV}
+      name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      namespace: ${NAMESPACE}
+    spec:
+      ports:
+        - name: web-http
+          port: "${{APP_EXPOSED_PORT}}"
+          protocol: TCP
+          targetPort: "${{CONTAINER_PORT}}"
+      selector:
+        name: ${APPNAME}-${VERSION_NUM}-${ENV}
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+      sessionAffinity: None
+      type: ClusterIP
+
+  # ---------------------------------------------------------------------
+  # Route - external access
+  # ---------------------------------------------------------------------
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      annotations:
+        haproxy.router.openshift.io/hsts_header: max-age=31536000; includeSubDomains; preload
+      labels:
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+        env: ${ENV}
+      name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      namespace: ${NAMESPACE}
+    spec:
+      host: ${APPNAME}-${VERSION_NUM}-${ENV}.${ROUTE_SUFFIX}
+      to:
+        kind: Service
+        name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      port:
+        targetPort: web-http
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+      wildcardPolicy: None
+
+# The following parameters should set a default value for each application.
+parameters:
+  - name: ENV
+    description: application environment
+    required: true
+    value: 'dev'
+
+  - name: APPNAME
+    description: application name and module name in OpenShift
+    required: true
+    value: 'bdc-data-portal-cohort-builder-service'
+
+  - name: VERSION_NUM
+    description: The application version number, use number and '-'
+    required: true
+    value: '0-1-0'
+
+  - name: REPLICA_COUNT
+    description: count of replicas
+    required: true
+    value: '2'
+
+  - name: ROUTE_SUFFIX
+    description: suffix for the default router
+    required: true
+    value: 'apps.nonprodaro.nhlbi.nih.gov'
+
+  - name: CONTAINER_PORT
+    description: Container port exposed for internal routing
+    required: true
+    value: '8080'
+
+  - name: APP_EXPOSED_PORT
+    description: Application port exposed to external access
+    required: true
+    value: '8080'
+
+  - name: IMAGE_REGISTRY_URL
+    description: registry url for pulling the image from the image registry
+    required: true
+    value: 'nonprodnhlbi.azurecr.io'
+
+  - name: NAMESPACE
+    description: application target namespace / openshift project name
+    required: true
+    value: 'bdc-data-portal-dev'
+
+  - name: REGISTRY_NAMESPACE
+    description: image registry namespace
+    required: true
+    value: 'bdc-data-portal'
+
+  - name: RUN_AS_USER_ID
+    description: Container userid and external file volume mount uid; the value must come from the ARO namespace UID range
+    displayName: Container userid and external file volume mount uid
+    required: true
+    value: "1000940000"
+
+  - name: APP_LOG_LEVEL
+    description: Log level for the gov.nih.nhlbi.bdc package
+    value: 'INFO'
+  - name: CPU_REQUEST
+    value: '100m'
+  - name: CPU_LIMIT
+    value: '1'
+  - name: MEMORY_REQUEST
+    value: '512Mi'
+  - name: MEMORY_LIMIT
+    description: Keep above the JVM max heap
+    value: '1536Mi'

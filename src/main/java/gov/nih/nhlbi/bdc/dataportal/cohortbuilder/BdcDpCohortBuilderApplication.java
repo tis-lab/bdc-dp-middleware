@@ -4,8 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CohortBuilderApplication {
+public class BdcDpCohortBuilderApplication {
     public static void main(String[] args) {
-        SpringApplication.run(CohortBuilderApplication.class, args);
+
+        SpringApplication.run(BdcDpCohortBuilderApplication.class, args);
     }
 }
