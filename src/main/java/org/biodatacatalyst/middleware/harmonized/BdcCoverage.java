@@ -10,4 +10,9 @@ public record BdcCoverage(int studyCount, List<String> studies, List<String> var
     public static BdcCoverage none() {
         return NONE;
     }
+
+    static BdcCoverage of(BdcConcept concept) {
+        return new BdcCoverage(concept.studyCount(), concept.studies(),
+                concept.variables().stream().map(BdcConcept.BdcCarrier::variableName).toList());
+    }
 }

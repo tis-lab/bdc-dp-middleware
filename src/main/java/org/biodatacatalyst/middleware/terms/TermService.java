@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import org.biodatacatalyst.middleware.harmonized.BdcVariable;
+import org.biodatacatalyst.middleware.harmonized.BdcConcept;
 import org.biodatacatalyst.middleware.harmonized.HarmonizedVariableLibrary;
 import org.biodatacatalyst.middleware.monarch.ConceptPage;
 import org.biodatacatalyst.middleware.monarch.MonarchClient;
@@ -30,11 +30,11 @@ public class TermService {
     static final int MAX_OFFSET = 10_000;
 
     private final MonarchClient monarch;
-    private final HarmonizedVariableLibrary bdcVariables;
+    private final HarmonizedVariableLibrary bdc;
 
-    public TermService(MonarchClient monarch, HarmonizedVariableLibrary bdcVariables) {
+    public TermService(MonarchClient monarch, HarmonizedVariableLibrary bdc) {
         this.monarch = monarch;
-        this.bdcVariables = bdcVariables;
+        this.bdc = bdc;
     }
 
     public TermResults terms(String query, int limit, int offset) {
@@ -47,32 +47,32 @@ public class TermService {
             throw new ApiException(BAD_USER_INPUT, "offset must be between 0 and " + MAX_OFFSET + ".");
         }
 
-        List<BdcVariable> variables = bdcVariables.search(normalized);
-        int variableCount = variables.size();
+        List<BdcConcept> matched = bdc.search(normalized);
+        int bdcConceptCount = matched.size();
 
-        int from = Math.min(offset, variableCount);
-        int to = Math.min(variableCount, offset + limit);
-        List<BdcVariable> onThisPage = variables.subList(from, Math.max(from, to));
+        int from = Math.min(offset, bdcConceptCount);
+        int to = Math.min(bdcConceptCount, offset + limit);
+        List<BdcConcept> onThisPage = matched.subList(from, Math.max(from, to));
 
-        int conceptsWanted = limit - onThisPage.size();
-        int conceptOffset = Math.max(0, offset - variableCount);
+        int wanted = limit - onThisPage.size();
+        int upstreamOffset = Math.max(0, offset - bdcConceptCount);
 
-        log.debug("Resolving term of {} characters (limit={}, offset={}): {} variable(s) then {} concept(s) from {}",
-                normalized.length(), limit, offset, onThisPage.size(), conceptsWanted, conceptOffset);
+        log.debug("Resolving term of {} characters (limit={}, offset={}): {} BDC concept(s) then {} upstream from {}",
+                normalized.length(), limit, offset, onThisPage.size(), wanted, upstreamOffset);
 
-        // conceptsWanted can be 0 when variables fill the page. The provider still reports its
-        // total for a zero-size page, which is what keeps `total` and `hasMore` correct.
-        ConceptPage concepts = monarch.search(normalized, conceptsWanted, conceptOffset);
+        // wanted can be 0 when BDC concepts fill the page. The provider still reports its total for
+        // a zero-size page, which is what keeps total and hasMore correct.
+        ConceptPage upstream = monarch.search(normalized, wanted, upstreamOffset);
 
-        List<SearchItem> items = merge(onThisPage, annotate(concepts));
-        int total = variableCount + concepts.total();
+        List<SearchItem> items = merge(onThisPage, annotate(upstream.items()));
+        int total = bdcConceptCount + upstream.total();
 
         // Computed from what the provider actually advanced by, not from items.size(). A repeated
         // identifier dropped by the mapper still consumed an upstream slot, and using the shorter
         // list here would report a further page at the end of the result set.
-        boolean hasMore = (long) offset + onThisPage.size() + concepts.rowsReturned() < total;
+        boolean hasMore = (long) offset + onThisPage.size() + upstream.rowsReturned() < total;
 
-        return new TermResults(items, total, limit, offset, hasMore, variableCount);
+        return new TermResults(items, total, limit, offset, hasMore, bdcConceptCount);
     }
 
     public AutocompleteResults autocomplete(String query) {
@@ -87,18 +87,18 @@ public class TermService {
         return new AutocompleteResults(suggestions.items(), suggestions.total());
     }
 
-    /** Variables first, then concepts. The order is the display order; nothing re-ranks it. */
-    private static List<SearchItem> merge(List<BdcVariable> variables, List<Term> concepts) {
-        List<SearchItem> items = new ArrayList<>(variables.size() + concepts.size());
-        items.addAll(variables);
-        items.addAll(concepts);
+    /** BDC concepts first, then upstream. The order is the display order; nothing re-ranks it. */
+    private static List<SearchItem> merge(List<BdcConcept> bdcConcepts, List<Term> upstream) {
+        List<SearchItem> items = new ArrayList<>(bdcConcepts.size() + upstream.size());
+        items.addAll(bdcConcepts);
+        items.addAll(upstream);
         return List.copyOf(items);
     }
 
     /** Attaches each concept's BDC coverage. A map lookup per concept; no upstream traffic. */
-    private List<Term> annotate(ConceptPage page) {
-        return page.items().stream()
-                .map(term -> term.withBdc(bdcVariables.coverageFor(term.id())))
+    private List<Term> annotate(List<Term> upstream) {
+        return upstream.stream()
+                .map(term -> term.withBdc(bdc.coverageFor(term.id())))
                 .toList();
     }
 

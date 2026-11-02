@@ -16,62 +16,93 @@ class HarmonizedVariableLibraryTest {
                 new HarmonizedVariableProperties(true, INDEX, 25));
     }
 
-    private static BdcVariable variable(HarmonizedVariableLibrary library, String name) {
-        return library.search(name).stream()
-                .filter(v -> v.name().equals(name))
+    private static BdcConcept concept(String curie) {
+        return library().search(curie).stream()
+                .filter(c -> c.conceptType().equals(curie))
                 .findFirst()
-                .orElseThrow(() -> new AssertionError("no variable named " + name));
+                .orElseThrow(() -> new AssertionError("no concept " + curie));
     }
 
     @Test
-    void foldsEveryStudySpecIntoOneVariablePerName() {
-        assertThat(library().variableCount()).isEqualTo(179);
-        assertThat(library().conceptCount()).isEqualTo(240);
+    void loadsEveryConceptFromTheIndex() {
+        assertThat(library().conceptCount()).isEqualTo(242);
     }
 
     @Test
-    void summarisesAVariableWithoutTheSpecificationDetail() {
-        BdcVariable hyperten = variable(library(), "hyperten");
+    void keysOnTheConceptAndCarriesItsProvenance() {
+        BdcConcept hypertension = concept("MONDO:0005044");
 
-        assertThat(hyperten.label()).isEqualTo("Hypertension");
-        assertThat(hyperten.domain()).isEqualTo("DIAGNOSIS");
-        assertThat(hyperten.studyCount()).isEqualTo(7);
-        assertThat(hyperten.studies())
-                .containsExactly("CARDIA", "CHS", "COPDGene", "HCHS", "JHS", "MESA", "WHI");
-        assertThat(hyperten.concepts()).containsExactly("MONDO:0005044", "MONDO:0005149");
-    }
-
-    /** 49 variables have no QA-table row; label must still be safe to render. */
-    @Test
-    void fallsBackToTheMachineNameWhenTheTableHasNoRow() {
-        BdcVariable hypertension = variable(library(), "hypertension");
-
-        assertThat(hypertension.label()).isEqualTo("hypertension");
-        assertThat(hypertension.domain()).isNull();
-        assertThat(hypertension.studyCount()).isEqualTo(3);
-    }
-
-    // ------------------------------------------------------------------ concept coverage
-
-    @Test
-    void countsOnlyTheStudiesThatAssignTheConcept() {
-        BdcCoverage hypertension = library().coverageFor("MONDO:0005044");
-
+        assertThat(hypertension.conceptLabel()).isNull();
+        assertThat(hypertension.displayLabel()).isEqualTo("MONDO:0005044");
+        assertThat(hypertension.bdchmType()).isEqualTo(BdchmTypeEnum.condition);
         assertThat(hypertension.studyCount()).isEqualTo(10);
         assertThat(hypertension.studies()).containsExactly(
                 "ARIC", "CARDIA", "CHS", "COPDGene", "FHS", "HCHS", "JHS", "MESA", "SPIROMICS", "WHI");
-        assertThat(hypertension.variableNames()).containsExactly("hyperten", "hypertension");
+        assertThat(hypertension.variables()).extracting("variableName")
+                .containsExactly("hyperten", "hypertension");
+        assertThat(hypertension.variables().getFirst().studies()).hasSize(7);
+        assertThat(hypertension.variables().getLast().studies()).hasSize(3);
     }
 
     @Test
-    void doesNotLetAVariableInheritStudiesThatAssignADifferentCode() {
-        BdcCoverage narrow = library().coverageFor("HP:0012393");
+    void keepsSubtypesApart() {
+        BdcConcept subtype = concept("MONDO:0005149");
+
+        assertThat(subtype.studyCount()).isEqualTo(2);
+        assertThat(subtype.studies()).containsExactly("ARIC", "WHI");
+        assertThat(subtype.variables()).extracting("variableName")
+                .containsExactly("hyperten", "hypertension");
+        // Each carrier assigns it in exactly one study, not in its whole study list.
+        assertThat(subtype.variables()).allSatisfy(
+                carrier -> assertThat(carrier.studies()).hasSize(1));
+    }
+
+    /** Ten studies have an asthma.yaml; one assigns this code. Counting by file name gives ten. */
+    @Test
+    void countsOnlyTheStudiesThatAssignTheConcept() {
+        BdcConcept narrow = concept("HP:0012393");
 
         assertThat(narrow.studyCount()).isEqualTo(1);
-        assertThat(narrow.variableNames()).containsExactly("asthma");
-        // The variable as a whole is still harmonized in ten studies; the concept is not.
-        assertThat(variable(library(), "asthma").studyCount()).isEqualTo(10);
+        assertThat(narrow.variables()).singleElement()
+                .satisfies(carrier -> assertThat(carrier.variableName()).isEqualTo("asthma"));
     }
+
+    @Test
+    void derivesTheBdchmTypeFromTheSpecification() {
+        assertThat(concept("MONDO:0005044").bdchmType()).isEqualTo(BdchmTypeEnum.condition);
+        assertThat(concept("OBA:VT0001253").bdchmClasses())
+                .containsExactly("MeasurementObservation");
+        assertThat(concept("ATC:C02").bdchmType()).isEqualTo(BdchmTypeEnum.drugexposure);
+    }
+
+    @Test
+    void doesNotPromoteVariableLabelsToConceptLabels() {
+        assertThat(concept("MONDO:0005044").conceptLabel()).isNull();
+    }
+
+    /** A concept never displays a file name, even where no label could be derived. */
+    @Test
+    void neverDisplaysAFileName() {
+        assertThat(library().search("hypert")).allSatisfy(concept -> {
+            assertThat(concept.displayLabel()).isNotBlank();
+            assertThat(concept.displayLabel())
+                    .isNotEqualTo(concept.variables().getFirst().variableName());
+        });
+    }
+
+    @Test
+    void preservesExplicitSourceAssociations() {
+        BdcConcept c = concept("MONDO:0005044");
+        assertThat(c.bdchmClasses()).containsExactly("Condition");
+        assertThat(c.sourceMappings()).isNotEmpty().allSatisfy(mapping -> {
+            assertThat(c.studies()).contains(mapping.study());
+            assertThat(mapping.bdchmClass()).isEqualTo("Condition");
+            assertThat(mapping.conceptSlot()).isEqualTo("condition_concept");
+            assertThat(mapping.sourceFile()).startsWith("priority_variables_transform/");
+        });
+    }
+
+    // ------------------------------------------------------------------------- lookup
 
     @Test
     void reportsNoCoverageForAConceptBdcHasNotHarmonized() {
@@ -82,6 +113,15 @@ class HarmonizedVariableLibraryTest {
         assertThat(none.variableNames()).isEmpty();
     }
 
+    @Test
+    void summarisesCoverageForAnnotation() {
+        BdcCoverage coverage = library().coverageFor("MONDO:0005044");
+
+        assertThat(coverage.studyCount()).isEqualTo(10);
+        assertThat(coverage.variableNames()).containsExactly("hyperten", "hypertension");
+    }
+
+    /** Prefix casing varies by source (MeSH vs MESH); local identifiers do not. */
     @Test
     void normalisesOnlyTheCuriePrefix() {
         assertThat(library().coverageFor("mondo:0005044").studyCount()).isEqualTo(10);
@@ -95,50 +135,39 @@ class HarmonizedVariableLibraryTest {
         assertThat(library().coverageFor("  ").studyCount()).isZero();
     }
 
-    @Test
-    void doesNotTreatTransformMachineryAsAConcept() {
-        for (String notAConcept : List.of("DEATH_RECORD", "ONESELF", "PRESENT", "Y")) {
-            assertThat(library().coverageFor(notAConcept).studyCount()).as(notAConcept).isZero();
-        }
-    }
-
-    // ------------------------------------------------------------------------ text search
+    // ------------------------------------------------------------------------ search
 
     @Test
-    void findsEveryMatchingVariableFromAPartialWord() {
-        assertThat(library().search("hyper")).extracting("name")
-                .containsExactly("hypert_trt", "hyperten", "hypertension");
+    void findsConceptsFromAPartialWord() {
+        List<BdcConcept> matches = library().search("hypert");
+
+        assertThat(matches).isNotEmpty();
+        assertThat(matches).extracting("conceptType").contains("MONDO:0005044", "ATC:C02");
+        assertThat(matches).extracting("displayLabel")
+                .contains("MONDO:0005044", "ATC:C02");
     }
 
     @Test
     void ordersMatchesByStudyCoverage() {
-        assertThat(library().search("hyper")).extracting(BdcVariable::studyCount)
-                .containsExactly(8, 7, 3);
-    }
+        List<Integer> counts = library().search("hypert").stream()
+                .map(BdcConcept::studyCount)
+                .toList();
 
-    /** Without the QA table's label, "height" could never reach a variable named bdy_hgt. */
-    @Test
-    void matchesOnTheLabelAsWellAsTheMachineName() {
-        assertThat(library().search("height")).extracting("name").contains("bdy_hgt");
+        assertThat(counts).isSortedAccordingTo((a, b) -> Integer.compare(b, a));
     }
 
     @Test
-    void matchesSnakeCaseNamesFromSpacedText() {
-        assertThat(library().search("blood pressure")).extracting("name").contains("blood_pressure");
+    void stillMatchesOnAVariableName() {
+        assertThat(library().search("bdy_hgt")).extracting("conceptType")
+                .contains("OBA:VT0001253");
     }
 
     @Test
     void acceptsACurieAsTheQuery() {
-        assertThat(library().search("MONDO:0005044")).extracting("name")
-                .containsExactlyInAnyOrder("hyperten", "hypertension");
-        assertThat(library().search("mondo:0005044")).hasSize(2);
+        assertThat(library().search("MONDO:0005044")).singleElement()
+                .satisfies(c -> assertThat(c.studyCount()).isEqualTo(10));
+        assertThat(library().search("mondo:0005044")).hasSize(1);
         assertThat(library().search("MONDO:9999999")).isEmpty();
-    }
-
-    @Test
-    void doesNotMatchAgainstProvenanceOrProse() {
-        assertThat(library().search("clinical")).isEmpty();
-        assertThat(library().search("measurement of the")).isEmpty();
     }
 
     @Test
@@ -153,8 +182,7 @@ class HarmonizedVariableLibraryTest {
         HarmonizedVariableLibrary capped = HarmonizedVariableLibrary.bundled(
                 new HarmonizedVariableProperties(true, INDEX, 2));
 
-        assertThat(capped.search("hyper")).extracting("name")
-                .containsExactly("hypert_trt", "hyperten");
+        assertThat(capped.search("hypert")).hasSize(2);
     }
 
     // ------------------------------------------------------------------------- lifecycle
@@ -163,8 +191,8 @@ class HarmonizedVariableLibraryTest {
     void reportsNothingWhenDisabled() {
         HarmonizedVariableLibrary disabled = HarmonizedVariableLibrary.disabled();
 
-        assertThat(disabled.variableCount()).isZero();
-        assertThat(disabled.search("hyper")).isEmpty();
+        assertThat(disabled.conceptCount()).isZero();
+        assertThat(disabled.search("hypert")).isEmpty();
         assertThat(disabled.coverageFor("MONDO:0005044").studyCount()).isZero();
     }
 
@@ -179,13 +207,26 @@ class HarmonizedVariableLibraryTest {
     @Test
     void failsFastWhenTheIndexIsNotAnIndex() {
         assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, "classpath:harmonized/README.md", 25)))
-                .isInstanceOf(IllegalStateException.class);
+                new HarmonizedVariableProperties(
+                        true, "classpath:harmonized/missing-concepts.json", 25)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("has no concepts array");
     }
 
-    /** 49 of the 179 variables have no row in the QA table; label falls back to the machine name. */
     @Test
-    void fallsBackToTheMachineNameForVariablesWithNoLabel() {
-        assertThat(variable(library(), "hypertension").label()).isEqualTo("hypertension");
+    void rejectsInvalidEnumValues() {
+        assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
+                new HarmonizedVariableProperties(
+                        true, "classpath:harmonized/invalid-type.json", 25)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Unknown bdchmType");
+    }
+
+    @Test
+    void usesCurieFallbackForEveryPreviouslyMislabelledConcept() {
+        for (String id : List.of("HP:0012393", "MONDO:0005149", "ATC:C10AA")) {
+            assertThat(concept(id).conceptLabel()).isNull();
+            assertThat(concept(id).displayLabel()).isEqualTo(id);
+        }
     }
 }

@@ -43,7 +43,7 @@ public class HarmonizedVariableLibrary {
 
     private final List<Indexed> searchable;
 
-    private final Map<String, BdcCoverage> byConcept;
+    private final Map<String, BdcConcept> byConcept;
 
     public HarmonizedVariableLibrary(HarmonizedVariableProperties properties,
                                      ResourceLoader resourceLoader) {
@@ -51,32 +51,31 @@ public class HarmonizedVariableLibrary {
         this.maxMatches = properties.maxMatches();
 
         if (!enabled) {
-            log.info("Harmonized variables disabled; every concept reports zero coverage");
+            log.info("Harmonized concepts disabled; every concept reports zero coverage");
             this.searchable = List.of();
             this.byConcept = Map.of();
             return;
         }
 
         JsonNode index = read(resourceLoader.getResource(properties.index()));
+        List<BdcConcept> concepts = concepts(index.path("concepts"));
 
-        List<BdcVariable> variables = variables(index.path("variables"));
-        this.searchable = variables.stream()
-                .sorted(Comparator.comparingInt(BdcVariable::studyCount).reversed()
-                        .thenComparing(BdcVariable::name))
-                .map(variable -> new Indexed(variable, searchTokens(variable)))
+        this.searchable = concepts.stream()
+                .sorted(Comparator.comparingInt(BdcConcept::studyCount).reversed()
+                        .thenComparing(BdcConcept::conceptType))
+                .map(concept -> new Indexed(concept, searchTokens(concept)))
                 .toList();
-        this.byConcept = concepts(index.path("concepts"));
 
-        log.info("Loaded harmonized index generated {}: {} variables, {} concepts",
-                index.path("generated").asString("unknown"), searchable.size(), byConcept.size());
+        Map<String, BdcConcept> keyed = new HashMap<>(concepts.size());
+        concepts.forEach(concept -> keyed.put(conceptKey(concept.conceptType()), concept));
+        this.byConcept = Collections.unmodifiableMap(keyed);
+
+        log.info("Loaded harmonized index generated {}: {} concepts, {} with a label",
+                index.path("generated").asString("unknown"), concepts.size(),
+                concepts.stream().filter(c -> c.conceptLabel() != null).count());
     }
 
-    /** How many variables are loaded. Zero when the feature is switched off. */
-    public int variableCount() {
-        return searchable.size();
-    }
-
-    /** How many distinct concepts are covered. */
+    /** How many concepts are covered. Zero when the feature is switched off. */
     public int conceptCount() {
         return byConcept.size();
     }
@@ -85,22 +84,20 @@ public class HarmonizedVariableLibrary {
         if (!enabled || conceptId == null || conceptId.isBlank()) {
             return BdcCoverage.none();
         }
-        return byConcept.getOrDefault(conceptKey(conceptId.strip()), BdcCoverage.none());
+        BdcConcept concept = byConcept.get(conceptKey(conceptId.strip()));
+        return concept == null ? BdcCoverage.none() : BdcCoverage.of(concept);
     }
 
-    public List<BdcVariable> search(String query) {
+    public List<BdcConcept> search(String query) {
         if (searchable.isEmpty() || query == null || query.isBlank()) {
             return List.of();
         }
 
         String trimmed = query.strip();
         if (CURIE.matcher(trimmed).matches()) {
-            BdcCoverage coverage = coverageFor(trimmed);
-            // Unknown identifiers must not fall through to fuzzy text search.
-            return capped(searchable.stream()
-                    .map(Indexed::variable)
-                    .filter(variable -> coverage.variableNames().contains(variable.name()))
-                    .toList());
+            BdcConcept exact = byConcept.get(conceptKey(trimmed));
+            // An unknown identifier must not fall through to fuzzy text search.
+            return exact == null ? List.of() : List.of(exact);
         }
 
         Set<String> queryTokens = tokenize(trimmed);
@@ -108,10 +105,10 @@ public class HarmonizedVariableLibrary {
             return List.of();
         }
 
-        List<BdcVariable> matches = new ArrayList<>();
+        List<BdcConcept> matches = new ArrayList<>();
         for (Indexed candidate : searchable) {
             if (matchesText(queryTokens, candidate.tokens())) {
-                matches.add(candidate.variable());
+                matches.add(candidate.concept());
                 if (matches.size() == maxMatches) {
                     // Pre-sorted by coverage, so stopping early keeps the best matches.
                     break;
@@ -121,17 +118,12 @@ public class HarmonizedVariableLibrary {
         return List.copyOf(matches);
     }
 
-    private List<BdcVariable> capped(List<BdcVariable> matches) {
-        return matches.size() <= maxMatches ? List.copyOf(matches)
-                : List.copyOf(matches.subList(0, maxMatches));
-    }
-
     // ------------------------------------------------------------------- text matching
-    private static boolean matchesText(Set<String> queryTokens, Set<String> variableTokens) {
+    private static boolean matchesText(Set<String> queryTokens, Set<String> conceptTokens) {
         for (String queryToken : queryTokens) {
             boolean covered = false;
-            for (String variableToken : variableTokens) {
-                if (queryToken.equals(variableToken) || isPrefixMatch(queryToken, variableToken)) {
+            for (String conceptToken : conceptTokens) {
+                if (queryToken.equals(conceptToken) || isPrefixMatch(queryToken, conceptToken)) {
                     covered = true;
                     break;
                 }
@@ -149,9 +141,17 @@ public class HarmonizedVariableLibrary {
         return shorter.length() >= MIN_PREFIX_LENGTH && longer.startsWith(shorter);
     }
 
-    private static Set<String> searchTokens(BdcVariable variable) {
-        Set<String> tokens = new LinkedHashSet<>(tokenize(variable.name()));
-        tokens.addAll(tokenize(variable.label()));
+    private static Set<String> searchTokens(BdcConcept concept) {
+        Set<String> tokens = new LinkedHashSet<>();
+        if (concept.conceptLabel() != null) {
+            tokens.addAll(tokenize(concept.conceptLabel()));
+        }
+        for (BdcConcept.BdcCarrier carrier : concept.variables()) {
+            tokens.addAll(tokenize(carrier.variableName()));
+            if (carrier.variableLabel() != null) {
+                tokens.addAll(tokenize(carrier.variableLabel()));
+            }
+        }
         return tokens;
     }
 
@@ -165,8 +165,7 @@ public class HarmonizedVariableLibrary {
         return tokens;
     }
 
-    /** A variable with its searchable text pre-tokenized. */
-    private record Indexed(BdcVariable variable, Set<String> tokens) {
+    private record Indexed(BdcConcept concept, Set<String> tokens) {
     }
 
     // ---------------------------------------------------------------------------- loading
@@ -186,37 +185,44 @@ public class HarmonizedVariableLibrary {
             throw new IllegalStateException("Unable to parse the harmonized index at "
                     + resource.getDescription(), exception);
         }
-        if (index == null || !index.path("variables").isArray() || !index.path("concepts").isArray()) {
+        if (index == null || !index.path("concepts").isArray()) {
             throw new IllegalStateException("The harmonized index at " + resource.getDescription()
-                    + " has no variables and concepts arrays; regenerate it with "
+                    + " has no concepts array; regenerate with tools/build_harmonized_index.py");
+        }
+        if (index.path("schemaVersion").asInt() != 2) {
+            throw new IllegalStateException("The harmonized index at " + resource.getDescription()
+                    + " is not a version 2 concept index; regenerate it with "
                     + "tools/build_harmonized_index.py");
         }
         return index;
     }
 
-    private static List<BdcVariable> variables(JsonNode rows) {
-        List<BdcVariable> variables = new ArrayList<>(rows.size());
+    private static List<BdcConcept> concepts(JsonNode rows) {
+        List<BdcConcept> concepts = new ArrayList<>(rows.size());
         for (JsonNode row : rows) {
-            String name = required(row, "name");
-            variables.add(new BdcVariable(
-                    name,
-                    // Never null, so the frontend never has to choose between two name fields.
-                    optional(row, "label") != null ? optional(row, "label") : name,
-                    optional(row, "domain"),
+            List<BdcConcept.BdcCarrier> carriers = new ArrayList<>();
+            for (JsonNode carrier : row.path("variables")) {
+                carriers.add(new BdcConcept.BdcCarrier(
+                        required(carrier, "variableName"),
+                        optional(carrier, "variableLabel"),
+                        strings(carrier.path("studies"))));
+            }
+            List<BdcConcept.SourceMapping> mappings = new ArrayList<>();
+            for (JsonNode mapping : row.path("sourceMappings")) {
+                mappings.add(new BdcConcept.SourceMapping(
+                        required(mapping, "study"), required(mapping, "bdchmClass"),
+                        required(mapping, "conceptSlot"), required(mapping, "sourceFile")));
+            }
+            concepts.add(new BdcConcept(
+                    required(row, "conceptType"),
+                    optional(row, "conceptLabel"),
+                    BdchmTypeEnum.fromIndex(optional(row, "bdchmType")),
+                    strings(row.path("bdchmClasses")),
+                    List.copyOf(mappings),
                     strings(row.path("studies")),
-                    strings(row.path("concepts"))));
+                    List.copyOf(carriers)));
         }
-        return List.copyOf(variables);
-    }
-
-    private static Map<String, BdcCoverage> concepts(JsonNode rows) {
-        Map<String, BdcCoverage> coverage = new HashMap<>(rows.size());
-        for (JsonNode row : rows) {
-            List<String> studies = strings(row.path("studies"));
-            coverage.put(conceptKey(required(row, "id")),
-                    new BdcCoverage(studies.size(), studies, strings(row.path("variableNames"))));
-        }
-        return Collections.unmodifiableMap(coverage);
+        return List.copyOf(concepts);
     }
 
     private static String required(JsonNode row, String field) {

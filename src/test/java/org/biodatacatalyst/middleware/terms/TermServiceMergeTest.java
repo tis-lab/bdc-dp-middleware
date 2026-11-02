@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 class TermServiceMergeTest {
 
-    private static final int VARIABLES = 3;
+    private static final int BDC = 5;
 
     private static Term concept(int n) {
         return new Term("MONDO:" + n, "concept " + n, "biolink:Disease", null, List.of(),
@@ -53,63 +53,64 @@ class TermServiceMergeTest {
     }
 
     @Test
-    void fillsTheFirstPageWithVariablesThenConcepts() {
-        TermResults results = service(searching(page(17, 400))).terms("hyper", 20, 0);
+    void fillsTheFirstPageWithBdcConceptsThenUpstream() {
+        TermResults results = service(searching(page(20 - BDC, 400))).terms("hyper", 20, 0);
 
         assertThat(results.items()).hasSize(20);
-        assertThat(types(results.items()).subList(0, VARIABLES))
-                .containsOnly("BdcVariable");
-        assertThat(types(results.items()).subList(VARIABLES, 20)).containsOnly("Term");
-        assertThat(results.bdcVariableCount()).isEqualTo(VARIABLES);
-        assertThat(results.total()).isEqualTo(403);
+        assertThat(types(results.items()).subList(0, BDC))
+                .containsOnly("BdcConcept");
+        assertThat(types(results.items()).subList(BDC, 20)).containsOnly("Term");
+        assertThat(results.bdcConceptCount()).isEqualTo(BDC);
+        assertThat(results.total()).isEqualTo(400 + BDC);
         assertThat(results.hasMore()).isTrue();
     }
 
     @Test
-    void asksUpstreamOnlyForTheSlotsVariablesDidNotTake() {
-        MonarchClient monarch = searching(page(17, 400));
+    void asksUpstreamOnlyForTheSlotsBdcDidNotTake() {
+        MonarchClient monarch = searching(page(20 - BDC, 400));
 
         service(monarch).terms("hyper", 20, 0);
 
         ArgumentCaptor<Integer> limit = ArgumentCaptor.forClass(Integer.class);
         ArgumentCaptor<Integer> offset = ArgumentCaptor.forClass(Integer.class);
         verify(monarch).search(anyString(), limit.capture(), offset.capture());
-        assertThat(limit.getValue()).isEqualTo(17);
+        assertThat(limit.getValue()).isEqualTo(20 - BDC);
         assertThat(offset.getValue()).isZero();
     }
 
     @Test
-    void shiftsTheUpstreamOffsetBackByTheVariablesAlreadyShown() {
+    void shiftsTheUpstreamOffsetBackByTheBdcConceptsAlreadyShown() {
         MonarchClient monarch = searching(page(20, 400));
 
         TermResults results = service(monarch).terms("hyper", 20, 20);
 
-        verify(monarch).search("hyper", 20, 17);
+        verify(monarch).search("hyper", 20, 20 - BDC);
         assertThat(types(results.items())).containsOnly("Term");
-        assertThat(results.bdcVariableCount()).isEqualTo(VARIABLES);
-        assertThat(results.total()).isEqualTo(403);
+        assertThat(results.bdcConceptCount()).isEqualTo(BDC);
+        assertThat(results.total()).isEqualTo(400 + BDC);
     }
 
     @Test
-    void handlesAPageStartingPartwayThroughTheVariables() {
-        MonarchClient monarch = searching(page(18, 400));
+    void handlesAPageStartingPartwayThroughTheBdcConcepts() {
+        MonarchClient monarch = searching(page(20 - (BDC - 1), 400));
 
         TermResults results = service(monarch).terms("hyper", 20, 1);
 
-        verify(monarch).search("hyper", 18, 0);
-        assertThat(types(results.items()).subList(0, 2)).containsOnly("BdcVariable");
+        verify(monarch).search("hyper", 20 - (BDC - 1), 0);
+        assertThat(types(results.items()).subList(0, BDC - 1)).containsOnly("BdcConcept");
+        assertThat(types(results.items()).get(BDC - 1)).isEqualTo("Term");
         assertThat(results.items()).hasSize(20);
     }
 
     @Test
-    void asksForZeroConceptsWhenVariablesFillThePage() {
+    void asksForZeroUpstreamWhenBdcFillsThePage() {
         MonarchClient monarch = searching(page(0, 400));
 
         TermResults results = service(monarch).terms("hyper", 2, 0);
 
         verify(monarch).search("hyper", 0, 0);
-        assertThat(types(results.items())).containsExactly("BdcVariable", "BdcVariable");
-        assertThat(results.total()).isEqualTo(403);
+        assertThat(types(results.items())).containsExactly("BdcConcept", "BdcConcept");
+        assertThat(results.total()).isEqualTo(400 + BDC);
         assertThat(results.hasMore()).isTrue();
     }
 
@@ -117,17 +118,17 @@ class TermServiceMergeTest {
     void reportsNoFurtherPageAtTheEndOfTheMergedSet() {
         TermResults results = service(searching(page(5, 5))).terms("hyper", 20, 0);
 
-        assertThat(results.items()).hasSize(8);
-        assertThat(results.total()).isEqualTo(8);
+        assertThat(results.items()).hasSize(BDC + 5);
+        assertThat(results.total()).isEqualTo(BDC + 5);
         assertThat(results.hasMore()).isFalse();
     }
 
     @Test
-    void returnsConceptsOnlyWhenNoVariableMatches() {
+    void returnsUpstreamOnlyWhenNoBdcConceptMatches() {
         TermResults results = service(searching(page(20, 400))).terms("zzzznotaterm", 20, 0);
 
         assertThat(types(results.items())).containsOnly("Term");
-        assertThat(results.bdcVariableCount()).isZero();
+        assertThat(results.bdcConceptCount()).isZero();
         assertThat(results.total()).isEqualTo(400);
     }
 
@@ -139,7 +140,11 @@ class TermServiceMergeTest {
 
         TermResults results = service(searching(upstream)).terms("hyper", 20, 0);
 
-        Term concept = (Term) results.items().get(VARIABLES);
+        Term concept = results.items().stream()
+                .filter(Term.class::isInstance)
+                .map(Term.class::cast)
+                .findFirst()
+                .orElseThrow();
         assertThat(concept.bdc().studyCount()).isEqualTo(10);
     }
 
