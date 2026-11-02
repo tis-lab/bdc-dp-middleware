@@ -23,7 +23,7 @@ class HarmonizedSchemaTest {
             var registry = new SchemaParser().parse(reader);
             var wiring = RuntimeWiring.newRuntimeWiring()
                     .type("Query", type -> type.dataFetcher("terms",
-                            _ -> Map.of("items", List.of(concept))))
+                            environment -> Map.of("items", List.of(concept))))
                     .type("SearchItem", type -> type.typeResolver(
                             env -> env.getSchema().getObjectType("BdcConcept")))
                     .build();
