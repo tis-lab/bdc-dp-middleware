@@ -21,7 +21,7 @@ class SearchProbeGraphQlTest {
             var response = client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/cb/query"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("""
-                        {"query":"{ searchProbe { status backend httpStatus elapsedMillis totalHits } searchConditions(keyword: \\"PRESENT|ONESELF|MONDO:0005148\\") { keyword totalHits buckets { conditionKey documentCount } sumOtherDocCount docCountErrorUpperBound } }"}
+                        {"query":"{ searchProbe { status backend httpStatus elapsedMillis totalHits snapshot { participantCount totalParticipantCount studyCount totalStudyCount datasetCount totalDatasetCount indexRelease lastUpdated unavailableFields } } searchConditions(keyword: \\"PRESENT|ONESELF|MONDO:0005148\\") { keyword totalHits buckets { conditionKey documentCount } sumOtherDocCount docCountErrorUpperBound } }"}
                         """)).build(), HttpResponse.BodyHandlers.ofString());
             return JsonMapper.builder().build().readTree(response.body());
         }
@@ -52,10 +52,35 @@ class SearchProbeGraphQlTest {
             assertThat(result.at("/data/searchProbe/status").asString()).isEqualTo("SUCCEEDED");
             assertThat(result.at("/data/searchProbe/httpStatus").asInt()).isEqualTo(200);
             assertThat(result.at("/data/searchProbe/totalHits").asString()).isEqualTo("500");
-            assertThat(result.at("/data/searchProbe").size()).isEqualTo(5);
+            assertThat(result.at("/data/searchProbe").size()).isEqualTo(6);
             assertThat(result.at("/data/searchConditions/totalHits").asString()).isEqualTo("500");
+            assertThat(result.at("/data/searchProbe/snapshot/participantCount").asInt()).isEqualTo(500);
+            assertThat(result.at("/data/searchProbe/snapshot/studyCount").isNull()).isTrue();
             assertThat(result.at("/data/searchConditions/buckets/0/documentCount").asString()).isEqualTo("12");
             assertThat(result.at("/data/searchConditions/sumOtherDocCount").asString()).isEqualTo("3");
+            int port = ((WebServerApplicationContext) app).getWebServer().getPort();
+            try (var http = HttpClient.newHttpClient()) {
+                var mapper = JsonMapper.builder().build();
+                var body = mapper.writeValueAsString(java.util.Map.of("query", """
+                    query($keys:[String!]!) {
+                      searchConditions(keywords:$keys) {
+                        keywords snapshot { participantCount totalParticipantCount studyCount datasetCount unavailableFields }
+                      }
+                    }
+                    """, "variables", java.util.Map.of("keys", java.util.List.of(
+                        "PRESENT|ONESELF|MONDO:0005148", "ABSENT|ONESELF|HP:0000822"))));
+                var response = http.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port
+                                + app.getEnvironment().getRequiredProperty("spring.graphql.http.path")))
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(body)).build(), HttpResponse.BodyHandlers.ofString());
+                assertThat(response.statusCode()).isEqualTo(200);
+                var data = mapper.readTree(response.body());
+                assertThat(data.has("errors")).as(data.toString()).isFalse();
+                assertThat(data.at("/data/searchConditions/keywords").size()).isEqualTo(2);
+                assertThat(data.at("/data/searchConditions/snapshot/participantCount").asInt()).isEqualTo(500);
+                assertThat(data.at("/data/searchConditions/snapshot/totalParticipantCount").asInt()).isEqualTo(1000);
+                assertThat(data.at("/data/searchConditions/snapshot/datasetCount").isNull()).isTrue();
+            }
         } finally { backend.stop(0); }
     }
 }

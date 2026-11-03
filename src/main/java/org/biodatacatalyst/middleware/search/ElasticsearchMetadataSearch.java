@@ -15,7 +15,7 @@ import tools.jackson.databind.json.JsonMapper;
 
 import static org.biodatacatalyst.middleware.shared.ApiException.Code.*;
 
-/** Shared Elasticsearch transport for the smoke test. */
+/** Elasticsearch performs selection and counting; middleware validates the response. */
 final class ElasticsearchMetadataSearch implements MetadataSearch {
     private static final int MAX_RESPONSE_BYTES = 1_048_576;
     private final SearchProperties properties;
@@ -42,16 +42,18 @@ final class ElasticsearchMetadataSearch implements MetadataSearch {
                 "query", Map.of("match_all", Map.of())));
     }
 
-    @Override public Execution executeCondition(String keyword) {
-        if (keyword == null || keyword.length() > 500
-                || !keyword.matches("[^|\\s]+\\|[^|\\s]+\\|[^|\\s]+")) {
-            throw new ApiException(BAD_USER_INPUT,
-                    "keyword must be status|relationship|concept, for example PRESENT|ONESELF|MONDO:0005148 (maximum 500 characters).");
-        }
+    @Override public Execution executeConditions(java.util.List<String> keywords) {
+        var selection = new ConditionSelection(keywords);
         var result = execute(Map.of("size", 0, "track_total_hits", true,
-                "query", Map.of("term", Map.of("_conditions", keyword)),
-                "aggs", Map.of("counts", Map.of("terms", Map.of(
-                        "field", "_conditions", "size", 100, "exclude", java.util.List.of(keyword))))));
+                "query", selection.query(),
+                "aggs", Map.of(
+                        "population", Map.of("global", Map.of()),
+                        "counts", Map.of("terms", Map.of("field", "_conditions", "size", 100,
+                                "exclude", selection.keywords())))));
+        JsonNode population = result.body().at("/aggregations/population/doc_count");
+        nonnegative(population);
+        if (population.bigIntegerValue().compareTo(result.body().at("/hits/total/value").bigIntegerValue()) < 0)
+            throw invalidResponse();
         JsonNode counts = result.body().at("/aggregations/counts");
         if (!counts.isObject() || !counts.path("buckets").isArray()
                 || counts.path("buckets").size() > 100) throw invalidResponse();
