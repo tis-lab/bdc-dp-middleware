@@ -14,7 +14,7 @@ spring:
     graphiql:
       enabled: ${GRAPHIQL_ENABLED:true}
     cors:
-      allowed-origins: ${FRONTEND_ORIGINS:http://localhost:3000,http://localhost:5173}
+      allowed-origins: ${FRONTEND_ORIGINS:http://localhost:3000,http://localhost:5173,https://bdc-dp-ui-dept-bdc-data-portal.apps.cloudapps.unc.edu}
       allowed-origin-patterns: ${FRONTEND_ORIGIN_PATTERNS:https://*.netlify.app}
       allowed-methods: POST
       allowed-headers: Content-Type
