@@ -8,7 +8,8 @@ with your index or alias name.
 The examples use `_conditions`, the keyword array added by the
 `add_condition_keys` post-processor. It holds one
 `condition_status|relationship_to_participant|condition_concept` string per
-condition, for example `PRESENT|ONESELF|MONDO:0005148`.
+condition, for example `PRESENT|ONESELF|MONDO:0005148`. One example also groups
+by `member_of_research_study`, the ResearchStudy inlined in each document.
 
 All examples set `"size": 0`, so the response has no documents, only the
 aggregations and `hits.total.value` (the number of matching participants,
@@ -292,6 +293,120 @@ GET participant_1/_search
 - To group by status, relationship and concept like `_conditions` does,
   nest `terms` aggregations on `condition.condition_status` and
   `condition.relationship_to_participant` inside `by_concept`.
+
+## Filter by condition, then break down by study and demography
+
+Finds the participants with one condition. For each study they belong to, it
+counts their `_conditions` keywords and the `ethnicity`, `race` and `sex` of
+their `demography` records.
+
+```
+GET participant_1/_search
+{
+  "size": 0,
+  "track_total_hits": true,
+  "query": {
+    "bool": {
+      "filter": [
+        { "term": { "_conditions": "PRESENT|ONESELF|MONDO:0005148" } }
+      ]
+    }
+  },
+  "aggs": {
+    "by_study": {
+      "terms": { "field": "member_of_research_study.id", "size": 100 },
+      "aggs": {
+        "conditions": {
+          "terms": { "field": "_conditions", "size": 100 }
+        },
+        "demography": {
+          "nested": { "path": "demography" },
+          "aggs": {
+            "ethnicity": { "terms": { "field": "demography.ethnicity", "size": 100 } },
+            "race": { "terms": { "field": "demography.race", "size": 100 } },
+            "sex": { "terms": { "field": "demography.sex", "size": 100 } }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+The response, shortened to one study and the first buckets:
+
+```json
+{
+  "hits": { "total": { "value": 170, "relation": "eq" } },
+  "aggregations": {
+    "by_study": {
+      "buckets": [
+        {
+          "key": "56fb5011-8e17-5cfa-a4f3-068837ea4b50",
+          "doc_count": 88,
+          "conditions": {
+            "buckets": [
+              { "key": "PRESENT|ONESELF|MONDO:0005148", "doc_count": 88 },
+              { "key": "ABSENT|ONESELF|MONDO:0005044", "doc_count": 72 }
+            ]
+          },
+          "demography": {
+            "doc_count": 88,
+            "ethnicity": {
+              "buckets": [
+                { "key": "OMOP:38003564", "doc_count": 84 },
+                { "key": "OMOP:38003563", "doc_count": 4 }
+              ]
+            },
+            "race": {
+              "buckets": [
+                { "key": "OMOP:8527", "doc_count": 53 },
+                { "key": "OMOP:8516", "doc_count": 18 }
+              ]
+            },
+            "sex": {
+              "buckets": [
+                { "key": "OMOP:8532", "doc_count": 54 },
+                { "key": "OMOP:8507", "doc_count": 34 }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+- `query.bool.filter` selects the participants, and every aggregation counts
+  only those. To require several conditions, add more `term` clauses to the
+  array. A filter doesn't calculate relevance scores, which aren't needed here.
+- `by_study` makes one bucket per study. Its `doc_count` is the number of the
+  selected participants in that study. `member_of_research_study` is a plain
+  object, not nested, so `terms` can use its fields directly. For readable
+  bucket keys, use `member_of_research_study.name` instead of `.id`.
+- `conditions` runs within each study bucket. It lists every condition keyword
+  of those participants, including the one filtered on, whose `doc_count` equals
+  the study's. Add `"exclude": ["PRESENT|ONESELF|MONDO:0005148"]` inside `terms`
+  to leave it out.
+- `demography` is needed because that field is mapped as `nested`: without the
+  `nested` step, the `terms` aggregations under it find no values. `conditions`
+  stays outside that step, because `_conditions` is on the participant document.
+- Inside `demography`, a `doc_count` counts demography records, not
+  participants. Each participant has one such record in this data, so the two
+  numbers are the same. If a participant could have several, add
+  `"aggs": { "participants": { "reverse_nested": {} } }` inside a `terms`
+  aggregation to count distinct participants, as in
+[Count conditions rather than participants](#count-conditions-rather-than-participants).
+- `race` is multivalued in the schema, so a record with two races would count
+  in both buckets, and the `race` buckets could add up to more than the
+  `doc_count`. In this data, no record has more than one.
+- `size` limits how many buckets each `terms` returns, not how many documents
+  are counted, so a bucket's `doc_count` is complete even with more than 100
+  participants. If `sum_other_doc_count` is above 0, some values didn't fit;
+  raise `size`.
+- The `ethnicity`, `race` and `sex` values are stored as they are in the data,
+  as CURIEs such as `OMOP:8507`.
 
 ## Duplicate keywords in `_conditions`
 
