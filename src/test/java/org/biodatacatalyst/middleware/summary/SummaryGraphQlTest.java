@@ -1,10 +1,11 @@
 package org.biodatacatalyst.middleware.summary;
 
-import java.net.URI;
+import java.net.*;
 import java.net.http.*;
-import java.util.Map;
-import java.util.Objects;
-
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import com.sun.net.httpserver.HttpServer;
 import org.biodatacatalyst.middleware.DataPortalMiddlewareApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
@@ -14,82 +15,77 @@ import tools.jackson.databind.json.JsonMapper;
 import static org.assertj.core.api.Assertions.*;
 
 class SummaryGraphQlTest {
-    @Test void exposesOnlyContractSummaryFieldsEvenWithOldProfileName() throws Exception {
-        try (var app=SpringApplication.run(DataPortalMiddlewareApplication.class,
-                "--server.port=0","--spring.profiles.active=synthetic","--harmonized.enabled=false",
-                "--monarch.base-url=http://127.0.0.1:1"); var http=HttpClient.newHttpClient()) {
-            int port= Objects.requireNonNull(((WebServerApplicationContext) app).getWebServer()).getPort();
-            var mapper=JsonMapper.builder().build();
-            String q="""
-                query($sourceId:ID!) {
-                  summary(sourceId:$sourceId) {
-                    release seed filter min_count
-                    terms { curie label vocabulary parents }
-                    relations { subject predicate object relation_source }
-                    research_studies { id name research_project_type program principal_investigator }
-                    studies {
-                      research_study participant_count
-                      participants { id participant_count summarized_slot bin_low bin_high bin_unit values { id participant_count } }
-                      demographics { id participant_count summarized_slot values { id participant_count sex race ethnicity } }
-                      conditions { id condition_concept participant_count values { id condition_status participant_count record_count } }
-                      measurements { id observation_type participant_count values { id bin_low bin_high bin_unit participant_count } }
-                      procedures { id participant_count }
-                      drug_exposures { id participant_count }
-                    }
-                  }
-                  summaryJson(sourceId:$sourceId)
-                  summarySources
-                  summaryConcepts(sourceId:$sourceId) { curie }
-                }
-                """;
-            for (String source:java.util.List.of("t2d","t2d-female")) {
-                var result=call(http,port,mapper,Map.of("query",q,"variables",Map.of("sourceId",source)));
-                assertThat(result.has("errors")).as(result.toString()).isFalse();
-                assertThat(result.at("/data/summary/release")).isEqualTo(result.at("/data/summaryJson/release"));
-                assertThat(result.at("/data/summary/studies/0/participant_count").asInt()).isEqualTo(source.equals("t2d")?480:230);
-                assertThat(result.at("/data/summaryJson").properties()).extracting(Map.Entry::getKey)
-                        .containsExactlyInAnyOrder("release","seed","filter","min_count","terms","relations","research_studies","studies");
-            }
-            StringBuilder introspection = new StringBuilder();
-            for (String inspect : java.util.List.of(
-                    "{ __type(name:\"SummaryResponse\") { fields { name } } }",
-                    "{ __schema { queryType { fields { name } } } }")) {
-                var inspected = call(http,port,mapper,Map.of("query",inspect));
-                assertThat(inspected.has("errors")).as(inspected.toString()).isFalse();
-                introspection.append(inspected);
-            }
-            for (String forbidden:java.util.List.of("participantRecords","entityRecords","participantDetail","definitionParticipants","records","snapshot","cohortFilteringApplied"))
-                assertThat(introspection.toString()).doesNotContain("\""+forbidden+"\"");
-            JsonNode result;
-            result=call(http,port,mapper,Map.of("query","{ summary { records } }"));
-            assertThat(result.has("errors")).isTrue();
-            String selectionQuery = """
-                query($include:[ID!]!,$exclude:[ID!]!) {
-                  summary(include:$include,exclude:$exclude) {
-                    release filter studies { participant_count conditions { condition_concept } }
-                  }
-                  summaryJson(include:$include,exclude:$exclude)
-                }
-                """;
-            result=call(http,port,mapper,Map.of("query",selectionQuery,"variables",Map.of(
-                    "include",java.util.List.of("MONDO:0005148","MONDO:0005015"),
-                    "exclude",java.util.List.of("MONDO:0005252"))));
+    @Test void pageLoadAndBooleanFiltersUseLiveBackend() throws Exception {
+        var json=JsonMapper.builder().build();
+        var captured=new AtomicReference<JsonNode>();
+        var es=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+        byte[] fixture;
+        try(var in=getClass().getResourceAsStream("/summary/elasticsearch-response.json")) { fixture=Objects.requireNonNull(in).readAllBytes(); }
+        es.createContext("/participant_1/_search", exchange -> {
+            captured.set(json.readTree(exchange.getRequestBody().readAllBytes()));
+            exchange.getResponseHeaders().set("Content-Type","application/json");
+            exchange.sendResponseHeaders(200,fixture.length);
+            exchange.getResponseBody().write(fixture); exchange.close();
+        });
+        es.start();
+        try(var app=SpringApplication.run(DataPortalMiddlewareApplication.class,
+                "--server.port=0","--harmonized.enabled=false","--search.enabled=true",
+                "--search.endpoint=http://127.0.0.1:"+es.getAddress().getPort(),"--search.index=participant_1",
+                "--summary.release=integration-test-release","--summary.min-count=1");
+            var http=HttpClient.newHttpClient()) {
+            int port=((WebServerApplicationContext)app).getWebServer().getPort();
+            String path=app.getEnvironment().getRequiredProperty("spring.graphql.http.path");
+            var result=call(http,port,path,json,"{ summary { seed release min_count studies { research_study participant_count conditions { participant_count relationship_to_participant } } } }");
             assertThat(result.has("errors")).as(result.toString()).isFalse();
-            assertThat(result.at("/data/summary/studies/0/participant_count").asInt()).isEqualTo(480);
-            assertThat(result.at("/data/summary/studies/0/conditions").size()).isEqualTo(1);
-            assertThat(result.at("/data/summary/studies/0/conditions/0/condition_concept").asString()).isEqualTo("MONDO:0005148");
-            assertThat(result.at("/data/summaryJson/studies/0/conditions").size()).isEqualTo(1);
-            assertThat(result.at("/data/summary/filter")).isEqualTo(result.at("/data/summaryJson/filter"));
-            result=call(http,port,mapper,Map.of("query","{ summary(sourceId:\"../t2d\") { release } }"));
-            assertThat(result.at("/errors/0/extensions/code").asString()).isEqualTo("BAD_USER_INPUT");
-        }
+            assertThat(result.at("/data/summary/seed").isNull()).isTrue();
+            assertThat(result.at("/data/summary/studies/0/participant_count").asInt()).isEqualTo(5);
+            assertThat(captured.get().at("/query/match_all").isObject()).isTrue();
+            for (String unsupported : List.of(
+                    "{ summary(seed: \"*\") { release } }",
+                    "{ summary(selection: {operator: OR}) { release } }")) {
+                result=call(http,port,path,json,unsupported);
+                assertThat(result.has("errors")).isTrue();
+            }
+            captured.set(null);
+            result=call(http,port,path,json,"{ summaryJson }");
+            assertThat(result.has("errors")).isTrue();
+            assertThat(captured.get()).isNull();
+            result=call(http,port,path,json,"{ __type(name: \"SummaryFilterInput\") { name } }");
+            assertThat(result.at("/data/__type/name").asString()).isEqualTo("SummaryFilterInput");
+            String id = resultId("demography|sex|FEMALE");
+            String selection = "{and: [{summaryId: \""+id+"\"}, {or: [{summaryId: \""+id+"\"}]}]}";
+            result=call(http,port,path,json,"{ summary(filter: "+selection+") { filter studies { participant_count } } }");
+            assertThat(result.has("errors")).as(result.toString()).isFalse();
+            assertThat(result.at("/data/summary/filter/0").asString()).isEqualTo(id);
+            assertThat(captured.get().at("/query/bool/filter/1/bool/minimum_should_match").asInt()).isEqualTo(1);
+            result=call(http,port,path,json,"{ summary(filter: {condition: {concept: \"HP:0000822\", selection: EXCLUDE}}) { filter } }");
+            assertThat(result.has("errors")).as(result.toString()).isFalse();
+            assertThat(captured.get().at("/query/nested/query/bool/filter/1/term/condition.relationship_to_participant").asString()).isEqualTo("ONESELF");
+            assertThat(captured.get().at("/query/nested/query/bool/filter/2/term/condition.condition_status").asString()).isEqualTo("ABSENT");
+            var conceptQuery=captured.get().path("query");
+            result=call(http,port,path,json,"{ summary(filter: {condition: {concept: \"HP:0000822\", status: ABSENT}}) { release } }");
+            assertThat(result.has("errors")).as(result.toString()).isFalse();
+            assertThat(captured.get().path("query")).isEqualTo(conceptQuery);
+            for (String invalid : List.of("{}", "{or: []}", "{summaryId: \"bad\"}", "{and: [], or: []}", "{condition: {concept: \"HP:0000822\"}}", "{condition: {concept: \"HP:0000822\", selection: INCLUDE, status: ABSENT}}")) {
+                captured.set(null);
+                result=call(http,port,path,json,"{ summary(filter: "+invalid+") { release } }");
+                assertThat(result.at("/errors/0/extensions/code").asString()).isEqualTo("BAD_USER_INPUT");
+                assertThat(captured.get()).isNull();
+            }
+            result=call(http,port,path,json,"{ summary(filter: null) { release } }");
+            assertThat(result.has("errors")).isFalse();
+            assertThat(captured.get().at("/query/match_all").isObject()).isTrue();
+        } finally { es.stop(0); }
     }
-    private JsonNode call(HttpClient http,int port,JsonMapper mapper,Map<String,?> body) throws Exception {
-        var req=HttpRequest.newBuilder(URI.create("http://localhost:"+port+"/cb/query"))
+    private static String resultId(String parts) {
+        return "urn:bdc:summary:"+Base64.getUrlEncoder().withoutPadding().encodeToString(parts.getBytes(StandardCharsets.UTF_8));
+    }
+    private JsonNode call(HttpClient http,int port,String path,JsonMapper json,String query) throws Exception {
+        var request=HttpRequest.newBuilder(URI.create("http://localhost:"+port+path))
                 .header("Content-Type","application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(body))).build();
-        var res=http.send(req,HttpResponse.BodyHandlers.ofString());
-        assertThat(res.statusCode()).isEqualTo(200);
-        return mapper.readTree(res.body());
+                .POST(HttpRequest.BodyPublishers.ofString(json.writeValueAsString(Map.of("query",query)),StandardCharsets.UTF_8)).build();
+        var response=http.send(request,HttpResponse.BodyHandlers.ofString());
+        assertThat(response.statusCode()).isEqualTo(200);
+        return json.readTree(response.body());
     }
 }

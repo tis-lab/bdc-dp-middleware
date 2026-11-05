@@ -256,7 +256,7 @@ slots:
     description: The term searched for.
     range: Term
     inlined: false
-    required: true
+    required: false
   filter:
     description: >-
       Ids of the summaries every participant counted must match. Each study's

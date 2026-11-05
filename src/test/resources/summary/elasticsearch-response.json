@@ -1,0 +1,157 @@
+{
+  "timed_out": false,
+  "_shards": {
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 5,
+      "relation": "eq"
+    },
+    "hits": []
+  },
+  "aggregations": {
+    "missing_study": {
+      "doc_count": 0
+    },
+    "studies": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "study_one",
+          "doc_count": 5,
+          "conditions": {
+            "doc_count": 6,
+            "concepts": {
+              "doc_count_error_upper_bound": 0,
+              "sum_other_doc_count": 0,
+              "buckets": [
+                {
+                  "key": "MONDO:0005148",
+                  "doc_count": 6,
+                  "participants": {
+                    "doc_count": 4
+                  },
+                  "relationships": {
+                    "doc_count_error_upper_bound": 0,
+                    "sum_other_doc_count": 0,
+                    "buckets": [
+                      {
+                        "key": "ONESELF",
+                        "doc_count": 6,
+                        "statuses": {
+                          "doc_count_error_upper_bound": 0,
+                          "sum_other_doc_count": 0,
+                          "buckets": [
+                            {
+                              "key": "PRESENT",
+                              "doc_count": 5,
+                              "participants": {
+                                "doc_count": 3
+                              }
+                            },
+                            {
+                              "key": "ABSENT",
+                              "doc_count": 1,
+                              "participants": {
+                                "doc_count": 1
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "missing_concept": {
+              "doc_count": 0
+            },
+            "missing_status": {
+              "doc_count": 0
+            },
+            "missing_relationship": {
+              "doc_count": 0
+            }
+          },
+          "demographics": {
+            "doc_count": 5,
+            "sex": {
+              "doc_count": 5,
+              "participants": {
+                "doc_count": 4
+              },
+              "values": {
+                "doc_count_error_upper_bound": 0,
+                "sum_other_doc_count": 0,
+                "buckets": [
+                  {
+                    "key": "FEMALE",
+                    "doc_count": 3,
+                    "participants": {
+                      "doc_count": 3
+                    }
+                  },
+                  {
+                    "key": "MALE",
+                    "doc_count": 1,
+                    "participants": {
+                      "doc_count": 1
+                    }
+                  }
+                ]
+              }
+            },
+            "race": {
+              "doc_count": 5,
+              "participants": {
+                "doc_count": 4
+              },
+              "values": {
+                "doc_count_error_upper_bound": 0,
+                "sum_other_doc_count": 0,
+                "buckets": [
+                  {
+                    "key": "WHITE",
+                    "doc_count": 3,
+                    "participants": {
+                      "doc_count": 3
+                    }
+                  },
+                  {
+                    "key": "ASIAN",
+                    "doc_count": 2,
+                    "participants": {
+                      "doc_count": 2
+                    }
+                  }
+                ]
+              }
+            },
+            "ethnicity": {
+              "doc_count": 5,
+              "participants": {
+                "doc_count": 4
+              },
+              "values": {
+                "doc_count_error_upper_bound": 0,
+                "sum_other_doc_count": 0,
+                "buckets": [
+                  {
+                    "key": "NOT_HISPANIC_OR_LATINO",
+                    "doc_count": 4,
+                    "participants": {
+                      "doc_count": 4
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

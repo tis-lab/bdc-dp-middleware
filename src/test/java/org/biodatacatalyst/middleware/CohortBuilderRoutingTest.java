@@ -24,18 +24,17 @@ class CohortBuilderRoutingTest {
             var mapper = JsonMapper.builder().build();
             var response = client.send(HttpRequest.newBuilder(URI.create(base + "/cb/query"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"query\":\"{ summarySources }\"}"))
+                    .POST(HttpRequest.BodyPublishers.ofString("{\"query\":\"{ health { status } }\"}"))
                     .build(), HttpResponse.BodyHandlers.ofString());
             assertThat(response.statusCode()).isEqualTo(200);
             var result = mapper.readTree(response.body());
             assertThat(result.has("errors")).isFalse();
-            assertThat(result.at("/data/summarySources").isArray()).isTrue();
-            assertThat(result.at("/data/summarySources").size()).isGreaterThan(0);
+            assertThat(result.at("/data/health/status").asString()).isEqualTo("UP");
 
             for (String path : new String[]{"/graphql", "/query", "/cb/graphql"}) {
                 var old = client.send(HttpRequest.newBuilder(URI.create(base + path))
                         .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofString("{\"query\":\"{ summarySources }\"}"))
+                        .POST(HttpRequest.BodyPublishers.ofString("{\"query\":\"{ health { status } }\"}"))
                         .build(), HttpResponse.BodyHandlers.ofString());
                 assertThat(old.statusCode()).as(path).isEqualTo(404);
             }

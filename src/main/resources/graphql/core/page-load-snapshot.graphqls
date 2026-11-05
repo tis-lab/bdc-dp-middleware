@@ -1,0 +1,26 @@
+extend type Query {
+  """Provisional page-load-only totals; independent of the summary.yaml contract."""
+  pageLoadSnapshot: PageLoadSnapshot
+}
+type PageLoadSnapshot {
+  release: String!
+  minCount: Int!
+  countBasis: String!
+  participantCount: SnapshotCount!
+  demographics: [SnapshotDemographic!]!
+}
+"""Zero is returned as zero; positive counts below minCount are null and suppressed."""
+type SnapshotCount {
+  value: Count
+  suppressed: Boolean!
+}
+type SnapshotDemographic {
+  slot: String!
+  recordedParticipantCount: SnapshotCount!
+  missingParticipantCount: SnapshotCount!
+  values: [SnapshotCategory!]!
+}
+type SnapshotCategory {
+  value: String!
+  participantCount: SnapshotCount!
+}

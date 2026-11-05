@@ -57,3 +57,7 @@ search:
   api-key: ${SEARCH_API_KEY:}
   connect-timeout: ${SEARCH_CONNECT_TIMEOUT:5s}
   read-timeout: ${SEARCH_READ_TIMEOUT:15s}
+# Required for every deployment
+summary:
+  release: ${SUMMARY_RELEASE:test}
+  min-count: ${SUMMARY_MIN_COUNT:1}
