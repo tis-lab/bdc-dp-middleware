@@ -2,9 +2,10 @@
 
 Each data file holds records of one class, as YAML documents separated by
 ``---``. The class comes from the file name: ``<anything>-<ClassName>--data.yaml``
-(e.g. ``SYNTH1-Person--data.yaml``). Tables and columns are derived from the
-LinkML schema the same way ``linkml-pg-ddl`` derives them, in enums-as-varchar
-mode, so values of enum-range slots are loaded as plain strings.
+(e.g. ``SYNTH1-Person--data.yaml``). A class can have several files, for example
+one per study folder. Tables and columns are derived from the LinkML schema the
+same way ``linkml-pg-ddl`` derives them, in enums-as-varchar mode, so values of
+enum-range slots are loaded as plain strings.
 
 How a record maps to rows:
 
@@ -376,7 +377,7 @@ def main(argv: list[str] | None = None) -> None:
         nargs="*",
         help=(
             f"data files <...>-<Class>--data.yaml, or directories to load all {DATA_FILE_GLOB} "
-            f"files in (not subdirectories) (default: {DEFAULT_DATA_DIR})"
+            f"files in, including subdirectories (default: {DEFAULT_DATA_DIR})"
         ),
     )
     add_connection_options(parser, maintenance_db=False)
@@ -401,7 +402,7 @@ def run(args: argparse.Namespace) -> int:
     for arg in args.data or [DEFAULT_DATA_DIR]:
         path = arg.resolve()
         if path.is_dir():
-            found = sorted(path.glob(DATA_FILE_GLOB))
+            found = sorted(path.rglob(DATA_FILE_GLOB))
             if not found:
                 print(f"pg-load-data: no {DATA_FILE_GLOB} files in {path}", file=sys.stderr)
                 return EXIT_SETUP
@@ -417,7 +418,7 @@ def run(args: argparse.Namespace) -> int:
     mapper = Mapper(SchemaView(str(args.linkml_schema.resolve())))
 
     # Read and map everything first, so the set of tables to truncate is known.
-    by_class: dict[str, tuple[Path, list[tuple[Record, list[RowOp] | str]], Counter]] = {}
+    by_class: dict[str, list[tuple[Path, list[tuple[Record, list[RowOp] | str]], Counter]]] = defaultdict(list)
     for path in files:
         m = CLASS_FROM_FILE.search(path.name)
         if not path.is_file() or not m:
@@ -426,9 +427,6 @@ def run(args: argparse.Namespace) -> int:
         class_name = m["cls"]
         if class_name not in mapper.class_table:
             print(f"pg-load-data: {path.name}: {class_name} isn't a concrete class of the schema", file=sys.stderr)
-            return EXIT_SETUP
-        if class_name in by_class:
-            print(f"pg-load-data: two files for {class_name}: {by_class[class_name][0]} and {path}", file=sys.stderr)
             return EXIT_SETUP
         print(f"Reading {path.name}")
         try:
@@ -445,9 +443,16 @@ def run(args: argparse.Namespace) -> int:
                 plans.append((record, ops))
             except RecordError as e:
                 plans.append((record, str(e)))
-        by_class[class_name] = (path, plans, unknown)
+        by_class[class_name].append((path, plans, unknown))
 
-    tables = {op.table.name: op.table for _, plans, _ in by_class.values() for _, ops in plans if not isinstance(ops, str) for op in ops}
+    tables = {
+        op.table.name: op.table
+        for class_files in by_class.values()
+        for _, plans, _ in class_files
+        for _, ops in plans
+        if not isinstance(ops, str)
+        for op in ops
+    }
     print(f"Target: {args.user}@{args.host}:{args.port}/{args.dbname}, schema {args.schema}")
     log = result = None
     failed = 0
@@ -487,16 +492,16 @@ def run(args: argparse.Namespace) -> int:
             conn.commit()
 
             for class_name in load_order(mapper, list(by_class)):
-                path, plans, unknown = by_class[class_name]
-                started = datetime.now()
-                log = Log(log_path_for(args, path, started), args, path, class_name, started)
-                result = FileResult(unknown_keys=unknown)
-                print(f"Loading {path.name} ({len(plans)} records) as {class_name}")
-                load_file(conn, plans, seen, result, log)
-                log.finish(result, f"finished {datetime.now().isoformat(timespec='seconds')}")
-                print(f"  {result.counts()}\n  Log: {log.path}")
-                failed += len(result.failures)
-                log = None
+                for path, plans, unknown in by_class[class_name]:
+                    started = datetime.now()
+                    log = Log(log_path_for(args, path, started), args, path, class_name, started)
+                    result = FileResult(unknown_keys=unknown)
+                    print(f"Loading {path.name} ({len(plans)} records) as {class_name}")
+                    load_file(conn, plans, seen, result, log)
+                    log.finish(result, f"finished {datetime.now().isoformat(timespec='seconds')}")
+                    print(f"  {result.counts()}\n  Log: {log.path}")
+                    failed += len(result.failures)
+                    log = None
     except KeyboardInterrupt:
         if log is not None:
             log.finish(FileResult(), "INTERRUPTED (Ctrl-C); this file was rolled back")

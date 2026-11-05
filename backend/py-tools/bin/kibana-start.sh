@@ -168,8 +168,7 @@ case "$rc" in
       echo "  not 127.0.0.1:$es_port), and Docker networking must work. Check that" >&2
       echo "  'ip route get <a container IP>' goes through docker0; a VPN using the same" >&2
       echo "  range (e.g. 172.17.x) takes over that traffic. For an 'oc port-forward', add" >&2
-      echo "  --address 127.0.0.1,<docker0 address>. See the README section" >&2
-      echo "  'Docker networking on WSL2 with a VPN, and oc port-forward'." >&2
+      echo "  --address 127.0.0.1,<docker0 address>. See DOCKER-VPN.md." >&2
     fi
     ;;
 esac

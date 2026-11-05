@@ -2,7 +2,9 @@
 
 Python command-line and other tools for the backend. A packaged
 [uv](https://docs.astral.sh/uv/) project (`src/py_tools/`), Python 3.14.
-Implementation notes are in [README-DEV.md](README-DEV.md).
+Implementation notes are in [README-DEV.md](README-DEV.md). Docker networking
+problems with a VPN and `oc port-forward` are covered in
+[DOCKER-VPN.md](DOCKER-VPN.md).
 
 ```sh
 uv sync                 # create the venv and install the project
@@ -20,7 +22,43 @@ my-tool = "py_tools.my_tool:main"
 
 Then run it with `uv run my-tool`.
 
+## Typical workflow
+
+From the harmonized data to a searchable Elasticsearch index. PostgreSQL and
+Elasticsearch must be running, with the data in `data/harmonized/<study>/`.
+
+```sh
+D=schema/pg-ddl/bdchm/enums-as-varchar
+
+uv run pg-bootstrap                                # once: role, database, extension, schema
+uv run python $D/apply_01_tables__enums_as_varchar.py
+uv run harmonized-add-studies                      # the study records and participant references
+uv run pg-load-data                                # every study; empties the tables first
+uv run python $D/apply_02_primary_keys__enums_as_varchar.py
+uv run python $D/apply_03_foreign_keys__enums_as_varchar.py   # one FK fails, as expected (see pg-load-data)
+
+uv run pg-export-participants
+uv run es-participant-mapping                      # only when the schema, exporter or post-processors changed
+uv run es-recreate-index                           # asks before deleting an existing index
+uv run es-load-participants --delete-missing
+```
+
+To load only some studies, give their folders:
+`uv run pg-load-data data/harmonized/study_one`. Query examples are in
+[ES-EXAMPLES.md](ES-EXAMPLES.md).
+
 ## Tools
+
+- [`linkml-pg-ddl`](#linkml-pg-ddl-postgresql-ddl-from-a-linkml-schema): PostgreSQL DDL from a LinkML schema
+- [`pg-apply-ddl`](#pg-apply-ddl-apply-ddl-files-to-postgresql): apply DDL files to PostgreSQL
+- [`pg-bootstrap`](#pg-bootstrap-set-up-the-role-database-and-schema): set up the role, database and schema
+- [`harmonized-add-studies`](#harmonized-add-studies-add-a-researchstudy-to-each-study-folder): add a ResearchStudy to each study folder
+- [`pg-load-data`](#pg-load-data-load-harmonized-yaml-data-into-the-tables): load harmonized data into the tables
+- [`pg-export-participants`](#pg-export-participants-one-json-document-per-participant): one JSON document per participant
+- [`es-participant-mapping`](#es-participant-mapping-elasticsearch-index-definition-for-the-participant-documents): the Elasticsearch index definition
+- [`es-recreate-index`](#es-recreate-index-drop-and-recreate-an-index-from-the-definition): drop and recreate an index
+- [`es-load-participants`](#es-load-participants-load-the-participant-documents-into-the-index): load the documents into the index
+- [`bin/kibana-start.sh`, `bin/kibana-stop.sh`](#binkibana-startsh-and-binkibana-stopsh-a-kibana-for-any-elasticsearch): a Kibana for any Elasticsearch
 
 ### `linkml-pg-ddl`: PostgreSQL DDL from a LinkML schema
 
@@ -328,6 +366,51 @@ Existing objects are reported but never changed, even if they differ (for
 example, a database owned by another role). Fix those by hand. Exit status: 0
 on success, 2 on any error. The steps before the error have already been done.
 
+### `harmonized-add-studies`: add a ResearchStudy to each study folder
+
+Each folder under `data/harmonized/` holds one study. This tool writes the
+folder's study record and makes its participants reference it, so that
+`Participant.member_of_research_study` conforms to the schema (a ResearchStudy
+id, not a study name). Run it before `pg-load-data`, and again whenever the data
+has been regenerated.
+
+```sh
+uv run harmonized-add-studies --dry-run   # report what would change
+uv run harmonized-add-studies
+```
+
+| Option       | Default            | Meaning                                  |
+|--------------|--------------------|------------------------------------------|
+| `--data-dir` | `data/harmonized/` | The folder holding the study folders.    |
+| `--dry-run`  | off                | Report what would change, without writing. |
+
+For each study folder, for example `study_one/`:
+
+- It writes `SYNTH1-ResearchStudy--data.yaml`, one `ResearchStudy` record. The
+  prefix comes from the folder's `SYNTH1-Participant--data.yaml`.
+- It sets `member_of_research_study` of every participant in that file to the
+  study's id. Only those lines change.
+
+| Folder      | Study               | Study id                               |
+|-------------|---------------------|----------------------------------------|
+| `study_one` | `Example Study One` | `16f3ee0b-da11-50be-8192-105affbfdaa3` |
+| `study_two` | `Example Study Two` | `56fb5011-8e17-5cfa-a4f3-068837ea4b50` |
+
+The studies are made-up example data, defined in `STUDIES` in
+`src/py_tools/harmonized_add_studies.py`, because `data/harmonized/` isn't
+committed. **Change a study there, not in its YAML file**: the next run replaces
+a study file that differs. The ids are derived from the folder names, so they're
+the same on every run. A new study folder needs a new `STUDIES` entry.
+
+Running it again changes nothing once the data is up to date. A participant can
+have the study's name (new data) or its id (already done). Any other value stops
+the run, as does a folder with no `STUDIES` entry or without exactly one
+participant file. Everything is checked first, so in those cases nothing is
+written and the exit status is 2. Folders starting with a dot are ignored, and a
+`STUDIES` entry with no folder only gets a warning. If writing a file fails, the
+exit status is also 2 and the message lists the files already written. Fix the
+cause and run it again.
+
 ### `pg-load-data`: load harmonized YAML data into the tables
 
 Loads LinkML instance data into the tables from `linkml-pg-ddl`, in
@@ -337,18 +420,24 @@ strings, as they are in the data (for example `OMOP:8507` for `sex`).
 ```sh
 uv run pg-bootstrap                                                               # once
 uv run python schema/pg-ddl/bdchm/enums-as-varchar/apply_01_tables__enums_as_varchar.py
-uv run pg-load-data                                  # all data/harmonized/*--data.yaml
-uv run pg-load-data path/to/other-dir                # all *--data.yaml in that directory
-uv run pg-load-data data/harmonized/SYNTH1-Person--data.yaml --no-truncate
+uv run pg-load-data                                  # all *--data.yaml under data/harmonized/, every study
+uv run pg-load-data data/harmonized/study_two --no-truncate   # add one study, keeping what's loaded
+uv run pg-load-data path/to/other-dir                # all *--data.yaml under that directory
+uv run pg-load-data data/harmonized/study_one/SYNTH1-Person--data.yaml --no-truncate
 ```
 
 Each data file holds records of one class, as YAML documents separated by
 `---`. The class comes from the file name, `<anything>-<ClassName>--data.yaml`,
-for example `SYNTH1-Person--data.yaml` → `Person` → table `person`.
+for example `SYNTH1-Person--data.yaml` → `Person` → table `person`. A class can
+have several files, such as one per study folder. They all load into the class's
+table.
+
+Without `--no-truncate`, loading a single study empties the tables first, so
+the other study's rows in those tables are gone.
 
 | Argument / option | Default                                        | Meaning                         |
 |-------------------|------------------------------------------------|---------------------------------|
-| `DATA ...`        | `data/harmonized/`                             | Data files and/or directories, at most one file per class. A directory means every `*--data.yaml` directly in it (not in subdirectories). |
+| `DATA ...`        | `data/harmonized/`                             | Data files and/or directories. A directory means every `*--data.yaml` in it and its subdirectories. |
 | `--host`, `--port`, `--dbname`, `--user`, `--password`, `--schema`, `--log-dir` | as for `pg-apply-ddl` | |
 | `--linkml-schema` | `schema/linkml/bdchm.yaml`                     | The schema the tables were generated from. |
 | `--truncate` / `--no-truncate` | `--truncate`                      | Empty the tables that receive rows before loading. |
@@ -366,13 +455,14 @@ How records become rows:
   `measurement_observation`, `Person.cause_of_death` → `cause_of_death`.
 - **Values are stored as they are.** References aren't checked against other
   tables, and enum values aren't checked against the schema. For example,
-  `member_of_research_study` = `Example Study One` and `body_site` =
-  `Right arm` go into `*_id` columns although no such rows exist, and
-  `associated_evidence` text goes into its join table.
+  `body_site` = `Right arm` goes into a `*_id` column although no such row
+  exists, and `associated_evidence` text goes into its join table.
 - **Duplicate ids** are skipped: a record whose id is already in its table, or
-  was already loaded in this run, isn't inserted again. The same goes for a
-  nested object (the 2 assays repeated across 2,916 observations are stored
-  once).
+  was already loaded in this run, isn't inserted again. The first record loaded
+  wins, even if a later one differs. The same goes for a nested object (the 2
+  assays repeated across 2,916 observations are stored once). 25 `Person`
+  records are in both study folders, with identical content, so 975 people are
+  stored for 1,000 participants.
 - **Keys that aren't slots** of the class are ignored and listed in the log.
 
 Files are loaded so that referenced classes come first (Person before
@@ -401,7 +491,7 @@ One log per data file per run, next to the DDL logs for the same target:
 ```
 logs/<host>-<port>/<db>/<schema>/load/<data-folder>/<data-file>/<timestamp>.log
 
-logs/localhost-5432/dp/bdchm/load/harmonized/SYNTH1-Person--data/20261029-002537.log
+logs/localhost-5432/dp/bdchm/load/study_one/SYNTH1-Person--data/20261029-002537.log
 ```
 
 A log has the totals, the rows inserted and duplicates skipped per table, keys
@@ -423,15 +513,17 @@ id: bad-int
 year_of_birth: abc
 ```
 
-#### With the bdchm DDL and the SYNTH1 data
+#### With the bdchm DDL and the study data
 
 Load after `01_tables`; then apply the rest one step at a time and read the logs:
 
 - `02_primary_keys`: applies (no duplicate ids).
-- `03_foreign_keys`: two FKs fail, as expected from the as-is references:
-  `participant.member_of_research_study_id` → `research_study` (no study data)
-  and `measurement_observation.body_site_id` → `body_site` (`Right arm` is
-  text, not a BodySite id).
+- `03_foreign_keys`: one FK fails, as expected from the as-is references:
+  `measurement_observation.body_site_id` → `body_site` (`Right arm` is text,
+  not a BodySite id). `participant.member_of_research_study_id` →
+  `research_study` applies once
+  [`harmonized-add-studies`](#harmonized-add-studies-add-a-researchstudy-to-each-study-folder)
+  has been run.
 - `04_constraints`: in enums-as-varchar mode its CHECKs allow only the
   schema's permissible value names (`MALE`, `ALIVE`, ...), while the data has
   CURIEs (`OMOP:8507`), so those CHECKs fail. Skip this file for this data.
@@ -474,10 +566,9 @@ References are handled like this:
 - A reference to the participant itself, or to the record a nested record
   sits in, is **left out**.
 - A reference whose id isn't in any table the slot's range can live in is
-  **left out**. The log counts these per `class.slot`. With the SYNTH1 data
-  that's the evidence text in `Condition.associated_evidence`, `Right arm` in
-  `MeasurementObservation.body_site`, and the missing study in
-  `Participant.member_of_research_study`.
+  **left out**. The log counts these per `class.slot`. With the study data
+  that's the evidence text in `Condition.associated_evidence` and `Right arm` in
+  `MeasurementObservation.body_site`.
 - Otherwise each reference slot has **one JSON type**, the same in every
   document, as Elasticsearch requires:
   - **id slots**: the range is a single class whose records belong to
@@ -509,6 +600,11 @@ of records are sorted by id, so exporting again gives identical files.
     "cause_of_death": [ { "id": "90723e22-...", "cause": "ICD10CM:R99", "order": 1 } ]
   },
   "identity": ["100001"],
+  "member_of_research_study": {
+    "id": "16f3ee0b-...", "identity": ["SYNTH1"], "name": "Example Study One",
+    "research_project_type": "STUDY", "program": "Example Research Program",
+    "principal_investigator": ["Example Investigator A"]
+  },
   "visit": [
     { "id": "75122f58-...", "visit_category": "STUDY_SITE_VISIT", "age_at_visit_start": 27375,
       "questionnaire_response": [ { "id": "qr1", "age_at_response": 27375 } ] }
@@ -553,7 +649,9 @@ run again (see below):
 
 ```python
 condition_count.es_properties = {"condition_count": {"type": "integer"}}
-``` A post-processor is either:
+```
+
+A post-processor is either:
 
 - a function `(doc, ctx)` that changes `doc` in place (returns `None`) or
   returns a new `dict`, or
@@ -594,8 +692,7 @@ exporter uses to build the documents, so the two match:
 
 ```sh
 uv run es-participant-mapping            # writes schema/es/<YYYYMMDD-HHMMSS>__participant.json
-curl -X PUT localhost:9200/participant -H 'Content-Type: application/json' \
-     -d @schema/es/20261029-022946__participant.json
+uv run es-recreate-index                 # creates the index from the newest file
 ```
 
 | Option                         | Default                    | Meaning                          |
@@ -739,7 +836,8 @@ field added by a post-processor that wasn't declared) is rejected and
 reported, and the other documents still load. Busy-cluster rejections (429)
 are retried with back-off.
 
-The whole pipeline, from the database to a searchable alias:
+The Elasticsearch part of the [typical workflow](#typical-workflow), with a new
+versioned index and an alias:
 
 ```sh
 uv run pg-export-participants
@@ -792,193 +890,4 @@ anonymous volumes. Kibana keeps its saved objects (data views, dashboards) in
 them. Both scripts only touch containers that `kibana-start.sh` created (they
 carry the label `py-tools.kibana=true`).
 
-## Docker networking on WSL2 with a VPN, and `oc port-forward`
-
-This section describes a problem found while testing `bin/kibana-start.sh`,
-how Docker was reconfigured to fix it, and how to reach an Elasticsearch in an
-OpenShift cluster through `oc port-forward` with that configuration. It
-applies to any container started with `docker run` that needs to reach the
-WSL machine or another container, not only Kibana.
-
-### The setup
-
-- Windows with WSL2 in **mirrored** networking mode: WSL shares Windows'
-  network interfaces, including a VPN's. Check with `wslinfo
-  --networking-mode`.
-- **Docker Engine installed inside WSL** (Ubuntu, managed by systemd), not
-  Docker Desktop. Its default bridge network is `docker0`; containers started
-  with `docker run` get addresses on it, and published ports (`-p`) are
-  forwarded to them.
-- A VPN client on Windows (here the campus VPN, `search unc.edu`).
-
-### Symptoms
-
-- `bin/kibana-start.sh` couldn't reach Elasticsearch, or Kibana never came
-  up, and the wait ran into its timeout.
-- From WSL, every connection to a container timed out: its published port
-  (`curl localhost:59201`) and its container IP (`curl 172.17.0.2:9200`).
-- Inside the container, Elasticsearch answered normally
-  (`docker exec <container> curl localhost:9200` gave 200).
-- Connections didn't fail with "connection refused"; they hung until a
-  timeout, even to ports where nothing listened.
-- The same commands had worked earlier the same day.
-
-### Diagnosis
-
-```sh
-ip route get 172.17.0.2         # which interface traffic to a container uses
-ip -4 addr show                 # the addresses of each interface
-ip route                        # all routes
-wslinfo --networking-mode       # mirrored or nat
-```
-
-`ip route get 172.17.0.2` answered `dev eth0`, not `dev docker0`, and
-`ip -4 addr` showed why:
-
-| Interface | Address | What it is |
-|---|---|---|
-| `docker0` | `172.17.0.1/16` | Docker's default bridge (Docker's default range) |
-| `eth0` | `172.17.21.33/18`, gateway `172.17.0.1` | The VPN, mirrored into WSL |
-
-The VPN had been given addresses in Docker's own range, and its gateway had
-the same address as `docker0`. The routing table had, among others:
-
-```
-172.16.0.0/12 via 172.17.0.1 dev eth0      # VPN: all of 172.16-172.31
-172.17.0.0/18 dev eth0                     # VPN: its own subnet
-172.17.0.0/16 dev docker0                  # Docker's bridge
-```
-
-Linux picks the most specific matching route. For a container at
-`172.17.0.2`, the VPN's `/18` is more specific than Docker's `/16`, so the
-traffic went into the VPN, which dropped it. That explains every symptom:
-
-- Published ports failed too, because Docker forwards them to the container's
-  bridge address, which was routed into the VPN.
-- `host.docker.internal`, which `kibana-start.sh` maps to Docker's bridge
-  gateway, was `172.17.0.1`, the same address as the VPN gateway.
-- Connections hung instead of being refused because the VPN silently drops
-  packets it doesn't expect.
-- It had worked earlier because the VPN connected later.
-
-The backend compose stack wasn't affected: compose creates its own networks
-(`172.18.0.0/16` and up). The VPN routes all of `172.16.0.0/12`, but each
-compose network's own `/16` route is more specific, so it still won. Only
-the default bridge collided, through the VPN's `/18`.
-
-### The fix: move Docker's networks out of the VPN's ranges
-
-Docker's address ranges are set in `/etc/docker/daemon.json`:
-
-```json
-{
-  "bip": "192.168.200.1/24",
-  "default-address-pools": [ { "base": "192.168.208.0/20", "size": 24 } ]
-}
-```
-
-- `bip` (bridge IP) is the address and size of `docker0`, the default bridge
-  used by `docker run`. Containers get `192.168.200.2`, `.3`, ..., and
-  `host.docker.internal` becomes `192.168.200.1`.
-- `default-address-pools` is where new networks come from, such as the ones
-  `docker compose` creates: `192.168.208.0/24`, `192.168.209.0/24`, ... (16
-  networks of 254 addresses). Without it, they come from `172.18-31.x`,
-  which the VPN's `172.16.0.0/12` also covers; they work today only because
-  their routes are more specific, and a VPN pushing narrower routes would
-  break them too.
-- The ranges must not be used by the VPN or your local network. Check with
-  `ip route` while the VPN is connected: here the VPN uses `10.0.0.0/8`,
-  `172.16.0.0/12` and some public addresses, and the home network
-  `192.168.0.0/24`, so `192.168.200.0/24` and `192.168.208.0/20` are free.
-
-Apply it (this needs `sudo`):
-
-```sh
-printf '%s\n' '{' \
-  '  "bip": "192.168.200.1/24",' \
-  '  "default-address-pools": [ { "base": "192.168.208.0/20", "size": 24 } ]' \
-  '}' | sudo tee /etc/docker/daemon.json
-sudo systemctl restart docker
-```
-
-The restart stops all running containers. Networks that already exist keep
-their old ranges; only new ones use the pool. For the backend stack, recreate
-its network with `bin/compose.sh down` and `bin/compose.sh up -d` (in
-`backend/`); data in `backend/data/` isn't affected.
-
-Check that it worked:
-
-```sh
-ip -4 addr show docker0          # inet 192.168.200.1/24
-ip route get 192.168.200.2       # ... dev docker0 ...
-docker run --rm -d --name net-check -p 59999:80 nginx:alpine >/dev/null
-sleep 2; curl -s -o /dev/null -w '%{http_code}\n' localhost:59999   # 200
-docker rm -f net-check
-```
-
-If the VPN or your network ever starts using these ranges, pick others the
-same way and restart Docker again. To undo the change, delete
-`/etc/docker/daemon.json` and restart Docker.
-
-### Using `oc port-forward` with this configuration
-
-`oc port-forward` (and `kubectl port-forward`) makes a remote service
-reachable on a local port, but by default it listens only on `127.0.0.1` of
-WSL. Programs running in WSL, such as the py-tools commands, can use
-`localhost:9200` directly. A container can't: inside it, `localhost` is the
-container itself, so `kibana-start.sh` points Kibana at
-`host.docker.internal`, which is `192.168.200.1`, Docker's bridge, where the
-port-forward isn't listening. `kibana-start.sh` then warns that the container
-can't reach Elasticsearch.
-
-Make the port-forward also listen on the bridge address:
-
-```sh
-# terminal 1 (keep it running)
-oc login ...                                   # as usual
-oc port-forward svc/<elasticsearch-service> 9200:9200 --address 127.0.0.1,192.168.200.1
-
-# terminal 2
-bin/kibana-start.sh                            # ES at localhost:9200 (the default)
-```
-
-- `--address` takes a comma-separated list of local addresses to listen on.
-  `127.0.0.1` keeps `localhost:9200` working for the py-tools commands;
-  `192.168.200.1` makes it reachable from containers.
-- `192.168.200.1` exists only while Docker is running (it's `docker0`'s
-  address), so start Docker before the port-forward. If Docker is
-  restarted, restart the port-forward too.
-- Don't use `--address 0.0.0.0` unless you need to: it listens on every
-  interface, including your LAN and the VPN, and this Elasticsearch may have
-  no authentication.
-- `svc/<name>` forwards to a service; `pod/<name>` or a plain pod name forwards
-  to one pod. The first `9200` is the local port, the second the remote one.
-- If something else already uses local port `9200` (for example the backend
-  stack's Elasticsearch), choose another local port and tell the script:
-
-  ```sh
-  oc port-forward svc/<elasticsearch-service> 9201:9200 --address 127.0.0.1,192.168.200.1
-  bin/kibana-start.sh --es-port 9201 --port 5602
-  ```
-
-Check both paths:
-
-```sh
-curl -s localhost:9200 | grep number                       # from WSL
-curl -s 192.168.200.1:9200 | grep number                   # the address containers use
-docker exec py-tools-kibana curl -s -o /dev/null -w '%{http_code}\n' http://host.docker.internal:9200/   # 200, once Kibana runs
-```
-
-While Kibana runs, `oc` prints messages such as:
-
-```
-E1029 ... portforward.go:404] "Unhandled Error" err="error copying from local connection to remote stream: ... read: connection reset by peer"
-Handling connection for 9200
-```
-
-Each `Handling connection` is a new connection through the forward; the
-`connection reset by peer` errors appear when Kibana closes a connection
-before `oc` has finished copying it. Kibana does that routinely (health
-checks, retries with timeouts), and they're harmless as long as Kibana stays
-available. To hide them, run the port-forward with `2>/dev/null`, or in a
-terminal you don't watch.
+If the container can't reach Elasticsearch, see [DOCKER-VPN.md](DOCKER-VPN.md).

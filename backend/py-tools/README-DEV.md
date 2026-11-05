@@ -329,6 +329,46 @@ passed through.
   should report `created` and the second `exists`. Then run an `apply_*.py`
   script without options, and check that the new objects are owned by the role.
 
+## `harmonized-add-studies` (`src/py_tools/harmonized_add_studies.py`)
+
+- **A reference, not a nested object.** `ResearchStudy` has an identifier and
+  `member_of_research_study` isn't `inlined`, so the conforming value is the
+  study's id, as for `associated_person`. The same rule applies to the study's
+  `date_started`, `date_ended` and `associated_timepoint`: `TimePoint` has an
+  identifier too, so `linkml-validate` rejects them as nested objects. They're
+  optional, so the example studies leave them out. Adding them means a separate
+  `TimePoint` data file.
+- **Where studies are defined.** In `STUDIES`, because `data/harmonized` is
+  ignored by git and may be regenerated. Ids are `uuid5` values of the folder
+  name, so they don't depend on the run, and they have the same form as the
+  data's ids.
+- **Plan, then write.** All folders are planned and checked before the first
+  write, so a problem in `study_two` leaves `study_one` untouched. Each file is
+  written to `<name>.tmp` and moved into place with `os.replace`. The study file
+  goes first, so that participants never reference a missing study. A failed
+  write can still leave earlier files written; the run lists them, and running
+  it again finishes the job.
+- **Line edits, not a YAML round trip.** `SLOT_LINE` replaces only the
+  top-level `member_of_research_study:` lines, so the rest of the file stays
+  byte for byte. The records are parsed too: the number of lines must equal the
+  number of records, and each value must be the study's name or id. That guards
+  against values written over several lines, and against moving a participant
+  from another study.
+
+### Verifying changes
+
+Check that `--dry-run` writes nothing, that the first run changes every
+participant, and that the second reports `unchanged` and `change 0 of N`. In a
+scratch `--data-dir`, change one value to something else, and add a folder with
+no `STUDIES` entry: both should exit 2 and write nothing. A dot folder should be
+ignored, a missing study folder should give a warning, and a read-only study
+folder should exit 2 and list what was already written. Validate one record of
+each study file with `uvx --from linkml linkml-validate -s
+schema/linkml/bdchm.yaml -C ResearchStudy FILE` (the data files hold several
+documents and a `---` terminator, so copy one record to its own file). After
+`pg-load-data`, the `participant__member_of_research_study_id__fk_research_study`
+foreign key in `03_foreign_keys` should apply.
+
 ## `pg-load-data` (`src/py_tools/pg_load_data.py`)
 
 ### One schema analysis
@@ -386,7 +426,9 @@ target tables to check and truncate before anything is written.
 - **File order.** `load_order()` sorts the files' classes so that a class
   comes after those its single-valued slots reference (a cycle falls back to
   name order). Multivalued references are join rows, inserted after their
-  record, so they don't affect the order.
+  record, so they don't affect the order. A class's own files load in path
+  order, each in its own transaction with its own log, and they share `seen`, so
+  a record in two study folders is a duplicate in the second.
 
 ### Verifying changes
 
@@ -398,8 +440,8 @@ record duplicate). Apply 02 and 03 and load again (it should truncate the
 referencing tables, and refuse once one of them has a row). Then load a small
 file of bad records (bad integer, no id, unknown key, bad nested value,
 dangling reference with FKs on) and check the log. Finally, Ctrl-C during
-`SYNTH1-MeasurementObservation` should leave that table empty and earlier
-files loaded.
+`SYNTH1-MeasurementObservation`, the first file of its class, should leave that
+table empty and earlier files loaded.
 
 ## `pg-export-participants` (`src/py_tools/pg_export_participants.py`)
 
@@ -407,8 +449,9 @@ files loaded.
 
 All tables (from the `Mapper`'s `Generator` tables, enums-as-varchar) are read
 into memory once: `rows[table][id]` for class tables, and
-`joins[(owner table, slot)][owner id] = [target ids]`. With the SYNTH1 data
-that's about 35,000 rows, and all 500 documents are built in under a second.
+`joins[(owner table, slot)][owner id] = [target ids]`. With the two studies
+that's about 108,000 rows, and a full export of the 1,000 documents takes about
+2 seconds.
 Much larger data would need per-participant queries instead. Reading once
 also lets post-processors look anything up through `ctx.rows`.
 
@@ -495,7 +538,7 @@ dates and times become ISO strings (`json_value()`).
 - `add_condition_keys` (built in) builds `_conditions` from the document's
   `condition` array, not from `ctx.rows`, so it sees exactly what's indexed.
   The fields and separator are module constants (`CONDITION_KEY_FIELDS`,
-  `CONDITION_KEY_SEPARATOR`). None of the SYNTH1 values contain `|`; if a
+  `CONDITION_KEY_SEPARATOR`). None of the values in the two studies contain `|`; if a
   future value could, the separator would need to change, because there's no
   escaping.
 
@@ -503,11 +546,11 @@ dates and times become ISO strings (`json_value()`).
 
 On a throwaway server from the backend's `pg/` image, run `pg-bootstrap`,
 apply `01_tables__enums_as_varchar`, run `pg-load-data`, then
-`pg-export-participants`. All 500 should be written, and the log should list
-the three unresolved slots above. Then add rows for the cases SYNTH1 doesn't
+`pg-export-participants`. All 1,000 should be written, and the log should list
+the two unresolved slots above. Then add rows for the cases the data doesn't
 have, and export one participant:
-- a `research_study` 'Example Study One' with `part_of_id` pointing at itself
-  (inlined, `part_of` becomes a stub);
+- `part_of_id` of a `research_study` pointing at itself (inlined, `part_of`
+  becomes a stub);
 - `condition__associated_evidence` rows pointing at a quantity (inlined with
   `_class`) and at a visit (a `_class` stub);
 - a `questionnaire_response` pointing at a visit (nested under it, with no
@@ -552,7 +595,7 @@ over all documents.
 ### Verifying changes
 
 Generate a file. Export from a test database that also has rows for the cases
-SYNTH1 lacks: a questionnaire response on a visit with boolean, decimal,
+the data lacks: a questionnaire response on a visit with boolean, decimal,
 string and TimePoint answers; a study that is `part_of` itself; polymorphic
 evidence pointing at a quantity and at a visit; and a condition with only a
 visit. Then start a throwaway Elasticsearch of the backend's version:
@@ -685,7 +728,7 @@ container. The cause was the VPN: with WSL in `mirrored` mode, its interface
 `eth0` had `172.17.21.33/18` and gateway `172.17.0.1`, the same as
 `docker0`. Its `/18` route was more specific than docker0's `/16`, so
 container traffic went into the VPN. Moving Docker to `192.168.200.0/24` and
-pools in `192.168.208.0/20` (`daemon.json`, see README) fixed it. Compose
+pools in `192.168.208.0/20` (`daemon.json`, see [DOCKER-VPN.md](DOCKER-VPN.md)) fixed it. Compose
 networks (`172.18+`) had kept working only because their own `/16` routes
 were more specific than the VPN's `172.16.0.0/12`.
 

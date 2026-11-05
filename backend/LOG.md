@@ -2,6 +2,14 @@
 
 Newest first. Each section covers one set of development changes.
 
+## 2026-11-05 03:59 PST: Line endings set with .gitattributes
+
+Added `backend/.gitattributes`: text files are stored and checked out with LF,
+and `*.cmd` and `*.bat` are left byte for byte, so `model/mvnw.cmd` stays CRLF.
+Working copies under `backend/` that a checkout with `core.autocrlf=true` had
+left with CRLF were converted to LF, which fixes the scripts in `bin/`,
+`model/mvnw` and `py-tools/bin/kibana-stop.sh` that failed with `$'\r'` errors.
+
 ## 2026-10-29 00:06 PDT: pg setup moved from init scripts to py-tools pg-bootstrap
 
 - pg runs no init scripts any more. The already-deleted `10-dp.sql` and
