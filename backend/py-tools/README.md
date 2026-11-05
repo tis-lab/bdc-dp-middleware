@@ -2,9 +2,13 @@
 
 Python command-line and other tools for the backend. A packaged
 [uv](https://docs.astral.sh/uv/) project (`src/py_tools/`), Python 3.14.
-Implementation notes are in [README-DEV.md](README-DEV.md). Docker networking
-problems with a VPN and `oc port-forward` are covered in
-[DOCKER-VPN.md](DOCKER-VPN.md).
+
+| Document | Contents |
+|---|---|
+| [README-DEV.md](README-DEV.md) | Implementation notes |
+| [ES-EXAMPLES.md](ES-EXAMPLES.md) | Elasticsearch query examples, with explanations |
+| [README-AZURE.md](README-AZURE.md) | Issues in migrating to Azure AI Search, including which query results can be reproduced |
+| [DOCKER-VPN.md](DOCKER-VPN.md) | Docker networking problems with a VPN, and `oc port-forward` |
 
 ```sh
 uv sync                 # create the venv and install the project
@@ -30,9 +34,11 @@ Elasticsearch must be running, with the data in `data/harmonized/<study>/`.
 ```sh
 D=schema/pg-ddl/bdchm/enums-as-varchar
 
-uv run pg-bootstrap                                # once: role, database, extension, schema
+uv run pg-bootstrap                                # drops the database (asks first), then creates it, the role,
+                                                   # extension and schema
 uv run python $D/apply_01_tables__enums_as_varchar.py
 uv run harmonized-add-studies                      # the study records and participant references
+uv run harmonized-add-ages                         # a made-up age_at_index for every participant
 uv run pg-load-data                                # every study; empties the tables first
 uv run python $D/apply_02_primary_keys__enums_as_varchar.py
 uv run python $D/apply_03_foreign_keys__enums_as_varchar.py   # one FK fails, as expected (see pg-load-data)
@@ -47,17 +53,22 @@ To load only some studies, give their folders:
 `uv run pg-load-data data/harmonized/study_one`. Query examples are in
 [ES-EXAMPLES.md](ES-EXAMPLES.md).
 
+To rebuild the database and the index in one command, without the data preparation
+and foreign keys, use [`bin/full-reload.sh`](#binfull-reloadsh-rebuild-postgresql-and-the-index).
+
 ## Tools
 
 - [`linkml-pg-ddl`](#linkml-pg-ddl-postgresql-ddl-from-a-linkml-schema): PostgreSQL DDL from a LinkML schema
 - [`pg-apply-ddl`](#pg-apply-ddl-apply-ddl-files-to-postgresql): apply DDL files to PostgreSQL
-- [`pg-bootstrap`](#pg-bootstrap-set-up-the-role-database-and-schema): set up the role, database and schema
+- [`pg-bootstrap`](#pg-bootstrap-start-the-database-from-scratch): start the database from scratch
 - [`harmonized-add-studies`](#harmonized-add-studies-add-a-researchstudy-to-each-study-folder): add a ResearchStudy to each study folder
+- [`harmonized-add-ages`](#harmonized-add-ages-give-participants-a-random-age): give participants a random age
 - [`pg-load-data`](#pg-load-data-load-harmonized-yaml-data-into-the-tables): load harmonized data into the tables
 - [`pg-export-participants`](#pg-export-participants-one-json-document-per-participant): one JSON document per participant
 - [`es-participant-mapping`](#es-participant-mapping-elasticsearch-index-definition-for-the-participant-documents): the Elasticsearch index definition
 - [`es-recreate-index`](#es-recreate-index-drop-and-recreate-an-index-from-the-definition): drop and recreate an index
 - [`es-load-participants`](#es-load-participants-load-the-participant-documents-into-the-index): load the documents into the index
+- [`bin/full-reload.sh`](#binfull-reloadsh-rebuild-postgresql-and-the-index): rebuild PostgreSQL and the index
 - [`bin/kibana-start.sh`, `bin/kibana-stop.sh`](#binkibana-startsh-and-binkibana-stopsh-a-kibana-for-any-elasticsearch): a Kibana for any Elasticsearch
 
 ### `linkml-pg-ddl`: PostgreSQL DDL from a LinkML schema
@@ -130,7 +141,7 @@ not proof against two runs at the same moment.
 #### Applying the DDL
 
 First, if the database isn't set up yet, run
-[`pg-bootstrap`](#pg-bootstrap-set-up-the-role-database-and-schema) to create
+[`pg-bootstrap`](#pg-bootstrap-start-the-database-from-scratch) to create
 the `dp` role, the `dp` database, the `vector` extension and the `bdchm`
 schema.
 
@@ -328,19 +339,25 @@ Things to know:
   interrupted, keeps what it applied. Because the DDL is idempotent, run the
   same file again after fixing the cause.
 
-### `pg-bootstrap`: set up the role, database and schema
+### `pg-bootstrap`: start the database from scratch
 
-Creates what the DDL needs before it can be applied, connecting as an
-administrative role. Each item is created only if it's missing:
+Gives you an empty database, ready for the DDL, connecting as an administrative
+role. **By default, if the database exists, it's dropped with everything in it**,
+after you confirm. Then the role, database, extension and schema are each created
+if they're missing.
 
 ```sh
-uv run pg-bootstrap                     # role dp, database dp, extension vector, schema bdchm
+uv run pg-bootstrap                     # database dp, role dp, extension vector, schema bdchm
+uv run pg-bootstrap -y                  # the same, without asking
+uv run pg-bootstrap --no-drop           # only create what's missing, and keep the data
 uv run pg-bootstrap --user app --dbname appdb --schema s1 --extensions ''
 ```
 
 ```
 Server: localhost:5432, as postgres
-role       dp                       created (LOGIN)
+Drop database dp on localhost:5432 (owner dp, 312 MB, open connections: 0) with everything in it, and create it again? [y/N] y
+database   dp                       dropped (was 312 MB, owner dp)
+role       dp                       exists
 database   dp                       created (owner dp)
 extension  vector                   created (version 0.8.7)
 schema     bdchm                    created (owner dp)
@@ -348,6 +365,8 @@ schema     bdchm                    created (owner dp)
 
 | Option             | Default                               | Meaning                               |
 |--------------------|---------------------------------------|---------------------------------------|
+| `--drop` / `--no-drop` | `--drop`                          | Drop the database first if it exists, with everything in it. |
+| `-y`, `--yes`      | ask                                   | Drop without asking. |
 | `--host`, `--port` | `$PGHOST`/`$PGPORT`, else `localhost:5432` |                                  |
 | `--user`           | `$PGUSER`, else `dp`                  | Login role to create. It owns the database and schema. |
 | `--password`       | none                                  | Password for the role, if it's created. Not needed with trust authentication. |
@@ -362,9 +381,22 @@ The defaults match `pg-apply-ddl` and the `apply_*.py` scripts, so after
 `pg-bootstrap` they run as `dp` without options, and everything they create
 is owned by `dp`.
 
-Existing objects are reported but never changed, even if they differ (for
-example, a database owned by another role). Fix those by hand. Exit status: 0
-on success, 2 on any error. The steps before the error have already been done.
+About dropping:
+
+- Open connections to the database are ended, including an application or database
+  client using it.
+- It asks only if the database exists. With no terminal and no `-y`, it changes
+  nothing and exits 1, so a script must pass `-y` or `--no-drop` on purpose.
+- It won't drop `postgres`, `template0`, `template1` or the `--admin-db`.
+- The role isn't dropped, because other databases can use it.
+- After a drop, apply the DDL and load the data again: see the
+  [typical workflow](#typical-workflow).
+
+An existing role is reported but never changed. With `--no-drop`, the same goes
+for an existing database, extension and schema, even if they differ (for example,
+a database owned by another role). Fix those by hand. Exit status: 0 on success,
+1 if dropping wasn't confirmed (nothing changed), 2 on any error. The steps before
+the error have already been done.
 
 ### `harmonized-add-studies`: add a ResearchStudy to each study folder
 
@@ -411,6 +443,38 @@ written and the exit status is 2. Folders starting with a dot are ignored, and a
 exit status is also 2 and the message lists the files already written. Fix the
 cause and run it again.
 
+### `harmonized-add-ages`: give participants a random age
+
+The harmonized participants have no `age_at_index`. This tool sets it in every
+`*-Participant--data.yaml` under `data/harmonized/`, to a value from 18 to 99
+years. The schema defines the slot in days, so the values range from 6575 to
+36524. Run it before `pg-load-data`, and again whenever the data has been
+regenerated.
+
+```sh
+uv run harmonized-add-ages --dry-run   # report what would change
+uv run harmonized-add-ages
+```
+
+| Option       | Default            | Meaning                                                 |
+|--------------|--------------------|---------------------------------------------------------|
+| `--data-dir` | `data/harmonized/` | The folder to look for participant files in, including subfolders. |
+| `--dry-run`  | off                | Report what would change, without writing.              |
+
+- **The ages are roughly uniform** over the range. Each run prints how many
+  participants fall in each decade.
+- **Each age comes from a hash of the participant's id**, so it looks random but
+  is the same on every run.
+- **The ages are made up, and independent of the rest of the data.** An
+  `age_at_index` can be later than the participant's visits, whose ages run from
+  45 to 85 years. Two participants of the same `Person` get unrelated ages.
+
+Running it again changes nothing once the data is up to date. A participant can
+have no age, a null age, or the age the tool would give it. Any other value
+stops the run with exit status 2, and nothing is written. If writing a file
+fails, the exit status is also 2 and the message lists the files already written.
+Fix the cause and run it again.
+
 ### `pg-load-data`: load harmonized YAML data into the tables
 
 Loads LinkML instance data into the tables from `linkml-pg-ddl`, in
@@ -418,7 +482,7 @@ Loads LinkML instance data into the tables from `linkml-pg-ddl`, in
 strings, as they are in the data (for example `OMOP:8507` for `sex`).
 
 ```sh
-uv run pg-bootstrap                                                               # once
+uv run pg-bootstrap                                                               # drops the database first; asks
 uv run python schema/pg-ddl/bdchm/enums-as-varchar/apply_01_tables__enums_as_varchar.py
 uv run pg-load-data                                  # all *--data.yaml under data/harmonized/, every study
 uv run pg-load-data data/harmonized/study_two --no-truncate   # add one study, keeping what's loaded
@@ -605,6 +669,7 @@ of records are sorted by id, so exporting again gives identical files.
     "research_project_type": "STUDY", "program": "Example Research Program",
     "principal_investigator": ["Example Investigator A"]
   },
+  "age_at_index": 32366,
   "visit": [
     { "id": "75122f58-...", "visit_category": "STUDY_SITE_VISIT", "age_at_visit_start": 27375,
       "questionnaire_response": [ { "id": "qr1", "age_at_response": 27375 } ] }
@@ -851,6 +916,42 @@ couldn't start (no files, no such index, can't connect), 130 if interrupted.
 Documents sent before an interruption stay in the index. Each run's log, with
 the counts and each failed document's id, file and error, is at
 `logs/<host>-<port>/es/<index>/load/<timestamp>.log`.
+
+### `bin/full-reload.sh`: rebuild PostgreSQL and the index
+
+A Bash script that rebuilds everything from the harmonized data, using the tools
+above. It works from any folder.
+
+```sh
+bin/full-reload.sh            # asks about the primary keys, and before replacing the index
+bin/full-reload.sh --es-yes   # replaces the index without asking
+```
+
+| Step | Command | Asks? |
+|---|---|---|
+| 1. Drop and recreate the database | `pg-bootstrap -y` | No: **the database is dropped straight away.** |
+| 2. Create the enums-as-varchar tables | `apply_01_tables__enums_as_varchar.py` | |
+| 3. Load the harmonized data, every study | `pg-load-data` | |
+| 4. Apply the primary keys | `apply_02_primary_keys__enums_as_varchar.py` | `[y/N]`: the default is to skip them. With no terminal, they're skipped. |
+| 5. Write the participant documents | `pg-export-participants` | |
+| 6. Recreate the index from the newest `schema/es` file | `es-recreate-index` | Yes, if the index exists, unless `--es-yes`. With no terminal and no `--es-yes`, the script stops here. |
+| 7. Load the documents | `es-load-participants --delete-missing` | |
+
+| Option | Default | Meaning |
+|---|---|---|
+| `--es-yes` | ask | Replace an existing index without asking. |
+| `--index NAME` | `participant_1` | The index to recreate and load. |
+| `--out-dir DIR` | `data/participants/` | Where the participant documents go. |
+
+- The script prints the PostgreSQL and Elasticsearch targets first. They come from
+  the tools' environment variables (`PGHOST`, `PGDATABASE`, `ES_HOST`, `ES_PORT`,
+  ...). **Check them when `localhost:9200` is a port-forward to a remote cluster.**
+- It doesn't run `harmonized-add-studies` or `harmonized-add-ages`. Run those first
+  if the data has been regenerated.
+- It doesn't apply the foreign keys, or run `es-participant-mapping`. Generate a new
+  index definition first if the schema, exporter or post-processors changed.
+- It stops at the first step that fails, with exit status 1, and says which. Run it
+  again after fixing the cause. Exit status 2 means a bad option or no `uv`.
 
 ### `bin/kibana-start.sh` and `bin/kibana-stop.sh`: a Kibana for any Elasticsearch
 

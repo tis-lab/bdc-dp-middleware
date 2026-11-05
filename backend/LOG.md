@@ -2,6 +2,13 @@
 
 Newest first. Each section covers one set of development changes.
 
+## 2026-11-05 10:00 PST: Docs updated for pg-bootstrap dropping the database
+
+`pg-bootstrap` in py-tools now drops an existing database by default, after asking.
+`README.md` and `DEV.md` no longer say it's safe to re-run, and the DEV.md checklist
+uses `--no-drop`, so that verifying the stack doesn't drop the database. `README.md`
+no longer says `py-tools/` is empty.
+
 ## 2026-11-05 03:59 PST: Line endings set with .gitattributes
 
 Added `backend/.gitattributes`: text files are stored and checked out with LF,

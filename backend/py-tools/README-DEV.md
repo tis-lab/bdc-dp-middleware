@@ -312,10 +312,21 @@ passed through.
   and database (`CREATE DATABASE` can't run in the target database, nor in a
   transaction, hence autocommit), then one to the new database for extensions
   and the schema, because both are per-database.
-- Each step checks the catalog (`pg_roles`, `pg_database`, `pg_extension`,
-  `pg_namespace`) and only creates what's missing. It never alters what exists
-  (owner, LOGIN, extension version), so a hand-made setup is never changed
-  behind your back. The output says what it found, including the owner.
+- **Dropping is the default**, so that a reload can start from scratch. It runs
+  first, in the `--admin-db` connection, before anything is created, so answering
+  no changes nothing. `confirm_drop()` follows `es-recreate-index`: `-y` skips the
+  question, and with no terminal it refuses and exits 1, so a script can't drop a
+  database by accident. The prompt names the server, owner, size and open
+  connections, because `--dbname` can come from `$PGDATABASE`.
+- `DROP DATABASE ... WITH (FORCE)` (PostgreSQL 13 and later) ends open connections,
+  which otherwise make the drop fail. `PROTECTED_DATABASES` and `--admin-db` are
+  refused before connecting. The role stays: it's cluster-wide, and may own other
+  databases.
+- After that, each step checks the catalog (`pg_roles`, `pg_database`,
+  `pg_extension`, `pg_namespace`) and only creates what's missing. It never alters
+  what exists (owner, LOGIN, extension version), so a hand-made setup kept with
+  `--no-drop` is never changed behind your back. The output says what it found,
+  including the owner.
 - Extensions and the schema are created as the admin, because `CREATE
   EXTENSION` usually needs a superuser. The schema is created `AUTHORIZATION
   <role>`, so the role owns it and can create objects in it.
@@ -325,9 +336,13 @@ passed through.
 - Names go through `psycopg.sql.Identifier`, and the password through
   `sql.Literal`, because DDL can't take bind parameters.
 - To verify: start a throwaway server with the extensions installed (for
-  pgvector, build the backend's `pg/` image) and run it twice. The first run
-  should report `created` and the second `exists`. Then run an `apply_*.py`
-  script without options, and check that the new objects are owned by the role.
+  pgvector, build the backend's `pg/` image) and run it twice with `--no-drop`. The
+  first run should report `created` and the second `exists`. Then run an
+  `apply_*.py` script without options, and check that the new objects are owned by
+  the role. Then check dropping: with a table in the database and a client
+  connected, `-y` should report `dropped` and leave no table; with no terminal and
+  no `-y` it should exit 1 and change nothing; answering no should do the same; and
+  `--dbname postgres` should exit 2.
 
 ## `harmonized-add-studies` (`src/py_tools/harmonized_add_studies.py`)
 
@@ -368,6 +383,31 @@ schema/linkml/bdchm.yaml -C ResearchStudy FILE` (the data files hold several
 documents and a `---` terminator, so copy one record to its own file). After
 `pg-load-data`, the `participant__member_of_research_study_id__fk_research_study`
 foreign key in `03_foreign_keys` should apply.
+
+## `harmonized-add-ages` (`src/py_tools/harmonized_add_ages.py`)
+
+- **A hash, not a random number generator.** `age_in_days()` takes the SHA-256 of
+  the participant's id modulo the size of the range. That's uniform over the
+  range, and it needs no stored seed: the same id always gives the same age,
+  whatever the file order or the set of studies.
+- **Range.** `MIN_DAYS` and `MAX_DAYS` use 365.25 days a year, from the first day
+  of age 18 (6575) to the last day of age 99 (36524).
+- **Independent of other ages.** The visits' ages (45 to 85 years) are deliberately
+  not taken into account, so `age_at_index` can be later than a visit.
+- **Shared code.** `PARTICIPANT_FILE` and `write_file()` come from
+  `harmonized_add_studies`, and `read_records()` from `pg_load_data`.
+- **Line edits, as in `harmonized-add-studies`.** `read_records()` gives the line
+  each record starts on, and the new line goes first in the record, which is its
+  sorted position. Records are handled from the last to the first, so that an
+  insertion doesn't move the lines still to be handled.
+
+### Verifying changes
+
+Check that `--dry-run` writes nothing, that the first run changes every
+participant, that the second reports `change 0 of N`, and that a scratch copy
+with a different `age_at_index` exits 2 and writes nothing. A `null` value should
+be replaced. Check that a value's line is the record's first, and that the file's
+other lines are unchanged.
 
 ## `pg-load-data` (`src/py_tools/pg_load_data.py`)
 
@@ -686,6 +726,33 @@ in a scratch folder:
 - a clean subset with `--delete-missing --alias` (the others deleted, alias
   moved);
 - no arguments (loads `data/participants/`).
+
+## `bin/full-reload.sh`
+
+- It only calls the tools, so their defaults and environment variables decide the
+  targets. `pg-bootstrap -y` is the one unconditional drop. The index keeps
+  `es-recreate-index`'s question unless `--es-yes`, because `localhost:9200` can be
+  a port-forward to a shared cluster.
+- The primary-key question defaults to no, and a missing terminal counts as no, so
+  an unattended run still finishes the load. The foreign keys aren't applied: the
+  `body_site` one is known to fail with this data.
+- `--index` and `--out-dir` exist so the whole script can be tested without touching
+  the real index or `data/participants`. The database can be redirected with
+  `PGDATABASE` and `PGUSER`.
+- A relative `--out-dir` is made absolute before the `cd` to the project.
+
+### Verifying changes
+
+Keep Bash 3.2 compatible. With `PGDATABASE` and `PGUSER` set to throwaway names, and a
+throwaway `--index` and `--out-dir`:
+
+- With no terminal, the primary keys should be skipped, and the run should finish
+  when the index is new. With the index present and no `--es-yes`, it should stop at
+  step 6 with exit status 1.
+- On a terminal (`printf 'y\n' | script -qec 'bin/full-reload.sh ...' /dev/null`),
+  `y` should add the primary keys, and an empty answer should skip them.
+- A failing step should stop the script. Check that the real database, index and
+  `data/participants` are unchanged, then remove the throwaways and their logs.
 
 ## `bin/kibana-start.sh`, `bin/kibana-stop.sh`
 

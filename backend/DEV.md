@@ -128,8 +128,9 @@ settings that compose adds must be in the image or in the OpenShift resources:
   cluster has only the `postgres` superuser. The `dp` role, database,
   `vector` extension and `bdchm` schema are created by `pg-bootstrap` in
   `py-tools/`, a Python command run from the host as `postgres` (trust auth).
-  Unlike init scripts, it can be run at any time, re-run safely (it only
-  creates what's missing), and used from Windows. A failed run doesn't leave a
+  Unlike init scripts, it can be run at any time and used from Windows. By
+  default it drops an existing database first, after asking; `--no-drop` only
+  creates what's missing. A failed run doesn't leave a
   half-initialized cluster that needs `clean-pg.sh`. The earlier
   `10-dp.sql`, `20-init-sql.sh` and `pg/init-sql/` bind mount were removed.
 - `pg/root/` holds only `.gitkeep`, and `COPY root/ /` is kept for the
@@ -307,7 +308,7 @@ docker inspect -f '{{.State.Health.Status}}' backend-es-1   # healthy
 curl -s localhost:9200/_cluster/health                       # status green
 curl -s -o /dev/null -w '%{http_code}\n' localhost:5601/api/status   # 200
 docker inspect -f '{{.State.Health.Status}}' backend-pg-1   # healthy
-(cd py-tools && uv run pg-bootstrap)        # role, database, extension, schema exist
+(cd py-tools && uv run pg-bootstrap --no-drop)   # role, database, extension, schema exist
 bin/compose.sh exec pg psql -U dp dp -Atc "select extversion from pg_extension where extname='vector'"
 bin/compose.sh exec es id                    # your uid/gid, plus group 0
 bin/compose.sh exec pg id                    # same
