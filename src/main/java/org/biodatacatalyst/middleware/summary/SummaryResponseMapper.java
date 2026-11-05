@@ -71,12 +71,43 @@ final class SummaryResponseMapper {
                 }
                 demographics.add(new DemographySummary(id("demography",slot),slot,recorded,null,null,List.of(),null,values));
             }
-            studies.add(new StudySummary(studyId,total,List.of(),demographics,conditions,List.of(),List.of(),List.of()));
+            studies.add(new StudySummary(studyId,total,ages(study.path("ages"),total),demographics,conditions,List.of(),List.of(),List.of()));
         }
         return new SummaryResponse(properties.release(), null, requiredIds, minimum,
                 terms.stream().map(c -> new SummaryTerm(c,null,null,List.of())).toList(),
                 List.of(),List.of(),studies);
     }
+    private List<ParticipantSummary> ages(JsonNode aggregation, BigInteger studyTotal) {
+        BigInteger recorded = bounded(aggregation.path("doc_count"), studyTotal);
+        JsonNode buckets = aggregation.at("/ranges/buckets");
+        if (!buckets.isArray() || buckets.size() != SummaryAgeBins.BANDS.size())
+            throw invalid("Age aggregation is incomplete.");
+        Map<String,JsonNode> byKey = new HashMap<>();
+        for (JsonNode bucket : buckets) {
+            String key = key(bucket);
+            if (byKey.put(key,bucket) != null) throw invalid("Duplicate age range.");
+        }
+        BigInteger binned = BigInteger.ZERO;
+        List<ParticipantSummary> values = new ArrayList<>();
+        for (var band : SummaryAgeBins.BANDS) {
+            JsonNode bucket = byKey.get(band.key());
+            if (bucket == null || !bucket.path("from").isNumber() || !bucket.path("to").isNumber()
+                    || bucket.path("from").decimalValue().compareTo(java.math.BigDecimal.valueOf(band.fromDays())) != 0
+                    || bucket.path("to").decimalValue().compareTo(java.math.BigDecimal.valueOf(band.toDays())) != 0)
+                throw invalid("Unexpected age range bounds.");
+            BigInteger participants = bounded(bucket.path("doc_count"),recorded);
+            binned = binned.add(participants);
+            if (participants.compareTo(minimum) >= 0)
+                values.add(new ParticipantSummary(id("participant","age_at_index",band.key(),"a"),
+                        "age_at_index",participants,null,java.math.BigDecimal.valueOf(band.low()),
+                        java.math.BigDecimal.valueOf(band.high()),"a",List.of()));
+        }
+        if (binned.compareTo(recorded) > 0) throw invalid("Age bin counts exceed recorded participants.");
+        if (recorded.compareTo(minimum) < 0) return List.of();
+        return List.of(new ParticipantSummary(id("participant","age_at_index"),"age_at_index",
+                recorded,null,null,null,null,values));
+    }
+
     // Values pinned by synthetic/bdchm.yaml; schema validation also checks emitted payloads in CI.
     private static Set<String> demographicValues(String slot) {
         return switch (slot) {
@@ -113,3 +144,4 @@ final class SummaryResponseMapper {
     }
     private static ApiException invalid(String message) { return new ApiException(UPSTREAM_INVALID_RESPONSE,message); }
 }
+

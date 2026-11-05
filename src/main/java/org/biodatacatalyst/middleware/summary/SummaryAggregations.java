@@ -18,7 +18,7 @@ final class SummaryAggregations {
                 "missing_concept", Map.of("missing", Map.of("field", "condition.condition_concept")),
                 "missing_status", Map.of("missing", Map.of("field", "condition.condition_status")),
                 "missing_relationship", Map.of("missing", Map.of("field", "condition.relationship_to_participant"))));
-        var studies = Map.of("terms", terms(STUDY_FIELD, 100), "aggs", Map.of("conditions", conditions, "demographics", demographics()));
+        var studies = Map.of("terms", terms(STUDY_FIELD, 100), "aggs", Map.of("conditions", conditions, "demographics", demographics(), "ages", SummaryAgeBins.aggregation()));
         return Map.of("size", 0, "track_total_hits", true, "query", query, "aggs", Map.of(
                 "studies", studies,
                 "missing_study", Map.of("missing", Map.of("field", STUDY_FIELD))));
@@ -37,3 +37,4 @@ final class SummaryAggregations {
         return SummaryCodeMappings.terms(field, size);
     }
 }
+
