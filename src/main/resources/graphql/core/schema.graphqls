@@ -1,4 +1,4 @@
-"""Read-only middleware API. All business operations use POST /graphql."""
+"""Read-only middleware API. All business operations use POST /cb/query."""
 type Query {
   """Return ranked candidates from Monarch. The frontend/user chooses the intended concept."""
   terms(

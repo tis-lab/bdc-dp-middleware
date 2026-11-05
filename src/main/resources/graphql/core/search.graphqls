@@ -1,11 +1,12 @@
 extend type Query {
   """
-  Smoke test.
+  Unfiltered page-load snapshot: all parent participant documents in the configured index.
   """
   searchProbe: SearchProbeResult!
 }
 
 type SearchProbeResult {
+  snapshot: CohortSnapshot!
   status: String!
   backend: String!
   httpStatus: Int!
@@ -15,8 +16,8 @@ type SearchProbeResult {
 }
 
 extend type Query {
-  """Search the exact _conditions keyword and count other condition keywords among matches. No summary-schema formatting."""
-  searchConditions(keyword: String!): SearchCountResult!
+  """Supply keyword or keywords. OR within PRESENT keys and within ABSENT keys; AND between the two groups. ABSENT requires an explicit record. Interim snapshot, not SummaryResponse."""
+  searchConditions(keyword: String, keywords: [String!]): SearchCountResult!
 }
 
 type ConditionCount {
@@ -27,7 +28,9 @@ type ConditionCount {
 }
 
 type SearchCountResult {
-  keyword: String!
+  snapshot: CohortSnapshot!
+  keyword: String
+  keywords: [String!]!
   """Exact matching parent-document count."""
   totalHits: String!
   buckets: [ConditionCount!]!
@@ -35,4 +38,19 @@ type SearchCountResult {
   sumOtherDocCount: String!
   """Elasticsearch's upper bound on bucket count error for this terms aggregation."""
   docCountErrorUpperBound: String!
+}
+
+"""Interim right-hand snapshot. Null means unavailable, never zero. Not summary.yaml's SummaryResponse."""
+type CohortSnapshot {
+  """Exact matching parent-document count; participant count assumes one document per participant."""
+  participantCount: Count!
+  """All parent participant documents in the configured index, ignoring selected condition filters."""
+  totalParticipantCount: Count!
+  studyCount: Count
+  totalStudyCount: Count
+  datasetCount: Count
+  totalDatasetCount: Count
+  indexRelease: String
+  lastUpdated: String
+  unavailableFields: [String!]!
 }

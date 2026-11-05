@@ -1,0 +1,53 @@
+name: Summary schema validation
+on:
+  pull_request:
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  summary:
+    name: Summary schema contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation dependencies
+        run: python -m pip install -r scripts/requirements-summary-validation.txt
+      - name: Test strict schema validation
+        run: python scripts/test_summary_schema.py
+      - name: Verify pinned schema and static fixture
+        run: python scripts/validate_summary_schema.py
+      - name: Check GraphQL contract
+        run: python scripts/test_graphql_schema.py
+      - name: Check AND/OR semantics
+        run: |
+          mkdir -p target/filter-check
+          javac -d target/filter-check src/main/java/org/biodatacatalyst/middleware/shared/ApiException.java src/main/java/org/biodatacatalyst/middleware/summary/SummaryFilterCompiler.java src/main/java/org/biodatacatalyst/middleware/summary/SummaryLeafFilterCompiler.java src/main/java/org/biodatacatalyst/middleware/summary/SummaryCodeMappings.java scripts/SummaryFilterCompilerCheck.java scripts/SummaryCodeMappingsCheck.java
+          java -cp target/filter-check SummaryFilterCompilerCheck
+          java -cp target/filter-check org.biodatacatalyst.middleware.summary.SummaryCodeMappingsCheck > target/code-mappings.tsv
+          python scripts/test_summary_code_mappings.py target/code-mappings.tsv
+      - name: Build and produce actual mapper responses
+        run: mvn --batch-mode clean verify
+      - name: Validate actual mapper responses
+        run: python scripts/validate_summary_schema.py --require-generated
+      - name: Upload validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: summary-schema-evidence
+          path: |
+            target/summary-contract/*.json
+            target/summary-schema/*.json
+            target/surefire-reports/*
+          if-no-files-found: warn
+          retention-days: 14

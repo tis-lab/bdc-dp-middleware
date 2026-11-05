@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -25,7 +26,7 @@ class ElasticsearchMetadataSearchTest {
     static String countResponse() {
         String base = COUNTS;
         return base.substring(0, base.length() - 1) + """
-            ,"aggregations":{"counts":{"doc_count_error_upper_bound":0,
+            ,"aggregations":{"population":{"doc_count":1000},"counts":{"doc_count_error_upper_bound":0,
             "sum_other_doc_count":3,"buckets":[{"key":"PRESENT|ONESELF|MONDO:0005252","doc_count":12}]}}}
             """;
     }
@@ -99,18 +100,67 @@ class ElasticsearchMetadataSearchTest {
     @Test void queriesTheSuppliedKeywordAndMapsBackendBuckets() {
         reply.set(countResponse());
         for (String keyword : List.of("PRESENT|ONESELF|MONDO:0005148", "ABSENT|ONESELF|MONDO:0005252")) {
-            var result = new SearchProbeController(client()).searchConditions(keyword);
+            var result = new SearchProbeController(client()).searchConditions(keyword, null);
             var sent = JsonMapper.builder().build().readTree(requestBody.get());
             assertThat(sent.path("size").asInt()).isZero();
             assertThat(sent.path("track_total_hits").asBoolean()).isTrue();
-            assertThat(sent.at("/query/term/_conditions").asString()).isEqualTo(keyword);
+            assertThat(sent.at("/query/bool/filter/0/terms/_conditions/0").asString()).isEqualTo(keyword);
             assertThat(sent.at("/aggs/counts/terms/exclude/0").asString()).isEqualTo(keyword);
             assertThat(result.keyword()).isEqualTo(keyword);
             assertThat(result.totalHits()).isEqualTo("500");
-            assertThat(result.buckets()).containsExactly(new SearchProbeController.ConditionCount(
+            assertThat(result.buckets()).containsExactly(new SearchResponseMapper.ConditionCount(
                     "PRESENT|ONESELF|MONDO:0005252", "12"));
             assertThat(result.sumOtherDocCount()).isEqualTo("3");
         }
+    }
+    @Test void sendsOrWithinEachStatusAndAndBetweenGroups() {
+        reply.set(countResponse());
+        var keys = List.of("PRESENT|ONESELF|MONDO:1", "PRESENT|ONESELF|HP:2",
+                "ABSENT|ONESELF|MONDO:3", "ABSENT|ONESELF|HP:4", "PRESENT|ONESELF|MONDO:1");
+        var result = new SearchProbeController(client()).searchConditions(null, keys);
+        var sent = JsonMapper.builder().build().readTree(requestBody.get());
+        assertThat(sent.at("/query/bool/filter").size()).isEqualTo(2);
+        assertThat(sent.at("/query/bool/filter/0/terms/_conditions").toString())
+                .isEqualTo("[\"PRESENT|ONESELF|MONDO:1\",\"PRESENT|ONESELF|HP:2\"]");
+        assertThat(sent.at("/query/bool/filter/1/terms/_conditions").toString())
+                .isEqualTo("[\"ABSENT|ONESELF|MONDO:3\",\"ABSENT|ONESELF|HP:4\"]");
+        assertThat(sent.at("/aggs/population/global").isObject()).isTrue();
+        assertThat(sent.has("post_filter")).isFalse();
+        assertThat(result.keywords()).hasSize(4);
+        assertThat(result.snapshot().participantCount()).isEqualTo(java.math.BigInteger.valueOf(500));
+        assertThat(result.snapshot().totalParticipantCount()).isEqualTo(java.math.BigInteger.valueOf(1000));
+        assertThat(result.snapshot().studyCount()).isNull();
+        assertThat(result.snapshot().datasetCount()).isNull();
+    }
+    @Test void rejectsInvalidListsAndAmbiguousArgumentsWithoutNetwork() {
+        var controller = new SearchProbeController(client());
+        assertThatThrownBy(() -> controller.searchConditions(null, null)).isInstanceOf(ApiException.class);
+        assertThatThrownBy(() -> controller.searchConditions("PRESENT|ONESELF|HP:1", List.of("ABSENT|ONESELF|HP:2")))
+                .isInstanceOf(ApiException.class);
+        for (var keys : List.of(List.<String>of(), java.util.Collections.nCopies(51, "PRESENT|ONESELF|HP:1"),
+                Collections.singletonList((String) null), List.of("UNKNOWN|ONESELF|HP:1"),
+                List.of("PRESENT|MOTHER|HP:1"), List.of("PRESENT|ONESELF|HP:*"))) {
+            assertThatThrownBy(() -> client().executeConditions(keys)).isInstanceOfSatisfying(ApiException.class,
+                    error -> assertThat(error.code()).isEqualTo(BAD_USER_INPUT));
+        }
+        assertThat(path.get()).isNull();
+    }
+    @Test void rejectsMissingOrInconsistentPopulationCount() {
+        for (String bad : List.of(countResponse().replace("\"doc_count\":1000", "\"doc_count\":1"),
+                countResponse().replace("\"population\"", "\"wrong_population\""))) {
+            reply.set(bad);
+            assertThatThrownBy(() -> client().executeCondition("PRESENT|ONESELF|HP:1"))
+                    .isInstanceOfSatisfying(ApiException.class,
+                            error -> assertThat(error.code()).isEqualTo(UPSTREAM_INVALID_RESPONSE));
+        }
+    }
+    @Test void keepsLargeCountsExactAndUnknownFieldsNull() {
+        reply.set(OK.replace("\"value\":0", "\"value\":9007199254740993"));
+        var snapshot = new SearchProbeController(client()).searchProbe().snapshot();
+        assertThat(snapshot.participantCount()).isEqualTo(new java.math.BigInteger("9007199254740993"));
+        assertThat(snapshot.totalParticipantCount()).isEqualTo(snapshot.participantCount());
+        assertThat(snapshot.indexRelease()).isNull();
+        assertThat(snapshot.unavailableFields()).contains("studyCount", "datasetCount", "indexRelease");
     }
     @Test void rejectsMalformedKeywordBeforeSendingRequest() {
         for (String keyword : List.of("", "diabetes", "MONDO:1|ABSENT", "PRESENT||MONDO:1", "a".repeat(501))) {
@@ -130,7 +180,7 @@ class ElasticsearchMetadataSearchTest {
     }
     @Test void acceptsEmptyBuckets() {
         reply.set(countResponse().replace("{\"key\":\"PRESENT|ONESELF|MONDO:0005252\",\"doc_count\":12}", ""));
-        assertThat(new SearchProbeController(client()).searchConditions("PRESENT|ONESELF|MONDO:0005148").buckets()).isEmpty();
+        assertThat(new SearchProbeController(client()).searchConditions("PRESENT|ONESELF|MONDO:0005148", null).buckets()).isEmpty();
     }
     @Test void preservesActualSuccessfulHttpStatus() {
         status.set(201);

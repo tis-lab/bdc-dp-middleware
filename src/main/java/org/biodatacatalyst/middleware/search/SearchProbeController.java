@@ -1,12 +1,15 @@
 package org.biodatacatalyst.middleware.search;
 
-import java.util.ArrayList;
 import java.util.List;
+import org.biodatacatalyst.middleware.search.SearchResponseMapper.SearchProbeResult;
+import org.biodatacatalyst.middleware.search.SearchResponseMapper.SearchCountResult;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+import org.biodatacatalyst.middleware.shared.ApiException;
+import static org.biodatacatalyst.middleware.shared.ApiException.Code.BAD_USER_INPUT;
 
-/** Initial query execution endpoints; no summary-schema mapping. */
+/** Live snapshot operations; per-study summary-schema mapping is a separate contract. */
 @Controller
 public class SearchProbeController {
     private final MetadataSearch search;
@@ -17,31 +20,18 @@ public class SearchProbeController {
 
     @QueryMapping
     public SearchProbeResult searchProbe() {
-        var execution = search.executeProbe();
-        return new SearchProbeResult("SUCCEEDED", "elasticsearch", execution.httpStatus(),
-                (int) Math.min(execution.elapsedMillis(), Integer.MAX_VALUE),
-                execution.body().at("/hits/total/value").bigIntegerValue().toString());
+        return SearchResponseMapper.probe(search.executeProbe());
     }
 
     @QueryMapping
-    public SearchCountResult searchConditions(@Argument("keyword") String keyword) {
-        var execution = search.executeCondition(keyword);
-        var counts = execution.body().at("/aggregations/counts");
-        var buckets = new ArrayList<ConditionCount>();
-        for (var bucket : counts.path("buckets")) {
-            buckets.add(new ConditionCount(bucket.path("key").asString(),
-                    bucket.path("doc_count").bigIntegerValue().toString()));
+    public SearchCountResult searchConditions(@Argument("keyword") String keyword,
+                                              @Argument("keywords") List<String> keywords) {
+        if ((keyword == null) == (keywords == null)) {
+            throw new ApiException(BAD_USER_INPUT,
+                    "Supply either keyword or keywords, not both.");
         }
-        return new SearchCountResult(keyword,
-                execution.body().at("/hits/total/value").bigIntegerValue().toString(),
-                List.copyOf(buckets),
-                counts.path("sum_other_doc_count").bigIntegerValue().toString(),
-                counts.path("doc_count_error_upper_bound").bigIntegerValue().toString());
+        var selection = new ConditionSelection(keyword == null ? keywords : List.of(keyword));
+        var execution = search.executeConditions(selection.keywords());
+        return SearchResponseMapper.conditions(keyword, selection.keywords(), execution);
     }
-
-    public record ConditionCount(String conditionKey, String documentCount) {}
-    public record SearchCountResult(String keyword, String totalHits,
-                                    List<ConditionCount> buckets, String sumOtherDocCount, String docCountErrorUpperBound) {}
-
-    public record SearchProbeResult(String status, String backend, int httpStatus, int elapsedMillis, String totalHits) {}
 }

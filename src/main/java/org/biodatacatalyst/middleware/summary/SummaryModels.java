@@ -7,6 +7,7 @@ import java.util.List;
 public final class SummaryModels {
     private SummaryModels() {}
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record SummaryResponse(
             String release,
             String seed,
@@ -25,6 +26,7 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record SummaryTerm(
             String curie,
             String label,
@@ -35,6 +37,7 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record TermRelation(
             String subject,
             String predicate,
@@ -42,6 +45,7 @@ public final class SummaryModels {
             String relation_source) {
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record ResearchStudy(
             String id,
             String name,
@@ -53,6 +57,7 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record StudySummary(
             String research_study,
             BigInteger participant_count,
@@ -72,6 +77,7 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record ParticipantSummary(
             String id,
             String summarized_slot,
@@ -86,6 +92,7 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record DemographySummary(
             String id,
             String summarized_slot,
@@ -101,10 +108,12 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record ConditionSummary(
             String id,
             String condition_concept,
             String condition_status,
+            String relationship_to_participant,
             BigInteger participant_count,
             BigInteger record_count,
             List<ConditionSummary> values) {
@@ -113,6 +122,7 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record ProcedureSummary(
             String id,
             String procedure_concept,
@@ -125,6 +135,7 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record DrugExposureSummary(
             String id,
             String drug_concept,
@@ -136,6 +147,7 @@ public final class SummaryModels {
         }
     }
 
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record MeasurementObservationSummary(
             String id,
             String observation_type,

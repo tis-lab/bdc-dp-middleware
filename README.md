@@ -1,4 +1,4 @@
-# BDC Data Portal Middleware
+# BDC Data Portal Cohort Builder Service
 
 ## Build and run
 
@@ -10,7 +10,7 @@
    the green arrow next to the class, or use the generated **DataPortalMiddlewareApplication** run
    configuration.
 4. Wait for `Started DataPortalMiddlewareApplication` in the Run window, then open
-   <http://localhost:8080/graphiql>.
+   <http://localhost:8080/cb/graphiql>.
 
 ### PowerShell
 
@@ -29,14 +29,20 @@ Check it is up and running:
 Invoke-RestMethod http://localhost:8080/actuator/health
 ```
 
-Then open <http://localhost:8080/graphiql>
+Then open <http://localhost:8080/cb/graphiql>
+
+## Routing
+
+The service name is `bdc-data-portal-cohort-builder-service`. The cohort builder UI
+sends GraphQL requests to `POST /cb/query` through DP-Core. DP-Core must forward
+the full path unchanged. See [the routing agreement and deployment checks](docs/cohort-builder-routing.md).
 
 ## Endpoints
 
 | Endpoint                         | Purpose                                                   |
 |----------------------------------|-----------------------------------------------------------|
-| `POST /graphql`                  | The entire frontend API                                   |
-| `GET /graphiql`                  | Interactive, schema-aware documentation and query console |
+| `POST /cb/query`                  | The entire frontend API                                   |
+| `GET /cb/graphiql`                  | Interactive, schema-aware documentation and query console |
 | `GET /actuator/health`           | Overall health                                            |
 | `GET /actuator/health/liveness`  | OpenShift liveness probe                                  |
 | `GET /actuator/health/readiness` | OpenShift readiness probe                                 |
@@ -50,19 +56,4 @@ Always available:
 | `terms(query, limit, offset)` | `TermResults` - one paginated list: matching BDC concepts with specification coverage first, then ranked concepts from Monarch |
 | `autocomplete(query)`         | `AutocompleteResults` - Monarch's suggestions unchanged, no BDC data, no pagination                                            |
 | `health`                      | `Health!` - process status only                                                                                                |
-| `summary(query)`              | `SummaryResponse` - participant counts for a cohort, study by study                                                            |
-| `summaryJson(query)`          | the same response as a JSON scalar, with no selection set                                                                      |
-
-With the `synthetic` profile active: `studies`, `study`, `participants`, `entityRecords`,
-`participant`, `participantDetail`, `participantRecords`, `measurements`, `definitions`,
-`definition`, `definitionCounts`, `definitionParticipants`.
-
-## Optional synthetic feature
-
-Off by default. Synthetic data can be read by activating the profile:
-
-```powershell
-$env:SPRING_PROFILES_ACTIVE = "synthetic"
-$env:APP_DATA_LOCATION = "classpath:data/"
-mvn spring-boot:run
-```
+| `summary`              | `SummaryResponse` - participant counts for a cohort, study by study                                                            |

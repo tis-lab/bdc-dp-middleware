@@ -1,0 +1,116 @@
+{
+  "release": "test-release",
+  "filter": [],
+  "min_count": 1,
+  "terms": [
+    {
+      "curie": "MONDO:0005148",
+      "parents": []
+    }
+  ],
+  "relations": [],
+  "research_studies": [],
+  "studies": [
+    {
+      "research_study": "study_one",
+      "participant_count": 5,
+      "participants": [],
+      "demographics": [
+        {
+          "id": "urn:bdc:summary:ZGVtb2dyYXBoeXxzZXg",
+          "summarized_slot": "sex",
+          "participant_count": 4,
+          "race": [],
+          "values": [
+            {
+              "id": "urn:bdc:summary:ZGVtb2dyYXBoeXxzZXh8RkVNQUxF",
+              "summarized_slot": "sex",
+              "participant_count": 3,
+              "race": [],
+              "values": [],
+              "sex": "FEMALE"
+            },
+            {
+              "id": "urn:bdc:summary:ZGVtb2dyYXBoeXxzZXh8TUFMRQ",
+              "summarized_slot": "sex",
+              "participant_count": 1,
+              "race": [],
+              "values": [],
+              "sex": "MALE"
+            }
+          ]
+        },
+        {
+          "id": "urn:bdc:summary:ZGVtb2dyYXBoeXxyYWNl",
+          "summarized_slot": "race",
+          "participant_count": 4,
+          "race": [],
+          "values": [
+            {
+              "id": "urn:bdc:summary:ZGVtb2dyYXBoeXxyYWNlfFdISVRF",
+              "summarized_slot": "race",
+              "participant_count": 3,
+              "race": [
+                "WHITE"
+              ],
+              "values": []
+            },
+            {
+              "id": "urn:bdc:summary:ZGVtb2dyYXBoeXxyYWNlfEFTSUFO",
+              "summarized_slot": "race",
+              "participant_count": 2,
+              "race": [
+                "ASIAN"
+              ],
+              "values": []
+            }
+          ]
+        },
+        {
+          "id": "urn:bdc:summary:ZGVtb2dyYXBoeXxldGhuaWNpdHk",
+          "summarized_slot": "ethnicity",
+          "participant_count": 4,
+          "race": [],
+          "values": [
+            {
+              "id": "urn:bdc:summary:ZGVtb2dyYXBoeXxldGhuaWNpdHl8Tk9UX0hJU1BBTklDX09SX0xBVElOTw",
+              "summarized_slot": "ethnicity",
+              "participant_count": 4,
+              "race": [],
+              "values": [],
+              "ethnicity": "NOT_HISPANIC_OR_LATINO"
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "id": "urn:bdc:summary:Y29uZGl0aW9ufE1PTkRPOjAwMDUxNDg",
+          "condition_concept": "MONDO:0005148",
+          "participant_count": 4,
+          "values": [
+            {
+              "id": "urn:bdc:summary:Y29uZGl0aW9ufE1PTkRPOjAwMDUxNDh8T05FU0VMRnxQUkVTRU5U",
+              "condition_concept": "MONDO:0005148",
+              "condition_status": "PRESENT",
+              "relationship_to_participant": "ONESELF",
+              "participant_count": 3,
+              "values": []
+            },
+            {
+              "id": "urn:bdc:summary:Y29uZGl0aW9ufE1PTkRPOjAwMDUxNDh8T05FU0VMRnxBQlNFTlQ",
+              "condition_concept": "MONDO:0005148",
+              "condition_status": "ABSENT",
+              "relationship_to_participant": "ONESELF",
+              "participant_count": 1,
+              "values": []
+            }
+          ]
+        }
+      ],
+      "procedures": [],
+      "drug_exposures": [],
+      "measurements": []
+    }
+  ]
+}
