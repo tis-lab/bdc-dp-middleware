@@ -85,15 +85,17 @@ bin/compose.sh up -d --wait pg
 cd py-tools && uv run pg-bootstrap
 ```
 
-It creates, only where missing:
+It creates, where missing:
 
 - role `dp` (login, not a superuser)
 - database `dp`, owned by `dp`, with the `vector` (pgvector) extension
 - schema `bdchm`, owned by `dp`
 
-It's safe to run any time; it reports what already exists and changes nothing
-there. `uv run pg-bootstrap --help` lists options for other names. Then apply
-the bdchm DDL with the scripts described in the py-tools README.
+**If database `dp` already exists, it's dropped with everything in it**, after you
+confirm, and created again. `-y` skips the question, and `--no-drop` keeps the
+database and only creates what's missing. The role is never dropped.
+`uv run pg-bootstrap --help` lists options for other names. Then apply the bdchm
+DDL with the scripts described in the py-tools README.
 
 No password is needed for either role:
 
@@ -237,8 +239,8 @@ uncommitted there as drift.
 ## Python tools: `py-tools/`
 
 `py-tools/` is a packaged [uv](https://docs.astral.sh/uv/) project (Python 3.14)
-for command-line and other tools. It starts empty. See
-[py-tools/README.md](py-tools/README.md).
+for the tools that load the harmonized data into PostgreSQL and index it in
+Elasticsearch. See [py-tools/README.md](py-tools/README.md).
 
 ```bash
 cd py-tools
