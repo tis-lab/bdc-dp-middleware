@@ -18,7 +18,9 @@ input SummaryFilterInput {
   or: [SummaryFilterInput!]
 }
 
-"""Exact MONDO/HP concept match. Supply selection or status; if both are supplied they must agree.
+"""
+Exact CURIE match against Elasticsearch condition.condition_concept.
+The concept is matched as supplied; no ontology expansion or cross-class lookup.
 EXCLUDE means an explicit ABSENT record, never a missing record or Boolean NOT.
 """
 input SummaryConditionInput {

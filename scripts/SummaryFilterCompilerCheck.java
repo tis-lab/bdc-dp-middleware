@@ -93,7 +93,54 @@ public class SummaryFilterCompilerCheck {
         invalid(Map.of("condition",Map.of("concept",a,"selection","INCLUDE"),"and",List.of(includeB)));
         System.out.println("PASS: concept selections; 64 exhaustive status combinations for both requested expressions; default/explicit relationship; same-record semantics; invalid input");
     }
+    static void vocabularyChecks() {
+        for (String concept : List.of(
+                "MONDO:0005044",
+                "HP:0000822",
+                "UPHENO:7000207",
+                "ATC:C03",
+                "EXAMPLE:future-concept")) {
+
+            var include = SummaryFilterCompiler.compile(condition(concept, "INCLUDE"));
+            var exclude = SummaryFilterCompiler.compile(condition(concept, "EXCLUDE"));
+
+            var present = Map.<String,Object>of(
+                    "condition", List.of(record(concept, "PRESENT", "ONESELF")));
+            var absent = Map.<String,Object>of(
+                    "condition", List.of(record(concept, "ABSENT", "ONESELF")));
+
+            check(matches(include.query(), present));
+            check(!matches(include.query(), absent));
+            check(matches(exclude.query(), absent));
+            check(!matches(exclude.query(), present));
+            check(!matches(include.query(), Map.of()));
+            check(!matches(exclude.query(), Map.of()));
+
+            check(include.query().equals(
+                    SummaryFilterCompiler.compile(
+                            leaf("condition|" + concept + "|ONESELF|PRESENT")
+                    ).query()));
+        }
+
+        var both = SummaryFilterCompiler.compile(Map.of("and", List.of(
+                condition("UPHENO:7000207", "INCLUDE"),
+                condition("MONDO:0005044", "INCLUDE"))));
+
+        check(matches(both.query(), Map.of("condition", List.of(
+                record("UPHENO:7000207", "PRESENT", "ONESELF"),
+                record("MONDO:0005044", "PRESENT", "ONESELF")))));
+        check(!matches(both.query(), Map.of("condition", List.of(
+                record("UPHENO:7000207", "PRESENT", "ONESELF")))));
+
+        for (String concept : List.of(
+                "", "UPHENO", ":7000207", "ATC:", "ATC:C 03",
+                "HP:*", "ATC:C?", "ATC:C03|PRESENT",
+                "ATC:C03\n", "EXAMPLE:" + "x".repeat(512))) {
+            invalid(condition(concept, "INCLUDE"));
+        }
+    }
     public static void main(String[] args) {
+        vocabularyChecks();
         conceptChecks();
         var diabetes = leaf("condition|MONDO:0005015|ONESELF|PRESENT");
         var hypertension = leaf("condition|HP:0000822|ONESELF|PRESENT");

@@ -31,8 +31,14 @@ final class SummaryLeafFilterCompiler {
         if (!Set.of("concept", "selection", "status", "relationship").containsAll(condition.keySet()))
             throw bad("Unknown condition field.");
         if (!(condition.get("concept") instanceof String concept)
-                || !concept.matches("(?:MONDO|HP):[0-9]{7}"))
-            throw bad("concept must be a MONDO or HP CURIE, e.g. MONDO:0005015 or HP:0000822.");
+                || concept.length() > 512
+                || !concept.matches(
+                "[A-Za-z][A-Za-z0-9._-]*:[^\\s\\p{Z}\\p{C}|*?]+")) {
+            throw bad(
+                    "concept must be a CURIE in prefix:identifier format, "
+                            + "without whitespace, control characters, pipes, or wildcards; "
+                            + "for example MONDO:0005044.");
+        }
         Object selection = condition.get("selection");
         Object suppliedStatus = condition.get("status");
         if (selection == null && suppliedStatus == null)
