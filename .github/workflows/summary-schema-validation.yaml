@@ -32,9 +32,9 @@ jobs:
       - name: Check AND/OR semantics
         run: |
           mkdir -p target/filter-check
-          javac -d target/filter-check src/main/java/org/biodatacatalyst/middleware/shared/ApiException.java src/main/java/org/biodatacatalyst/middleware/summary/SummaryFilterCompiler.java src/main/java/org/biodatacatalyst/middleware/summary/SummaryLeafFilterCompiler.java src/main/java/org/biodatacatalyst/middleware/summary/SummaryCodeMappings.java scripts/SummaryFilterCompilerCheck.java scripts/SummaryCodeMappingsCheck.java
+          javac -d target/filter-check src/main/java/gov/nih/nhlbi/bdc/dataportal/cohortbuilder/shared/ApiException.java src/main/java/gov/nih/nhlbi/bdc/dataportal/cohortbuilder/summary/SummaryFilterCompiler.java src/main/java/gov/nih/nhlbi/bdc/dataportal/cohortbuilder/summary/SummaryLeafFilterCompiler.java src/main/java/gov/nih/nhlbi/bdc/dataportal/cohortbuilder/summary/SummaryCodeMappings.java scripts/SummaryFilterCompilerCheck.java scripts/SummaryCodeMappingsCheck.java
           java -cp target/filter-check SummaryFilterCompilerCheck
-          java -cp target/filter-check org.biodatacatalyst.middleware.summary.SummaryCodeMappingsCheck > target/code-mappings.tsv
+          java -cp target/filter-check gov.nih.nhlbi.bdc.dataportal.cohortbuilder.summary.SummaryCodeMappingsCheck > target/code-mappings.tsv
           python scripts/test_summary_code_mappings.py target/code-mappings.tsv
       - name: Build and produce actual mapper responses
         run: mvn --batch-mode clean verify

@@ -41,3 +41,6 @@ build/
 ### Python validation tooling ###
 __pycache__/
 *.pyc
+
+# Generated coverage reports
+testResults/
