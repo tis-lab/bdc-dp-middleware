@@ -1,4 +1,4 @@
-package org.biodatacatalyst.middleware.summary;
+package gov.nih.nhlbi.bdc.dataportal.cohortbuilder.summary;
 /** Dependency-free boundary check: run with -ea after compilation alongside SummaryAgeBins. */
 public class SummaryAgeBinsCheck {
     public static void main(String[] args) {

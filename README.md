@@ -6,10 +6,10 @@
 
 1. **File > Open** and select the project folder. IntelliJ imports the Maven project automatically.
 2. **File > Project Structure > Project**: set the SDK to a JDK 21 install and the language level to 21.
-3. Open `src/main/java/org/biodatacatalyst/middleware/DataPortalMiddlewareApplication.java` and click
+3. Open `src/main/java/gov/nih/nhlbi/bdc/dataportal/cohortbuilder/DataPortalMiddlewareApplication.java` and click
    the green arrow next to the class, or use the generated **DataPortalMiddlewareApplication** run
    configuration.
-4. Wait for `Started DataPortalMiddlewareApplication` in the Run window, then open
+4. Wait for `Started BdcDpCohortBuilderApplication` in the Run window, then open
    <http://localhost:8080/cb/graphiql>.
 
 ### PowerShell

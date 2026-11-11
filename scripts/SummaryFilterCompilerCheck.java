@@ -1,7 +1,7 @@
 import java.util.*;
 import java.nio.charset.StandardCharsets;
-import org.biodatacatalyst.middleware.summary.SummaryFilterCompiler;
-import org.biodatacatalyst.middleware.shared.ApiException;
+import gov.nih.nhlbi.bdc.dataportal.cohortbuilder.summary.SummaryFilterCompiler;
+import gov.nih.nhlbi.bdc.dataportal.cohortbuilder.shared.ApiException;
 
 /** Dependency-free execution of the production compiler against synthetic participant records. */
 public class SummaryFilterCompilerCheck {

@@ -1,4 +1,4 @@
-package org.biodatacatalyst.middleware.summary;
+package gov.nih.nhlbi.bdc.dataportal.cohortbuilder.summary;
 
 import java.util.*;
 

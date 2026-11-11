@@ -1,8 +1,6 @@
-# Default profile: term resolution only. The synthetic study feature is OFF here and is switched on
-# by activating the "synthetic" profile, which layers application-synthetic.yml over this file.
 spring:
   application:
-    name: bdc-dp-middleware
+    name: bdc-data-portal-cohort-builder-service
 
   graphql:
     http:
@@ -23,12 +21,13 @@ spring:
 server:
   port: ${PORT:8080}
   shutdown: graceful
+  forward-headers-strategy: framework
 
 management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,info
   endpoint:
     health:
       show-details: never
@@ -42,7 +41,7 @@ monarch:
 
 logging:
   level:
-    org.biodatacatalyst.middleware: ${APP_LOG_LEVEL:INFO}
+    gov.nih.nhlbi.bdc: ${APP_LOG_LEVEL:INFO}
 
 harmonized:
   enabled: ${HARMONIZED_ENABLED:true}
@@ -60,3 +59,8 @@ search:
 summary:
   release: ${SUMMARY_RELEASE:test}
   min-count: ${SUMMARY_MIN_COUNT:1}
+
+info:
+  app:
+    name: bdc-data-portal-cohort-builder-service
+    environment: ${ENV:local}
