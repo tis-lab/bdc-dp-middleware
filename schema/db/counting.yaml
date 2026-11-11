@@ -1,0 +1,486 @@
+id: https://w3id.org/tis-lab/BDC-Portal/db/counting
+name: bdchm_db_counting
+title: Counting database
+description: >-
+  Participant-level projection of BDC-HM records used for counts and cohorts.
+  Every column copies a named BDC-HM slot or states how it is derived; see
+  bdchm_db_common for the conventions.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  bdchm: https://w3id.org/bdchm/
+  bdchmg: https://w3id.org/tis-lab/BDC-Portal/governed/
+  bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
+
+default_prefix: bdchmdb
+default_range: string
+
+imports:
+  - linkml:types
+  - bdchm
+  - bdchm_governed
+  - bdchm_db_common
+
+classes:
+
+  # -------------------------------------------------------------------
+  # Participants
+  # -------------------------------------------------------------------
+
+  ParticipantOrdinal:
+    description: Maps each participant in a release to its number and consent group.
+    mixins:
+      - ReleaseScoped
+    related_mappings:
+      - bdchm:Participant
+    annotations:
+      table: counting.participant_ordinal
+    slots:
+      - ordinal
+    attributes:
+      participant_id:
+        required: true
+        exact_mappings:
+          - bdchm:id
+        annotations:
+          source_slot: Participant.id
+      research_study_id:
+        required: true
+        exact_mappings:
+          - bdchm:member_of_research_study
+        annotations:
+          source_slot: Participant.member_of_research_study
+      consent_group:
+        required: true
+        exact_mappings:
+          - bdchmg:consent_group_id
+        annotations:
+          source_slot: GovernedParticipant.consent_group_id
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, ordinal]
+      participant:
+        unique_key_slots: [release, participant_id]
+
+  ParticipantAttribute:
+    description: Participant-level values used for demographic and age summaries.
+    mixins:
+      - ReleaseScoped
+    related_mappings:
+      - bdchm:Participant
+      - bdchm:Demography
+    annotations:
+      table: counting.participant_attribute
+    slots:
+      - ordinal
+    attributes:
+      sex:
+        range: SexEnum
+        exact_mappings:
+          - bdchm:sex
+        annotations:
+          source_slot: Demography.sex
+      ethnicity:
+        range: EthnicityEnum
+        exact_mappings:
+          - bdchm:ethnicity
+        annotations:
+          source_slot: Demography.ethnicity
+      race:
+        range: RaceEnum
+        multivalued: true
+        exact_mappings:
+          - bdchm:race
+        annotations:
+          source_slot: Demography.race
+      age_at_index_days:
+        range: integer
+        exact_mappings:
+          - bdchm:age_at_index
+        annotations:
+          source_slot: Participant.age_at_index
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, ordinal]
+
+  GroupRange:
+    description: The contiguous range of participant numbers for each consent group.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: counting.group_range
+    attributes:
+      consent_group:
+        required: true
+        exact_mappings:
+          - bdchmg:consent_group_id
+        annotations:
+          source_slot: GovernedParticipant.consent_group_id
+      research_study_id:
+        required: true
+        exact_mappings:
+          - bdchm:member_of_research_study
+        annotations:
+          source_slot: Participant.member_of_research_study
+      lo:
+        range: integer
+        required: true
+        annotations:
+          origin: system
+          derivation: Lowest ordinal in the consent group.
+      hi:
+        range: integer
+        required: true
+        annotations:
+          origin: system
+          derivation: Highest ordinal in the consent group.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, consent_group]
+
+  # -------------------------------------------------------------------
+  # Events: one row per BDC-HM record. The abstract class declares the
+  # columns; each subclass states which BDC-HM slot fills them.
+  # -------------------------------------------------------------------
+
+  Event:
+    abstract: true
+    description: >-
+      One row per BDC-HM record. Values are copied without recoding; missing
+      times are never imputed; no new events (such as eras) are derived.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: counting.event
+    slots:
+      - ordinal
+    attributes:
+      source_record_id:
+        required: true
+        exact_mappings:
+          - bdchm:id
+        annotations:
+          source_slot: id
+      source_class:
+        required: true
+        annotations:
+          origin: system
+          derivation: Name of the BDC-HM class the record belongs to.
+      source_file:
+        required: true
+        annotations:
+          origin: system
+          derivation: Harmonized file the record was loaded from.
+      visit_id:
+        exact_mappings:
+          - bdchm:associated_visit
+        annotations:
+          source_slot: associated_visit
+      age_start_days:
+        range: integer
+        description: Participant's age in days at the start of the event, from the slot named in age_start_slot.
+      age_end_days:
+        range: integer
+      age_start_slot:
+        required: true
+        annotations:
+          origin: system
+          derivation: Name of the BDC-HM slot age_start_days was copied from.
+      concept:
+        range: uriorcurie
+        required: true
+      status: {}
+      relationship: {}
+      record_provenance: {}
+      value_decimal:
+        range: decimal
+      value_operator: {}
+      unit: {}
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, source_record_id]
+
+  ConditionEvent:
+    is_a: Event
+    exact_mappings:
+      - bdchm:Condition
+    slot_usage:
+      ordinal:
+        annotations:
+          derivation: Ordinal of Condition.associated_participant.
+      concept:
+        exact_mappings:
+          - bdchm:condition_concept
+        annotations:
+          source_slot: Condition.condition_concept
+      status:
+        range: HistoricalStatusEnum
+        exact_mappings:
+          - bdchm:condition_status
+        annotations:
+          source_slot: Condition.condition_status
+      relationship:
+        range: FamilyRelationshipEnum
+        required: true
+        exact_mappings:
+          - bdchm:relationship_to_participant
+        annotations:
+          source_slot: Condition.relationship_to_participant
+      age_start_days:
+        related_mappings:
+          - bdchm:age_at_condition_start
+          - bdchm:age_at_condition_report
+        annotations:
+          source_slot: Condition.age_at_condition_start, or Condition.age_at_condition_report when only that is recorded; age_start_slot says which
+      age_end_days:
+        exact_mappings:
+          - bdchm:age_at_condition_end
+        annotations:
+          source_slot: Condition.age_at_condition_end
+      record_provenance:
+        range: ProvenanceEnum
+        exact_mappings:
+          - bdchm:condition_provenance
+        annotations:
+          source_slot: Condition.condition_provenance
+
+  ProcedureEvent:
+    is_a: Event
+    exact_mappings:
+      - bdchm:Procedure
+    slot_usage:
+      ordinal:
+        annotations:
+          derivation: Ordinal of Procedure.associated_participant.
+      concept:
+        exact_mappings:
+          - bdchm:procedure_concept
+        annotations:
+          source_slot: Procedure.procedure_concept
+      status:
+        range: StatusEnum
+        exact_mappings:
+          - bdchm:procedure_status
+        annotations:
+          source_slot: Procedure.procedure_status
+      age_start_days:
+        exact_mappings:
+          - bdchm:age_at_procedure
+        annotations:
+          source_slot: Procedure.age_at_procedure
+      record_provenance:
+        range: ProvenanceEnum
+        exact_mappings:
+          - bdchm:procedure_provenance
+        annotations:
+          source_slot: Procedure.procedure_provenance
+
+  DrugExposureEvent:
+    is_a: Event
+    exact_mappings:
+      - bdchm:DrugExposure
+    slot_usage:
+      ordinal:
+        annotations:
+          derivation: Ordinal of DrugExposure.associated_participant.
+      concept:
+        exact_mappings:
+          - bdchm:drug_concept
+        annotations:
+          source_slot: DrugExposure.drug_concept
+      status:
+        range: HistoricalStatusEnum
+        exact_mappings:
+          - bdchm:exposure_status
+        annotations:
+          source_slot: DrugExposure.exposure_status
+      age_start_days:
+        exact_mappings:
+          - bdchm:age_at_exposure_start
+        annotations:
+          source_slot: DrugExposure.age_at_exposure_start
+      age_end_days:
+        exact_mappings:
+          - bdchm:age_at_exposure_end
+        annotations:
+          source_slot: DrugExposure.age_at_exposure_end
+      record_provenance:
+        range: DrugExposureProvenanceEnum
+        exact_mappings:
+          - bdchm:exposure_provenance
+        annotations:
+          source_slot: DrugExposure.exposure_provenance
+
+  MeasurementObservationEvent:
+    is_a: Event
+    exact_mappings:
+      - bdchm:MeasurementObservation
+    slot_usage:
+      ordinal:
+        annotations:
+          derivation: Ordinal of MeasurementObservation.associated_participant.
+      concept:
+        exact_mappings:
+          - bdchm:observation_type
+        annotations:
+          source_slot: MeasurementObservation.observation_type
+      age_start_days:
+        exact_mappings:
+          - bdchm:age_at_observation
+        annotations:
+          source_slot: MeasurementObservation.age_at_observation
+      value_decimal:
+        exact_mappings:
+          - bdchm:value_decimal
+        annotations:
+          source_slot: MeasurementObservation.value_quantity.value_decimal
+      value_operator:
+        range: QuantityOperatorEnum
+        exact_mappings:
+          - bdchm:operator
+        annotations:
+          source_slot: MeasurementObservation.value_quantity.operator
+      unit:
+        range: UnitOfMeasurementEnum
+        exact_mappings:
+          - bdchm:unit
+        annotations:
+          source_slot: MeasurementObservation.value_quantity.unit
+
+  # -------------------------------------------------------------------
+  # Terms and posting lists
+  # -------------------------------------------------------------------
+
+  CountingTermClosure:
+    is_a: TermClosure
+    description: Copy of the release's term closure, so joins stay in the counting database.
+    annotations:
+      table: counting.term_closure
+
+  TermMember:
+    description: Posting lists recording which participants have each term.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: counting.term_member
+    slots:
+      - ordinal
+      - status_rule
+    attributes:
+      concept:
+        range: uriorcurie
+        required: true
+        related_mappings:
+          - bdchm:condition_concept
+          - bdchm:procedure_concept
+          - bdchm:drug_concept
+          - bdchm:observation_type
+        annotations:
+          derivation: >-
+            The participant has at least one Event whose concept is this term
+            or a descendant of it in the release's closure, whose status meets
+            status_rule (any record, for classes with no status) and, for
+            conditions, whose relationship_to_participant is Self.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, concept, status_rule, ordinal]
+
+  ReleaseCheck:
+    description: Checks that must pass before a release is activated.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: counting.release_check
+      origin: system
+    attributes:
+      check_name:
+        required: true
+      expected:
+        range: integer
+      actual:
+        range: integer
+      passed:
+        range: boolean
+        required: true
+      checked_at:
+        range: datetime
+        required: true
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, check_name]
+
+  # -------------------------------------------------------------------
+  # Materialized cohorts
+  # -------------------------------------------------------------------
+
+  Cohort:
+    description: A materialized cohort, stored when a researcher runs the final refinement.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: counting.cohort
+      origin: system
+    attributes:
+      cohort_id:
+        identifier: true
+      ras_subject:
+        description: RAS identity of the researcher who built the cohort.
+        annotations:
+          origin: ga4gh
+      expression:
+        required: true
+        description: The cohort expression over BDC-HM classes, slots and enum values, as JSON.
+      expression_hash:
+        required: true
+      created_at:
+        range: datetime
+        required: true
+      expires_at:
+        range: datetime
+        required: true
+
+  CohortMember:
+    description: A participant in a materialized cohort.
+    annotations:
+      table: counting.cohort_member
+    slots:
+      - ordinal
+    attributes:
+      cohort_id:
+        range: Cohort
+        required: true
+      in_exact_scope:
+        range: boolean
+        required: true
+        annotations:
+          origin: system
+          derivation: The participant's consent group is in the researcher's exact scope.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [cohort_id, ordinal]
+
+  CohortEvidence:
+    description: The BDC-HM records that satisfied each rule for each cohort member.
+    annotations:
+      table: counting.cohort_evidence
+    slots:
+      - ordinal
+    attributes:
+      cohort_id:
+        range: Cohort
+        required: true
+      rule_name:
+        required: true
+        annotations:
+          origin: system
+      source_record_id:
+        required: true
+        exact_mappings:
+          - bdchm:id
+        annotations:
+          source_slot: id of the Condition, Procedure, DrugExposure or MeasurementObservation record
+    unique_keys:
+      primary_key:
+        unique_key_slots: [cohort_id, ordinal, rule_name, source_record_id]

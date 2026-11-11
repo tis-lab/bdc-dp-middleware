@@ -1,0 +1,264 @@
+id: https://w3id.org/tis-lab/BDC-Portal/db/catalog
+name: bdchm_db_catalog
+title: Catalog database, catalog schema
+description: >-
+  Release, term, study and curated consent metadata. Contains no
+  participant-level data. See bdchm_db_common for the conventions.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  bdchm: https://w3id.org/bdchm/
+  bdchmg: https://w3id.org/tis-lab/BDC-Portal/governed/
+  bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
+
+default_prefix: bdchmdb
+default_range: string
+
+imports:
+  - linkml:types
+  - bdchm
+  - bdchm_governed
+  - bdchm_db_common
+
+classes:
+
+  Release:
+    description: One release of the governed data.
+    annotations:
+      table: catalog.release
+      origin: system
+    attributes:
+      release:
+        identifier: true
+      delta_version:
+        range: integer
+        required: true
+        description: Pinned version of the governed Delta tables.
+      schema_version:
+        required: true
+        description: Version of the bdchm_governed schema the release was validated against.
+      kg_version:
+        required: true
+        description: Pinned BDC-KG version the release's terms, closure and study mappings were exported from.
+      status:
+        range: ReleaseStatusEnum
+        required: true
+      loaded_at:
+        range: datetime
+        required: true
+
+  Term:
+    description: A term available for searching and counting in a release.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: catalog.term
+      origin: ontology
+      source: Exported from the release's pinned BDC-KG version.
+    attributes:
+      curie:
+        range: uriorcurie
+        required: true
+        related_mappings:
+          - bdchm:condition_concept
+          - bdchm:procedure_concept
+          - bdchm:drug_concept
+          - bdchm:observation_type
+        annotations:
+          derivation: A term used as a concept value in the release's BDC-HM records, or an ancestor of one.
+      label:
+        required: true
+      synonyms:
+        multivalued: true
+      ontology:
+        required: true
+      ontology_version:
+        required: true
+      bdchm_class:
+        required: true
+        description: The BDC-HM class whose records use this term.
+        related_mappings:
+          - bdchm:Condition
+          - bdchm:Procedure
+          - bdchm:DrugExposure
+          - bdchm:MeasurementObservation
+      summary_class:
+        required: true
+        description: The Study Palette summary class requested for this term.
+      replaced_by:
+        range: uriorcurie
+        description: Set when the term is obsolete in this release.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, curie]
+
+  CatalogTermClosure:
+    is_a: TermClosure
+    annotations:
+      table: catalog.term_closure
+
+  Study:
+    description: A research study in a release.
+    mixins:
+      - ReleaseScoped
+    exact_mappings:
+      - bdchm:ResearchStudy
+    annotations:
+      table: catalog.study
+    attributes:
+      research_study_id:
+        required: true
+        exact_mappings:
+          - bdchm:id
+        annotations:
+          source_slot: ResearchStudy.id
+      accession:
+        required: true
+        exact_mappings:
+          - bdchm:accession_number
+        annotations:
+          source_slot: ResearchStudy.accession_number
+      title:
+        required: true
+        exact_mappings:
+          - bdchm:name
+        annotations:
+          source_slot: ResearchStudy.name
+      description:
+        exact_mappings:
+          - bdchm:description
+        annotations:
+          source_slot: ResearchStudy.description
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, research_study_id]
+
+  VariableMapping:
+    description: >-
+      How one study's dbGaP variable was harmonized to a BDC-HM slot, and the
+      term it produces. Exported from the release's pinned BDC-KG version.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: catalog.variable_mapping
+      origin: bdc-kg
+    attributes:
+      mapping_id:
+        required: true
+        description: The mapping's identifier in the BDC-KG.
+      research_study_id:
+        required: true
+        exact_mappings:
+          - bdchm:id
+        annotations:
+          source_slot: ResearchStudy.id
+      bdchm_class:
+        required: true
+        description: The BDC-HM class the variable was harmonized into.
+      bdchm_slot:
+        required: true
+        description: The BDC-HM slot the variable's values fill, for example condition_concept.
+      concept:
+        range: uriorcurie
+        description: The term the mapping produces, when it produces one.
+      dbgap_study_accession:
+        required: true
+        pattern: '^phs\d{6}\.v\d+\.p\d+$'
+        related_mappings:
+          - bdchm:accession_number
+      dbgap_dataset_accession:
+        required: true
+        pattern: '^pht\d{6}\.v\d+\.p\d+$'
+      dbgap_variable_accession:
+        required: true
+        pattern: '^phv\d{8}\.v\d+\.p\d+$'
+      mapping_note:
+        description: How the source values were transformed during harmonization.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, mapping_id]
+
+  ConsentGroupRecord:
+    is_a: ConsentGroup
+    description: A versioned copy of a curated ConsentGroup record.
+    exact_mappings:
+      - bdchmg:ConsentGroup
+    annotations:
+      table: catalog.consent_group
+      origin: curation
+    attributes:
+      version:
+        range: integer
+        required: true
+        annotations:
+          origin: system
+          derivation: Incremented each time the curated record changes.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [consent_group_id, version]
+
+  StigmatizingConcept:
+    description: A term subtree that cannot be used as a filter outside approved scope.
+    annotations:
+      table: catalog.stigmatizing_concept
+      origin: curation
+    attributes:
+      list_version:
+        range: integer
+        required: true
+      root_curie:
+        range: uriorcurie
+        required: true
+      category:
+        required: true
+        description: For example mental health or illicit drug use.
+      reviewed_by:
+        required: true
+    unique_keys:
+      primary_key:
+        unique_key_slots: [list_version, root_curie]
+
+  TermAvailability:
+    description: Studies where at least min_count participants have a term.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: catalog.term_availability
+    attributes:
+      curie:
+        range: uriorcurie
+        required: true
+      research_study_id:
+        required: true
+        related_mappings:
+          - bdchm:member_of_research_study
+        annotations:
+          derivation: >-
+            Studies with at least min_count participants in the term's
+            posting list (status rule present).
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, curie, research_study_id]
+
+  TermResolutionCache:
+    description: BDC-KG search results that passed release validation.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: catalog.term_resolution_cache
+      origin: system
+    attributes:
+      query_text:
+        required: true
+        description: Normalized search text.
+      candidates:
+        required: true
+        description: Candidate CURIEs, as JSON.
+      fetched_at:
+        range: datetime
+        required: true
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, query_text]
