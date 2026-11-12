@@ -1,6 +1,6 @@
 # Summary endpoint: UI integration guide
 
-Status: current middleware implementation, reviewed 2026-11-04.
+Status: current middleware implementation, reviewed 2026-11-12.
 
 ## 1. What the UI calls
 
@@ -17,7 +17,7 @@ query GetSummary($filter: SummaryFilterInput) {
   summary(filter: $filter) {
     release
     min_count
-    seed
+    focus
     filter
     terms { curie label vocabulary parents }
     research_studies { id name }
@@ -176,7 +176,8 @@ IDs are not study selectors: the predicate applies across all studies, even if t
 |------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
 | `release`                          | Data release identifier; retain with results and cached selections.                                                              |
 | `min_count`                        | Server-configured reporting threshold; the UI cannot set it per request.                                                         |
-| `seed`                             | Currently null; optional in the response schema. Do not use it to reconstruct the selection.                                     |
+| `focus`                            | Requested description concepts; independent of the participant filter. Empty when omitted.                                       |
+| `seed`                             | Deprecated GraphQL-only compatibility field, always null. Not part of the pinned LinkML model.                                   |
 | `filter`                           | List of IDs mandatory in every branch, not the submitted expression.                                                             |
 | `studies[].research_study`         | Real study ID; use as a stable key. Metadata may not yet provide a display name.                                                 |
 | `studies[].participant_count`      | Selected participants represented by that study's root documents. Do not sum studies into a unique global total.                 |

@@ -16,7 +16,7 @@ class SummaryServiceTest {
     }
     @Test void pageLoadUsesMatchAllWithoutWildcardOrSeed() throws Exception {
         var result = new SummaryResponseMapper(new SummaryProperties("test-release",1)).map(fixture());
-        assertThat(result.seed()).isNull();
+        assertThat(result.focus()).isEmpty();
         assertThat(result.filter()).isEmpty();
         var wire = json.valueToTree(result);
         assertThat(wire.has("filter_expression")).isFalse();

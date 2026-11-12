@@ -5,7 +5,7 @@ scalar Decimal
 
 extend type Query {
   """Live study-first summary. Omit filter (or pass null) for unfiltered page load."""
-  summary(filter: SummaryFilterInput): SummaryResponse
+  summary(filter: SummaryFilterInput, focus: [ID!]): SummaryResponse
 }
 
 """Middleware-only request expression: exactly one non-null field per node. Maximum 8 levels / 100 nodes.
@@ -41,7 +41,11 @@ enum RelationSource { KG CURATED }
 
 type SummaryResponse {
   release: String!
-  seed: ID
+  seed: ID @deprecated(reason: "Use focus. Legacy seed always returns null.")
+  """Concepts requested for description, not participant selection. Empty when omitted.
+  Current implementation supports exact condition concepts; no related-term expansion.
+  """
+  focus: [ID!]!
   """Summary IDs required in every branch. Does not serialize the full AND/OR request; retain that request client-side."""
   filter: [String!]!
   min_count: Count!

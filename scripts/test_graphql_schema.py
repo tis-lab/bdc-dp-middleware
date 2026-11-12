@@ -12,6 +12,11 @@ class GraphQLContractTests(unittest.TestCase):
         cls.schema = build_schema('\n'.join(p.read_text() for p in sorted(directory.glob('*.graphqls'))))
     def test_schema_is_valid(self):
         self.assertEqual(validate_schema(self.schema), [])
+    def test_optional_focus_and_legacy_seed(self):
+        query = 'query($focus: [ID!], $filter: SummaryFilterInput) { summary(focus: $focus, filter: $filter) { focus seed studies { participant_count } } }'
+        self.assertEqual(validate(self.schema, parse(query)), [])
+        self.assertIsNotNone(self.schema.get_type('SummaryResponse').fields['seed'].deprecation_reason)
+        self.assertTrue(validate(self.schema, parse('{ summary(focus: [null]) { focus } }')))
     def test_page_load_without_arguments(self):
         query = '{ summary { release seed filter min_count studies { research_study participant_count } } }'
         self.assertEqual(validate(self.schema, parse(query)), [])

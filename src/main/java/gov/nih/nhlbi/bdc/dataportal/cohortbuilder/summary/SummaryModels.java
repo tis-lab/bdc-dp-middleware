@@ -10,7 +10,7 @@ public final class SummaryModels {
     @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     public record SummaryResponse(
             String release,
-            String seed,
+            List<String> focus,
             List<String> filter,
             BigInteger min_count,
             List<SummaryTerm> terms,
@@ -18,6 +18,7 @@ public final class SummaryModels {
             List<ResearchStudy> research_studies,
             List<StudySummary> studies) {
         public SummaryResponse {
+            focus = focus == null ? List.of() : List.copyOf(focus);
             filter = filter == null ? List.of() : List.copyOf(filter);
             terms = terms == null ? List.of() : List.copyOf(terms);
             relations = relations == null ? List.of() : List.copyOf(relations);

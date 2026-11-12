@@ -54,7 +54,7 @@ def validate_file(check, path):
     print(f"PASS {path}")
     return value
 
-REQUIRED_OUTPUTS = {"page-load.json", "filtered.json", "suppressed.json", "empty.json"}
+REQUIRED_OUTPUTS = {"page-load.json", "filtered.json", "suppressed.json", "empty.json", "focused.json", "focused-empty.json"}
 
 def require_outputs(directory):
     outputs = sorted(directory.glob("*.json"))
@@ -69,11 +69,8 @@ def summary(require_generated=False):
         if hashlib.sha256((ROOT / name).read_bytes()).hexdigest() != digest:
             raise ValueError("Pinned schema changed; review and update provenance and digest: " + name)
     original = (ROOT / "schema/upstream/summary.yaml").read_text()
-    before, rest = original.split("\n  seed:\n", 1)
-    seed, after = rest.split("\n  filter:\n", 1)
-    expected = before + "\n  seed:\n" + seed.replace("required: true", "required: false") + "\n  filter:\n" + after
-    if (ROOT / "schema/summary.yaml").read_text() != expected:
-        raise ValueError("Active summary.yaml may differ from upstream only in seed.required")
+    if (ROOT / "schema/summary.yaml").read_text() != original:
+        raise ValueError("Active summary.yaml must match the pinned upstream schema")
     check = validator(ROOT / "schema/summary.yaml", "SummaryResponse")
     schema_output = ROOT / "target/summary-schema"
     schema_output.mkdir(parents=True, exist_ok=True)

@@ -23,9 +23,27 @@ class SummaryGraphQlTest {
         try(var in=getClass().getResourceAsStream("/summary/elasticsearch-response.json")) { fixture=Objects.requireNonNull(in).readAllBytes(); }
         es.createContext("/participant_1/_search", exchange -> {
             captured.set(json.readTree(exchange.getRequestBody().readAllBytes()));
+            byte[] response = fixture;
+            if (captured.get().at("/aggs/studies/aggs/conditions/aggs/selected").isObject()) {
+                var body = json.readTree(fixture);
+                var requested = captured.get().at("/aggs/studies/aggs/conditions/aggs/selected/filter/terms/condition.condition_concept");
+                var accepted = new HashSet<String>();
+                requested.forEach(c -> accepted.add(c.asString()));
+                for (var study : body.at("/aggregations/studies/buckets")) {
+                    var conditions = (tools.jackson.databind.node.ObjectNode) study.path("conditions");
+                    var selected = conditions.deepCopy();
+                    var concepts = (tools.jackson.databind.node.ObjectNode) selected.path("concepts");
+                    var oldBuckets = concepts.path("buckets");
+                    var kept = concepts.putArray("buckets");
+                    oldBuckets.forEach(b -> { if (accepted.contains(b.path("key").asString())) kept.add(b); });
+                    conditions.removeAll();
+                    conditions.set("selected", selected);
+                }
+                response = json.writeValueAsBytes(body);
+            }
             exchange.getResponseHeaders().set("Content-Type","application/json");
-            exchange.sendResponseHeaders(200,fixture.length);
-            exchange.getResponseBody().write(fixture); exchange.close();
+            exchange.sendResponseHeaders(200,response.length);
+            exchange.getResponseBody().write(response); exchange.close();
         });
         es.start();
         try(var app=SpringApplication.run(BdcDpCohortBuilderApplication.class,
@@ -33,13 +51,26 @@ class SummaryGraphQlTest {
                 "--search.endpoint=http://127.0.0.1:"+es.getAddress().getPort(),"--search.index=participant_1",
                 "--summary.release=integration-test-release","--summary.min-count=1");
             var http=HttpClient.newHttpClient()) {
-            int port=((WebServerApplicationContext)app).getWebServer().getPort();
+            int port= Objects.requireNonNull(((WebServerApplicationContext) app).getWebServer()).getPort();
             String path=app.getEnvironment().getRequiredProperty("spring.graphql.http.path");
             var result=call(http,port,path,json,"{ summary { seed release min_count studies { research_study participant_count conditions { participant_count relationship_to_participant } } } }");
             assertThat(result.has("errors")).as(result.toString()).isFalse();
             assertThat(result.at("/data/summary/seed").isNull()).isTrue();
             assertThat(result.at("/data/summary/studies/0/participant_count").asInt()).isEqualTo(5);
             assertThat(captured.get().at("/query/match_all").isObject()).isTrue();
+
+            result=call(http,port,path,json,"{ summary(focus: [\"MONDO:0005148\"]) { focus seed terms { curie } studies { participant_count conditions { condition_concept } } } }");
+            assertThat(result.has("errors")).as(result.toString()).isFalse();
+            assertThat(result.at("/data/summary/focus/0").asString()).isEqualTo("MONDO:0005148");
+            assertThat(result.at("/data/summary/seed").isNull()).isTrue();
+            assertThat(result.at("/data/summary/studies/0/participant_count").asInt()).isEqualTo(5);
+            assertThat(captured.get().at("/query/match_all").isObject()).isTrue();
+            for (String focus : List.of("[\"HP:*\"]", "[\"invalid\"]")) {
+                captured.set(null);
+                result=call(http,port,path,json,"{ summary(focus: "+focus+") { focus } }");
+                assertThat(result.at("/errors/0/extensions/code").asString()).isEqualTo("BAD_USER_INPUT");
+                assertThat(captured.get()).isNull();
+            }
             for (String unsupported : List.of(
                     "{ summary(seed: \"*\") { release } }",
                     "{ summary(selection: {operator: OR}) { release } }")) {
@@ -52,7 +83,7 @@ class SummaryGraphQlTest {
             assertThat(captured.get()).isNull();
             result=call(http,port,path,json,"{ __type(name: \"SummaryFilterInput\") { name } }");
             assertThat(result.at("/data/__type/name").asString()).isEqualTo("SummaryFilterInput");
-            String id = resultId("demography|sex|FEMALE");
+            String id = resultId();
             String selection = "{and: [{summaryId: \""+id+"\"}, {or: [{summaryId: \""+id+"\"}]}]}";
             result=call(http,port,path,json,"{ summary(filter: "+selection+") { filter studies { participant_count } } }");
             assertThat(result.has("errors")).as(result.toString()).isFalse();
@@ -77,8 +108,8 @@ class SummaryGraphQlTest {
             assertThat(captured.get().at("/query/match_all").isObject()).isTrue();
         } finally { es.stop(0); }
     }
-    private static String resultId(String parts) {
-        return "urn:bdc:summary:"+Base64.getUrlEncoder().withoutPadding().encodeToString(parts.getBytes(StandardCharsets.UTF_8));
+    private static String resultId() {
+        return "urn:bdc:summary:"+Base64.getUrlEncoder().withoutPadding().encodeToString("demography|sex|FEMALE".getBytes(StandardCharsets.UTF_8));
     }
     private JsonNode call(HttpClient http,int port,String path,JsonMapper json,String query) throws Exception {
         var request=HttpRequest.newBuilder(URI.create("http://localhost:"+port+path))
