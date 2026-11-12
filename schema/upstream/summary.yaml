@@ -44,6 +44,21 @@ description: >-
   response with a narrower filter merges with the first by id.
 
 
+  A request asks two separate questions. The filter says who is counted: each
+  study's participant_count is how many of its participants match it. The
+  focus says what is described about them: the concepts the request names,
+  each summarized per study, along with terms related to them. Age and
+  demographics are always summarized. The T2D example counts participants
+  with a fasting glucose measurement (its filter) and describes type 2
+  diabetes among them (its focus).
+
+
+  The overview is the response with no focus and no filter, fetched before any
+  search. Each study's participant_count in it is everyone in the study, so it
+  is the total a filtered count is out of. Adding the studies' totals counts a
+  participant enrolled in two studies twice.
+
+
   Because summaries subclass BDCHM records, the validator accepts a summary
   where a record belongs. Keep them in separate slots.
 license: MIT
@@ -184,10 +199,10 @@ classes:
 
   SummaryResponse:
     tree_root: true
-    description: Counts of the participants matching one filter, study by study, around the term searched for.
+    description: Counts of the participants matching one filter, study by study, describing the focus concepts.
     slots:
       - release
-      - seed
+      - focus
       - filter
       - min_count
       - terms
@@ -252,11 +267,14 @@ slots:
   release:
     description: The index release counted. Responses merge only within a release.
     required: true
-  seed:
-    description: The term searched for.
+  focus:
+    description: >-
+      The concepts to describe. Each is summarized in every study that records
+      it, along with the terms related to it. The filter, not the focus, decides
+      who is counted. The overview has none.
     range: Term
+    multivalued: true
     inlined: false
-    required: true
   filter:
     description: >-
       Ids of the summaries every participant counted must match. Each study's

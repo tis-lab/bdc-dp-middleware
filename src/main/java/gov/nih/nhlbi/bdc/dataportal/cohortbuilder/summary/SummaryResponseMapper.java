@@ -20,21 +20,26 @@ final class SummaryResponseMapper {
     }
     SummaryResponse map(JsonNode body) { return map(body, List.of()); }
     SummaryResponse map(JsonNode body, List<String> requiredIds) {
+        return map(body, requiredIds, List.of());
+    }
+    SummaryResponse map(JsonNode body, List<String> requiredIds, List<String> focus) {
         if (count(body.at("/aggregations/missing_study/doc_count")).signum() != 0)
             throw invalid("Participants without member_of_research_study.id cannot be represented in the study-first summary. Repair study associations and reindex.");
         BigInteger matchingParticipants = count(body.at("/hits/total/value"));
         List<StudySummary> studies = new ArrayList<>();
-        Set<String> terms = new TreeSet<>();
+        Set<String> terms = new TreeSet<>(focus); // Requested terms resolve even when absent or suppressed; no count is inferred.
         for (JsonNode study : buckets(body.at("/aggregations/studies"))) {
             String studyId = key(study);
             BigInteger total = bounded(study.path("doc_count"), matchingParticipants);
             if (total.compareTo(minimum) < 0) continue;
             List<ConditionSummary> conditions = new ArrayList<>();
+            JsonNode conditionFacets = focus.isEmpty() ? study.path("conditions") : study.at("/conditions/selected");
             for (String field : List.of("concept", "status", "relationship"))
-                if (count(study.at("/conditions/missing_"+field+"/doc_count")).signum() != 0)
+                if (count(conditionFacets.at("/missing_"+field+"/doc_count")).signum() != 0)
                     throw invalid("Condition records must have concept, status and relationship fields.");
-            for (JsonNode concept : buckets(study.at("/conditions/concepts"))) {
+            for (JsonNode concept : buckets(conditionFacets.path("concepts"))) {
                 String curie = key(concept);
+                if (!focus.isEmpty() && !focus.contains(curie)) throw invalid("Unexpected concept outside requested focus.");
                 BigInteger conceptCount = bounded(concept.at("/participants/doc_count"), total);
                 if (conceptCount.compareTo(minimum) < 0) continue;
                 List<ConditionSummary> values = new ArrayList<>();
@@ -73,7 +78,7 @@ final class SummaryResponseMapper {
             }
             studies.add(new StudySummary(studyId,total,ages(study.path("ages"),total),demographics,conditions,List.of(),List.of(),List.of()));
         }
-        return new SummaryResponse(properties.release(), null, requiredIds, minimum,
+        return new SummaryResponse(properties.release(), focus, requiredIds, minimum,
                 terms.stream().map(c -> new SummaryTerm(c,null,null,List.of())).toList(),
                 List.of(),List.of(),studies);
     }

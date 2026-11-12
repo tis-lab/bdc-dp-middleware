@@ -11,10 +11,10 @@ spring:
         enabled: true
     graphiql:
       path: /cb/graphiql
-      enabled: ${GRAPHIQL_ENABLED:true}
+      enabled: ${GRAPHIQL_ENABLED:false}
     cors:
-      allowed-origins: ${FRONTEND_ORIGINS:http://localhost:3000,http://localhost:5173,https://bdc-dp-ui-dept-bdc-data-portal.apps.cloudapps.unc.edu}
-      allowed-origin-patterns: ${FRONTEND_ORIGIN_PATTERNS:https://*.netlify.app}
+      allowed-origins: ${FRONTEND_ORIGINS}
+      allowed-origin-patterns: ${FRONTEND_ORIGIN_PATTERNS:}
       allowed-methods: POST
       allowed-headers: Content-Type
 
@@ -35,32 +35,31 @@ management:
         enabled: true
 
 monarch:
-  base-url: ${MONARCH_BASE_URL:https://api.monarchinitiative.org/v3/api}
-  connect-timeout: ${MONARCH_CONNECT_TIMEOUT:5s}
-  read-timeout: ${MONARCH_READ_TIMEOUT:15s}
+  base-url: ${MONARCH_BASE_URL}
+  connect-timeout: ${MONARCH_CONNECT_TIMEOUT}
+  read-timeout: ${MONARCH_READ_TIMEOUT}
 
 logging:
   level:
-    gov.nih.nhlbi.bdc: ${APP_LOG_LEVEL:INFO}
+    gov.nih.nhlbi.bdc: ${APP_LOG_LEVEL}
 
 harmonized:
-  enabled: ${HARMONIZED_ENABLED:true}
-  index: ${HARMONIZED_INDEX:classpath:harmonized/harmonized-index.json}
-  max-matches: ${HARMONIZED_MAX_MATCHES:25}
+  enabled: ${HARMONIZED_ENABLED}
+  index: ${HARMONIZED_INDEX}
+  max-matches: ${HARMONIZED_MAX_MATCHES}
 
 search:
-  enabled: ${SEARCH_ENABLED:true}
-  endpoint: ${SEARCH_ENDPOINT:http://bdc-elasticsearch.dept-bdc-data-portal.svc.cluster.local:9200}
-  index: ${SEARCH_INDEX:participant_1}
+  enabled: ${SEARCH_ENABLED}
+  endpoint: ${SEARCH_ENDPOINT}
+  index: ${SEARCH_INDEX}
   api-key: ${SEARCH_API_KEY:}
-  connect-timeout: ${SEARCH_CONNECT_TIMEOUT:5s}
-  read-timeout: ${SEARCH_READ_TIMEOUT:15s}
-# Required for every deployment
+  connect-timeout: ${SEARCH_CONNECT_TIMEOUT}
+  read-timeout: ${SEARCH_READ_TIMEOUT}
 summary:
-  release: ${SUMMARY_RELEASE:test}
-  min-count: ${SUMMARY_MIN_COUNT:1}
+  release: ${SUMMARY_RELEASE}
+  min-count: ${SUMMARY_MIN_COUNT}
 
 info:
   app:
     name: bdc-data-portal-cohort-builder-service
-    environment: ${ENV:local}
+    environment: ${ENV}

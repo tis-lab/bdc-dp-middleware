@@ -25,6 +25,12 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validator(ROOT / 'schema/summary.yaml', 'MadeUpRoot')
 
+    def test_focus_replaces_seed_in_serialized_contract(self):
+        valid = {'release': 'test-release', 'min_count': 1, 'focus': ['MONDO:0005148'], 'studies': []}
+        self.assertTrue(self.summary.is_valid(valid))
+        self.assertFalse(self.summary.is_valid(dict(valid, focus='MONDO:0005148')))
+        self.assertFalse(self.summary.is_valid(dict(valid, seed='MONDO:0005148')))
+
     def test_nested_invalid_fields_and_enums(self):
         valid = json.loads((ROOT / 'src/test/resources/summary/contracts/page-load.json').read_text())
         self.assertTrue(self.summary.is_valid(valid))

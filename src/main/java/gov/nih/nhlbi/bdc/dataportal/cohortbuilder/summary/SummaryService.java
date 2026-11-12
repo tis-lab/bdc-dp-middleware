@@ -18,7 +18,11 @@ public class SummaryService {
         return summary(null);
     }
     public SummaryResponse summary(java.util.Map<String,Object> filter) {
+        return summary(filter, null);
+    }
+    public SummaryResponse summary(java.util.Map<String,Object> filter, java.util.List<String> focus) {
+        var concepts = SummaryFocus.validate(focus);
         var selection = SummaryFilterCompiler.compile(filter);
-        return mapper.map(transport.execute(SummaryAggregations.request(selection.query())).body(), selection.requiredIds());
+        return mapper.map(transport.execute(SummaryAggregations.request(selection.query(), concepts)).body(), selection.requiredIds(), concepts);
     }
 }
