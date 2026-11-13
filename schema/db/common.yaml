@@ -17,7 +17,7 @@ description: >-
   A column with no BDC-HM origin says where it comes from in the origin
   annotation: system (created by this design), ontology (from the term
   release), bdc-kg (from the pinned BDC-KG version), curation (from
-  ConsentGroup curation) or ga4gh (from a passport).
+  DbgapConsentGroup or ConsentGroupEligibility curation) or ga4gh (from a passport).
 
   Every table class names its database table in the table annotation.
 license: MIT
@@ -26,6 +26,7 @@ version: 0.1.0
 prefixes:
   linkml: https://w3id.org/linkml/
   bdchm: https://w3id.org/bdchm/
+  dbgapc: https://w3id.org/tis-lab/BDC-Portal/dbgap_consent/
   bdchmg: https://w3id.org/tis-lab/BDC-Portal/governed/
   bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
 
@@ -37,7 +38,10 @@ imports:
 
 slots:
   release:
-    description: The release this row belongs to; every release-scoped table is partitioned by it.
+    description: >-
+      The release this row belongs to. In the counting database, release-scoped tables are
+      partitioned by it, except counting.release_check, which is kept as permanent history.
+      Catalog tables are small and are not partitioned.
     required: true
     annotations:
       origin: system
@@ -66,7 +70,11 @@ enums:
       present:
         description: Status PRESENT (or any record, for classes with no status).
       present_or_historical:
-        description: Status PRESENT or HISTORICAL.
+        description: Status PRESENT or HISTORICAL. Equal to present for procedures, whose StatusEnum has no HISTORICAL.
+      absent:        # ConditionSummary values are split by condition_status
+        description: Status ABSENT.
+      unknown:
+        description: Status UNKNOWN.
 
   ReleaseStatusEnum:
     permissible_values:
@@ -83,10 +91,13 @@ enums:
       approved:
         description: Signed in through NIH RAS with dbGaP visas.
 
-  CountModeEnum:
-    permissible_values:
-      ESTIMATED: {}
-      EXACT: {}
+types:
+  uuid:
+    typeof: string
+    description: An RFC 4122 UUID, stored in Postgres as uuid.
+    pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+    annotations:
+      sql_type: uuid
 
 classes:
   ReleaseScoped:
@@ -96,7 +107,10 @@ classes:
       - release
 
   TermClosure:
-    description: Each term paired with each of its descendants, including itself.
+    abstract: true
+    description: >-
+      Each term paired with each of its descendants, including itself. Abstract: each database
+      has its own copy. LinkML does not inherit unique_keys, so each subclass repeats the key.
     mixins:
       - ReleaseScoped
     attributes:

@@ -6,11 +6,12 @@ description: >-
   Every column copies a named BDC-HM slot or states how it is derived; see
   bdchm_db_common for the conventions.
 license: MIT
-version: 0.1.0
+version: 0.2.0
 
 prefixes:
   linkml: https://w3id.org/linkml/
   bdchm: https://w3id.org/bdchm/
+  dbgapc: https://w3id.org/tis-lab/BDC-Portal/dbgap_consent/
   bdchmg: https://w3id.org/tis-lab/BDC-Portal/governed/
   bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
 
@@ -19,9 +20,9 @@ default_range: string
 
 imports:
   - linkml:types
-  - bdchm
-  - bdchm_governed
-  - bdchm_db_common
+  - ../../synthetic/bdchm
+  - ../bdchm_governed
+  - common
 
 classes:
 
@@ -37,6 +38,7 @@ classes:
       - bdchm:Participant
     annotations:
       table: counting.participant_ordinal
+      partition: list(release)
     slots:
       - ordinal
     attributes:
@@ -55,7 +57,7 @@ classes:
       consent_group:
         required: true
         exact_mappings:
-          - bdchmg:consent_group_id
+          - dbgapc:consent_group_id
         annotations:
           source_slot: GovernedParticipant.consent_group_id
     unique_keys:
@@ -65,7 +67,10 @@ classes:
         unique_key_slots: [release, participant_id]
 
   ParticipantAttribute:
-    description: Participant-level values used for demographic and age summaries.
+    description: >-
+      Participant-level values used for demographic and age summaries. A participant can have several Demography
+      records (one per visit). sex and ethnicity are set only when all of them agree, and are NULL otherwise; race
+      is the union of their values. Disagreements are counted by the demography_conflict release check.
     mixins:
       - ReleaseScoped
     related_mappings:
@@ -73,6 +78,7 @@ classes:
       - bdchm:Demography
     annotations:
       table: counting.participant_attribute
+      partition: list(release)
     slots:
       - ordinal
     attributes:
@@ -82,28 +88,84 @@ classes:
           - bdchm:sex
         annotations:
           source_slot: Demography.sex
+          enforced_by: release_check enum_value_invalid
       ethnicity:
         range: EthnicityEnum
         exact_mappings:
           - bdchm:ethnicity
         annotations:
           source_slot: Demography.ethnicity
+          enforced_by: release_check enum_value_invalid
       race:
         range: RaceEnum
         multivalued: true
+        description: >-
+          The union of race values across the participant's Demography records, matching BDC-HM's multivalued
+          slot. Participants whose records report different races are counted by the demography_conflict
+          release check. Counts by race may exceed the participant count.
         exact_mappings:
           - bdchm:race
         annotations:
           source_slot: Demography.race
+          storage: text[] with a GIN index
+          enforced_by: release_check enum_value_invalid
       age_at_index_days:
         range: integer
+        description: >-
+          Kept for fidelity to BDC-HM. No harmonized study populates Participant.age_at_index today, so this is
+          NULL for every participant; summaries use age_at_baseline_days.
         exact_mappings:
           - bdchm:age_at_index
         annotations:
           source_slot: Participant.age_at_index
+      baseline_visit_id:
+        description: The participant's visit named by StudyBaseline for their study, if they attended it.
+        related_mappings:
+          - bdchm:Visit
+        annotations:
+          origin: system
+          derivation: >-
+            The participant's Visit whose name equals StudyBaseline.baseline_visit_name for the participant's
+            research study.
+      age_at_baseline_days:
+        range: integer
+        description: >-
+          Age at the baseline visit. Harmonized ages are whole years multiplied by 365, so this is precise to
+          a year, not a day.
+        related_mappings:
+          - bdchm:age_at_visit_start
+        annotations:
+          origin: system
+          derivation: Visit.age_at_visit_start of baseline_visit_id.
     unique_keys:
       primary_key:
         unique_key_slots: [release, ordinal]
+
+  StudyBaseline:
+    description: >-
+      The visit each study treats as baseline, chosen by curators per release. It defines age_at_baseline_days
+      and must be shown wherever that age is displayed.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: counting.study_baseline
+      partition: list(release)
+      origin: curated
+    attributes:
+      research_study_id:
+        required: true
+        exact_mappings:
+          - bdchm:member_of_research_study
+      baseline_visit_name:
+        required: true
+        description: Visit.name of the baseline visit, for example "ARIC EXAM 1".
+        exact_mappings:
+          - bdchm:name
+        annotations:
+          source_slot: Visit.name
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, research_study_id]
 
   GroupRange:
     description: The contiguous range of participant numbers for each consent group.
@@ -111,11 +173,12 @@ classes:
       - ReleaseScoped
     annotations:
       table: counting.group_range
+      partition: list(release)
     attributes:
       consent_group:
         required: true
         exact_mappings:
-          - bdchmg:consent_group_id
+          - dbgapc:consent_group_id
         annotations:
           source_slot: GovernedParticipant.consent_group_id
       research_study_id:
@@ -154,6 +217,7 @@ classes:
       - ReleaseScoped
     annotations:
       table: counting.event
+      partition: list(release)
     slots:
       - ordinal
     attributes:
@@ -180,7 +244,9 @@ classes:
           source_slot: associated_visit
       age_start_days:
         range: integer
-        description: Participant's age in days at the start of the event, from the slot named in age_start_slot.
+        description: >-
+          Participant's age in days at the start of the event, from the slot named in age_start_slot. Harmonized
+          ages are whole years multiplied by 365, so intervals shorter than a year cannot be answered.
       age_end_days:
         range: integer
       age_start_slot:
@@ -196,6 +262,9 @@ classes:
       record_provenance: {}
       value_decimal:
         range: decimal
+        description: >-
+          Copied unchanged. Harmonization already converts each observation type to one unit; the
+          unit_inconsistent release check confirms it after UCUM normalization.
       value_operator: {}
       unit: {}
     unique_keys:
@@ -358,6 +427,10 @@ classes:
     description: Copy of the release's term closure, so joins stay in the counting database.
     annotations:
       table: counting.term_closure
+      partition: list(release)
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, ancestor, descendant]
 
   TermMember:
     description: Posting lists recording which participants have each term.
@@ -365,6 +438,7 @@ classes:
       - ReleaseScoped
     annotations:
       table: counting.term_member
+      partition: list(release)
     slots:
       - ordinal
       - status_rule
@@ -382,21 +456,29 @@ classes:
             The participant has at least one Event whose concept is this term
             or a descendant of it in the release's closure, whose status meets
             status_rule (any record, for classes with no status) and, for
-            conditions, whose relationship_to_participant is Self.
+            conditions, whose relationship_to_participant is the self value
+            (ONESELF in BDC-HM v1.3.0; OMOP:45884467 from the version that keys
+            FamilyRelationshipEnum by OMOP code). Records with no status are
+            excluded and counted by the null_status release check.
     unique_keys:
       primary_key:
         unique_key_slots: [release, concept, status_rule, ordinal]
 
   ReleaseCheck:
-    description: Checks that must pass before a release is activated.
+    description: >-
+      Checks that must pass before a release is activated. Every value of ReleaseCheckEnum must have a passing
+      row for the release. Rows are permanent history: they outlive the release's other tables, so the
+      record of what was verified before a release was served survives its retirement.
     mixins:
       - ReleaseScoped
     annotations:
       table: counting.release_check
       origin: system
+      retention: permanent       # not partitioned; never deleted when a release is retired
     attributes:
       check_name:
         required: true
+        range: ReleaseCheckEnum
       expected:
         range: integer
       actual:
@@ -425,6 +507,7 @@ classes:
     attributes:
       cohort_id:
         identifier: true
+        range: uuid
       ras_subject:
         description: RAS identity of the researcher who built the cohort.
         annotations:
@@ -456,10 +539,29 @@ classes:
         required: true
         annotations:
           origin: system
-          derivation: The participant's consent group is in the researcher's exact scope.
+          derivation: >-
+            The participant's consent group is covered by one of the researcher's dbGaP visas and
+            catalog.consent_group_current shows exact_count_eligible for it, both as of cohort creation.
+            That view reports a group eligible only when its eligibility decision was made against the
+            current version of its consent meaning.
+          access: >-
+            Provisioning reads only rows where this is true, through counting.cohort_member_in_scope.
     unique_keys:
       primary_key:
         unique_key_slots: [cohort_id, ordinal]
+
+  CohortMemberInScope:
+    description: >-
+      Cohort members whose consent group is in the researcher's exact scope; the only cohort
+      membership provisioning can read.
+    annotations:
+      view: counting.cohort_member_in_scope
+    slots:
+      - ordinal
+    attributes:
+      cohort_id:
+        range: Cohort
+        required: true
 
   CohortEvidence:
     description: The BDC-HM records that satisfied each rule for each cohort member.
@@ -484,3 +586,28 @@ classes:
     unique_keys:
       primary_key:
         unique_key_slots: [cohort_id, ordinal, rule_name, source_record_id]
+
+# Release checks that must pass before activation (StatusRuleEnum is extended in bdchm_db_common)
+enums:
+
+  ReleaseCheckEnum:
+    permissible_values:
+      participant_count:
+        description: Participants loaded equal participants in the harmonized files.
+      null_status:
+        description: Records with no status, which every status rule excludes. Reported; passes when below the agreed tolerance.
+      relationship_unmapped:
+        description: Condition records whose relationship_to_participant is not a FamilyRelationshipEnum value. Must be 0.
+      demography_conflict:
+        description: Participants whose Demography records disagree on sex, ethnicity or race. Reported.
+      baseline_coverage:
+        description: Participants with an age_at_baseline_days, per study. Reported.
+      unit_inconsistent:
+        description: Observation types with more than one unit after UCUM normalization. Must be 0.
+      unit_missing:
+        description: Measurement records with value_decimal but no unit. Reported.
+      enum_value_invalid:
+        description: >-
+          Values outside their BDC-HM enum in columns copied from enum-ranged slots (sex, ethnicity,
+          race, statuses, relationship). Checked here rather than by CHECK constraints, because the
+          enum keys change with the pinned BDC-HM version. Must be 0.

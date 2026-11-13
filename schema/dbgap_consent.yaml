@@ -1,0 +1,129 @@
+id: https://w3id.org/tis-lab/BDC-Portal/dbgap_consent
+name: dbgap_consent
+title: dbGaP consent groups
+description: >-
+  What a dbGaP consent group means, in Data Use Ontology (DUO) terms, and which consent group a
+  participant belongs to. Named for dbGaP consent groups rather than "consent" so that neither the
+  module nor its classes can be mistaken for, or collide with, BDC-HM's participant-level Consent
+  and Participant.consents. This module holds facts about consent only, never a decision about how
+  this portal uses them; portal policy lives in bdchm_governed, which imports this module. Enum
+  keys match BDC-HM's DataUseEnum where both have the value. Verify DUO identifiers against the
+  current DUO release.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  bdchm: https://w3id.org/bdchm/
+  dbgapc: https://w3id.org/tis-lab/BDC-Portal/dbgap_consent/
+  DUO: http://purl.obolibrary.org/obo/DUO_
+  MONDO: http://purl.obolibrary.org/obo/MONDO_
+
+default_prefix: dbgapc
+default_range: string
+
+imports:
+  - linkml:types
+
+enums:
+  DuoPrimaryDataUseEnum:
+    description: One primary data use (a DUO data use permission) per consent group.
+    permissible_values:
+      NRES:
+        meaning: DUO:0000004
+        description: No restriction
+      GRU:
+        meaning: DUO:0000042
+        description: General research use
+      HMB:
+        meaning: DUO:0000006
+        description: Health, medical or biomedical research
+      DS:
+        meaning: DUO:0000007
+        description: Disease-specific research
+      POA:
+        meaning: DUO:0000011
+        description: Population origins or ancestry research only
+
+  DuoDataUseModifierEnum:
+    description: Any number of DUO data use modifiers per consent group.
+    permissible_values:
+      IRB:
+        meaning: DUO:0000021
+        description: Ethics approval required
+      NPUNCU:
+        meaning: DUO:0000018
+        description: Not-for-profit, non-commercial use only (dbGaP abbreviation NPU)
+      PUB:
+        meaning: DUO:0000019
+        description: Publication required
+      COL:
+        meaning: DUO:0000020
+        description: Collaboration required
+      GSO:
+        meaning: DUO:0000016
+        description: Genetic studies only
+      NMDS:
+        meaning: DUO:0000015
+        description: No general methods research
+      GS:
+        meaning: DUO:0000022
+        description: Geographical restriction
+      MOR:
+        meaning: DUO:0000024
+        description: Publication moratorium
+
+slots:
+  consent_group_id:
+    description: dbGaP consent group, written as the study accession plus a consent group number.
+    pattern: '^phs\d{6}\.c\d+$'
+
+classes:
+  DbgapConsentGroup:
+    description: One dbGaP consent group and its meaning in DUO terms, with the curation that established it.
+    slots:
+      - consent_group_id
+    slot_usage:
+      consent_group_id:
+        identifier: true
+    attributes:
+      study_accession:
+        required: true
+        description: dbGaP study accession without version, e.g. phs001234; consent_group_id begins with it.
+        pattern: '^phs\d{6}$'
+        related_mappings:
+          - bdchm:accession_number
+      dbgap_abbreviation:
+        required: true
+        description: As published by dbGaP, e.g. HMB-IRB-NPU.
+      primary_data_use:
+        range: DuoPrimaryDataUseEnum
+        required: true
+      modifiers:
+        range: DuoDataUseModifierEnum
+        multivalued: true
+      disease_restriction:
+        multivalued: true
+        range: uriorcurie
+        description: MONDO terms naming the disease(s) for DS consent.
+      source_consent_text:
+        required: true
+        description: Consent wording from the study's dbGaP documentation.
+      curated_by:
+        required: true
+        description: Who translated the consent wording into DUO terms.
+      reviewed_by:
+        required: true
+        description: Who checked that translation.
+      curated_on:
+        range: date
+        required: true
+    rules:
+      - preconditions:
+          slot_conditions:
+            primary_data_use:
+              equals_string: DS
+        postconditions:
+          slot_conditions:
+            disease_restriction:
+              required: true

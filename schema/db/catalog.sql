@@ -32,7 +32,7 @@ CREATE TABLE catalog.term (
 );
 
 CREATE TABLE catalog.term_closure (                -- each term with all its descendants (and itself)
-  release     text,
+  release     text REFERENCES catalog.release,
   ancestor    text,
   descendant  text,
   PRIMARY KEY (release, ancestor, descendant)
@@ -64,28 +64,60 @@ CREATE TABLE catalog.variable_mapping (             -- from the release's BDC-KG
 CREATE INDEX variable_mapping_study_idx ON catalog.variable_mapping (release, research_study_id, concept);
 
 CREATE TABLE catalog.consent_group (               -- curated ConsentGroup records, versioned
-  consent_group_id         text,                   -- 'phs001234.c1'
+  consent_group_id         text    CHECK (consent_group_id ~ '^phs\d{6}\.c\d+$'),   -- 'phs001234.c1'
   version                  integer,
-  study_accession          text    NOT NULL,
+  study_accession          text    NOT NULL CHECK (study_accession ~ '^phs\d{6}$'),   -- 'phs001234'
   dbgap_abbreviation       text    NOT NULL,       -- 'HMB-IRB-NPU'
-  primary_data_use         text    NOT NULL,       -- PrimaryDataUseEnum
-  modifiers                text[]  NOT NULL DEFAULT '{}',   -- DataUseModifierEnum
+  primary_data_use         text    NOT NULL CHECK (primary_data_use IN ('NRES', 'GRU', 'HMB', 'DS', 'POA')),
+  modifiers                text[]  NOT NULL DEFAULT '{}'
+                           CHECK (modifiers <@ ARRAY['IRB', 'NPUNCU', 'PUB', 'COL', 'GSO', 'NMDS', 'GS', 'MOR']),
   disease_restriction      text[]  NOT NULL DEFAULT '{}',   -- MONDO terms, required for DS
   source_consent_text      text    NOT NULL,
-  exact_count_eligible     boolean NOT NULL DEFAULT false,
-  sharing_eligible         boolean NOT NULL DEFAULT false,
-  eligibility_approved_by  text,
   curated_by               text    NOT NULL,
   reviewed_by              text    NOT NULL,
   curated_on               date    NOT NULL,
   PRIMARY KEY (consent_group_id, version),
-  CHECK (primary_data_use <> 'DS' OR cardinality(disease_restriction) > 0)
+  CHECK (primary_data_use <> 'DS' OR cardinality(disease_restriction) > 0),
+  CHECK (starts_with(consent_group_id, study_accession || '.c'))
 );
 
+CREATE TABLE catalog.consent_group_eligibility (   -- the portal's policy per consent group, versioned
+  consent_group_id         text    CHECK (consent_group_id ~ '^phs\d{6}\.c\d+$'),
+  version                  integer,
+  consent_group_version    integer NOT NULL,       -- the consent_group version this decision was made against
+  exact_count_eligible     boolean NOT NULL,
+  sharing_eligible         boolean NOT NULL,
+  eligibility_approved_by  text    NOT NULL,
+  approved_on              date    NOT NULL,
+  PRIMARY KEY (consent_group_id, version),
+  FOREIGN KEY (consent_group_id, consent_group_version) REFERENCES catalog.consent_group (consent_group_id, version)
+);
+
+-- Current consent meaning with the current eligibility decision (GovernedConsentGroup). A
+-- decision made against an older version of the consent meaning does not apply: the group reads
+-- as ineligible until eligibility is decided again. Columns are listed rather than m.*, because
+-- Postgres expands * once at creation and would silently omit columns added to consent_group later.
 CREATE VIEW catalog.consent_group_current AS
-  SELECT DISTINCT ON (consent_group_id) *
-  FROM catalog.consent_group
-  ORDER BY consent_group_id, version DESC;
+  WITH meaning AS (
+    SELECT DISTINCT ON (consent_group_id) *
+    FROM catalog.consent_group
+    ORDER BY consent_group_id, version DESC
+  ), decision AS (
+    SELECT DISTINCT ON (consent_group_id) *
+    FROM catalog.consent_group_eligibility
+    ORDER BY consent_group_id, version DESC
+  )
+  SELECT m.consent_group_id, m.version, m.study_accession, m.dbgap_abbreviation, m.primary_data_use,
+         m.modifiers, m.disease_restriction, m.source_consent_text, m.curated_by, m.reviewed_by,
+         m.curated_on,
+         d.version                                                        AS eligibility_version,
+         coalesce(d.consent_group_version = m.version, false)             AS eligibility_is_current,
+         coalesce(d.consent_group_version = m.version AND d.exact_count_eligible, false) AS exact_count_eligible,
+         coalesce(d.consent_group_version = m.version AND d.sharing_eligible, false)     AS sharing_eligible,
+         d.eligibility_approved_by,
+         d.approved_on
+  FROM meaning m
+  LEFT JOIN decision d USING (consent_group_id);
 
 CREATE TABLE catalog.stigmatizing_concept (        -- excluded as filters outside approved scope
   list_version  integer,
@@ -96,14 +128,14 @@ CREATE TABLE catalog.stigmatizing_concept (        -- excluded as filters outsid
 );
 
 CREATE TABLE catalog.term_availability (           -- studies with at least min_count participants per term
-  release            text,
+  release            text REFERENCES catalog.release,
   curie              text,
   research_study_id  text,
   PRIMARY KEY (release, curie, research_study_id)
 );
 
 CREATE TABLE catalog.term_resolution_cache (       -- BDC-KG results that passed release validation
-  release      text,
+  release      text REFERENCES catalog.release,
   query_text   text,                               -- normalized search text
   candidates   jsonb       NOT NULL,
   fetched_at   timestamptz NOT NULL,
@@ -123,5 +155,11 @@ GRANT USAGE ON SCHEMA catalog TO rebuild_job, doc_generator, api_search, api_cou
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA catalog TO rebuild_job;
 GRANT SELECT ON ALL TABLES IN SCHEMA catalog TO doc_generator, api_search;
 GRANT INSERT, UPDATE ON catalog.term_resolution_cache TO api_search;
-GRANT SELECT ON catalog.consent_group, catalog.consent_group_current,
+GRANT SELECT ON catalog.consent_group, catalog.consent_group_eligibility, catalog.consent_group_current,
                 catalog.stigmatizing_concept, catalog.release TO api_counting, provisioning;
+
+-- Summaries for unauthenticated and signed-in users (counting role api_public).
+-- Labels, studies, releases and the stigmatizing-concept list; no curated consent records.
+GRANT USAGE ON SCHEMA catalog TO api_public;
+GRANT SELECT ON catalog.release, catalog.term, catalog.term_closure, catalog.study,
+                catalog.stigmatizing_concept, catalog.term_availability TO api_public;

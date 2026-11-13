@@ -10,6 +10,7 @@ version: 0.1.0
 prefixes:
   linkml: https://w3id.org/linkml/
   bdchm: https://w3id.org/bdchm/
+  dbgapc: https://w3id.org/tis-lab/BDC-Portal/dbgap_consent/
   bdchmg: https://w3id.org/tis-lab/BDC-Portal/governed/
   bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
 
@@ -18,9 +19,9 @@ default_range: string
 
 imports:
   - linkml:types
-  - bdchm
-  - bdchm_governed
-  - bdchm_db_common
+  - ../../synthetic/bdchm
+  - ../bdchm_governed
+  - common
 
 classes:
 
@@ -49,8 +50,10 @@ classes:
         range: datetime
         required: true
 
-  Term:
-    description: A term available for searching and counting in a release.
+  CatalogTerm:
+    description: >-
+      A term available for searching and counting in a release. Named CatalogTerm so it cannot
+      collide with Study Palette's Term (terms.yaml), the shape served in summary responses.
     mixins:
       - ReleaseScoped
     annotations:
@@ -98,6 +101,9 @@ classes:
     is_a: TermClosure
     annotations:
       table: catalog.term_closure
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, ancestor, descendant]
 
   Study:
     description: A research study in a release.
@@ -181,10 +187,10 @@ classes:
         unique_key_slots: [release, mapping_id]
 
   ConsentGroupRecord:
-    is_a: ConsentGroup
-    description: A versioned copy of a curated ConsentGroup record.
+    is_a: DbgapConsentGroup
+    description: A versioned copy of a curated DbgapConsentGroup record (what the consent means, in DUO terms).
     exact_mappings:
-      - bdchmg:ConsentGroup
+      - dbgapc:DbgapConsentGroup
     annotations:
       table: catalog.consent_group
       origin: curation
@@ -198,6 +204,67 @@ classes:
     unique_keys:
       primary_key:
         unique_key_slots: [consent_group_id, version]
+
+  ConsentGroupEligibilityRecord:
+    description: >-
+      A versioned copy of the portal's eligibility decision for a consent group, stored apart from
+      ConsentGroupRecord so each decision names the version of the consent meaning it was made
+      against. catalog.consent_group_current joins the two back into one GovernedConsentGroup.
+    mixins:
+      - ConsentGroupEligibility
+    exact_mappings:
+      - bdchmg:ConsentGroupEligibility
+    annotations:
+      table: catalog.consent_group_eligibility
+      origin: curation
+    slots:
+      - consent_group_id
+    slot_usage:
+      consent_group_id:
+        required: true
+    attributes:
+      version:
+        range: integer
+        required: true
+        annotations:
+          origin: system
+          derivation: Incremented each time the eligibility decision changes.
+      consent_group_version:
+        range: integer
+        required: true
+        description: Version of the ConsentGroupRecord this decision was made against.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [consent_group_id, version]
+
+  ConsentGroupCurrent:
+    is_a: GovernedConsentGroup
+    description: >-
+      The current consent meaning of each group with its current eligibility decision. A decision
+      made against an older meaning version does not apply, so exact_count_eligible and
+      sharing_eligible read false until eligibility is decided again; with no decision at all the
+      approval fields are empty.
+    exact_mappings:
+      - bdchmg:GovernedConsentGroup
+    annotations:
+      view: catalog.consent_group_current
+    slot_usage:
+      eligibility_approved_by:
+        required: false
+      approved_on:
+        required: false
+    attributes:
+      version:
+        range: integer
+        required: true
+        description: Version of the consent meaning shown.
+      eligibility_version:
+        range: integer
+        description: Version of the eligibility decision shown, if any.
+      eligibility_is_current:
+        range: boolean
+        required: true
+        description: The decision was made against the meaning version shown.
 
   StigmatizingConcept:
     description: A term subtree that cannot be used as a filter outside approved scope.
@@ -236,8 +303,11 @@ classes:
           - bdchm:member_of_research_study
         annotations:
           derivation: >-
-            Studies with at least min_count participants in the term's
-            posting list (status rule present).
+            Studies whose obfuscated participant count for the term (posting list,
+            status rule present) is at least min_count, using the same seeded noise
+            as summary responses, so this table never lists a study that a public
+            summary for the same term suppresses, and never reveals an exact count
+            crossing the threshold.
     unique_keys:
       primary_key:
         unique_key_slots: [release, curie, research_study_id]
