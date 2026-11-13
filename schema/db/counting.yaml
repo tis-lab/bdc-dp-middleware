@@ -31,7 +31,11 @@ classes:
   # -------------------------------------------------------------------
 
   ParticipantOrdinal:
-    description: Maps each participant in a release to its number and consent group.
+    description: >-
+      Maps each participant in a release to its number and consent group. A participant is one BDC-HM
+      Participant record: one person's enrollment in one research study, under one consent group. BDC-HM
+      does not link records of the same person across studies, so someone enrolled in two studies is two
+      participants, and a count over several studies counts enrollments, not distinct people.
     mixins:
       - ReleaseScoped
     related_mappings:
@@ -69,8 +73,10 @@ classes:
   ParticipantAttribute:
     description: >-
       Participant-level values used for demographic and age summaries. A participant can have several Demography
-      records (one per visit). sex and ethnicity are set only when all of them agree, and are NULL otherwise; race
-      is the union of their values. Disagreements are counted by the demography_conflict release check.
+      records (one per visit). sex and ethnicity are set only when all of their non-NULL values agree, and are
+      NULL otherwise, so a participant with conflicting records is counted under no value and not as recorded;
+      race is the union of their values. Disagreements are counted by the demography_conflict release check.
+      Age summaries bin age_at_baseline_days, not age_at_index_days.
     mixins:
       - ReleaseScoped
     related_mappings:
@@ -130,8 +136,12 @@ classes:
       age_at_baseline_days:
         range: integer
         description: >-
-          Age at the baseline visit. Harmonized ages are whole years multiplied by 365, so this is precise to
-          a year, not a day.
+          Age at the baseline visit, used for age summaries; NULL when the participant has no baseline visit,
+          and such participants are not counted as having an age recorded. Harmonized ages are whole years
+          multiplied by 365, so this is precise to a year, not a day. Binning converts back with the same
+          factor: age in years is floor(age_at_baseline_days / 365), and a band [low, high) in years holds
+          days from 365 * low inclusive to 365 * high exclusive. Converting with 365.25 instead would put
+          everyone exactly low years old in the band below.
         related_mappings:
           - bdchm:age_at_visit_start
         annotations:
@@ -260,11 +270,13 @@ classes:
       status: {}
       relationship: {}
       record_provenance: {}
-      value_decimal:
+      value_numeric:
         range: decimal
         description: >-
-          Copied unchanged. Harmonization already converts each observation type to one unit; the
-          unit_inconsistent release check confirms it after UCUM normalization.
+          The record's numeric value, from whichever numeric slot holds it. numeric stores integers exactly,
+          so integer- and decimal-valued records are compared and binned together. Harmonization already
+          converts each observation type to one unit; the unit_inconsistent release check confirms it after
+          UCUM normalization.
       value_operator: {}
       unit: {}
     unique_keys:
@@ -298,11 +310,13 @@ classes:
         annotations:
           source_slot: Condition.relationship_to_participant
       age_start_days:
-        related_mappings:
+        description: >-
+          Copied from Condition.age_at_condition_start, NULL when that is not recorded. The pinned BDC-HM has no
+          age at which a condition was reported, so no other slot is used in its place.
+        exact_mappings:
           - bdchm:age_at_condition_start
-          - bdchm:age_at_condition_report
         annotations:
-          source_slot: Condition.age_at_condition_start, or Condition.age_at_condition_report when only that is recorded; age_start_slot says which
+          source_slot: Condition.age_at_condition_start
       age_end_days:
         exact_mappings:
           - bdchm:age_at_condition_end
@@ -400,11 +414,17 @@ classes:
           - bdchm:age_at_observation
         annotations:
           source_slot: MeasurementObservation.age_at_observation
-      value_decimal:
-        exact_mappings:
+      value_numeric:
+        related_mappings:
           - bdchm:value_decimal
+          - bdchm:value_integer
         annotations:
-          source_slot: MeasurementObservation.value_quantity.value_decimal
+          derivation: >-
+            MeasurementObservation.value_quantity.value_decimal when set, otherwise
+            MeasurementObservation.value_quantity.value_integer, unchanged (COALESCE(value_decimal,
+            value_integer)). A Quantity with both set and unequal is counted by the quantity_value_conflict
+            release check, which must be 0; one with only value_concept, and observations whose value is
+            value_string, value_boolean or value_enum, leave this NULL.
       value_operator:
         range: QuantityOperatorEnum
         exact_mappings:
@@ -605,7 +625,11 @@ enums:
       unit_inconsistent:
         description: Observation types with more than one unit after UCUM normalization. Must be 0.
       unit_missing:
-        description: Measurement records with value_decimal but no unit. Reported.
+        description: Measurement records with value_numeric but no unit. Reported.
+      quantity_value_conflict:
+        description: >-
+          Measurement records whose value_quantity has both value_decimal and value_integer set to different
+          values, so value_numeric would be ambiguous. Must be 0.
       enum_value_invalid:
         description: >-
           Values outside their BDC-HM enum in columns copied from enum-ranged slots (sex, ethnicity,

@@ -5,9 +5,10 @@
 -- release is a DETACH and DROP of its partitions. The exception is
 -- release_check: it is the permanent record of what was verified before
 -- each release was served, so it is never partitioned or deleted from.
--- Columns must match counting.yaml (LinkML); check_schema_sql.py
--- fails CI when they differ. Partitioning, indexes and grants live only
--- here, because the LinkML SQL generator cannot express them.
+-- Columns must match counting.yaml (LinkML); run
+-- python schema/tests/check_schema.py after changing either (not yet in CI).
+-- Partitioning, indexes and grants live only here, because the LinkML SQL
+-- generator cannot express them. What the counts mean: schema/db/README.md.
 -- =====================================================================
 
 CREATE SCHEMA counting;
@@ -66,13 +67,13 @@ CREATE TABLE counting.event (                      -- projection of BDC-HM recor
   concept            text    NOT NULL,             -- condition_concept, observation_type, ...
   status             text,                         -- condition_status, procedure_status, exposure_status
   relationship       text,                         -- relationship_to_participant (conditions)
-  value_decimal      numeric,
+  value_numeric      numeric,                      -- value_quantity.value_decimal, else value_integer
   value_operator     text,                         -- e.g. LESS_THAN
   unit               text,
   PRIMARY KEY (release, source_record_id)
 ) PARTITION BY LIST (release);
 CREATE INDEX event_concept_idx  ON counting.event (release, concept, status, ordinal);
-CREATE INDEX event_value_idx    ON counting.event (release, concept, value_decimal);
+CREATE INDEX event_value_idx    ON counting.event (release, concept, value_numeric);
 CREATE INDEX event_timeline_idx ON counting.event (release, ordinal, age_start_days);
 
 CREATE TABLE counting.term_closure (               -- copy of the release's closure, for joins here
@@ -95,7 +96,8 @@ CREATE TABLE counting.release_check (              -- checks that must pass befo
   release     text,
   check_name  text CHECK (check_name IN ('participant_count', 'null_status', 'relationship_unmapped',
                                          'demography_conflict', 'baseline_coverage',
-                                         'unit_inconsistent', 'unit_missing', 'enum_value_invalid')),
+                                         'unit_inconsistent', 'unit_missing', 'quantity_value_conflict',
+                                         'enum_value_invalid')),
   expected    bigint,
   actual      bigint,
   passed      boolean     NOT NULL,

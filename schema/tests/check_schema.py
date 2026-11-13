@@ -13,8 +13,17 @@ Checks, per table or view named by a class's `table` or `view` annotation:
   patterns        a slot with a pattern has a CHECK using ~
 Views are checked for columns only.
 
-Usage: python tests/check_schema_sql.py            (catalog and counting)
-       python tests/check_schema_sql.py MODEL DDL
+Also checks that every bdchm: CURIE in a class's or column's exact_mappings or related_mappings
+names a class or slot in the pinned BDC-HM (synthetic/bdchm.yaml), so a mapping to a slot the
+pinned version lacks fails here rather than at load time.
+
+Run from anywhere; default paths are resolved from the repository root:
+
+  pip install -r schema/tests/requirements.txt
+  python schema/tests/check_schema.py              (catalog and counting)
+  python schema/tests/check_schema.py MODEL DDL    (one pair; paths relative to the current directory)
+
+Exit status 0 when nothing differs, 1 when something does, 2 on wrong arguments. Not run in CI yet.
 """
 import re
 import sys
@@ -26,7 +35,8 @@ from linkml_runtime.utils.schemaview import SchemaView
 from pglast import ast
 from pglast.enums import ConstrType
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]  # repository root: schema/tests/check_schema.py
+BDCHM = "synthetic/bdchm.yaml"
 PAIRS = [("schema/db/catalog.yaml", "schema/db/catalog.sql"),
          ("schema/db/counting.yaml", "schema/db/counting.sql")]
 TYPES = {"string": {"text", "jsonb"}, "uriorcurie": {"text"}, "integer": {"int4", "int8", "integer", "bigint"},
@@ -73,6 +83,29 @@ def model(path):
         out[rel] = {"cls": name, "view": ann(cls, "view") is not None, "partition": ann(cls, "partition") is not None,
                     "pk": pk, "unique": list(keys.values()), "cols": cols}
     return out
+
+
+def bdchm_names(path):
+    sv = SchemaView(str(path))
+    return set(sv.all_classes()) | set(sv.all_slots())
+
+
+def mappings(model_path, known):
+    """bdchm: CURIEs in the model's mappings that the pinned BDC-HM does not define."""
+    sv = SchemaView(str(model_path))
+    found = []
+
+    def check(where, element):
+        for curie in list(element.exact_mappings or []) + list(element.related_mappings or []):
+            prefix, _, local = str(curie).partition(":")
+            if prefix == "bdchm" and local not in known:
+                found.append(f"{where}: maps to {curie}, which the pinned BDC-HM ({BDCHM}) does not define")
+
+    for name in sv.all_classes(imports=False):
+        check(name, sv.get_class(name))
+        for s in sv.class_induced_slots(name):
+            check(f"{name}.{s.name}", s)
+    return found
 
 
 def deparse(node):
@@ -176,8 +209,13 @@ def compare(model_path, ddl_path):
 
 
 def main(argv):
-    pairs = [tuple(argv[:2])] if argv else [(ROOT / a, ROOT / b) for a, b in PAIRS]
+    if argv and len(argv) != 2:
+        print(__doc__, file=sys.stderr)
+        return 2
+    pairs = [tuple(argv)] if argv else [(ROOT / a, ROOT / b) for a, b in PAIRS]
+    known = bdchm_names(ROOT / BDCHM)
     found = [f"{Path(b).name}: {p}" for a, b in pairs for p in compare(a, b)]
+    found += [f"{Path(a).name}: {p}" for a, _ in pairs for p in mappings(a, known)]
     print("\n".join(found + [f"{len(found)} problem(s)"]))
     return 1 if found else 0
 
