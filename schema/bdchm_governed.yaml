@@ -1,0 +1,67 @@
+id: https://w3id.org/tis-lab/BDC-Portal/bdchm_governed
+name: bdchm_governed
+title: BDC-HM governed extension
+description: >-
+  This portal's access-control policy over BDC-HM. What a consent group means comes from
+  dbgap_consent, which is kept free of policy so it can go upstream; this module adds how the
+  portal treats each group, and requires every participant to carry one. Nothing here is
+  proposed upstream. Every addition is a subclass or a new class, so no BDC-HM class, slot or
+  enum changes meaning.
+license: MIT
+version: 0.3.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  bdchm: https://w3id.org/bdchm/
+  dbgapc: https://w3id.org/tis-lab/BDC-Portal/dbgap_consent/
+  bdchmg: https://w3id.org/tis-lab/BDC-Portal/governed/
+
+default_prefix: bdchmg
+default_range: string
+
+imports:
+  - linkml:types
+  - ../synthetic/bdchm
+  - dbgap_consent
+
+classes:
+  ConsentGroupEligibility:
+    mixin: true
+    description: >-
+      The portal's decision on how a consent group may be used. A mixin so the decision can be
+      combined with the consent meaning (GovernedConsentGroup) or stored on its own.
+    attributes:
+      exact_count_eligible:
+        range: boolean
+        required: true
+        description: Approved researchers may see exact counts for this group.
+      sharing_eligible:
+        range: boolean
+        required: true
+        description: Participant-level results for this group may be shared through the portal.
+      eligibility_approved_by:
+        required: true
+      approved_on:
+        range: date
+        required: true
+
+  GovernedConsentGroup:
+    is_a: DbgapConsentGroup
+    mixins:
+      - ConsentGroupEligibility
+    description: >-
+      One consent group as the portal uses it: the DUO meaning inherited from dbgap_consent's
+      DbgapConsentGroup, plus the portal's eligibility decision. Subclassing keeps
+      DbgapConsentGroup itself free of policy, so dbgap_consent can go upstream unchanged.
+
+  GovernedParticipant:
+    is_a: Participant
+    description: >-
+      A BDC-HM Participant that must carry its dbGaP consent group. The slot is a consent fact
+      from dbgap_consent; requiring it is portal policy. Access decisions use consent_group_id
+      only, never BDC-HM Participant.consents, which has no consent group and is not populated.
+    slots:
+      - consent_group_id
+    slot_usage:
+      consent_group_id:
+        required: true
