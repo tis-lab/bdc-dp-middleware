@@ -4,7 +4,7 @@ spring:
 
   graphql:
     http:
-      path: /cb/query
+      path: /api/cb/open/query
     schema:
       locations: classpath:graphql/core/
       inspection:

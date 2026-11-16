@@ -4,7 +4,7 @@ Status: current middleware implementation, reviewed 2026-11-12.
 
 ## 1. What the UI calls
 
-Send a GraphQL POST to `<middleware-base-url>/cb/query` with `Content-Type: application/json`. Local default: `http://localhost:8080/cb/query`.
+Send a GraphQL POST to `<middleware-base-url>/api/cb/open/query` with `Content-Type: application/json`. Local default: `http://localhost:8080/api/cb/open/query`.
 
 Use **summary** for both initial page load and filtered cohort summaries. A separate `pageLoadSnapshot` is also proposed as the `summary` only provides study level counts. This route needs to be discussed with the team, but it has been implemented if UI needs to integrate it.
 
