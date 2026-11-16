@@ -9,8 +9,8 @@ public enum BdchmTypeEnum {
         try {
             return valueOf(value);
         } catch (IllegalArgumentException exception) {
-            throw new IllegalStateException("Unknown bdchmType in harmonized index: " + value
-                    + "; regenerate with tools/build_harmonized_index.py", exception);
+            throw new IllegalStateException("Unknown bdchmType in VarLib catalog: " + value
+                    + "; review the producer catalog and contract", exception);
         }
     }
 }

@@ -1,0 +1,2 @@
+linkml==1.11.1
+jsonschema==4.26.0

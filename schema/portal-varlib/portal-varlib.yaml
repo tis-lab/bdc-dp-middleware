@@ -1,0 +1,190 @@
+# DRAFT: extends real upstream types; no participant/dataset/hierarchy counts.
+id: https://w3id.org/tis-lab/study-palette/proposals/portal-varlib
+name: portal_varlib_contract_proposal
+version: 0.3.0-draft
+title: Portal IntegratedVariable contract proposal
+description: Portal metadata catalog extending pinned upstream variable classes. Distinct
+  integrated variable identities link to compound variables and studies. Not participant
+  data.
+license: MIT
+prefixes:
+  linkml: https://w3id.org/linkml/
+  portal: https://w3id.org/tis-lab/study-palette/proposals/portal-varlib/
+default_prefix: portal
+default_range: string
+imports:
+- linkml:types
+- vendor/bdc_variable_library
+classes:
+  PortalVariableCatalog:
+    tree_root: true
+    description: Version-3 metadata catalog of integrated variables, study-specific definitions, and their references.
+    attributes:
+      schema_version:
+        range: integer
+        required: true
+        minimum_value: 3
+        maximum_value: 3
+      release:
+        required: true
+        pattern: .*\S.*
+      integrated_variables:
+        range: PortalIntegratedVariable
+        required: true
+        multivalued: true
+        inlined_as_list: true
+      compound_variables:
+        range: PortalCompoundVariable
+        required: true
+        multivalued: true
+        inlined_as_list: true
+      studies:
+        range: PortalResearchStudy
+        required: true
+        multivalued: true
+        inlined_as_list: true
+      concepts:
+        range: PortalConcept
+        required: true
+        multivalued: true
+        inlined_as_list: true
+      sources:
+        range: PortalMetadataSource
+        required: true
+        multivalued: true
+        inlined_as_list: true
+      single_continuous_variables:
+        range: PortalSingleContinuousVariable
+        multivalued: true
+        inlined_as_list: true
+        description: Optional actual source-variable definitions. Only populate with
+          authoritative records linked by compound row_metadata.id.
+      single_categorical_variables:
+        range: PortalSingleCategoricalVariable
+        multivalued: true
+        inlined_as_list: true
+        description: Optional actual source-variable definitions. Only populate with
+          authoritative records linked by compound row_metadata.id.
+  PortalIntegratedVariable:
+    is_a: IntegratedVariable
+    description: An integrated variable with its own authoritative ID. Several variables
+      may share a concept. Extra requirements below are portal policy proposals, not
+      upstream requirements.
+    slots:
+    - metadata_sources
+    slot_usage:
+      id:
+        required: true
+      variable_label:
+        required: true
+        pattern: .*\S.*
+      concept_type:
+        required: true
+      bdchm_type:
+        required: true
+      integrates:
+        range: PortalCompoundVariable
+        required: true
+        minimum_cardinality: 1
+        inlined: false
+      associated_study:
+        inlined: false
+        description: Optional inherited study reference; do not use it as a multistudy
+          list. Derive contributing studies through integrates.
+  PortalCompoundVariable:
+    is_a: CompoundVariable
+    description: Study-specific compound variable. Its ID is not a transformation
+      file stem. Inherited row_metadata and documentation_metadata retain their upstream
+      meanings.
+    slots:
+    - metadata_sources
+    slot_usage:
+      id:
+        required: true
+      associated_study:
+        range: PortalResearchStudy
+        required: true
+        inlined: false
+      variable_label:
+        required: true
+        pattern: .*\S.*
+      concept_type:
+        required: true
+      bdchm_type:
+        required: true
+  PortalResearchStudy:
+    is_a: ResearchStudy
+    description: Study metadata only; no participant counts or access grants.
+    attributes:
+      study_name:
+        required: true
+        pattern: .*\S.*
+    slot_usage:
+      id:
+        required: true
+  PortalConcept:
+    description: Ontology metadata, distinct from labels of variables.
+    attributes:
+      curie:
+        identifier: true
+        required: true
+        pattern: ^[A-Za-z][A-Za-z0-9._-]*:[A-Za-z0-9._-]+$
+      label:
+        description: Verified ontology label; omit when unavailable.
+        pattern: .*\S.*
+  PortalMetadataSource:
+    description: Versioned provenance of metadata. A checksum/revision does not prove
+      clinical accuracy.
+    attributes:
+      source_id:
+        identifier: true
+        required: true
+      repository:
+        required: true
+        pattern: ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$
+      revision:
+        required: true
+        pattern: ^[0-9a-f]{40}$
+      path:
+        required: true
+        pattern: .*\S.*
+  PortalSingleContinuousVariable:
+    is_a: SingleContinuousVariable
+    description: Portal extension of an actual upstream source-variable class; not
+      a specification alias.
+    slots:
+    - metadata_sources
+    slot_usage:
+      id:
+        required: true
+      variable_name:
+        required: true
+        pattern: .*\S.*
+      associated_study:
+        range: PortalResearchStudy
+        required: true
+        inlined: false
+  PortalSingleCategoricalVariable:
+    is_a: SingleCategoricalVariable
+    description: Portal extension of an actual upstream source-variable class; not
+      a specification alias.
+    slots:
+    - metadata_sources
+    slot_usage:
+      id:
+        required: true
+      variable_name:
+        required: true
+        pattern: .*\S.*
+      associated_study:
+        range: PortalResearchStudy
+        required: true
+        inlined: false
+slots:
+  metadata_sources:
+    description: Explicit provenance for this variable; resolves within catalog sources.
+    range: PortalMetadataSource
+    multivalued: true
+    required: true
+    minimum_cardinality: 1
+    inlined: false

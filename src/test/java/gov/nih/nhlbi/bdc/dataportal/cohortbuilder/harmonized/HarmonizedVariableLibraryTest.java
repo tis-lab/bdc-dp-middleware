@@ -1,232 +1,97 @@
 package gov.nih.nhlbi.bdc.dataportal.cohortbuilder.harmonized;
 
-import java.util.List;
-
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.io.TempDir;
+import static org.assertj.core.api.Assertions.*;
 
 class HarmonizedVariableLibraryTest {
+    private static final String MANIFEST = "classpath:harmonized/catalogs/manifest.json";
+    private static final HarmonizedVariableLibrary LIBRARY = HarmonizedVariableLibrary.bundled(
+            new HarmonizedVariableProperties(true, MANIFEST, 25));
 
-    private static final String INDEX = "classpath:harmonized/harmonized-index.json";
-
-    private static HarmonizedVariableLibrary library() {
-        return HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, INDEX, 25));
-    }
-
-    private static BdcConcept concept(String curie) {
-        return library().search(curie).stream()
-                .filter(c -> c.conceptType().equals(curie))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("no concept " + curie));
-    }
-
-    @Test
-    void loadsEveryConceptFromTheIndex() {
-        assertThat(library().conceptCount()).isEqualTo(242);
-    }
-
-    @Test
-    void keysOnTheConceptAndCarriesItsProvenance() {
-        BdcConcept hypertension = concept("MONDO:0005044");
-
-        assertThat(hypertension.conceptLabel()).isNull();
-        assertThat(hypertension.displayLabel()).isEqualTo("MONDO:0005044");
-        assertThat(hypertension.bdchmType()).isEqualTo(BdchmTypeEnum.condition);
-        assertThat(hypertension.studyCount()).isEqualTo(10);
-        assertThat(hypertension.studies()).containsExactly(
-                "ARIC", "CARDIA", "CHS", "COPDGene", "FHS", "HCHS", "JHS", "MESA", "SPIROMICS", "WHI");
-        assertThat(hypertension.variables()).extracting("variableName")
-                .containsExactly("hyperten", "hypertension");
-        assertThat(hypertension.variables().getFirst().studies()).hasSize(7);
-        assertThat(hypertension.variables().getLast().studies()).hasSize(3);
-    }
-
-    @Test
-    void keepsSubtypesApart() {
-        BdcConcept subtype = concept("MONDO:0005149");
-
-        assertThat(subtype.studyCount()).isEqualTo(2);
-        assertThat(subtype.studies()).containsExactly("ARIC", "WHI");
-        assertThat(subtype.variables()).extracting("variableName")
-                .containsExactly("hyperten", "hypertension");
-        // Each carrier assigns it in exactly one study, not in its whole study list.
-        assertThat(subtype.variables()).allSatisfy(
-                carrier -> assertThat(carrier.studies()).hasSize(1));
-    }
-
-    /** Ten studies have an asthma.yaml; one assigns this code. Counting by file name gives ten. */
-    @Test
-    void countsOnlyTheStudiesThatAssignTheConcept() {
-        BdcConcept narrow = concept("HP:0012393");
-
-        assertThat(narrow.studyCount()).isEqualTo(1);
-        assertThat(narrow.variables()).singleElement()
-                .satisfies(carrier -> assertThat(carrier.variableName()).isEqualTo("asthma"));
-    }
-
-    @Test
-    void derivesTheBdchmTypeFromTheSpecification() {
-        assertThat(concept("MONDO:0005044").bdchmType()).isEqualTo(BdchmTypeEnum.condition);
-        assertThat(concept("OBA:VT0001253").bdchmClasses())
-                .containsExactly("MeasurementObservation");
-        assertThat(concept("ATC:C02").bdchmType()).isEqualTo(BdchmTypeEnum.drugexposure);
-    }
-
-    @Test
-    void doesNotPromoteVariableLabelsToConceptLabels() {
-        assertThat(concept("MONDO:0005044").conceptLabel()).isNull();
-    }
-
-    /** A concept never displays a file name, even where no label could be derived. */
-    @Test
-    void neverDisplaysAFileName() {
-        assertThat(library().search("hypert")).allSatisfy(concept -> {
-            assertThat(concept.displayLabel()).isNotBlank();
-            assertThat(concept.displayLabel())
-                    .isNotEqualTo(concept.variables().getFirst().variableName());
+    @Test void loadsAllConceptsAndPreservesIntegratedIdentities() {
+        assertThat(LIBRARY.conceptCount()).isEqualTo(303);
+        var c = LIBRARY.search("MONDO:0005044").getFirst();
+        assertThat(c.studyCount()).isEqualTo(10);
+        assertThat(c.conceptLabel()).isNotBlank();
+        assertThat(c.integratedVariables()).singleElement().satisfies(iv -> {
+            assertThat(iv.id()).isEqualTo("bdchm:Condition/MONDO:0005044");
+            assertThat(iv.studyMappings()).isNotEmpty().allSatisfy(m -> {
+                assertThat(m.studyId()).startsWith("bdchm:Study/phs");
+                assertThat(m.sourceVariables()).isNotEmpty();
+            });
         });
     }
-
-    @Test
-    void preservesExplicitSourceAssociations() {
-        BdcConcept c = concept("MONDO:0005044");
-        assertThat(c.bdchmClasses()).containsExactly("Condition");
-        assertThat(c.sourceMappings()).isNotEmpty().allSatisfy(mapping -> {
-            assertThat(c.studies()).contains(mapping.study());
-            assertThat(mapping.bdchmClass()).isEqualTo("Condition");
-            assertThat(mapping.conceptSlot()).isEqualTo("condition_concept");
-            assertThat(mapping.sourceFile()).startsWith("priority_variables_transform/");
+    @Test void keepsDifferentClassesForTheSameConcept() {
+        // Producer has two OMOP concepts represented by more than one integrated variable.
+        var manifest = new org.springframework.core.io.DefaultResourceLoader();
+        var cards = new PortalCatalogLoader(manifest).load(MANIFEST);
+        var multiple = cards.stream().filter(c -> c.integratedVariables().size() > 1).toList();
+        assertThat(multiple).hasSize(2).allSatisfy(c -> {
+            assertThat(c.integratedVariables()).extracting(BdcConcept.IntegratedVariable::id).doesNotHaveDuplicates();
+            assertThat(c.bdchmClasses()).hasSize(2).contains("Observation");
+            assertThat(c.bdchmType()).isEqualTo(BdchmTypeEnum.observation);
         });
     }
-
-    // ------------------------------------------------------------------------- lookup
-
-    @Test
-    void reportsNoCoverageForAConceptBdcHasNotHarmonized() {
-        BdcCoverage none = library().coverageFor("MONDO:9999999");
-
-        assertThat(none.studyCount()).isZero();
-        assertThat(none.studies()).isEmpty();
-        assertThat(none.variableNames()).isEmpty();
+    @Test void keepsLegacyAliasFieldsAndAddsActualSourceVariables() {
+        var c = LIBRARY.search("MONDO:0005044").getFirst();
+        assertThat(c.variables()).extracting(BdcConcept.BdcCarrier::variableName).contains("hyperten", "hypertension");
+        assertThat(c.sourceMappings()).allSatisfy(m -> {
+            assertThat(m.bdchmClass()).isEqualTo("Condition");
+            assertThat(m.conceptSlot()).isEqualTo("condition_concept");
+        });
+        var sources = c.integratedVariables().stream().flatMap(v -> v.studyMappings().stream())
+                .flatMap(m -> m.sourceVariables().stream()).toList();
+        assertThat(sources).anyMatch(BdcConcept.SourceVariable::valueVariable);
+        assertThat(sources).anyMatch(s -> !s.valueVariable());
+        assertThat(sources).allSatisfy(s -> assertThat(s.id()).startsWith("dbgap:phv"));
     }
-
-    @Test
-    void summarisesCoverageForAnnotation() {
-        BdcCoverage coverage = library().coverageFor("MONDO:0005044");
-
-        assertThat(coverage.studyCount()).isEqualTo(10);
-        assertThat(coverage.variableNames()).containsExactly("hyperten", "hypertension");
+    @Test void searchesLabelsAliasesAndExactCurie() {
+        assertThat(LIBRARY.search("hypertension")).extracting(BdcConcept::conceptType).contains("MONDO:0005044", "HP:0000822");
+        assertThat(LIBRARY.search("bdy_hgt")).isNotEmpty();
+        assertThat(LIBRARY.search("mondo:0005044")).hasSize(1);
+        assertThat(LIBRARY.search("MONDO:999999999")).isEmpty();
+        assertThat(LIBRARY.search(" ")).isEmpty();
+        assertThat(LIBRARY.coverageFor("MONDO:0005044").studyCount()).isEqualTo(10);
     }
-
-    /** Prefix casing varies by source (MeSH vs MESH); local identifiers do not. */
-    @Test
-    void normalisesOnlyTheCuriePrefix() {
-        assertThat(library().coverageFor("mondo:0005044").studyCount()).isEqualTo(10);
-        assertThat(library().coverageFor(" MONDO:0005044 ").studyCount()).isEqualTo(10);
-        assertThat(library().coverageFor("MONDO:0005044X").studyCount()).isZero();
+    @Test void capsAndOrdersByStudyCoverage() {
+        var lib = HarmonizedVariableLibrary.bundled(new HarmonizedVariableProperties(true, MANIFEST, 2));
+        assertThat(lib.search("hyper")).hasSize(2);
+        assertThat(LIBRARY.search("hyper").stream().map(BdcConcept::studyCount).toList())
+                .isSortedAccordingTo(java.util.Comparator.reverseOrder());
     }
-
-    @Test
-    void treatsNullAndBlankConceptsAsUnknown() {
-        assertThat(library().coverageFor(null).studyCount()).isZero();
-        assertThat(library().coverageFor("  ").studyCount()).isZero();
+    @Test void missingLabelsUseCurieAndNotVariableLabels() {
+        var c = LIBRARY.search("ATC:C02").getFirst();
+        assertThat(c.conceptLabel()).isNull();
+        assertThat(c.displayLabel()).isEqualTo("ATC:C02");
     }
-
-    // ------------------------------------------------------------------------ search
-
-    @Test
-    void findsConceptsFromAPartialWord() {
-        List<BdcConcept> matches = library().search("hypert");
-
-        assertThat(matches).isNotEmpty();
-        assertThat(matches).extracting("conceptType").contains("MONDO:0005044", "ATC:C02");
-        assertThat(matches).extracting("displayLabel")
-                .contains("MONDO:0005044", "ATC:C02");
+    @Test void disabledLibraryNeedsNoFiles() {
+        assertThat(HarmonizedVariableLibrary.disabled().conceptCount()).isZero();
+        assertThat(HarmonizedVariableLibrary.disabled().coverageFor("HP:0000822").studyCount()).isZero();
     }
-
-    @Test
-    void ordersMatchesByStudyCoverage() {
-        List<Integer> counts = library().search("hypert").stream()
-                .map(BdcConcept::studyCount)
-                .toList();
-
-        assertThat(counts).isSortedAccordingTo((a, b) -> Integer.compare(b, a));
-    }
-
-    @Test
-    void stillMatchesOnAVariableName() {
-        assertThat(library().search("bdy_hgt")).extracting("conceptType")
-                .contains("OBA:VT0001253");
-    }
-
-    @Test
-    void acceptsACurieAsTheQuery() {
-        assertThat(library().search("MONDO:0005044")).singleElement()
-                .satisfies(c -> assertThat(c.studyCount()).isEqualTo(10));
-        assertThat(library().search("mondo:0005044")).hasSize(1);
-        assertThat(library().search("MONDO:9999999")).isEmpty();
-    }
-
-    @Test
-    void ignoresFragmentsTooShortToBeEvidence() {
-        assertThat(library().search("car")).isEmpty();
-        assertThat(library().search("a")).isEmpty();
-        assertThat(library().search("  ")).isEmpty();
-    }
-
-    @Test
-    void capsTheNumberOfMatches() {
-        HarmonizedVariableLibrary capped = HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, INDEX, 2));
-
-        assertThat(capped.search("hypert")).hasSize(2);
-    }
-
-    // ------------------------------------------------------------------------- lifecycle
-
-    @Test
-    void reportsNothingWhenDisabled() {
-        HarmonizedVariableLibrary disabled = HarmonizedVariableLibrary.disabled();
-
-        assertThat(disabled.conceptCount()).isZero();
-        assertThat(disabled.search("hypert")).isEmpty();
-        assertThat(disabled.coverageFor("MONDO:0005044").studyCount()).isZero();
-    }
-
-    @Test
-    void failsFastWhenTheIndexIsMissing() {
+    @Test void failsForMissingManifest() {
         assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(true, "classpath:harmonized/no-such.json", 25)))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("build_harmonized_index.py");
+                new HarmonizedVariableProperties(true, "classpath:no-such.json", 25)))
+                .isInstanceOf(IllegalStateException.class).hasMessageContaining("Cannot read VarLib");
     }
-
-    @Test
-    void failsFastWhenTheIndexIsNotAnIndex() {
+    @Test void rejectsEmptyCollection(@TempDir Path dir) throws Exception {
+        var path = dir.resolve("manifest.json");
+        Files.writeString(path, "{\"schema_version\":3,\"release\":\"test\",\"catalogs\":[]}");
         assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(
-                        true, "classpath:harmonized/missing-concepts.json", 25)))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("has no concepts array");
+                new HarmonizedVariableProperties(true, path.toUri().toString(), 25)))
+                .hasMessageContaining("empty");
     }
-
-    @Test
-    void rejectsInvalidEnumValues() {
+    @Test void rejectsInvalidCatalog(@TempDir Path dir) throws Exception {
+        var path = dir.resolve("manifest.json");
+        Files.writeString(path, """
+            {"schema_version":3,"release":"test","catalogs":[
+              {"file":"varlib_catalog_test.json","prefix":"TEST"}]}
+            """);
+        Files.writeString(dir.resolve("varlib_catalog_test.json"), "{}");
         assertThatThrownBy(() -> HarmonizedVariableLibrary.bundled(
-                new HarmonizedVariableProperties(
-                        true, "classpath:harmonized/invalid-type.json", 25)))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Unknown bdchmType");
-    }
-
-    @Test
-    void usesCurieFallbackForEveryPreviouslyMislabelledConcept() {
-        for (String id : List.of("HP:0012393", "MONDO:0005149", "ATC:C10AA")) {
-            assertThat(concept(id).conceptLabel()).isNull();
-            assertThat(concept(id).displayLabel()).isEqualTo(id);
-        }
+                new HarmonizedVariableProperties(true, path.toUri().toString(), 25)))
+                .hasMessageContaining("Catalog schema/release mismatch");
     }
 }

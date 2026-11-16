@@ -1,0 +1,37 @@
+name: VarLib catalog validation
+on:
+  pull_request:
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  varlib:
+    name: VarLib catalog contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned validation tools
+        run: python -m pip install -r scripts/requirements-varlib-validation.txt
+      - name: Validate packaged catalogs against the contract
+        run: python scripts/validate_varlib_catalogs.py
+      - name: Test validation failures
+        run: python -m unittest discover -s scripts -p test_varlib_catalogs.py
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Test catalog loading and terms GraphQL mapping
+        run: mvn --batch-mode -Dtest=HarmonizedVariableLibraryTest,HarmonizedSchemaTest,TermServiceMergeTest test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: varlib-validation-evidence
+          path: target/surefire-reports/*
+          if-no-files-found: warn

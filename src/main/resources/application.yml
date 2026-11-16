@@ -41,11 +41,11 @@ monarch:
 
 logging:
   level:
-    gov.nih.nhlbi.bdc: ${APP_LOG_LEVEL}
+    gov.nih.nhlbi.bdc: ${APP_LOG_LEVEL:INFO}
 
 harmonized:
   enabled: ${HARMONIZED_ENABLED}
-  index: ${HARMONIZED_INDEX}
+  index: ${HARMONIZED_INDEX:classpath:harmonized/catalogs/manifest.json}
   max-matches: ${HARMONIZED_MAX_MATCHES}
 
 search:

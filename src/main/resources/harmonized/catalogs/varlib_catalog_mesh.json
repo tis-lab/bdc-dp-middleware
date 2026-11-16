@@ -1,0 +1,3813 @@
+{
+  "schema_version": 3,
+  "release": "hv-1d45e28",
+  "sources": [
+    {
+      "source_id": "hv:FHS-ingest/tak_insulin.yaml",
+      "repository": "RTIInternational/NHLBI-BDC-DMC-HV",
+      "revision": "1d45e288b9dd59249e94a0c12a53ac12685d0784",
+      "path": "priority_variables_transform/FHS-ingest/tak_insulin.yaml"
+    },
+    {
+      "source_id": "hv:WHI-ingest/tak_insulin.yaml",
+      "repository": "RTIInternational/NHLBI-BDC-DMC-HV",
+      "revision": "1d45e288b9dd59249e94a0c12a53ac12685d0784",
+      "path": "priority_variables_transform/WHI-ingest/tak_insulin.yaml"
+    },
+    {
+      "source_id": "hv:MESA-ingest/tak_insulin.yaml",
+      "repository": "RTIInternational/NHLBI-BDC-DMC-HV",
+      "revision": "1d45e288b9dd59249e94a0c12a53ac12685d0784",
+      "path": "priority_variables_transform/MESA-ingest/tak_insulin.yaml"
+    },
+    {
+      "source_id": "hv:JHS-ingest/tak_insulin.yaml",
+      "repository": "RTIInternational/NHLBI-BDC-DMC-HV",
+      "revision": "1d45e288b9dd59249e94a0c12a53ac12685d0784",
+      "path": "priority_variables_transform/JHS-ingest/tak_insulin.yaml"
+    },
+    {
+      "source_id": "hv:HCHS-ingest/tak_insulin.yaml",
+      "repository": "RTIInternational/NHLBI-BDC-DMC-HV",
+      "revision": "1d45e288b9dd59249e94a0c12a53ac12685d0784",
+      "path": "priority_variables_transform/HCHS-ingest/tak_insulin.yaml"
+    },
+    {
+      "source_id": "hv:FHS-ingest/med_use.yaml",
+      "repository": "RTIInternational/NHLBI-BDC-DMC-HV",
+      "revision": "1d45e288b9dd59249e94a0c12a53ac12685d0784",
+      "path": "priority_variables_transform/FHS-ingest/med_use.yaml"
+    }
+  ],
+  "concepts": [
+    {
+      "curie": "MeSH:D007328"
+    },
+    {
+      "curie": "MeSH:D013974"
+    }
+  ],
+  "studies": [
+    {
+      "id": "bdchm:Study/phs000007",
+      "study_name": "FHS"
+    },
+    {
+      "id": "bdchm:Study/phs000810",
+      "study_name": "HCHS/SOL"
+    },
+    {
+      "id": "bdchm:Study/phs000286",
+      "study_name": "JHS"
+    },
+    {
+      "id": "bdchm:Study/phs000209",
+      "study_name": "MESA"
+    },
+    {
+      "id": "bdchm:Study/phs000200",
+      "study_name": "WHI"
+    }
+  ],
+  "integrated_variables": [
+    {
+      "id": "bdchm:DrugExposure/MeSH:D007328",
+      "variable_label": "MeSH:D007328 (DrugExposure)",
+      "variable_description": "MeSH:D007328 derived as BDCHM DrugExposure.drug_concept; value in exposure_status (HistoricalStatusEnum)",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "integrates": [
+        "hv:FHS-ingest/tak_insulin.yaml#0/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#1/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#2/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#3/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#4/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#5/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#6/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#7/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#8/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#9/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#10/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#11/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#12/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#13/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#14/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#15/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#16/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#17/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#18/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#19/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#20/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#21/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#22/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#23/MeSH:D007328",
+        "hv:FHS-ingest/tak_insulin.yaml#24/MeSH:D007328",
+        "hv:WHI-ingest/tak_insulin.yaml#0/MeSH:D007328",
+        "hv:WHI-ingest/tak_insulin.yaml#1/MeSH:D007328",
+        "hv:WHI-ingest/tak_insulin.yaml#2/MeSH:D007328",
+        "hv:WHI-ingest/tak_insulin.yaml#3/MeSH:D007328",
+        "hv:WHI-ingest/tak_insulin.yaml#4/MeSH:D007328",
+        "hv:MESA-ingest/tak_insulin.yaml#0/MeSH:D007328",
+        "hv:MESA-ingest/tak_insulin.yaml#3/MeSH:D007328",
+        "hv:MESA-ingest/tak_insulin.yaml#5/MeSH:D007328",
+        "hv:MESA-ingest/tak_insulin.yaml#7/MeSH:D007328",
+        "hv:MESA-ingest/tak_insulin.yaml#9/MeSH:D007328",
+        "hv:MESA-ingest/tak_insulin.yaml#10/MeSH:D007328",
+        "hv:MESA-ingest/tak_insulin.yaml#12/MeSH:D007328",
+        "hv:JHS-ingest/tak_insulin.yaml#0/MeSH:D007328",
+        "hv:JHS-ingest/tak_insulin.yaml#1/MeSH:D007328",
+        "hv:JHS-ingest/tak_insulin.yaml#2/MeSH:D007328",
+        "hv:JHS-ingest/tak_insulin.yaml#3/MeSH:D007328",
+        "hv:HCHS-ingest/tak_insulin.yaml#0/MeSH:D007328",
+        "hv:HCHS-ingest/tak_insulin.yaml#1/MeSH:D007328",
+        "hv:HCHS-ingest/tak_insulin.yaml#2/MeSH:D007328"
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml",
+        "hv:WHI-ingest/tak_insulin.yaml",
+        "hv:MESA-ingest/tak_insulin.yaml",
+        "hv:JHS-ingest/tak_insulin.yaml",
+        "hv:HCHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "bdchm:DrugExposure/MeSH:D013974",
+      "variable_label": "MeSH:D013974 (DrugExposure)",
+      "variable_description": "MeSH:D013974 derived as BDCHM DrugExposure.drug_concept; value in exposure_status (HistoricalStatusEnum)",
+      "concept_type": "MeSH:D013974",
+      "bdchm_type": "drugexposure",
+      "integrates": [
+        "hv:FHS-ingest/med_use.yaml#10/MeSH:D013974"
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/med_use.yaml"
+      ]
+    }
+  ],
+  "compound_variables": [
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#0/MeSH:D007328",
+      "variable_label": "FHS · FHS OMNI 1 EXAM 2",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00250767",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00250718",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#1/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 12",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00001827",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00002020",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#2/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 13",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00002046",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00002204",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#3/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 14",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00002229",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00002425",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#4/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 15",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00002451",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00002668",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#5/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 16",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 3 -> ABSENT; 4 -> PRESENT; 5 -> HISTORICAL",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00002705",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00002946",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#6/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 17",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00002970",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00003261",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#7/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 18",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00003358",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00003667",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#8/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 19",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00003789",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00004083",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#9/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 20",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00004224",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00004525",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#10/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 21",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00004620",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00004939",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#11/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 22",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00004981",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00005557",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#12/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 23",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00005601",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00006030",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#13/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 24",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00006152",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00006325",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#14/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 25",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00006492",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00006663",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#15/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 26",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00006887",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00007095",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#16/MeSH:D007328",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 27",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00007324",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00007534",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#17/MeSH:D007328",
+      "variable_label": "FHS · FHS OFFSPRING EXAM 2",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> PRESENT; 3 -> HISTORICAL",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00007718",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00008379",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#18/MeSH:D007328",
+      "variable_label": "FHS · FHS OFFSPRING EXAM 3",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00008404",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00008743",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#19/MeSH:D007328",
+      "variable_label": "FHS · FHS OFFSPRING EXAM 4",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00008805",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00009127",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#20/MeSH:D007328",
+      "variable_label": "FHS · FHS OFFSPRING EXAM 5",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00009207",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00009579",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#21/MeSH:D007328",
+      "variable_label": "FHS · FHS OFFSPRING EXAM 6",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00009708",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00010138",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#22/MeSH:D007328",
+      "variable_label": "FHS · FHS OFFSPRING EXAM 7",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; 2 -> HISTORICAL; 3 -> UNKNOWN; . -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00010193",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00010694",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#23/MeSH:D007328",
+      "variable_label": "FHS · FHS OFFSPRING SHHS EXAM 1 · FHS OMNI 1 SHHS EXAM 1",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00055345",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00056635",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        },
+        {
+          "id": "dbgap:phv00056607",
+          "microschema_slot": [
+            "relative_timing"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/tak_insulin.yaml#24/MeSH:D007328",
+      "variable_label": "FHS · FHS OFFSPRING SHHS EXAM 2 · FHS OMNI 1 SHHS EXAM 2",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00056962",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00057982",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        },
+        {
+          "id": "dbgap:phv00057968",
+          "microschema_slot": [
+            "relative_timing"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:WHI-ingest/tak_insulin.yaml#0/MeSH:D007328",
+      "variable_label": "WHI · WHI SCREENING",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000200",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00078469",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078435",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:WHI-ingest/tak_insulin.yaml#1/MeSH:D007328",
+      "variable_label": "WHI",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000200",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00170601",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00170566",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078437",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078436",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        },
+        {
+          "id": "dbgap:phv00170602",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:WHI-ingest/tak_insulin.yaml#2/MeSH:D007328",
+      "variable_label": "WHI",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000200",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00170683",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00170648",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078437",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078436",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        },
+        {
+          "id": "dbgap:phv00170684",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:WHI-ingest/tak_insulin.yaml#3/MeSH:D007328",
+      "variable_label": "WHI",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000200",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00193671",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00193628",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078437",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078436",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        },
+        {
+          "id": "dbgap:phv00193672",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:WHI-ingest/tak_insulin.yaml#4/MeSH:D007328",
+      "variable_label": "WHI",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000200",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00193783",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00193686",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078437",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        },
+        {
+          "id": "dbgap:phv00078436",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        },
+        {
+          "id": "dbgap:phv00193784",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:MESA-ingest/tak_insulin.yaml#0/MeSH:D007328",
+      "variable_label": "MESA · MESA AIR EXAM",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000209",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00083119",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00082638",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        },
+        {
+          "id": "dbgap:phv00083008",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:MESA-ingest/tak_insulin.yaml#3/MeSH:D007328",
+      "variable_label": "MESA · MESA CLASSIC EXAM 1",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000209",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00085364",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00084441",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        },
+        {
+          "id": "dbgap:phv00085244",
+          "microschema_slot": [
+            "age_at_drug_start"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:MESA-ingest/tak_insulin.yaml#5/MeSH:D007328",
+      "variable_label": "MESA · MESA CLASSIC EXAM 2",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000209",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00086008",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00085772",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:MESA-ingest/tak_insulin.yaml#7/MeSH:D007328",
+      "variable_label": "MESA · MESA CLASSIC EXAM 3",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000209",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00086490",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00086258",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:MESA-ingest/tak_insulin.yaml#9/MeSH:D007328",
+      "variable_label": "MESA · MESA CLASSIC EXAM 4",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000209",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00086927",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00086726",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:MESA-ingest/tak_insulin.yaml#10/MeSH:D007328",
+      "variable_label": "MESA · MESA AIR EXAM 5",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000209",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00175366",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00174584",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:MESA-ingest/tak_insulin.yaml#12/MeSH:D007328",
+      "variable_label": "MESA · MESA CLASSIC EXAM 5",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000209",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00176789",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00176007",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:JHS-ingest/tak_insulin.yaml#0/MeSH:D007328",
+      "variable_label": "JHS · JHS Exam 1",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: No -> ABSENT; Yes -> PRESENT",
+      "associated_study": "bdchm:Study/phs000286",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00401102",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00401078",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:JHS-ingest/tak_insulin.yaml#1/MeSH:D007328",
+      "variable_label": "JHS · JHS Exam 2",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: No -> ABSENT; Yes -> PRESENT",
+      "associated_study": "bdchm:Study/phs000286",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00401294",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00401273",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:JHS-ingest/tak_insulin.yaml#2/MeSH:D007328",
+      "variable_label": "JHS · JHS Exam 3",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: No -> ABSENT; Yes -> PRESENT",
+      "associated_study": "bdchm:Study/phs000286",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00401395",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00401370",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:JHS-ingest/tak_insulin.yaml#3/MeSH:D007328",
+      "variable_label": "JHS · JHS Exam 3",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: No -> ABSENT; Yes -> PRESENT",
+      "associated_study": "bdchm:Study/phs000286",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00401574",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00401565",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:HCHS-ingest/tak_insulin.yaml#0/MeSH:D007328",
+      "variable_label": "HCHS/SOL · HCHS EXAM",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT",
+      "associated_study": "bdchm:Study/phs000810",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:HCHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00226345",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00226250",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:HCHS-ingest/tak_insulin.yaml#1/MeSH:D007328",
+      "variable_label": "HCHS/SOL · HCHS EXAM",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; Q -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000810",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:HCHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00226360",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00226250",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:HCHS-ingest/tak_insulin.yaml#2/MeSH:D007328",
+      "variable_label": "HCHS/SOL · HCHS EXAM",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: 0 -> ABSENT; 1 -> PRESENT; Q -> UNKNOWN",
+      "associated_study": "bdchm:Study/phs000810",
+      "concept_type": "MeSH:D007328",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:HCHS-ingest/tak_insulin.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00226361",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00226250",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D007328",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hv:FHS-ingest/med_use.yaml#10/MeSH:D013974",
+      "variable_label": "FHS · FHS ORIGINAL EXAM 22",
+      "variable_description": "provenance: PATIENT_SELF_REPORTED_MEDICATION | exposure_status: . -> UNKNOWN; 3 -> UNKNOWN; 1 -> PRESENT; 2 -> HISTORICAL; 0 -> ABSENT",
+      "associated_study": "bdchm:Study/phs000007",
+      "concept_type": "MeSH:D013974",
+      "bdchm_type": "drugexposure",
+      "metadata_sources": [
+        "hv:FHS-ingest/med_use.yaml"
+      ],
+      "row_metadata": [
+        {
+          "id": "dbgap:phv00004980",
+          "microschema_slot": [
+            "exposure_status"
+          ]
+        },
+        {
+          "id": "dbgap:phv00005557",
+          "microschema_slot": [
+            "subject_identifier"
+          ]
+        }
+      ],
+      "documentation_metadata": [
+        {
+          "contr_vocab": "MeSH:D013974",
+          "microschema_slot": [
+            "drug_type"
+          ]
+        }
+      ]
+    }
+  ],
+  "single_categorical_variables": [
+    {
+      "id": "dbgap:phv00250767",
+      "variable_name": "g050",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00250767",
+      "file_id": "pht004814",
+      "file_name": "e_exam_ex02_7_0003s",
+      "source_variable_description": "Medical History - Interim Non-cardiovascular Medications I: Insulin",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes, now"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "Yes, not now"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "Maybe"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "Unknown"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00250718",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00250718",
+      "file_id": "pht004814",
+      "file_name": "e_exam_ex02_7_0003s",
+      "source_variable_description": "Unique study participant identification number",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00001827",
+      "variable_name": "FE93",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00001827",
+      "file_id": "pht000014",
+      "file_name": "ex0_12s",
+      "source_variable_description": "INTERIM HISTORY OF MEDICINE USED: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "9",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW (NONE)"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002020",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002020",
+      "file_id": "pht000014",
+      "file_name": "ex0_12s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002046",
+      "variable_name": "FF95",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002046",
+      "file_id": "pht000015",
+      "file_name": "ex0_13s",
+      "source_variable_description": "INTERIM HISTORY OF MEDICINE USED: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002204",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002204",
+      "file_id": "pht000015",
+      "file_name": "ex0_13s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002229",
+      "variable_name": "FG94",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002229",
+      "file_id": "pht000016",
+      "file_name": "ex0_14s",
+      "source_variable_description": "INTERIM HISTORY OF MEDICINE USED: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002425",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002425",
+      "file_id": "pht000016",
+      "file_name": "ex0_14s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002451",
+      "variable_name": "FH94",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002451",
+      "file_id": "pht000017",
+      "file_name": "ex0_15s",
+      "source_variable_description": "INTERIM HISTORY OF MEDICINE USED: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002668",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002668",
+      "file_id": "pht000017",
+      "file_name": "ex0_15s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002705",
+      "variable_name": "FI53",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002705",
+      "file_id": "pht000018",
+      "file_name": "ex0_16s",
+      "source_variable_description": "INTERIM HISTORY OF MEDICINE USED: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "4",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "5",
+          "indicator_meaning": "YES, NOT NOW"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002946",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002946",
+      "file_id": "pht000018",
+      "file_name": "ex0_16s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00002970",
+      "variable_name": "FJ27",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00002970",
+      "file_id": "pht000019",
+      "file_name": "ex0_17s",
+      "source_variable_description": "INTERIM HISTORY OF MEDICINE USED: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00003261",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00003261",
+      "file_id": "pht000019",
+      "file_name": "ex0_17s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00003358",
+      "variable_name": "FK110",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00003358",
+      "file_id": "pht000020",
+      "file_name": "ex0_18s",
+      "source_variable_description": "MEDICINE USE: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00003667",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00003667",
+      "file_id": "pht000020",
+      "file_name": "ex0_18s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00003789",
+      "variable_name": "FL144",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00003789",
+      "file_id": "pht000021",
+      "file_name": "ex0_19s",
+      "source_variable_description": "INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00004083",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00004083",
+      "file_id": "pht000021",
+      "file_name": "ex0_19s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00004224",
+      "variable_name": "FM182",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00004224",
+      "file_id": "pht000022",
+      "file_name": "ex0_20s",
+      "source_variable_description": "MEDICINE USE: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00004525",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00004525",
+      "file_id": "pht000022",
+      "file_name": "ex0_20s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00004620",
+      "variable_name": "FN121",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00004620",
+      "file_id": "pht000023",
+      "file_name": "ex0_21s",
+      "source_variable_description": "INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00004939",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00004939",
+      "file_id": "pht000023",
+      "file_name": "ex0_21s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00004981",
+      "variable_name": "FO128",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00004981",
+      "file_id": "pht000024",
+      "file_name": "ex0_22s",
+      "source_variable_description": "MEDICATION USE: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00005557",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00005557",
+      "file_id": "pht000024",
+      "file_name": "ex0_22s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml",
+        "hv:FHS-ingest/med_use.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00005601",
+      "variable_name": "FP082",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00005601",
+      "file_id": "pht000025",
+      "file_name": "ex0_23s",
+      "source_variable_description": "MEDICATION USE: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00006030",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00006030",
+      "file_id": "pht000025",
+      "file_name": "ex0_23s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00006152",
+      "variable_name": "FQ167",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00006152",
+      "file_id": "pht000026",
+      "file_name": "ex0_24s",
+      "source_variable_description": "MEDICATION USE - INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00006325",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00006325",
+      "file_id": "pht000026",
+      "file_name": "ex0_24s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00006492",
+      "variable_name": "FR219",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00006492",
+      "file_id": "pht000027",
+      "file_name": "ex0_25s",
+      "source_variable_description": "OTHER MEDICATIONS - INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00006663",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00006663",
+      "file_id": "pht000027",
+      "file_name": "ex0_25s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00006887",
+      "variable_name": "FS278",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00006887",
+      "file_id": "pht000028",
+      "file_name": "ex0_26s",
+      "source_variable_description": "NONCARDIOVASCULAR MEDICATIONS: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00007095",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00007095",
+      "file_id": "pht000028",
+      "file_name": "ex0_26s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00007324",
+      "variable_name": "FT285",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00007324",
+      "file_id": "pht000029",
+      "file_name": "ex0_27s",
+      "source_variable_description": "NONCARDIOVASCULAR MEDICATIONS: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00007534",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00007534",
+      "file_id": "pht000029",
+      "file_name": "ex0_27s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00007718",
+      "variable_name": "B68",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00007718",
+      "file_id": "pht000031",
+      "file_name": "ex1_2s",
+      "source_variable_description": "INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES (<20)"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES (20+)"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "YES (NOT NOW)"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00008379",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00008379",
+      "file_id": "pht000031",
+      "file_name": "ex1_2s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00008404",
+      "variable_name": "C29",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00008404",
+      "file_id": "pht000032",
+      "file_name": "ex1_3s",
+      "source_variable_description": "INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES (NOT NOW)"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES (NOW)"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00008743",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00008743",
+      "file_id": "pht000032",
+      "file_name": "ex1_3s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00008805",
+      "variable_name": "D035",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00008805",
+      "file_id": "pht000033",
+      "file_name": "ex1_4s",
+      "source_variable_description": "INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00009127",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00009127",
+      "file_id": "pht000033",
+      "file_name": "ex1_4s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00009207",
+      "variable_name": "E254",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00009207",
+      "file_id": "pht000034",
+      "file_name": "ex1_5s",
+      "source_variable_description": "INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00009579",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00009579",
+      "file_id": "pht000034",
+      "file_name": "ex1_5s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00009708",
+      "variable_name": "F218",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00009708",
+      "file_id": "pht000035",
+      "file_name": "ex1_6s",
+      "source_variable_description": "MEDICATIONS: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00010138",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00010138",
+      "file_id": "pht000035",
+      "file_name": "ex1_6s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00010193",
+      "variable_name": "G050",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00010193",
+      "file_id": "pht000036",
+      "file_name": "ex1_7s",
+      "source_variable_description": "NON-CARDIOVASCULAR MEDICATIONS: INSULIN",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00010694",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00010694",
+      "file_id": "pht000036",
+      "file_name": "ex1_7s",
+      "source_variable_description": "UNIQUE PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00055345",
+      "variable_name": "INSULN1",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00055345",
+      "file_id": "pht000395",
+      "file_name": "t_sleephhs_1998_1b_1056s",
+      "source_variable_description": "Insulin",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "Not on this class of medication"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "On this class of medication"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00056635",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00056635",
+      "file_id": "pht000395",
+      "file_name": "t_sleephhs_1998_1b_1056s",
+      "source_variable_description": "SHARE ID NUMBER",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00056607",
+      "variable_name": "idtype",
+      "variable_description": "Source for DrugExposure.associated_visit",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00056607",
+      "file_id": "pht000395",
+      "file_name": "t_sleephhs_1998_1b_1056s",
+      "source_variable_description": "Framingham Cohort Identifier",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Offspring"
+        },
+        {
+          "indicator_char": "7",
+          "indicator_meaning": "Omni 1"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00056962",
+      "variable_name": "INSLN2",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00056962",
+      "file_id": "pht000397",
+      "file_name": "t_sleephhs_2003_1b_1058s",
+      "source_variable_description": "Insulins",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "Not on this class of medication"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "On this class of medication"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00057982",
+      "variable_name": "shareid",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00057982",
+      "file_id": "pht000397",
+      "file_name": "t_sleephhs_2003_1b_1058s",
+      "source_variable_description": "SHARE ID NUMBER",
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00057968",
+      "variable_name": "IDTYPE",
+      "variable_description": "Source for DrugExposure.associated_visit",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00057968",
+      "file_id": "pht000397",
+      "file_name": "t_sleephhs_2003_1b_1058s",
+      "source_variable_description": "Framingham Heart Study Cohort Identifier",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Offspring"
+        },
+        {
+          "indicator_char": "7",
+          "indicator_meaning": "Omni 1"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00078469",
+      "variable_name": "INSULINW",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00078469",
+      "file_id": "pht000998",
+      "file_name": "f2_rel1",
+      "source_variable_description": "Insulin shots now",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00170601",
+      "variable_name": "F33DIABINSULIN",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00170601",
+      "file_id": "pht002769",
+      "file_name": "outc_self_cad_rel3",
+      "source_variable_description": "F33 Diabetes Insulin",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00170683",
+      "variable_name": "F33DIABINSULIN",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00170683",
+      "file_id": "pht002770",
+      "file_name": "outc_self_ct_os_rel3",
+      "source_variable_description": "F33 Diabetes Insulin",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00193671",
+      "variable_name": "F33DIABINSULIN",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00193671",
+      "file_id": "pht003413",
+      "file_name": "outc_self_x2_mrc_rel1",
+      "source_variable_description": "F33 Diabetes Insulin",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00193783",
+      "variable_name": "F33DIABINSULIN",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00193783",
+      "file_id": "pht003414",
+      "file_name": "outc_self_x2_src_rel1",
+      "source_variable_description": "F33 Diabetes Insulin",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00083119",
+      "variable_name": "insln1c",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00083119",
+      "file_id": "pht001111",
+      "file_name": "MESA_AirNRExamMain",
+      "source_variable_description": "INSULINS",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES"
+        }
+      ],
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00085364",
+      "variable_name": "insln1c",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00085364",
+      "file_id": "pht001116",
+      "file_name": "MESA_Exam1Main",
+      "source_variable_description": "INSULINS",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES"
+        }
+      ],
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00086008",
+      "variable_name": "insln2c",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00086008",
+      "file_id": "pht001118",
+      "file_name": "MESA_Exam2Main",
+      "source_variable_description": "INSULINS",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES"
+        }
+      ],
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00086490",
+      "variable_name": "insln3c",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00086490",
+      "file_id": "pht001119",
+      "file_name": "MESA_Exam3Main",
+      "source_variable_description": "INSULINS",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES"
+        }
+      ],
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00086927",
+      "variable_name": "insln4c",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00086927",
+      "file_id": "pht001120",
+      "file_name": "MESA_Exam4Main",
+      "source_variable_description": "INSULINS",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES"
+        }
+      ],
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00175366",
+      "variable_name": "insln5c",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00175366",
+      "file_id": "pht003086",
+      "file_name": "MESA_AirNRExam5Main",
+      "source_variable_description": "INSULINS",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES"
+        }
+      ],
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00176789",
+      "variable_name": "insln5c",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00176789",
+      "file_id": "pht003091",
+      "file_name": "MESA_Exam5Main",
+      "source_variable_description": "INSULINS",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES"
+        }
+      ],
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00401102",
+      "variable_name": "DMmedsIns",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000286",
+      "source_id": "phv00401102",
+      "file_id": "pht008729",
+      "file_name": "analysis1",
+      "source_variable_description": "Diabetic Insulin Medication Status (Y/N)",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00401078",
+      "variable_name": "SUBJECT_ID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000286",
+      "source_id": "phv00401078",
+      "file_id": "pht008729",
+      "file_name": "analysis1",
+      "source_variable_description": "PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00401294",
+      "variable_name": "DMmedsIns",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000286",
+      "source_id": "phv00401294",
+      "file_id": "pht008730",
+      "file_name": "analysis2",
+      "source_variable_description": "Diabetic Insulin Medication Status (Y/N)",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00401273",
+      "variable_name": "SUBJECT_ID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000286",
+      "source_id": "phv00401273",
+      "file_id": "pht008730",
+      "file_name": "analysis2",
+      "source_variable_description": "PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00401395",
+      "variable_name": "DMmedsIns",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000286",
+      "source_id": "phv00401395",
+      "file_id": "pht008731",
+      "file_name": "analysis3",
+      "source_variable_description": "Diabetic Insulin Medication Status (Y/N)",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00401370",
+      "variable_name": "SUBJECT_ID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000286",
+      "source_id": "phv00401370",
+      "file_id": "pht008731",
+      "file_name": "analysis3",
+      "source_variable_description": "PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00401574",
+      "variable_name": "asn0035_INSULIN",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000286",
+      "source_id": "phv00401574",
+      "file_id": "pht008734",
+      "file_name": "asn0035_retinopathy",
+      "source_variable_description": "Diabetic Insulin Medication Status",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00401565",
+      "variable_name": "SUBJECT_ID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000286",
+      "source_id": "phv00401565",
+      "file_id": "pht008734",
+      "file_name": "asn0035_retinopathy",
+      "source_variable_description": "PARTICIPANT ID",
+      "metadata_sources": [
+        "hv:JHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00226345",
+      "variable_name": "MED_INSULIN",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000810",
+      "source_id": "phv00226345",
+      "file_id": "pht004715",
+      "file_name": "HCHS_SOL_Cohort_Subject_Phenotypes",
+      "source_variable_description": "Insulins",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        }
+      ],
+      "metadata_sources": [
+        "hv:HCHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00226360",
+      "variable_name": "MHEA16C",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000810",
+      "source_id": "phv00226360",
+      "file_id": "pht004715",
+      "file_name": "HCHS_SOL_Cohort_Subject_Phenotypes",
+      "source_variable_description": "Diabetes - Insulin TrtSelf (MHEA16C)",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        },
+        {
+          "indicator_char": "Q",
+          "indicator_meaning": "DK/Refuse"
+        }
+      ],
+      "metadata_sources": [
+        "hv:HCHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00226361",
+      "variable_name": "MHEA16D",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000810",
+      "source_id": "phv00226361",
+      "file_id": "pht004715",
+      "file_name": "HCHS_SOL_Cohort_Subject_Phenotypes",
+      "source_variable_description": "Diabetes - Insulin Trt for Diab Self (MHEA16D)",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "No"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "Yes"
+        },
+        {
+          "indicator_char": "Q",
+          "indicator_meaning": "DK/Refuse"
+        }
+      ],
+      "metadata_sources": [
+        "hv:HCHS-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00004980",
+      "variable_name": "FO127",
+      "variable_description": "Source for DrugExposure.exposure_status",
+      "associated_study": "bdchm:Study/phs000007",
+      "source_id": "phv00004980",
+      "file_id": "pht000024",
+      "file_name": "ex0_22s",
+      "source_variable_description": "MEDICATION USE: THYROXINE (SYNTHROID, ETC.)",
+      "data_type": "enum",
+      "coded_values": [
+        {
+          "indicator_char": ".",
+          "indicator_meaning": "UNKNOWN"
+        },
+        {
+          "indicator_char": "3",
+          "indicator_meaning": "MAYBE"
+        },
+        {
+          "indicator_char": "1",
+          "indicator_meaning": "YES, NOW"
+        },
+        {
+          "indicator_char": "2",
+          "indicator_meaning": "YES, NOT NOW"
+        },
+        {
+          "indicator_char": "0",
+          "indicator_meaning": "NO"
+        }
+      ],
+      "metadata_sources": [
+        "hv:FHS-ingest/med_use.yaml"
+      ]
+    }
+  ],
+  "single_continuous_variables": [
+    {
+      "id": "dbgap:phv00078435",
+      "variable_name": "SUBJID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00078435",
+      "file_id": "pht000998",
+      "file_name": "f2_rel1",
+      "source_variable_description": "WHI dbGaP Subject ID",
+      "data_type": "integer",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00170566",
+      "variable_name": "SUBJID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00170566",
+      "file_id": "pht002769",
+      "file_name": "outc_self_cad_rel3",
+      "source_variable_description": "WHI dbGaP Subject ID",
+      "data_type": "integer",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00078437",
+      "variable_name": "AGE",
+      "variable_description": "Source for DrugExposure.age_at_exposure_start",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00078437",
+      "file_id": "pht006223",
+      "file_name": "f2_rel1",
+      "source_variable_description": "Age at screening",
+      "data_type": "integer",
+      "unit": "years",
+      "minimum_value": 49,
+      "maximum_value": 81,
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00078436",
+      "variable_name": "F2DAYS",
+      "variable_description": "Source for DrugExposure.age_at_exposure_start",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00078436",
+      "file_id": "pht006223",
+      "file_name": "f2_rel1",
+      "source_variable_description": "F2 Days since randomization",
+      "data_type": "integer",
+      "unit": "days",
+      "minimum_value": -1672,
+      "maximum_value": 1107,
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00170602",
+      "variable_name": "F33DIABINSULINDY",
+      "variable_description": "Source for DrugExposure.age_at_exposure_start",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00170602",
+      "file_id": "pht002769",
+      "file_name": "outc_self_cad_rel3",
+      "source_variable_description": "Days enrollment to F33 Diabetes Insulin",
+      "data_type": "integer",
+      "unit": "days",
+      "minimum_value": 84,
+      "maximum_value": 5400,
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00170648",
+      "variable_name": "SUBJID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00170648",
+      "file_id": "pht002770",
+      "file_name": "outc_self_ct_os_rel3",
+      "source_variable_description": "WHI dbGaP Subject ID",
+      "data_type": "integer",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00170684",
+      "variable_name": "F33DIABINSULINDY",
+      "variable_description": "Source for DrugExposure.age_at_exposure_start",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00170684",
+      "file_id": "pht002770",
+      "file_name": "outc_self_ct_os_rel3",
+      "source_variable_description": "Days enrollment to F33 Diabetes Insulin",
+      "data_type": "integer",
+      "unit": "days",
+      "minimum_value": 1,
+      "maximum_value": 5961,
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00193628",
+      "variable_name": "SUBJID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00193628",
+      "file_id": "pht003413",
+      "file_name": "outc_self_x2_mrc_rel1",
+      "source_variable_description": "WHI dbGaP Subject ID",
+      "data_type": "integer",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00193672",
+      "variable_name": "F33DIABINSULINDY",
+      "variable_description": "Source for DrugExposure.age_at_exposure_start",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00193672",
+      "file_id": "pht003413",
+      "file_name": "outc_self_x2_mrc_rel1",
+      "source_variable_description": "Days enrollment to F33 Diabetes Insulin",
+      "data_type": "integer",
+      "unit": "days",
+      "minimum_value": 4567,
+      "maximum_value": 8585,
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00193686",
+      "variable_name": "SUBJID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00193686",
+      "file_id": "pht003414",
+      "file_name": "outc_self_x2_src_rel1",
+      "source_variable_description": "WHI dbGaP Subject ID",
+      "data_type": "integer",
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00193784",
+      "variable_name": "F33DIABINSULINDY",
+      "variable_description": "Source for DrugExposure.age_at_exposure_start",
+      "associated_study": "bdchm:Study/phs000200",
+      "source_id": "phv00193784",
+      "file_id": "pht003414",
+      "file_name": "outc_self_x2_src_rel1",
+      "source_variable_description": "Days enrollment to F33 Diabetes Insulin",
+      "data_type": "integer",
+      "unit": "days",
+      "minimum_value": 4577,
+      "maximum_value": 8751,
+      "metadata_sources": [
+        "hv:WHI-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00082638",
+      "variable_name": "sidno",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00082638",
+      "file_id": "pht001111",
+      "file_name": "MESA_AirNRExamMain",
+      "source_variable_description": "SHARE ID NUMBER",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00083008",
+      "variable_name": "dbage1",
+      "variable_description": "Source for DrugExposure.age_at_exposure_start",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00083008",
+      "file_id": "pht001111",
+      "file_name": "MESA_AirNRExamMain",
+      "source_variable_description": "DIABETES MEDS, AGE STARTED USE",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00084441",
+      "variable_name": "sidno",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00084441",
+      "file_id": "pht001116",
+      "file_name": "MESA_Exam1Main",
+      "source_variable_description": "SHARE ID NUMBER",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00085244",
+      "variable_name": "dbage1",
+      "variable_description": "Source for DrugExposure.age_at_exposure_start",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00085244",
+      "file_id": "pht001116",
+      "file_name": "MESA_Exam1Main",
+      "source_variable_description": "DIABETES MEDS, AGE STARTED USE",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00085772",
+      "variable_name": "sidno",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00085772",
+      "file_id": "pht001118",
+      "file_name": "MESA_Exam2Main",
+      "source_variable_description": "SHARE ID NUMBER",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00086258",
+      "variable_name": "sidno",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00086258",
+      "file_id": "pht001119",
+      "file_name": "MESA_Exam3Main",
+      "source_variable_description": "SHARE ID NUMBER",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00086726",
+      "variable_name": "sidno",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00086726",
+      "file_id": "pht001120",
+      "file_name": "MESA_Exam4Main",
+      "source_variable_description": "SHARE ID NUMBER",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00174584",
+      "variable_name": "sidno",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00174584",
+      "file_id": "pht003086",
+      "file_name": "MESA_AirNRExam5Main",
+      "source_variable_description": "SHARE ID NUMBER",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00176007",
+      "variable_name": "sidno",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000209",
+      "source_id": "phv00176007",
+      "file_id": "pht003091",
+      "file_name": "MESA_Exam5Main",
+      "source_variable_description": "SHARE ID NUMBER",
+      "data_type": "numeric",
+      "metadata_sources": [
+        "hv:MESA-ingest/tak_insulin.yaml"
+      ]
+    },
+    {
+      "id": "dbgap:phv00226250",
+      "variable_name": "SUBJECT_ID",
+      "variable_description": "Source for DrugExposure.associated_participant",
+      "associated_study": "bdchm:Study/phs000810",
+      "source_id": "phv00226250",
+      "file_id": "pht004715",
+      "file_name": "HCHS_SOL_Cohort_Subject_Phenotypes",
+      "source_variable_description": "De-identified subject ID",
+      "data_type": "integer",
+      "metadata_sources": [
+        "hv:HCHS-ingest/tak_insulin.yaml"
+      ]
+    }
+  ]
+}
