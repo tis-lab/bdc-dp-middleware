@@ -6,7 +6,7 @@
 -- release_check: it is the permanent record of what was verified before
 -- each release was served, so it is never partitioned or deleted from.
 -- Columns must match counting.yaml (LinkML); run
--- python schema/tests/check_schema.py after changing either (not yet in CI).
+-- python schema/tests/check_schema.py after changing either (CI runs it too).
 -- Partitioning, indexes and grants live only here, because the LinkML SQL
 -- generator cannot express them. What the counts mean: schema/db/README.md.
 -- =====================================================================

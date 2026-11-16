@@ -23,7 +23,7 @@ Run from anywhere; default paths are resolved from the repository root:
   python schema/tests/check_schema.py              (catalog and counting)
   python schema/tests/check_schema.py MODEL DDL    (one pair; paths relative to the current directory)
 
-Exit status 0 when nothing differs, 1 when something does, 2 on wrong arguments. Not run in CI yet.
+Exit status 0 when nothing differs, 1 when something does, 2 on wrong arguments. CI runs it in .github/workflows/db-schema-validation.yaml.
 """
 import re
 import sys

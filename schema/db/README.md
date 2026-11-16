@@ -71,14 +71,26 @@ condition was reported.
 `schema/tests/check_schema.py` compares each model with its DDL (columns,
 partitioning, keys, nullability, types, enum and pattern checks) and checks
 that every `bdchm:` mapping names a class or slot in the pinned BDC-HM
-(`synthetic/bdchm.yaml`). It is not run in CI yet; run it after changing a
-model or its DDL:
+(`synthetic/bdchm.yaml`). Run it after changing a model or its DDL:
 
 ```sh
 pip install -r schema/tests/requirements.txt
 python schema/tests/check_schema.py                                         # catalog and counting
 python schema/tests/check_schema.py schema/db/counting.yaml schema/db/counting.sql   # one pair
+gen-yaml schema/db/counting.yaml > /dev/null                                # loads as the generators load it
 ```
 
 It can be run from any directory; with no arguments it finds the files from the
 repository root. It prints one line per problem and exits 1 if there are any.
+
+`check_schema.py` loads models with SchemaView, which resolves each import
+relative to the file that contains it and, when two modules define the same
+name, silently keeps one. The generators (`gen-java`, `gen-typescript`) resolve
+a nested import relative to the root schema unless it starts with `./` or
+`../`, and stop with `Conflicting URIs` on a duplicate name. So write nested
+imports as `./name`, and load each model with `gen-yaml` as well; it prints
+`slot_usage for undefined slot` errors for the `*Event` subclasses and for
+BDC-HM's `category`, which do not stop generation.
+
+CI (`.github/workflows/db-schema-validation.yaml`) runs both on every pull
+request and on pushes to `dev` and `main`.
