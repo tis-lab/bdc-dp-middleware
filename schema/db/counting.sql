@@ -152,6 +152,9 @@ CREATE TABLE counting.term_member_r2026_10           PARTITION OF counting.term_
 -- Some of these roles are theoretical and don't actually exist yet, but represent different 
 -- access levels that may be required for different processes
 GRANT USAGE ON SCHEMA counting TO rebuild_job, api_counting, api_public, provisioning;
+-- Every table here is participant-level (one row per participant, record or posting), keyed
+-- by ordinal, so any two of them join into a row-level profile. Besides the rebuild job, only
+-- api_counting and provisioning, which serve authorized users, may read them directly.
 GRANT SELECT, INSERT, UPDATE, DELETE ON counting.participant_ordinal, counting.participant_attribute,
       counting.study_baseline, counting.group_range, counting.event,
       counting.term_closure, counting.term_member TO rebuild_job;
@@ -161,10 +164,26 @@ GRANT SELECT ON counting.participant_ordinal, counting.participant_attribute,
                 counting.study_baseline, counting.group_range, counting.event,
                 counting.term_closure, counting.term_member, counting.release_check TO api_counting;
 GRANT SELECT, INSERT, DELETE ON counting.cohort, counting.cohort_member, counting.cohort_evidence TO api_counting;
--- Unauthenticated and signed-in summaries. Posting lists and attributes only: no events,
--- no participant_id, no cohorts. Exact counts leave this role only through the disclosure layer.
-GRANT SELECT ON counting.participant_attribute, counting.group_range,
-                counting.term_closure, counting.term_member TO api_public;
+-- Unauthenticated and signed-in summaries. api_public gets no SELECT on any counting table:
+-- posting lists (term_member), attributes (participant_attribute) and consent-group ranges
+-- (group_range) together give every participant's study, consent group, demographics and
+-- concepts. It will get EXECUTE only on SECURITY DEFINER functions that return exactly the
+-- public tier of the disclosure policy, already shaped, so this role never receives a
+-- participant row or an exact count:
+--   * root and facet totals, each the exact union over every study in scope (including
+--     studies below min_count), then obfuscated once; never a sum of per-study values
+--   * studies at or above min_count, named without counts, and suppressed_study_count for
+--     the rest (zero and small counts are indistinguishable)
+--   * no contributions, no record_count, no records
+-- Noise is applied inside the function: it is seeded by release, consent group and the
+-- matching participant set, which only the database can see. min_count, noise scale and
+-- policy_version come from the policy loaded into the database, never from the caller, and
+-- every result carries the policy_version it was shaped under. Those functions arrive with
+-- the counting query layer; until then api_public reads nothing here.
+REVOKE ALL ON ALL TABLES IN SCHEMA counting FROM api_public;
+-- Functions are executable by PUBLIC by default; a SECURITY DEFINER function here must be
+-- granted to api_public explicitly, never inherited.
+ALTER DEFAULT PRIVILEGES IN SCHEMA counting REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
 ALTER ROLE api_public SET statement_timeout = '2s';
 -- Provisioning reads in-scope members only.
 GRANT SELECT ON counting.cohort, counting.cohort_member_in_scope, counting.participant_ordinal TO provisioning;
