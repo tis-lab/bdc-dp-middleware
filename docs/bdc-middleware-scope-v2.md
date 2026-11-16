@@ -14,7 +14,7 @@ The middleware supports three different kinds of information:
 | Bundled RTI transformation specifications | Harmonized-variable definitions, associated concept identifiers and study mapping metadata | Accessible datasets, participant counts or completed harmonization of actual data |
 | Elasticsearch participant index | Live study-level counts and supported breakdowns | Cross-study unique-person counts; unsupported measurement/age facets |
 
-All business operations use **POST `/cb/query`**.
+All business operations use **POST `/api/cb/open/query`**.
 
 ## 2. Term search
 

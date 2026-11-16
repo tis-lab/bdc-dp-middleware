@@ -34,15 +34,15 @@ Then open <http://localhost:8080/cb/graphiql>
 ## Routing
 
 The service name is `bdc-data-portal-cohort-builder-service`. The cohort builder UI
-sends GraphQL requests to `POST /cb/query` through DP-Core. DP-Core must forward
-the full path unchanged. See [the routing agreement and deployment checks](docs/cohort-builder-routing.md).
+sends GraphQL requests to `POST /api/cb/open/query` through DP-Core. DP-Core must forward
+the full path unchanged.
 
 ## Endpoints
 
 | Endpoint                         | Purpose                                                   |
 |----------------------------------|-----------------------------------------------------------|
-| `POST /cb/query`                  | The entire frontend API                                   |
-| `GET /cb/graphiql`                  | Interactive, schema-aware documentation and query console |
+| `POST /api/cb/open/query`        | Existing public GraphQL operations                        |
+| `GET /cb/graphiql`               | Interactive, schema-aware documentation and query console |
 | `GET /actuator/health`           | Overall health                                            |
 | `GET /actuator/health/liveness`  | OpenShift liveness probe                                  |
 | `GET /actuator/health/readiness` | OpenShift readiness probe                                 |

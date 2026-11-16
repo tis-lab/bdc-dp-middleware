@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 class SearchProbeGraphQlTest {
     private JsonNode call(int port) throws Exception {
         try (var client = HttpClient.newHttpClient()) {
-            var response = client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/cb/query"))
+            var response = client.send(HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/cb/open/query"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString("""
                         {"query":"{ searchProbe { status backend httpStatus elapsedMillis totalHits snapshot { participantCount totalParticipantCount studyCount totalStudyCount datasetCount totalDatasetCount indexRelease lastUpdated unavailableFields } } searchConditions(keyword: \\"PRESENT|ONESELF|MONDO:0005148\\") { keyword totalHits buckets { conditionKey documentCount } sumOtherDocCount docCountErrorUpperBound } }"}
