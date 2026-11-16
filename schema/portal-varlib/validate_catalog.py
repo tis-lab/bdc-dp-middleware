@@ -1,64 +1,29 @@
-"""Validate the upstream-inherited portal catalog; never invent variable identities."""
+"""Validate a portal catalog with LinkML and check its cross-list references."""
 import argparse
 import json
 import re
 from functools import lru_cache
 from pathlib import Path
 
-from jsonschema import Draft202012Validator
-from linkml.generators.jsonschemagen import JsonSchemaGenerator
+from linkml.validator import validate
+from linkml_runtime import SchemaView
 
 HERE = Path(__file__).resolve().parent
 IDENTIFIER = re.compile(r'^[A-Za-z][A-Za-z0-9._-]*:[^\s]+$')
 
 
-def reachable_schema(schema):
-    """
-    Retain every generated definition reachable from the root, including inherited slots.
-
-    Unrelated upstream clinical records contain malformed regexes. They are outside this
-    metadata contract and are not validated; imported LinkML definitions remain unchanged.
-    """
-    definitions = schema.get('$defs', {})
-    def references(value):
-        if isinstance(value, dict):
-            for key, child in value.items():
-                if key == '$ref':
-                    if not child.startswith('#/$defs/'):
-                        raise ValueError(f'Unexpected generated reference: {child}')
-                    yield child.removeprefix('#/$defs/').replace('~1', '/').replace('~0', '~')
-                else:
-                    yield from references(child)
-        elif isinstance(value, list):
-            for child in value:
-                yield from references(child)
-    result = {key: value for key, value in schema.items() if key != '$defs'}
-    pending = list(references(result))
-    retained = {}
-    while pending:
-        name = pending.pop()
-        if name not in retained:
-            retained[name] = definitions[name]  # Fail closed on dangling definitions.
-            pending.extend(references(definitions[name]))
-    result['$defs'] = retained
-    return result
-
-
 @lru_cache(maxsize=1)
-def validator():
-    """Compile the actual upstream-inherited LinkML model to closed JSON Schema."""
-    schema = json.loads(JsonSchemaGenerator(
-        str(HERE / 'portal-varlib.yaml'), top_class='PortalVariableCatalog',
-        not_closed=False,
-    ).serialize())
-    schema = reachable_schema(schema)
-    Draft202012Validator.check_schema(schema)
-    return Draft202012Validator(schema)
+def catalog_schema():
+    """Resolve local imports once for the standard LinkML validator."""
+    view = SchemaView(str(HERE / 'portal-varlib.yaml'))
+    view.merge_imports()
+    return view.schema
 
 
 def validate_catalog(data, allow_synthetic=False):
     """Return shape and reference errors; fixture opt-in is not a production approval."""
-    errors = [f'{list(e.absolute_path)}: {e.message}' for e in validator().iter_errors(data)]
+    report = validate(data, catalog_schema(), 'PortalVariableCatalog')
+    errors = [result.message for result in report.results]
     if errors:
         return errors
     seen = set()
@@ -68,7 +33,10 @@ def validate_catalog(data, allow_synthetic=False):
                        ('single_continuous_variables', 'id'), ('single_categorical_variables', 'id')]:
         indexes[group] = {}
         for row in data.get(group, []):
-            identifier = row[key]
+            identifier = row.get(key)
+            if not isinstance(identifier, str) or not identifier:
+                errors.append(f'{group}: missing {key}')
+                continue
             if not IDENTIFIER.fullmatch(identifier):
                 errors.append(f'{group}: expected URI/CURIE identifier: {identifier}')
             if identifier in seen:
