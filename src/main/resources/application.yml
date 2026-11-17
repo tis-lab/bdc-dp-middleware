@@ -63,3 +63,15 @@ info:
   app:
     name: bdc-data-portal-cohort-builder-service
     environment: ${ENV}
+
+# Independent PostgreSQL prototype. Existing Elasticsearch settings are unchanged.
+postgres-search:
+  enabled: ${POSTGRES_SEARCH_ENABLED:false}
+  synthetic-data-confirmed: ${POSTGRES_SEARCH_SYNTHETIC_DATA_CONFIRMED:false}
+  url: ${POSTGRES_SEARCH_URL:}
+  username: ${POSTGRES_SEARCH_USERNAME:}
+  password: ${POSTGRES_SEARCH_PASSWORD:}
+  release: ${POSTGRES_SEARCH_RELEASE:}
+  min-count: ${POSTGRES_SEARCH_MIN_COUNT:0}
+  query-timeout-seconds: ${POSTGRES_SEARCH_QUERY_TIMEOUT_SECONDS:15}
+  max-aggregate-rows: ${POSTGRES_SEARCH_MAX_AGGREGATE_ROWS:10000}

@@ -56,4 +56,8 @@ Always available:
 | `terms(query, limit, offset)` | `TermResults` - one paginated list: matching BDC concepts with specification coverage first, then ranked concepts from Monarch |
 | `autocomplete(query)`         | `AutocompleteResults` - Monarch's suggestions unchanged, no BDC data, no pagination                                            |
 | `health`                      | `Health!` - process status only                                                                                                |
-| `summary`              | `SummaryResponse` - participant counts for a cohort, study by study                                                            |
+| `summary`                     | `SummaryResponse` - participant counts for a cohort, study by study                                                            |
+
+## PostgreSQL experiment
+
+`search(filter, focus)` returns the same summary contract from PostgreSQL and is independent of the existing Elasticsearch `summary` field.

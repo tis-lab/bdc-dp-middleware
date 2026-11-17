@@ -1,0 +1,21 @@
+# Synthetic integration tests only.
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ci-admin-only
+      POSTGRES_DB: postgres_search_test
+    ports:
+      - "127.0.0.1:55432:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    volumes:
+      - ./src/test/resources/postgres/roles.sql:/docker-entrypoint-initdb.d/00-roles.sql:ro
+      - ./src/test/resources/postgres/counting.sql:/docker-entrypoint-initdb.d/10-counting.sql:ro
+      - ./src/test/resources/postgres/fixture.sql:/docker-entrypoint-initdb.d/20-fixture.sql:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U postgres -d postgres_search_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 12

@@ -1,0 +1,61 @@
+name: PostgreSQL search
+on:
+  pull_request:
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  postgres-search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci-admin-only
+          POSTGRES_DB: postgres_search_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres_search_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      PG_TEST_URL: jdbc:postgresql://localhost:5432/postgres_search_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Initialize disposable PostgreSQL
+        env:
+          PGPASSWORD: ci-admin-only
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y postgresql-client
+          psql -h localhost -U postgres -d postgres_search_test -v ON_ERROR_STOP=1 -f src/test/resources/postgres/roles.sql
+          psql -h localhost -U postgres -d postgres_search_test -v ON_ERROR_STOP=1 -f src/test/resources/postgres/counting.sql
+          psql -h localhost -U postgres -d postgres_search_test -v ON_ERROR_STOP=1 -f src/test/resources/postgres/fixture.sql
+      - name: Run existing tests and actual PostgreSQL integration
+        run: mvn --batch-mode clean verify
+      - name: Validate PostgreSQL responses using summary.yaml
+        run: |
+          python -m pip install -r scripts/requirements-summary-validation.txt
+          python scripts/validate_postgres_schema.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: postgres-search-evidence
+          path: |
+            target/surefire-reports/*
+            target/postgres-contract/*.json
+          if-no-files-found: warn

@@ -1,0 +1,6 @@
+extend type Query {
+  """Synthetic-data PostgreSQL experiment. Same response contract as summary.
+  Exact condition matching; EXCLUDE means explicit ABSENT.
+  """
+  search(filter: SummaryFilterInput, focus: [ID!]): SummaryResponse
+}
