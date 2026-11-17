@@ -1,0 +1,129 @@
+id: https://w3id.org/tis-lab/BDC-Portal/db/common
+name: bdchm_db_common
+title: Shared definitions for the catalog and counting databases
+description: >-
+  Conventions used by every database schema, so the meaning of each column
+  can be traced to BDC-HM.
+
+  A column whose value is copied unchanged from a BDC-HM slot lists that slot
+  under exact_mappings, and gives its path from the source class in the
+  source_slot annotation (for example value_quantity.value_decimal). Where the
+  source slot depends on the record's class, an abstract table class declares
+  the column and one subclass per BDC-HM class narrows it with slot_usage.
+
+  A column computed from BDC-HM values lists its inputs under related_mappings
+  and states the rule in the derivation annotation.
+
+  A column with no BDC-HM origin says where it comes from in the origin
+  annotation: system (created by this design), ontology (from the term
+  release), bdc-kg (from the pinned BDC-KG version), curation (from
+  DbgapConsentGroup or ConsentGroupEligibility curation) or ga4gh (from a passport).
+
+  Every table class names its database table in the table annotation.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  bdchm: https://w3id.org/bdchm/
+  dbgapc: https://w3id.org/tis-lab/BDC-Portal/dbgap_consent/
+  bdchmg: https://w3id.org/tis-lab/BDC-Portal/governed/
+  bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
+
+default_prefix: bdchmdb
+default_range: string
+
+imports:
+  - linkml:types
+
+slots:
+  release:
+    description: >-
+      The release this row belongs to. In the counting database, release-scoped tables are
+      partitioned by it, except counting.release_check, which is kept as permanent history.
+      Catalog tables are small and are not partitioned.
+    required: true
+    annotations:
+      origin: system
+  ordinal:
+    description: >-
+      The participant's number within a release. Numbers are assigned in
+      consent-group order, so each consent group occupies a contiguous range.
+    range: integer
+    required: true
+    related_mappings:
+      - bdchm:Participant
+    annotations:
+      origin: system
+      derivation: Assigned per release by the rebuild job, sorted by consent group, then participant id.
+  concept_curie:
+    description: A term CURIE, such as MONDO:0005148.
+    range: uriorcurie
+  status_rule:
+    range: StatusRuleEnum
+    required: true
+
+enums:
+  StatusRuleEnum:
+    description: Which recorded statuses count as having a term.
+    permissible_values:
+      present:
+        description: Status PRESENT (or any record, for classes with no status).
+      present_or_historical:
+        description: Status PRESENT or HISTORICAL. Equal to present for procedures, whose StatusEnum has no HISTORICAL.
+      absent:        # ConditionSummary values are split by condition_status
+        description: Status ABSENT.
+      unknown:
+        description: Status UNKNOWN.
+
+  ReleaseStatusEnum:
+    permissible_values:
+      loading: {}
+      active: {}
+      retired: {}
+
+  TierEnum:
+    permissible_values:
+      public:
+        description: No sign-in.
+      signed_in:
+        description: Signed in through NIH RAS.
+      approved:
+        description: Signed in through NIH RAS with dbGaP visas.
+
+types:
+  uuid:
+    typeof: string
+    description: An RFC 4122 UUID, stored in Postgres as uuid.
+    pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+    annotations:
+      sql_type: uuid
+
+classes:
+  ReleaseScoped:
+    mixin: true
+    description: A row that belongs to one release.
+    slots:
+      - release
+
+  TermClosure:
+    abstract: true
+    description: >-
+      Each term paired with each of its descendants, including itself. Abstract: each database
+      has its own copy. LinkML does not inherit unique_keys, so each subclass repeats the key.
+    mixins:
+      - ReleaseScoped
+    attributes:
+      ancestor:
+        range: uriorcurie
+        required: true
+        annotations:
+          origin: ontology
+      descendant:
+        range: uriorcurie
+        required: true
+        annotations:
+          origin: ontology
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, ancestor, descendant]

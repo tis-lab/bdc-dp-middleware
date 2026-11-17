@@ -1,0 +1,3 @@
+# Dependencies of schema/tests/check_schema.py
+linkml==1.11.1
+pglast==8.8
