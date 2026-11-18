@@ -1,6 +1,6 @@
 id: https://w3id.org/tis-lab/BDC-Portal/db/common
 name: bdchm_db_common
-title: Shared definitions for the catalog and counting databases
+title: Shared definitions for the bdc_dp_metadata and bdc_dp_hm_index databases
 description: >-
   Conventions used by every database schema, so the meaning of each column
   can be traced to BDC-HM.
@@ -39,9 +39,9 @@ imports:
 slots:
   release:
     description: >-
-      The release this row belongs to. In the counting database, release-scoped tables are
-      partitioned by it, except counting.release_check, which is kept as permanent history.
-      Catalog tables are small and are not partitioned.
+      The release this row belongs to. In bdc_dp_hm_index, release-scoped tables in the hm schema
+      are partitioned by it, except hm.release_check, which is kept as permanent history.
+      bdc_dp_metadata tables are small and are not partitioned.
     required: true
     annotations:
       origin: system

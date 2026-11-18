@@ -1,0 +1,65 @@
+id: https://w3id.org/tis-lab/BDC-Portal/db/future/provisioning_metadata
+name: bdchm_db_provisioning_metadata
+title: "Future addition: provisioning tables in bdc_dp_metadata"
+description: >-
+  Not deployed. Share records for the provisioning service, which shares participant-level data with approved researchers. Apply with provisioning_metadata.sql after metadata.sql when provisioning is ready.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  bdchm: https://w3id.org/bdchm/
+  bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
+
+default_prefix: bdchmdb
+default_range: string
+
+imports:
+  - linkml:types
+  - ../metadata
+
+classes:
+
+  ShareRecord:
+    description: >-
+      One share the provisioning service created for a cohort. Written only by provisioning.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: access.share_record
+      origin: system
+    attributes:
+      share_name:
+        identifier: true
+      recipient_name:
+        required: true
+      ras_subject:
+        range: Account
+        required: true
+      cohort_id:
+        range: uuid
+        required: true
+        description: >-
+          The shared cohort (cohort.cohort in bdc_dp_hm_index). Not a foreign key, because the
+          cohort is in the other database.
+      consent_groups:
+        multivalued: true
+        required: true
+        description: Consent groups whose participants were shared.
+      visa_ids:
+        multivalued: true
+        required: true
+        description: Visas that entitled the share.
+      bytes_shared:
+        range: integer
+        description: Size of the shared files at creation, for egress estimates.
+      created_at:
+        range: datetime
+        required: true
+      expires_at:
+        range: datetime
+        required: true
+      dropped_at:
+        range: datetime
+        description: When the share was removed; empty while it is live.
+

@@ -1,11 +1,12 @@
-id: https://w3id.org/tis-lab/BDC-Portal/db/catalog
-name: bdchm_db_catalog
-title: Catalog database, catalog schema
+id: https://w3id.org/tis-lab/BDC-Portal/db/metadata
+name: bdchm_db_metadata
+title: bdc_dp_metadata database, catalog and access schemas
 description: >-
-  Release, term, study and curated consent metadata. Contains no
+  Release, term, study and curated consent metadata (catalog), and accounts,
+  entitlements and the query ledger (access). Contains no
   participant-level data. See bdchm_db_common for the conventions.
 license: MIT
-version: 0.1.0
+version: 0.2.0
 
 prefixes:
   linkml: https://w3id.org/linkml/
@@ -21,7 +22,7 @@ imports:
   - linkml:types
   - ../../synthetic/bdchm
   - ../bdchm_governed
-  - common
+  - ./common
 
 classes:
 
@@ -332,3 +333,140 @@ classes:
     unique_keys:
       primary_key:
         unique_key_slots: [release, query_text]
+  # -------------------------------------------------------------------
+  # access: accounts, entitlements, the query ledger
+  # -------------------------------------------------------------------
+
+  Account:
+    description: >-
+      One NIH RAS identity. Researchers never connect to the database; the API connects as its
+      own identity and acts on their behalf. Written only by the clearinghouse.
+    annotations:
+      table: access.account
+      origin: ga4gh
+    attributes:
+      ras_subject:
+        identifier: true
+        description: The RAS subject identifier.
+      first_seen:
+        range: datetime
+        required: true
+      last_seen:
+        range: datetime
+        required: true
+
+  Entitlement:
+    description: >-
+      One consent group granted by one dbGaP visa in an account's passport. Written only by the
+      clearinghouse; read by the counting API to decide exact scope.
+    annotations:
+      table: access.entitlement
+      origin: ga4gh
+    attributes:
+      ras_subject:
+        range: Account
+        required: true
+      consent_group_id:
+        required: true
+        pattern: '^phs\d{6}\.c\d+$'
+        related_mappings:
+          - dbgapc:consent_group_id
+      visa_id:
+        required: true
+      issuer:
+        required: true
+        description: The passport broker or visa issuer.
+      granted_at:
+        range: datetime
+        required: true
+      expires_at:
+        range: datetime
+        required: true
+        description: Never later than the visa's expiry.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [ras_subject, consent_group_id, visa_id]
+
+  QueryLedgerEntry:
+    description: >-
+      One answered query, for budgets, overlap checks and audit. Records the disclosure policy
+      version the response was shaped under. A public query has no user, so a public row names
+      no account and is identified by client_key; every other row names the caller's account.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: access.query_ledger
+      origin: system
+      access: >-
+        api_public may insert every column except ras_subject, so it can record only public
+        queries, and cannot read the ledger.
+    rules:
+      - description: A public query names no account and is identified by client_key.
+        preconditions:
+          slot_conditions:
+            tier:
+              equals_string: public
+        postconditions:
+          slot_conditions:
+            ras_subject:
+              value_presence: ABSENT
+            client_key:
+              required: true
+      - description: A signed-in or approved query names the caller's account and has no client_key.
+        preconditions:
+          slot_conditions:
+            tier:
+              any_of:
+                - equals_string: signed_in
+                - equals_string: approved
+        postconditions:
+          slot_conditions:
+            ras_subject:
+              required: true
+            client_key:
+              value_presence: ABSENT
+    attributes:
+      id:
+        identifier: true
+        range: integer
+        description: Assigned by the database.
+      ras_subject:
+        range: Account
+        description: The caller's account; empty for public requests.
+      client_key:
+        description: Hashed network address, recorded for the public tier only.
+      tier:
+        range: TierEnum
+        required: true
+      stage:
+        range: integer
+        description: Cohort builder stage the query was made at.
+      policy_version:
+        range: integer
+        required: true
+        description: Version of the disclosure policy the response was shaped under.
+      expression_hash:
+        required: true
+        description: Hash of the canonical cohort expression.
+      result_hash:
+        description: Hash of the matched participant set, which seeds the noise.
+      count_mode:
+        range: CountModeEnum
+        required: true
+      budget_cost:
+        range: integer
+        required: true
+        description: Cost charged against the caller's budget; 0 by default.
+      created_at:
+        range: datetime
+        required: true
+
+enums:
+
+  CountModeEnum:
+    description: Whether a count was returned with noise or exact, as in the summary schema's count_mode.
+    permissible_values:
+      OBFUSCATED:
+        description: Exact count with consistent seeded noise applied.
+      EXACT:
+        description: No noise; every contributing consent group is in the caller's exact scope.
