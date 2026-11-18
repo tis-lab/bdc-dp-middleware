@@ -93,8 +93,12 @@ satisfied the cohort's rules.
 
 ### Flow
 
+This model needs [persisted cohorts](COHORTS.md): querying keeps a cohort only
+for the length of one request, and a share needs the member list to exist when
+the share is made.
+
 1. The researcher builds a cohort in the cohort builder. At the final
-   refinement, the counting API materializes it: one `cohort.cohort` row (with
+   refinement, the counting API stores it: one `cohort.cohort` row (with
    the researcher's `ras_subject`, the release, the expression and an
    expiry) and one `cohort.cohort_member` row per member. If record-level
    shares are wanted, it also writes `cohort.cohort_evidence`.
@@ -159,6 +163,7 @@ the new release, before it is retired.
 
 | Piece | Where | Consent-group shares | Participant-list shares |
 |---|---|---|---|
+| Persisted cohorts (`cohort.cohort`, `cohort.cohort_member`) | `cohort_hm_index.sql` | No | Yes |
 | `access.share_record` | `provisioning_metadata.sql` | Yes (`cohort_id` made optional) | Yes, plus a per-share participant list |
 | Provisioning's grants on `catalog` and `access` | `provisioning_metadata.sql` | Yes | Yes |
 | `cohort.cohort_member_in_scope` view | `provisioning_hm_index.sql` | No | Replaced by a share-time scope (see above) |
@@ -166,14 +171,15 @@ the new release, before it is retired.
 | Provisioning's SELECT on `hm.participant_ordinal` | `provisioning_hm_index.sql` | No | Better replaced by a function |
 | Provisioning's access to `cohort.cohort` | `provisioning_hm_index.sql` | No | Yes |
 | `CONNECT` on `bdc_dp_hm_index` for provisioning | Server bootstrap | No | Yes |
-| `cohort.cohort_member.in_exact_scope` | Deployed (`hm_index.sql`) | Not used by provisioning; kept for exact counts | Not enough on its own (see above) |
+| `cohort.cohort_member.in_exact_scope` | `cohort_hm_index.sql` | Not used | Not enough on its own (see above) |
 
 ## When the decision is made
 
 **If shares are consent-group only:**
 
 1. Delete `provisioning_hm_index.sql` and `provisioning_hm_index.yaml`, and
-   their pair in `schema/tests/check_schema.py`.
+   their pair in `schema/tests/check_schema.py`. Persisted cohorts are then
+   needed only if stage 5 is too slow without them (see [COHORTS.md](COHORTS.md)).
 2. Make `access.share_record.cohort_id` optional in
    `provisioning_metadata.sql` and `.yaml`.
 3. Give provisioning no `CONNECT` on `bdc_dp_hm_index`, and update the roles
@@ -181,13 +187,15 @@ the new release, before it is retired.
 
 **If shares are participant lists (or both):**
 
-1. Replace `cohort.cohort_member_in_scope` with a share-time scope based on
+1. Apply [persisted cohorts](COHORTS.md) first, deciding cohort lifetime with
+   share lifetime in mind.
+2. Replace `cohort.cohort_member_in_scope` with a share-time scope based on
    `sharing_eligible` and live entitlements.
-2. Replace provisioning's SELECT on `hm.participant_ordinal` with a function
+3. Replace provisioning's SELECT on `hm.participant_ordinal` with a function
    limited to one cohort's checked members.
-3. Add a per-share participant list, or tie cohort expiry to share lifetime.
-4. Keep `cohort.cohort_evidence` only if shares are limited to matching
+4. Add a per-share participant list, or tie cohort expiry to share lifetime.
+5. Keep `cohort.cohort_evidence` only if shares are limited to matching
    records.
-5. Decide what happens to live shares when their release is retired.
+6. Decide what happens to live shares when their release is retired.
 
 In either case, apply the files as described in [README.md](README.md#applying-an-addition).

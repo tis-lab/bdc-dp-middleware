@@ -40,6 +40,7 @@ BDCHM = "synthetic/bdchm.yaml"
 PAIRS = [("schema/db/metadata.yaml", "schema/db/metadata.sql"),
          ("schema/db/hm_index.yaml", "schema/db/hm_index.sql"),
          # future additions, not deployed: checked so they keep matching the deployed models
+         ("schema/db/future/cohort_hm_index.yaml", "schema/db/future/cohort_hm_index.sql"),
          ("schema/db/future/provisioning_metadata.yaml", "schema/db/future/provisioning_metadata.sql"),
          ("schema/db/future/provisioning_hm_index.yaml", "schema/db/future/provisioning_hm_index.sql")]
 TYPES = {"string": {"text", "jsonb"}, "uriorcurie": {"text"}, "integer": {"int2", "int4", "int8", "smallint", "integer", "bigint"},

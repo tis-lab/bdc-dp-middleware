@@ -40,7 +40,7 @@ classes:
         range: uuid
         required: true
         description: >-
-          The shared cohort (cohort.cohort in bdc_dp_hm_index). Not a foreign key, because the
+          The shared cohort (cohort.cohort in bdc_dp_hm_index, from the persisted-cohorts addition). Not a foreign key, because the
           cohort is in the other database.
       consent_groups:
         multivalued: true

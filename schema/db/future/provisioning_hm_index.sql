@@ -4,8 +4,9 @@
 -- The provisioning service maps the in-scope members of a materialized cohort
 -- back to participant IDs and shares their data, limited to the records that
 -- satisfied the cohort's rules. The portal currently supports
--- querying only, so none of this is deployed. When provisioning is ready, run
--- this file in bdc_dp_hm_index after hm_index.sql, as deploy_migrations acting
+-- querying only, so none of this is deployed. It builds on persisted cohorts
+-- (cohort_hm_index.sql). When provisioning is ready, run this file in
+-- bdc_dp_hm_index after cohort_hm_index.sql, as deploy_migrations acting
 -- as bdc_dp_owner, and add the provisioning role to the server (see README.md).
 -- Columns must match provisioning_hm_index.yaml; check_schema.py checks them.
 -- =====================================================================

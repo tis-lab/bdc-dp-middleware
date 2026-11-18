@@ -13,7 +13,7 @@ CREATE TABLE access.share_record (                 -- every share the provisioni
   share_name      text PRIMARY KEY,
   recipient_name  text        NOT NULL,
   ras_subject     text        NOT NULL REFERENCES access.account,
-  cohort_id       uuid        NOT NULL,            -- cohort.cohort in bdc_dp_hm_index; no cross-database key
+  cohort_id       uuid        NOT NULL,            -- cohort.cohort (persisted cohorts) in bdc_dp_hm_index; no cross-database key
   release         text        NOT NULL,
   consent_groups  text[]      NOT NULL,
   visa_ids        text[]      NOT NULL,

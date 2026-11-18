@@ -1,8 +1,10 @@
 -- =====================================================================
--- bdc_dp_hm_index: schemas hm and cohort. Participant-level; restricted.
---   hm     : participant-level projection of BDC-HM, rebuilt per release:
---            participants, events, posting lists, release checks
---   cohort : materialized cohorts
+-- bdc_dp_hm_index: schema hm. Participant-level; restricted.
+--   hm : participant-level projection of BDC-HM, rebuilt per release:
+--        participants, events, posting lists, release checks
+-- Cohorts are not stored: a stage 5 request materializes its cohort in a temporary
+-- table for one transaction (see the grants for api_counting). Persisted cohorts are
+-- a future addition, in future/cohort_hm_index.sql.
 -- Release-scoped tables in hm are partitioned by release, so retiring a
 -- release is a DETACH and DROP of its partitions. The exception is
 -- release_check: it is the permanent record of what was verified before
@@ -18,10 +20,6 @@
 CREATE SCHEMA hm;
 COMMENT ON SCHEMA hm IS
   'Participant-level projection of BDC-HM, rebuilt per release: participants, events, posting lists. Restricted.';
-
-CREATE SCHEMA cohort;
-COMMENT ON SCHEMA cohort IS
-  'Materialized cohorts. Restricted; rows expire.';
 
 -- ---------------------------------------------------------------------
 -- hm tables
@@ -171,8 +169,7 @@ $$;
 
 -- Retiring a release removes its participant-level data. The caller must first
 -- mark the release retired in bdc_dp_metadata.catalog.release; this database
--- cannot check that. Cohorts built on the release can no longer be resolved
--- afterwards and should already have expired.
+-- cannot check that.
 CREATE FUNCTION hm.retire_release_partitions(p_release text)
 RETURNS void
 LANGUAGE plpgsql
@@ -200,27 +197,6 @@ REVOKE ALL ON FUNCTION hm.release_suffix(text)            FROM PUBLIC;
 REVOKE ALL ON FUNCTION hm.create_release_partitions(text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION hm.retire_release_partitions(text) FROM PUBLIC;
 
--- ---------------------------------------------------------------------
--- cohort tables
--- ---------------------------------------------------------------------
-
-CREATE TABLE cohort.cohort (                     -- materialized cohorts (stage 5)
-  cohort_id        uuid PRIMARY KEY,
-  release          text        NOT NULL,
-  ras_subject      text,                           -- NULL only if public cohorts are ever saved
-  expression       jsonb       NOT NULL,           -- cohort expression over BDC-HM
-  expression_hash  text        NOT NULL,
-  created_at       timestamptz NOT NULL,
-  expires_at       timestamptz NOT NULL
-);
-
-CREATE TABLE cohort.cohort_member (
-  cohort_id       uuid REFERENCES cohort.cohort ON DELETE CASCADE,
-  ordinal         integer,
-  in_exact_scope  boolean NOT NULL,
-  PRIMARY KEY (cohort_id, ordinal)
-);
-
 -- =====================================================================
 -- ROLES AND GRANTS
 -- Roles are created once per server by an Entra administrator (see README.md); each maps to
@@ -232,18 +208,15 @@ CREATE TABLE cohort.cohort_member (
 -- =====================================================================
 
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA hm, cohort FROM PUBLIC;
+REVOKE ALL ON SCHEMA hm FROM PUBLIC;
 
 -- Schema usage and default privileges for tables added later
 GRANT USAGE ON SCHEMA hm     TO rebuild_job, api_counting, api_public;
-GRANT USAGE ON SCHEMA cohort TO api_counting;
 
 ALTER DEFAULT PRIVILEGES FOR ROLE bdc_dp_owner IN SCHEMA hm
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO rebuild_job;
 ALTER DEFAULT PRIVILEGES FOR ROLE bdc_dp_owner IN SCHEMA hm
   GRANT SELECT ON TABLES TO api_counting;
-ALTER DEFAULT PRIVILEGES FOR ROLE bdc_dp_owner IN SCHEMA cohort
-  GRANT SELECT, INSERT, DELETE ON TABLES TO api_counting;
 -- Functions the owner creates later are not executable by PUBLIC either. This must be the
 -- global default: a per-schema default can only add privileges, never remove them.
 ALTER DEFAULT PRIVILEGES FOR ROLE bdc_dp_owner REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
@@ -278,5 +251,15 @@ GRANT SELECT ON ALL TABLES IN SCHEMA hm TO api_counting;
 -- removes the table grants from databases deployed with earlier versions of this file.
 REVOKE ALL ON ALL TABLES IN SCHEMA hm FROM api_public;
 
--- cohort: written by the counting API
-GRANT SELECT, INSERT, DELETE ON cohort.cohort, cohort.cohort_member TO api_counting;
+-- Stage 5 (signed-in breakdowns and approved counts) materializes the refined cohort for
+-- one request only: api_counting evaluates the cohort expression once into
+--   CREATE TEMPORARY TABLE ... ON COMMIT DROP
+-- computes every facet and study contribution of the response from it in the same
+-- transaction, and commits, which drops it. Nothing about the cohort outlives the request,
+-- so no participant list is stored per researcher and nothing needs to expire. Temporary
+-- tables are private to the transaction's session and are not written to the WAL. Do not
+-- use session-scoped temporary tables: connections are pooled and shared between users.
+-- Exact scope is computed per request from the caller's current entitlements and
+-- catalog.consent_group_current. The bootstrap revokes every database privilege from
+-- PUBLIC, including TEMPORARY, so it is granted here.
+GRANT TEMPORARY ON DATABASE bdc_dp_hm_index TO api_counting;

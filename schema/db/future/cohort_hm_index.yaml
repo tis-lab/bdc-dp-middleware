@@ -1,0 +1,79 @@
+id: https://w3id.org/tis-lab/BDC-Portal/db/future/cohort_hm_index
+name: bdchm_db_cohort_hm_index
+title: "Future addition: persisted cohorts in bdc_dp_hm_index"
+description: >-
+  Not deployed. Cohorts stored beyond one request, for cohorts reused across a researcher's
+  session or for participant-list provisioning. Querying materializes each cohort in a
+  transaction-scoped temporary table instead. Apply with cohort_hm_index.sql after
+  hm_index.sql when persisted cohorts are needed. See COHORTS.md.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  bdchm: https://w3id.org/bdchm/
+  bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
+
+default_prefix: bdchmdb
+default_range: string
+
+imports:
+  - linkml:types
+  - ../hm_index
+
+classes:
+
+  Cohort:
+    description: A cohort stored beyond one request, until it expires.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: cohort.cohort
+      origin: system
+    attributes:
+      cohort_id:
+        identifier: true
+        range: uuid
+      ras_subject:
+        description: RAS identity of the researcher who built the cohort.
+        annotations:
+          origin: ga4gh
+      expression:
+        required: true
+        description: The cohort expression over BDC-HM classes, slots and enum values, as JSON.
+      expression_hash:
+        required: true
+      created_at:
+        range: datetime
+        required: true
+      expires_at:
+        range: datetime
+        required: true
+
+  CohortMember:
+    description: A participant in a stored cohort.
+    annotations:
+      table: cohort.cohort_member
+    slots:
+      - ordinal
+    attributes:
+      cohort_id:
+        range: Cohort
+        required: true
+      in_exact_scope:
+        range: boolean
+        required: true
+        annotations:
+          origin: system
+          derivation: >-
+            The participant's consent group is covered by one of the researcher's dbGaP visas and
+            catalog.consent_group_current shows exact_count_eligible for it, both as of cohort creation.
+            That view reports a group eligible only when its eligibility decision was made against the
+            current version of its consent meaning.
+          access: >-
+            Exact counts over a stored cohort cover only rows where this is true. Fixed at creation,
+            so it can be stale; see COHORTS.md. Not a sharing scope: see PROVISIONING.md.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [cohort_id, ordinal]
+

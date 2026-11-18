@@ -8,15 +8,16 @@ identity; no role has a password.
 
 These files support querying only: term search, public and signed-in
 summaries, and counts for approved researchers. Participant-level access
-(provisioning) and Azure AI Search (the document generator) are future
-additions, kept apart in [`future/`](future/README.md) and not deployed.
+(provisioning), Azure AI Search (the document generator) and stored cohorts
+are future additions, kept apart in [`future/`](future/README.md) and not
+deployed.
 
 | File | What it holds |
 |---|---|
 | `common.yaml` | Conventions, slots and enums shared by both databases |
 | `metadata.yaml`, `metadata.sql` | `bdc_dp_metadata`: schemas `catalog` and `access` |
-| `hm_index.yaml`, `hm_index.sql` | `bdc_dp_hm_index`: schemas `hm` and `cohort`, and the release partition functions |
-| `future/` | Future additions, not deployed: provisioning and the document generator |
+| `hm_index.yaml`, `hm_index.sql` | `bdc_dp_hm_index`: schema `hm`, and the release partition functions |
+| `future/` | Future additions, not deployed: persisted cohorts, provisioning and the document generator |
 
 Each `.yaml` is the LinkML model and each `.sql` the DDL, with that database's
 grants at the end. They must agree; see [Validation](#validation).
@@ -30,7 +31,6 @@ grants at the end. They must agree; see [Validation](#validation).
 | `bdc_dp_metadata` | `catalog` | Releases, terms and their closure, studies, variable mappings, consent groups and eligibility, the stigmatizing-concept list, term availability, the term resolution cache | No |
 | | `access` | Accounts, entitlements, the query ledger | No, but sensitive |
 | `bdc_dp_hm_index` | `hm` | The participant-level projection of BDC-HM: participant numbers, attributes, events, posting lists, release checks | Yes |
-| | `cohort` | Materialized cohorts | Yes |
 
 The database boundary keeps search-facing identities away from participant
 data: a role without `CONNECT` on `bdc_dp_hm_index` cannot reach it at all.
@@ -90,7 +90,7 @@ Entra identities, named `id-bdcdp-<workload>-<env>`; the table shows dev.
 | `deploy_migrations` | `id-bdcdp-deploy-dev` | CI/CD pipeline, through workload identity federation | Acts as owner | Acts as owner |
 | `rebuild_job` | `id-bdcdp-rebuild-dev` | Databricks job | Writes `catalog` | Writes `hm` (not deletes from `release_check`); runs the partition functions |
 | `api_search` | `id-bdcdp-api-search-dev` | Query API Container App | Reads `catalog`; writes the resolution cache and query ledger | No connection |
-| `api_counting` | `id-bdcdp-api-counting-dev` | Query API Container App | Reads releases, consent groups, eligibility, the stigmatizing list and entitlements; writes the query ledger | Reads `hm`; writes `cohort` |
+| `api_counting` | `id-bdcdp-api-counting-dev` | Query API Container App | Reads releases, consent groups, eligibility, the stigmatizing list and entitlements; writes the query ledger | Reads `hm`; creates temporary tables for one transaction (stage 5) |
 | `api_public` | `id-bdcdp-api-public-dev` | Public summary Container App | Reads releases, terms, closure, studies, term availability, the stigmatizing list; records public queries in the query ledger, without reading it | Connects, but reads no table. Will execute only the public-summary functions (see below) |
 | `clearinghouse` | `id-bdcdp-clearinghouse-dev` | Container App or Function | Writes accounts and entitlements | No connection |
 
@@ -123,6 +123,19 @@ totals, studies at or above `min_count` named without counts, and a
 seeded by the matching participant set, which only the database sees. The
 functions arrive with the counting query layer; `hm_index.sql` states the full
 contract.
+
+### Stage 5 cohorts
+
+Stage 5 (signed-in breakdowns, and counts for approved researchers) runs on
+the refined cohort, but cohorts are not stored. Each stage 5 request evaluates
+the cohort expression once into a `CREATE TEMPORARY TABLE ... ON COMMIT DROP`
+table, computes the whole response from it in the same transaction, and
+commits, which drops it. No participant list is kept per researcher and
+nothing needs to expire. Exact scope is computed per request from current
+entitlements. `api_counting` is granted `TEMPORARY` on `bdc_dp_hm_index` for
+this, since the bootstrap revokes it from `PUBLIC`. Session-scoped temporary
+tables are not used: connections are pooled and shared between users. Stored
+cohorts are a future addition; see [`future/COHORTS.md`](future/COHORTS.md).
 
 ### The query ledger
 

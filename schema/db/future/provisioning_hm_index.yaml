@@ -2,7 +2,7 @@ id: https://w3id.org/tis-lab/BDC-Portal/db/future/provisioning_hm_index
 name: bdchm_db_provisioning_hm_index
 title: "Future addition: provisioning views in bdc_dp_hm_index"
 description: >-
-  Not deployed. The cohort membership view the provisioning service reads. Apply with provisioning_hm_index.sql after hm_index.sql when provisioning is ready.
+  Not deployed. The cohort membership view the provisioning service reads. Builds on persisted cohorts (cohort_hm_index.yaml). Apply with provisioning_hm_index.sql after cohort_hm_index.sql when provisioning is ready.
 license: MIT
 version: 0.1.0
 
@@ -16,7 +16,7 @@ default_range: string
 
 imports:
   - linkml:types
-  - ../hm_index
+  - ./cohort_hm_index
 
 classes:
 

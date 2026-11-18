@@ -1,8 +1,8 @@
 id: https://w3id.org/tis-lab/BDC-Portal/db/hm_index
 name: bdchm_db_hm_index
-title: bdc_dp_hm_index database, hm and cohort schemas
+title: bdc_dp_hm_index database, hm schema
 description: >-
-  Participant-level projection of BDC-HM records used for counts and cohorts.
+  Participant-level projection of BDC-HM records used for counts.
   Every column copies a named BDC-HM slot or states how it is derived; see
   bdchm_db_common for the conventions.
 license: MIT
@@ -512,65 +512,6 @@ classes:
     unique_keys:
       primary_key:
         unique_key_slots: [release, check_name]
-
-  # -------------------------------------------------------------------
-  # Materialized cohorts
-  # -------------------------------------------------------------------
-
-  Cohort:
-    description: A materialized cohort, stored when a researcher runs the final refinement.
-    mixins:
-      - ReleaseScoped
-    annotations:
-      table: cohort.cohort
-      origin: system
-    attributes:
-      cohort_id:
-        identifier: true
-        range: uuid
-      ras_subject:
-        description: RAS identity of the researcher who built the cohort.
-        annotations:
-          origin: ga4gh
-      expression:
-        required: true
-        description: The cohort expression over BDC-HM classes, slots and enum values, as JSON.
-      expression_hash:
-        required: true
-      created_at:
-        range: datetime
-        required: true
-      expires_at:
-        range: datetime
-        required: true
-
-  CohortMember:
-    description: A participant in a materialized cohort.
-    annotations:
-      table: cohort.cohort_member
-    slots:
-      - ordinal
-    attributes:
-      cohort_id:
-        range: Cohort
-        required: true
-      in_exact_scope:
-        range: boolean
-        required: true
-        annotations:
-          origin: system
-          derivation: >-
-            The participant's consent group is covered by one of the researcher's dbGaP visas and
-            catalog.consent_group_current shows exact_count_eligible for it, both as of cohort creation.
-            That view reports a group eligible only when its eligibility decision was made against the
-            current version of its consent meaning.
-          access: >-
-            Exact counts at stage 5 cover only rows where this is true. Provisioning, a future
-            addition, would read only these rows, through cohort.cohort_member_in_scope
-            (future/provisioning_hm_index.sql).
-    unique_keys:
-      primary_key:
-        unique_key_slots: [cohort_id, ordinal]
 
 # Release checks that must pass before activation (StatusRuleEnum is extended in bdchm_db_common)
 enums:
