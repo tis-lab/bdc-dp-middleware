@@ -8,12 +8,12 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 labels:
-  template: ${APPNAME}-${VERSION_NUM}-${ENV}
+  template: ${APPNAME}
 metadata:
   annotations:
     description: This template is for application deployment
     tags: java,general,springboot,pipeline
-  name: ${APPNAME}-${VERSION_NUM}-${ENV}
+  name: ${APPNAME}
 
 objects:
 
@@ -27,6 +27,9 @@ objects:
         app: ${APPNAME}
         version: ${VERSION_NUM}
         env: ${ENV}
+        tags.datadoghq.com/env: ${ENV}
+        tags.datadoghq.com/service: ${APPNAME}
+        tags.datadog.com/version: ${VERSION_NUM}
       name: ${APPNAME}-${VERSION_NUM}-${ENV}
       namespace: ${NAMESPACE}
     spec:
@@ -41,69 +44,46 @@ objects:
             app: ${APPNAME}
             version: ${VERSION_NUM}
             env: ${ENV}
+            tags.datadoghq.com/env: ${ENV}
+            tags.datadoghq.com/service: ${APPNAME}
+            tags.datadog.com/version: ${VERSION_NUM}
         spec:
           containers:
-            - name: ${APPNAME}-${VERSION_NUM}-${ENV}
+            - name: ${APPNAME}-${VERSION_NUM}
               env:
                 - name: TZ
                   value: America/New_York
-                - name: SPRING_CONFIG_ADDITIONAL_LOCATION
-                  value: "optional:file:/var/${APPNAME}/config/,optional:file:/var/${APPNAME}/config/secret/sensitive.properties"
+                - name: SPRING_CONFIG_LOCATION
+                  value: /var/${APPNAME}/config/,file:/var/${APPNAME}/config/secret/sensitive.properties
                 - name: _JAVA_OPTIONS
                   valueFrom:
                     secretKeyRef:
                       name: nih-ca-certs
                       key: java-options
-
-                - name: APP_LOG_LEVEL
-                  value: ${APP_LOG_LEVEL}
+                - name: DD_ENV
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: 'metadata.labels[''tags.datadoghq.com/env'']'
+                - name: DD_SERVICE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: 'metadata.labels[''tags.datadoghq.com/service'']'
+                - name: DD_VERSION
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: 'metadata.labels[''tags.datadoghq.com/version'']'
+                - name: DD_AGENT_HOST
+                  value: datadog-agent.datadog.svc.cluster.local
 
               ports:
-                - name: web-http
                   containerPort: "${{CONTAINER_PORT}}"
-                  protocol: TCP
 
               image: ${IMAGE_REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APPNAME}:${VERSION_NUM}-${ENV}
               imagePullPolicy: Always
-              startupProbe:
-                httpGet:
-                  path: /actuator/health/liveness
-                  port: web-http
-                periodSeconds: 5
-                failureThreshold: 30
-              livenessProbe:
-                httpGet:
-                  path: /actuator/health/liveness
-                  port: web-http
-                periodSeconds: 10
-                timeoutSeconds: 3
-                failureThreshold: 3
-              readinessProbe:
-                httpGet:
-                  path: /actuator/health/readiness
-                  port: web-http
-                periodSeconds: 10
-                timeoutSeconds: 3
-                failureThreshold: 3
-              resources:
-                requests:
-                  cpu: "${CPU_REQUEST}"
-                  memory: "${MEMORY_REQUEST}"
-                limits:
-                  cpu: "${CPU_LIMIT}"
-                  memory: "${MEMORY_LIMIT}"
-
-              securityContext:
-                capabilities:
-                  drop:
-                    - KILL
-                    - MKNOD
-                    - SETGID
-                    - SETUID
-                privileged: false
-                runAsUser: "${{RUN_AS_USER_ID}}"
-
-              # Mount the external volumes to container paths, plus configMaps and secrets.
+              dnsPolicy: ClusterFirst
               volumeMounts:
                 - name: config-volume
                   mountPath: /var/${APPNAME}/config/
@@ -112,24 +92,43 @@ objects:
                 - name: nih-ca-certs
                   readOnly: true
                   mountPath: /nihchaincerts
-
-          dnsPolicy: ClusterFirst
-          restartPolicy: Always
-          terminationGracePeriodSeconds: 30
-
-          # Volume definitions
           volumes:
             - name: config-volume
               configMap:
                 name: ${APPNAME}-${VERSION_NUM}-${ENV}
-                optional: true
             - name: secret-volume
               secret:
                 secretName: ${APPNAME}-${VERSION_NUM}-${ENV}
-                optional: true
             - name: nih-ca-certs
               secret:
                 secretName: nih-ca-certs
+
+  #Start Config Map
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APPNAME}
+        version: ${VERSION_NUM}
+        env: ${ENV}
+      name: ${APPNAME}-${VERSION_NUM}-${ENV}
+      namespace: ${NAMESPACE}
+    data:
+      application.properties: |
+        spring.application.name=bdc-data-portal-cohort-builder-service
+        server.port=${CONTAINER_PORT}
+        server.shutdown=graceful
+        server.forward-headers-strategy=framework
+        management.endpoints.web.exposure.include=health,info
+        management.endpoint.health.probes.enabled=true
+        management.endpoint.health.show-details=never
+        management.health.livenessstate.enabled=true
+        management.health.readinessstate.enabled=true
+        info.app.name=bdc-data-portal-cohort-builder-service
+        info.app.environment=${ENV}
+        logging.level.root=INFO
+        logging.level.gov.nih.nhlbi.bdc=${LOGGING_LEVEL}
+    #End Config Map
 
   # ---------------------------------------------------------------------
   # Service
@@ -155,6 +154,8 @@ objects:
         version: ${VERSION_NUM}
       sessionAffinity: None
       type: ClusterIP
+    status:
+      loadBalancer: {}
 
   # ---------------------------------------------------------------------
   # Route - external access
@@ -175,8 +176,6 @@ objects:
       to:
         kind: Service
         name: ${APPNAME}-${VERSION_NUM}-${ENV}
-      port:
-        targetPort: web-http
       tls:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
@@ -187,17 +186,17 @@ parameters:
   - name: ENV
     description: application environment
     required: true
-    value: 'dev'
+    value: dev
 
   - name: APPNAME
     description: application name and module name in OpenShift
     required: true
-    value: 'bdc-data-portal-cohort-builder-service'
+    value: bdc-data-portal-cohort-builder-service
 
   - name: VERSION_NUM
     description: The application version number, use number and '-'
     required: true
-    value: '0-1-0'
+    value: "1-0-0"
 
   - name: REPLICA_COUNT
     description: count of replicas
@@ -207,22 +206,22 @@ parameters:
   - name: ROUTE_SUFFIX
     description: suffix for the default router
     required: true
-    value: 'apps.nonprodaro.nhlbi.nih.gov'
+    value: 'apps.nonprod.nhlbi.nih.gov'
 
   - name: CONTAINER_PORT
     description: Container port exposed for internal routing
     required: true
-    value: '8080'
+    value: '8090'
 
   - name: APP_EXPOSED_PORT
     description: Application port exposed to external access
     required: true
-    value: '8080'
+    value: '8443'
 
   - name: IMAGE_REGISTRY_URL
     description: registry url for pulling the image from the image registry
     required: true
-    value: 'nonprodnhlbi.azurecr.io'
+    value: nonprodnhlbi.azurecr.io
 
   - name: NAMESPACE
     description: application target namespace / openshift project name
@@ -234,21 +233,7 @@ parameters:
     required: true
     value: 'bdc-data-portal'
 
-  - name: RUN_AS_USER_ID
-    description: Container userid and external file volume mount uid; the value must come from the ARO namespace UID range
-    displayName: Container userid and external file volume mount uid
-    required: true
-    value: "1000940000"
-
-  - name: APP_LOG_LEVEL
+  - name: LOGGING_LEVEL
     description: Log level for the gov.nih.nhlbi.bdc package
-    value: 'INFO'
-  - name: CPU_REQUEST
-    value: '100m'
-  - name: CPU_LIMIT
-    value: '1'
-  - name: MEMORY_REQUEST
-    value: '512Mi'
-  - name: MEMORY_LIMIT
-    description: Keep above the JVM max heap
-    value: '1536Mi'
+    required: true
+    value: INFO

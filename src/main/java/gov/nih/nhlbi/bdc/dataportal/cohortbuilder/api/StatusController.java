@@ -10,7 +10,7 @@ public class StatusController {
     @GetMapping({"/", "/api/v1/status"})
     public Map<String, String> status() {
         return Map.of(
-                "service", "bdc-dp-middleware",
+                "service", "bdc-data-portal-cohort-builder-service",
                 "status", "UP",
                 "message", "Starter application is running"
         );

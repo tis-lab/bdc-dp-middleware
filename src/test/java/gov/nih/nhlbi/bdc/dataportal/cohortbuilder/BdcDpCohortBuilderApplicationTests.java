@@ -10,8 +10,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -32,9 +32,9 @@ class BdcDpCohortBuilderApplicationTests {
                 HttpResponse.BodyHandlers.ofString());
     }
 
-    private static String statusOf(String body) {
+    private static String statusOf(String body) throws Exception{
         JsonNode node = MAPPER.readTree(body);
-        return node.path("status").asString();
+        return node.path("status").asText();
     }
 
     @ParameterizedTest(name = "{0} reports UP")
@@ -56,11 +56,11 @@ class BdcDpCohortBuilderApplicationTests {
         assertThat(response.statusCode()).isEqualTo(200);
 
         JsonNode body = MAPPER.readTree(response.body());
-        assertThat(body.path("status").asString()).isEqualTo("UP");
+        assertThat(body.path("status").asText()).isEqualTo("UP");
         // Comes from spring.application.name in application.yaml.
-        assertThat(body.path("service").asString())
+        assertThat(body.path("service").asText())
                 .isEqualTo("bdc-data-portal-cohort-builder-service");
-        assertThat(body.path("message").asString())
+        assertThat(body.path("message").asText())
                 .isEqualTo("Starter application is running");
     }
 
