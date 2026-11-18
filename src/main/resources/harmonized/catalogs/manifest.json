@@ -1,0 +1,45 @@
+{
+  "schema_version": 3,
+  "release": "hv-1d45e28",
+  "producer_repository": "tis-lab/BDC-VarLib",
+  "producer_commit": "de2b97c5d7124f6e71870a8867d678c9a8d20cd9",
+  "producer_path": "src/bdc_varlib/data",
+  "catalogs": [
+    {
+      "file": "varlib_catalog_atc.json",
+      "prefix": "ATC"
+    },
+    {
+      "file": "varlib_catalog_hpo.json",
+      "prefix": "HP"
+    },
+    {
+      "file": "varlib_catalog_mesh.json",
+      "prefix": "MeSH"
+    },
+    {
+      "file": "varlib_catalog_mondo.json",
+      "prefix": "MONDO"
+    },
+    {
+      "file": "varlib_catalog_ndfrt.json",
+      "prefix": "NDFRT"
+    },
+    {
+      "file": "varlib_catalog_oba.json",
+      "prefix": "OBA"
+    },
+    {
+      "file": "varlib_catalog_omop.json",
+      "prefix": "OMOP"
+    },
+    {
+      "file": "varlib_catalog_rxcui.json",
+      "prefix": "RxCUI"
+    },
+    {
+      "file": "varlib_catalog_vandf.json",
+      "prefix": "VANDF"
+    }
+  ]
+}

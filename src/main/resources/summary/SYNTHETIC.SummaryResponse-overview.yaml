@@ -1,0 +1,173 @@
+# SYNTHETIC: illustrative counts for two fictional studies, not derived from
+# participant data.
+#
+# The overview the landing page fetches before any search: no focus and no
+# filter, so each study's participant_count is everyone in it. The UI keeps
+# this response for the release and reads each study's total from it when a
+# filtered response, such as SYNTHETIC.SummaryResponse-t2d.yaml, arrives.
+
+release: example-release
+min_count: 10
+
+research_studies:
+  - id: palette:study_one
+    name: Example Study One
+    research_project_type: STUDY
+    program: Example Program
+    principal_investigator: [Example Investigator]
+  - id: palette:study_two
+    name: Example Study Two
+    research_project_type: STUDY
+    program: Example Program
+    principal_investigator: [Example Investigator]
+
+studies:
+  - research_study: palette:study_one
+    participant_count: 1200
+
+    participants:
+      - id: palette:participant/age_at_index
+        summarized_slot: age_at_index
+        participant_count: 1200
+        values:
+          - id: palette:participant/age_at_index/45-55a
+            summarized_slot: age_at_index
+            bin_low: 45
+            bin_high: 55
+            bin_unit: a
+            participant_count: 360
+          - id: palette:participant/age_at_index/55-65a
+            summarized_slot: age_at_index
+            bin_low: 55
+            bin_high: 65
+            bin_unit: a
+            participant_count: 420
+          - id: palette:participant/age_at_index/65-80a
+            summarized_slot: age_at_index
+            bin_low: 65
+            bin_high: 80
+            bin_unit: a
+            participant_count: 420
+
+    demographics:
+      - id: palette:demography/sex
+        summarized_slot: sex
+        participant_count: 1200
+        values:
+          - id: palette:demography/sex/FEMALE
+            summarized_slot: sex
+            sex: FEMALE
+            participant_count: 610
+          - id: palette:demography/sex/MALE
+            summarized_slot: sex
+            sex: MALE
+            participant_count: 580
+          - id: palette:demography/sex/UNKNOWN
+            summarized_slot: sex
+            sex: UNKNOWN
+            participant_count: 10
+      - id: palette:demography/race
+        summarized_slot: race
+        participant_count: 1185
+        values:
+          - id: palette:demography/race/WHITE
+            summarized_slot: race
+            race: [WHITE]
+            participant_count: 590
+          - id: palette:demography/race/BLACK_OR_AFRICAN_AMERICAN
+            summarized_slot: race
+            race: [BLACK_OR_AFRICAN_AMERICAN]
+            participant_count: 350
+          - id: palette:demography/race/ASIAN
+            summarized_slot: race
+            race: [ASIAN]
+            participant_count: 125
+          - id: palette:demography/race/AMERICAN_INDIAN_OR_ALASKA_NATIVE
+            summarized_slot: race
+            race: [AMERICAN_INDIAN_OR_ALASKA_NATIVE]
+            participant_count: 120
+      - id: palette:demography/ethnicity
+        summarized_slot: ethnicity
+        participant_count: 1200
+        values:
+          - id: palette:demography/ethnicity/HISPANIC_OR_LATINO
+            summarized_slot: ethnicity
+            ethnicity: HISPANIC_OR_LATINO
+            participant_count: 180
+          - id: palette:demography/ethnicity/NOT_HISPANIC_OR_LATINO
+            summarized_slot: ethnicity
+            ethnicity: NOT_HISPANIC_OR_LATINO
+            participant_count: 1020
+
+  - research_study: palette:study_two
+    participant_count: 1050
+
+    participants:
+      - id: palette:participant/age_at_index
+        summarized_slot: age_at_index
+        participant_count: 1050
+        values:
+          - id: palette:participant/age_at_index/45-55a
+            summarized_slot: age_at_index
+            bin_low: 45
+            bin_high: 55
+            bin_unit: a
+            participant_count: 300
+          - id: palette:participant/age_at_index/55-65a
+            summarized_slot: age_at_index
+            bin_low: 55
+            bin_high: 65
+            bin_unit: a
+            participant_count: 380
+          - id: palette:participant/age_at_index/65-80a
+            summarized_slot: age_at_index
+            bin_low: 65
+            bin_high: 80
+            bin_unit: a
+            participant_count: 370
+
+    demographics:
+      - id: palette:demography/sex
+        summarized_slot: sex
+        participant_count: 1050
+        values:
+          - id: palette:demography/sex/FEMALE
+            summarized_slot: sex
+            sex: FEMALE
+            participant_count: 560
+          - id: palette:demography/sex/MALE
+            summarized_slot: sex
+            sex: MALE
+            participant_count: 490
+      - id: palette:demography/race
+        summarized_slot: race
+        participant_count: 1040
+        values:
+          - id: palette:demography/race/WHITE
+            summarized_slot: race
+            race: [WHITE]
+            participant_count: 620
+          - id: palette:demography/race/BLACK_OR_AFRICAN_AMERICAN
+            summarized_slot: race
+            race: [BLACK_OR_AFRICAN_AMERICAN]
+            participant_count: 220
+          - id: palette:demography/race/MIDDLE_EASTERN_OR_NORTH_AFRICAN
+            summarized_slot: race
+            race: [MIDDLE_EASTERN_OR_NORTH_AFRICAN]
+            participant_count: 100
+          - id: palette:demography/race/NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER
+            summarized_slot: race
+            race: [NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER]
+            participant_count: 100
+      - id: palette:demography/ethnicity
+        summarized_slot: ethnicity
+        participant_count: 1050
+        values:
+          - id: palette:demography/ethnicity/HISPANIC_OR_LATINO
+            summarized_slot: ethnicity
+            ethnicity: HISPANIC_OR_LATINO
+            participant_count: 160
+          - id: palette:demography/ethnicity/NOT_HISPANIC_OR_LATINO
+            summarized_slot: ethnicity
+            ethnicity: NOT_HISPANIC_OR_LATINO
+            participant_count: 890

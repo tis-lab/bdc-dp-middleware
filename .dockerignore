@@ -1,0 +1,6 @@
+.git/
+.github/
+.idea/
+.venv*/
+target/*
+!target/bdc-cohort-builder-service.jar

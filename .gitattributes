@@ -1,0 +1,14 @@
+
+# Use consistent line endings for catalog and schema files.
+schema/portal-varlib/** text eol=lf
+src/main/resources/harmonized/catalogs/*.json text eol=lf
+# Preserve whitespace in vendored upstream files.
+schema/portal-varlib/vendor/** -whitespace
+
+# Keep pinned study-palette sources unchanged across Windows/Linux checkouts.
+src/main/resources/summary/*.yaml text eol=lf
+schema/summary.yaml text eol=lf
+schema/terms.yaml text eol=lf
+synthetic/bdchm.yaml text eol=lf
+
+synthetic/bdchm.yaml -whitespace

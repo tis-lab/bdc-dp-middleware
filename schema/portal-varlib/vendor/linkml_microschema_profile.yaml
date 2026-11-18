@@ -1,0 +1,238 @@
+---
+id: https://w3id.org/linkml/linkml-microschema-profile
+name: linkml-microschema-profile
+title: LinkML Microschema Profile
+version: "0.3.0"
+description: |-
+  A LinkML schema defining the Microschema Profile for composable data elements.
+  Microschemas are designed for inline composition without identifiers.
+  Domain-specific record and example microschemas live in downstream schemas
+  (e.g., https://w3id.org/linkml/clinical-microschemas).
+license: MIT
+see_also:
+  - https://linkml.github.io/linkml-microschema-profile
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  schema: http://schema.org/
+default_range: string
+
+imports:
+  - linkml:types
+
+classes:
+
+  #────────────────────────────────────────────────────────────────
+  # METACLASSES: Define what makes a class a "Microschema"
+  #────────────────────────────────────────────────────────────────
+
+  MicroschemaDefinition:
+    abstract: true
+    description: >-
+      A metaclass for classes that conform to the Microschema profile.
+      Classes that instantiate this are designed for inline composition.
+    comments:
+      - Classes instantiating this SHOULD NOT have identifier slots
+      - Classes instantiating this SHOULD be used with inlined=true
+      - Classes instantiating this MAY compose other microschemas via attributes
+    annotations:
+      - must_not_have_id_slot: true
+      - must_be_inlined: true
+    slots:
+      - profile_version
+      - domain_of_use
+      - subject
+      - observation_type
+      - location
+      - temporality
+      - methodology
+      - observation_result
+
+  ValueMicroschemaDefinition:
+    abstract: true
+    comments:
+      - Classes instantiating this SHOULD NOT have identifier slots
+      - Classes instantiating this SHOULD be used with inlined=true
+      - Classes instantiating this MAY compose other microschemas via attributes
+    annotations:
+      - must_not_have_id_slot: true
+      - must_be_inlined: true
+    description: >-
+      A microschema representing a typed value with optional unit/system.
+      Examples: Quantity, Timepoint, CodedValue, Range. This is the range for
+      observation result
+
+  #────────────────────────────────────────────────────────────────
+  # VALUE MICROSCHEMAS: Leaf value types
+  #────────────────────────────────────────────────────────────────
+
+  Quantity:
+    instantiates:
+      - ValueMicroschemaDefinition
+    description: >-
+      A numerical value with unit
+    slots:
+      - quantity_value
+      - quantity_unit
+      - comparator
+
+  Timepoint:
+    instantiates:
+      - ValueMicroschemaDefinition
+    description: >-
+      A point in time, potentially relative
+    slots:
+      - datetime
+      - relative_to_event
+      - offset
+      - subject_age
+
+  TimeInterval:
+    instantiates:
+      - ValueMicroschemaDefinition
+    description: >-
+      A period between two timepoints
+    slots:
+      - interval_start
+      - interval_end
+      - duration
+
+  CodedValue:
+    instantiates:
+      - ValueMicroschemaDefinition
+    description: >-
+      A value from a controlled vocabulary
+    slots:
+      - code
+      - code_label
+      - code_system
+
+#────────────────────────────────────────────────────────────────
+# SLOTS
+#────────────────────────────────────────────────────────────────
+
+slots:
+  # Microschema profile slots
+  profile_version:
+    range: string
+    description: Version of microschema profile this conforms to
+
+  domain_of_use:
+    range: string
+    multivalued: true
+    description: Domains where this microschema is applicable
+
+  subject:
+    required: true
+    description: >-
+      Entity being measured, observed, or interviewed - person, animal, specimen, or
+      environmental material
+
+  observation_type:
+    required: true
+    description: >-
+      Question being asked, measurement being taken, quality being observed
+
+  location:
+    required: true
+    description: >-
+      Spatial metadata specifying where the observation was made - geolocation,
+      place name, site id, environment, or biome
+
+  temporality:
+    required: true
+    description: >-
+      Temporal metadata specifying when an observation was made. This can be relative
+      or absolute - datetime, age of person, season, or geologic era
+
+  methodology:
+    required: true
+    description: >-
+      Information about how an observation was made - method, instrument, reagent kit,
+      statistical modifier
+
+  observation_result:
+    required: true
+    range: ValueMicroschemaDefinition
+    description: >-
+      The outcome of the observation type - answer, value, result, determination
+
+  # Value microschema slots
+  quantity_value:
+    range: decimal
+    required: true
+    description: The numeric value
+
+  quantity_unit:
+    range: uriorcurie
+    required: true
+    slot_uri: schema:unitCode
+    description: Unit (UCUM, UO, QUDT, etc.)
+
+  comparator:
+    range: ComparatorEnum
+    description: Comparison operator (less than, greater than, etc.) or exact if null
+
+  datetime:
+    range: datetime
+    description: Absolute timestamp
+
+  relative_to_event:
+    range: uriorcurie
+    description: Event this is relative to
+
+  offset:
+    range: Quantity
+    inlined: true
+    description: Offset from event (e.g., "+3 days")
+
+  subject_age:
+    range: Quantity
+    inlined: true
+    description: Age of the subject at this timepoint (e.g., age when the event occurred)
+
+  interval_start:
+    range: Timepoint
+    inlined: true
+    description: Start of the interval
+
+  interval_end:
+    range: Timepoint
+    inlined: true
+    description: End of the interval
+
+  duration:
+    range: Quantity
+    inlined: true
+    description: Duration as alternative to start/end
+
+  code:
+    range: uriorcurie
+    required: true
+    description: The code value as a CURIE
+
+  code_label:
+    range: string
+    description: Human-readable label for the code
+
+  code_system:
+    range: uriorcurie
+    description: The code system URI
+
+#────────────────────────────────────────────────────────────────
+# ENUMS
+#────────────────────────────────────────────────────────────────
+
+enums:
+  ComparatorEnum:
+    description: Comparator for quantity values
+    permissible_values:
+      lt:
+        description: Less than
+      le:
+        description: Less than or equal to
+      ge:
+        description: Greater than or equal to
+      gt:
+        description: Greater than
+

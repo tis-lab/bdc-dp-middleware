@@ -57,7 +57,7 @@ class BdcDpCohortBuilderApplicationTests {
 
         JsonNode body = MAPPER.readTree(response.body());
         assertThat(body.path("status").asText()).isEqualTo("UP");
-        // Comes from spring.application.name in application.yaml.
+        // Comes from spring.application.name in application.properties.
         assertThat(body.path("service").asText())
                 .isEqualTo("bdc-data-portal-cohort-builder-service");
         assertThat(body.path("message").asText())

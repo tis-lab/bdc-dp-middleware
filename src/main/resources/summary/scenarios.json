@@ -1,0 +1,16 @@
+[
+  {
+    "filter": null,
+    "focus": [],
+    "file": "SYNTHETIC.SummaryResponse-overview.yaml"
+  },
+  {
+    "filter": {
+      "summaryId": "palette:measurement/FAST_GLUC_BLD"
+    },
+    "focus": [
+      "MONDO:0005148"
+    ],
+    "file": "SYNTHETIC.SummaryResponse-t2d.yaml"
+  }
+]

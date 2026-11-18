@@ -1,0 +1,77 @@
+id: https://w3id.org/tis-lab/study-palette/terms
+name: study_palette_terms
+title: Study Palette term graph
+description: >-
+  The terms summaries refer to, their hierarchy, and the links between them.
+  Built at ingestion and published with each release, so serving a summary
+  never calls a vocabulary service.
+license: MIT
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  palette: https://w3id.org/tis-lab/study-palette/
+  biolink: https://w3id.org/biolink/vocab/
+
+default_prefix: palette
+default_range: string
+
+imports:
+  - linkml:types
+
+classes:
+  Term:
+    description: A concept from a source vocabulary.
+    slots:
+      - curie
+      - label
+      - vocabulary
+      - parents
+
+  TermRelation:
+    description: A link between two terms outside their hierarchy, such as a disease and its biomarker.
+    slots:
+      - subject
+      - predicate
+      - object
+      - relation_source
+
+slots:
+  curie:
+    identifier: true
+    range: uriorcurie
+  label:
+    description: The label the owning vocabulary publishes.
+  vocabulary:
+    description: >-
+      The vocabulary that owns the term. Usually the CURIE's prefix, but an
+      OMOP concept id wraps a term from another vocabulary, so OMOP:4156660 is
+      SNOMED's.
+  parents:
+    description: Direct parents in the owning ontology. Children are the inverse, so are not stored.
+    range: Term
+    multivalued: true
+    inlined: false
+  subject:
+    range: Term
+    inlined: false
+    required: true
+  predicate:
+    description: A Biolink predicate, e.g. biolink:has_biomarker.
+    range: uriorcurie
+    required: true
+  object:
+    range: Term
+    inlined: false
+    required: true
+  relation_source:
+    description: Where the link comes from, so a curated link never passes for a published one.
+    range: RelationSourceEnum
+    required: true
+
+enums:
+  RelationSourceEnum:
+    permissible_values:
+      KG:
+        description: Published in the knowledge graph.
+      CURATED:
+        description: Asserted by this project.

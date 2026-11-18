@@ -54,7 +54,7 @@ objects:
                 - name: TZ
                   value: America/New_York
                 - name: SPRING_CONFIG_LOCATION
-                  value: /var/${APPNAME}/config/,file:/var/${APPNAME}/config/secret/sensitive.properties
+                  value: /var/${APPNAME}/config/
                 - name: _JAVA_OPTIONS
                   valueFrom:
                     secretKeyRef:
@@ -77,28 +77,25 @@ objects:
                       fieldPath: 'metadata.labels[''tags.datadoghq.com/version'']'
                 - name: DD_AGENT_HOST
                   value: datadog-agent.datadog.svc.cluster.local
+                - name: GRAPHIQL_ENABLED
+                  value: "${GRAPHIQL_ENABLED}"
 
               ports:
-                  containerPort: "${{CONTAINER_PORT}}"
+                - containerPort: "${{CONTAINER_PORT}}"
 
               image: ${IMAGE_REGISTRY_URL}/${REGISTRY_NAMESPACE}/${APPNAME}:${VERSION_NUM}-${ENV}
               imagePullPolicy: Always
-              dnsPolicy: ClusterFirst
               volumeMounts:
                 - name: config-volume
                   mountPath: /var/${APPNAME}/config/
-                - name: secret-volume
-                  mountPath: /var/${APPNAME}/config/secret/
                 - name: nih-ca-certs
                   readOnly: true
                   mountPath: /nihchaincerts
+          dnsPolicy: ClusterFirst
           volumes:
             - name: config-volume
               configMap:
                 name: ${APPNAME}-${VERSION_NUM}-${ENV}
-            - name: secret-volume
-              secret:
-                secretName: ${APPNAME}-${VERSION_NUM}-${ENV}
             - name: nih-ca-certs
               secret:
                 secretName: nih-ca-certs
@@ -128,6 +125,26 @@ objects:
         info.app.environment=${ENV}
         logging.level.root=INFO
         logging.level.gov.nih.nhlbi.bdc=${LOGGING_LEVEL}
+        
+        spring.graphql.http.path=/api/cb/open/query
+        spring.graphql.schema.locations=classpath:graphql/core/
+        spring.graphql.graphiql.enabled=${GRAPHIQL_ENABLED:false}
+        spring.graphql.graphiql.path=/cb/graphiql
+  
+        spring.graphql.cors.allowed-origins=${FRONTEND_ORIGINS:}
+        spring.graphql.cors.allowed-origin-patterns=${FRONTEND_ORIGIN_PATTERNS:}
+        spring.graphql.cors.allowed-methods=POST
+        spring.graphql.cors.allowed-headers=Content-Type
+  
+        monarch.base-url=${MONARCH_BASE_URL:https://api.monarchinitiative.org/v3/api}
+        monarch.connect-timeout=${MONARCH_CONNECT_TIMEOUT:5s}
+        monarch.read-timeout=${MONARCH_READ_TIMEOUT:15s}
+  
+        harmonized.enabled=${HARMONIZED_ENABLED:true}
+        harmonized.index=${HARMONIZED_INDEX:classpath:harmonized/catalogs/manifest.json}
+        harmonized.max-matches=${HARMONIZED_MAX_MATCHES:25}
+  
+        summary.scenarios=classpath:summary/scenarios.json
     #End Config Map
 
   # ---------------------------------------------------------------------
@@ -186,12 +203,12 @@ parameters:
   - name: ENV
     description: application environment
     required: true
-    value: dev
+    value: "dev"
 
   - name: APPNAME
     description: application name and module name in OpenShift
     required: true
-    value: bdc-data-portal-cohort-builder-service
+    value: "bdc-data-portal-cohort-builder-service"
 
   - name: VERSION_NUM
     description: The application version number, use number and '-'
@@ -221,7 +238,7 @@ parameters:
   - name: IMAGE_REGISTRY_URL
     description: registry url for pulling the image from the image registry
     required: true
-    value: nonprodnhlbi.azurecr.io
+    value: "nonprodnhlbi.azurecr.io"
 
   - name: NAMESPACE
     description: application target namespace / openshift project name
@@ -236,4 +253,8 @@ parameters:
   - name: LOGGING_LEVEL
     description: Log level for the gov.nih.nhlbi.bdc package
     required: true
-    value: INFO
+    value: "INFO"
+
+  - name: GRAPHIQL_ENABLED
+    description: Enable the GraphiQL interface
+    value: "false"

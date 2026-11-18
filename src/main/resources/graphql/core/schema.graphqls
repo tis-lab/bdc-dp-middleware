@@ -1,0 +1,210 @@
+"""Read-only middleware API. All business operations use POST /api/cb/open/query."""
+type Query {
+  """Return ranked candidates from Monarch."""
+  terms(
+    """Trimmed search text, 1-200 Unicode characters."""
+    query: String!
+    """Page size: 1-100. A value outside that range is rejected, not clamped."""
+    limit: Int! = 20
+    """Zero-based offset: 0-10000."""
+    offset: Int! = 0
+  ): TermResults
+
+  """
+  Type-ahead concept suggestions from Monarch; no local index results or BDC coverage.
+
+  No limit or offset: the upstream autocomplete route accepts only the query, so the suggestion
+  list is as long as it chooses to make it and cannot be sized or paged. For a longer, paginated
+  list use `terms`.
+  """
+  autocomplete(
+    """Partially typed text, 1-200 Unicode characters."""
+    query: String!
+  ): AutocompleteResults
+
+  """Process status; does not load YAML or contact Monarch."""
+  health: Health!
+}
+"""One page, in Monarch's relevance order. An empty page is a successful result."""
+type TermResults {
+  items: [SearchItem!]!
+  """Local concept matches plus the provider's concept total, so it counts what `items` counts."""
+  total: Int!
+  """The page size actually applied."""
+  limit: Int!
+  """The offset actually applied."""
+  offset: Int!
+  """Whether a further page exists."""
+  hasMore: Boolean!
+  """
+  How many of `total` are local concept matches. Lets you label the pinned section without
+  counting `__typename` yourself.
+  """
+  bdcConceptCount: Int!
+}
+"""A biomedical concept from the knowledge graph, with whatever BDC holds for it."""
+type Term {
+  """The concept's CURIE, e.g. MONDO:0005044. The only guaranteed field, the value you carry
+  forward when the user selects, and the key every BDC annotation is joined on."""
+  id: ID!
+  """Primary name from the knowledge graph."""
+  label: String!
+  """Biolink category, e.g. biolink:Disease. The main axis for telling a disease from a phenotype."""
+  category: String!
+  """Null when the knowledge graph holds no description. Null means absent, not empty."""
+  description: String
+  """Alternative names. Null means not supplied; [] means known to have none."""
+  synonyms: [String!]
+  """`label (id)`, computed so every surface identifies a concept identically."""
+  displayLabel: String!
+  """What BDC has harmonized for this concept. Never null; zero when nothing is harmonized."""
+  bdc: BdcCoverage!
+}
+
+"""
+Type-ahead suggestions: Monarch's autocomplete list, in its own order, with nothing added.
+"""
+type AutocompleteResults {
+  """The suggestions, in provider order."""
+  items: [Suggestion!]!
+  """The provider's reported total when it supplies one, otherwise the number returned."""
+  total: Int!
+}
+
+type Suggestion {
+  """The concept's CURIE. Send this to `terms` when the user picks a suggestion."""
+  id: ID!
+  """Primary name from the knowledge graph."""
+  label: String!
+  """Biolink category, e.g. biolink:Disease."""
+  category: String!
+  """Null when the knowledge graph holds no description."""
+  description: String
+  """Null means not supplied; [] means known to have none."""
+  synonyms: [String!]
+  """`label (id)`, composed from the provider's own fields so every surface matches."""
+  displayLabel: String!
+}
+
+"""
+An entry in a `terms` result list: either a local concept with mapping coverage or a knowledge-graph concept.
+
+These are two source projections of concepts: local mapping coverage and provider metadata.
+They may refer to the same CURIE; this prototype does not deduplicate across sources.
+"""
+union SearchItem = BdcConcept | Term
+
+
+"""
+What BDC has harmonized for one concept.
+
+Describes harmonization specifications, not participant data: three studies means three studies
+wrote a rule for this concept, not that any dataset is accessible. Zero also means zero when the
+index is switched off, so do not render it as "BDC has nothing".
+"""
+type BdcCoverage {
+  """Distinct studies whose specifications assign this exact concept."""
+  studyCount: Int!
+  """Those studies by name, e.g. ["ARIC", "FHS"]."""
+  studies: [String!]!
+  """
+  Specification file-stem aliases that assign this concept. Not source-variable accessions.
+  """
+  variableNames: [String!]!
+}
+
+"""Vocabulary from linkml/bdc-variable-library BdchmTypeEnum; lowercase names are intentional."""
+enum BdchmTypeEnum {
+  observation
+  condition
+  procedure
+  exposure
+  drugexposure
+}
+
+"""
+A concept with transformation-specification coverage, not an IntegratedVariable instance.
+Interim concept-first representation, not a serialization of the DMC variable-library model.
+"""
+type BdcConcept {
+  """The CURIE, e.g. MONDO:0005044. The key, and what joins to a knowledge-graph concept."""
+  conceptType: ID!
+  """Verified concept label when supplied; never inferred from specification variable labels."""
+  conceptLabel: String
+  """`conceptLabel` when present, otherwise the CURIE. Never null, and never a bare file name."""
+  displayLabel: String!
+  """LinkML category; null when source classes are unknown or disagree. See bdchmClasses for exact classes."""
+  bdchmType: BdchmTypeEnum
+  """All exact BDCHM classes assigning this concept; no majority selection."""
+  bdchmClasses: [String!]!
+  """Explicit study/class/slot/file associations from the source specifications."""
+  sourceMappings: [BdcSourceMapping!]!
+  """How many studies assign this concept."""
+  studyCount: Int!
+  """
+  Those studies by name. Only the studies whose own specification assigns this concept - not
+  every study that happens to have a file of the same name.
+  """
+  studies: [String!]!
+  """
+  The variables that carry it, as provenance back to the transformation specs. Names here are
+  spec file names.
+  """
+  variables: [BdcCarrier!]!
+  """Authoritative integrated-variable identities and study-specific source mappings from VarLib."""
+  integratedVariables: [BdcIntegratedVariable!]!
+}
+
+"""Legacy specification-alias grouping; not a per-study variable or integrated-variable identity."""
+type BdcCarrier {
+  """The transformation spec file name, e.g. `hyperten`. Provenance, not an identity."""
+  variableName: String!
+  """Specification-alias label from an explicitly supplied TSV; not an ontology label. Null when absent."""
+  variableLabel: String
+  """
+  Only the studies where this specification alias assigns this exact concept.
+  """
+  studies: [String!]!
+}
+
+
+"""A specification assignment, not a participant record or source-variable accession."""
+type BdcSourceMapping {
+  study: String!
+  bdchmClass: String!
+  conceptSlot: String!
+  sourceFile: String!
+}
+
+type Health { service: String!, status: String! }
+
+"""A distinct IntegratedVariable; multiple entries can share the concept on a BdcConcept card."""
+type BdcIntegratedVariable {
+  id: ID!
+  label: String!
+  description: String
+  bdchmType: BdchmTypeEnum!
+  studyMappings: [BdcStudyVariableMapping!]!
+}
+type BdcStudyVariableMapping {
+  compoundVariableId: ID!
+  label: String!
+  description: String
+  studyId: ID!
+  studyName: String!
+  sourceVariables: [BdcSourceVariable!]!
+}
+type BdcSourceVariable {
+  id: ID!
+  variableName: String!
+  """Authoritative dbGaP description when supplied; not the catalog's context-specific usage description."""
+  description: String
+  dataType: String
+  unit: String
+  datasetId: ID
+  """True when the producer supplied an accession as the name because enrichment was unavailable."""
+  nameIsAccession: Boolean!
+  """True for a value/status input; false for supporting inputs such as subject ID or age."""
+  valueVariable: Boolean!
+  microschemaSlots: [String!]!
+}

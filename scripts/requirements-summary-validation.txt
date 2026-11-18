@@ -1,0 +1,4 @@
+linkml==1.11.1
+jsonschema==4.25.1
+PyYAML==6.0.3
+-r requirements-summary-checks.txt

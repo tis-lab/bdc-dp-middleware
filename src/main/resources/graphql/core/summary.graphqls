@@ -1,0 +1,176 @@
+"""Nonnegative integral count, serialized as a JSON number; not limited to GraphQL Int's 32 bits."""
+scalar Count
+"""Decimal boundary serialized as a JSON number."""
+scalar Decimal
+
+extend type Query {
+  """Fixed synthetic YAML scenarios. Omit filter and focus for the page-load example. Unsupported selections return BAD_USER_INPUT."""
+  summary(filter: SummaryFilterInput, focus: [ID!]): SummaryResponse
+}
+
+"""Request shape retained for API compatibility. Only the exact summaryId scenarios
+in the packaged manifest are available. Condition and AND/OR requests are rejected.
+"""
+input SummaryFilterInput {
+  condition: SummaryConditionInput
+  summaryId: ID
+  and: [SummaryFilterInput!]
+  or: [SummaryFilterInput!]
+}
+
+"""
+Condition input shape retained for future integration. Arbitrary condition selection is unavailable in this flat-file distribution.
+The concept is matched as supplied; no ontology expansion or cross-class lookup.
+EXCLUDE means an explicit ABSENT record, never a missing record or Boolean NOT.
+"""
+input SummaryConditionInput {
+  concept: ID!
+  selection: SummaryConditionSelection
+  status: SummaryConditionStatus
+  relationship: SummaryConditionRelationship = ONESELF
+}
+enum SummaryConditionSelection { INCLUDE EXCLUDE }
+enum SummaryConditionStatus { PRESENT ABSENT }
+enum SummaryConditionRelationship {
+  ONESELF NATURAL_PARENT NATURAL_FATHER NATURAL_MOTHER NATURAL_SIBLING
+  NATURAL_BROTHER NATURAL_SISTER NATURAL_CHILD BLOOD_RELATIVE
+}
+
+enum SummarizedSlot { sex race ethnicity age_at_index }
+enum RelationSource { KG CURATED }
+
+type SummaryResponse {
+  release: String!
+  seed: ID @deprecated(reason: "Use focus. Legacy seed always returns null.")
+  """Concepts requested for description, not participant selection. Empty when omitted.
+  The focus must match a packaged scenario; no related-term expansion.
+  """
+  focus: [ID!]!
+  """Summary IDs required in every branch. Does not serialize the full AND/OR request; retain that request client-side."""
+  filter: [String!]!
+  min_count: Count!
+  terms: [SummaryTerm!]!
+  relations: [TermRelation!]!
+  research_studies: [ResearchStudy!]!
+  studies: [StudySummary!]!
+}
+
+type SummaryTerm {
+  curie: ID!
+  label: String
+  vocabulary: String
+  parents: [String!]!
+}
+
+type TermRelation {
+  subject: ID!
+  predicate: String!
+  object: ID!
+  relation_source: RelationSource!
+}
+
+type ResearchStudy {
+  id: ID!
+  name: String
+  research_project_type: String
+  program: String
+  principal_investigator: [String!]!
+}
+
+type StudySummary {
+  research_study: ID!
+  """Precomputed participant count from the selected synthetic scenario."""
+  participant_count: Count!
+  """Aggregate age-at-index bins."""
+  participants: [ParticipantSummary!]!
+  demographics: [DemographySummary!]!
+  conditions: [ConditionSummary!]!
+  procedures: [ProcedureSummary!]!
+  drug_exposures: [DrugExposureSummary!]!
+  measurements: [MeasurementObservationSummary!]!
+}
+
+type ParticipantSummary {
+  id: ID!
+  summarized_slot: SummarizedSlot!
+  """Precomputed participant count from the selected synthetic scenario."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Lower bin bound, inclusive. Null means open-ended."""
+  bin_low: Decimal
+  """Upper bin bound, exclusive. Null means open-ended."""
+  bin_high: Decimal
+  bin_unit: String
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
+  values: [ParticipantSummary!]!
+}
+
+type DemographySummary {
+  id: ID!
+  summarized_slot: SummarizedSlot!
+  """Precomputed participant count from the selected synthetic scenario."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  sex: String
+  race: [String!]!
+  ethnicity: String
+  values: [DemographySummary!]!
+}
+
+type ConditionSummary {
+  id: ID!
+  condition_concept: ID
+  condition_status: String
+  relationship_to_participant: String
+  """Precomputed participant count from the selected synthetic scenario."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
+  values: [ConditionSummary!]!
+}
+
+type ProcedureSummary {
+  id: ID!
+  procedure_concept: ID
+  procedure_status: String
+  """Precomputed participant count from the selected synthetic scenario."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
+  values: [ProcedureSummary!]!
+}
+
+type DrugExposureSummary {
+  id: ID!
+  drug_concept: ID
+  """Precomputed participant count from the selected synthetic scenario."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
+  values: [DrugExposureSummary!]!
+}
+
+type MeasurementObservationSummary {
+  id: ID!
+  observation_type: String
+  """Precomputed participant count from the selected synthetic scenario."""
+  participant_count: Count!
+  """Optional aggregate number of observations, not a list of observations."""
+  record_count: Count
+  """Lower bin bound, inclusive. Null means open-ended."""
+  bin_low: Decimal
+  """Upper bin bound, exclusive. Null means open-ended."""
+  bin_high: Decimal
+  bin_unit: String
+  """Laboratory reference-range lower bound. This is not a bin boundary."""
+  range_low: Decimal
+  """Laboratory reference-range upper bound. This is not a bin boundary."""
+  range_high: Decimal
+  """Recursive breakdown of this summary. Omitted small cells are not zero."""
+  values: [MeasurementObservationSummary!]!
+}
