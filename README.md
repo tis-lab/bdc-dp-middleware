@@ -31,6 +31,13 @@ Invoke-RestMethod http://localhost:8080/actuator/health
 
 Then open <http://localhost:8080/cb/graphiql>
 
+## Load JSON objects into PostgreSQL
+
+The jar can also load files of JSON objects (YAML, JSON, NDJSON) into a PostgreSQL
+`jsonb` table in a database and as a user you name:
+`java -jar target/app.jar load --db.name=DATABASE --db.user=USER <file-or-dir>`. See
+[README-LOAD.md](README-LOAD.md) for options, behavior and troubleshooting.
+
 ## Routing
 
 The service name is `bdc-data-portal-cohort-builder-service`. The cohort builder UI
