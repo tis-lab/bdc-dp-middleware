@@ -1,3 +1,10 @@
+# Preserve upstream DDL whitespace and portable test bootstrap line endings.
+src/test/resources/postgres/hm_index.sql -whitespace
+src/test/resources/postgres/metadata.sql -whitespace
+src/test/resources/postgres/*.sh text eol=lf
+src/test/resources/postgres/*.sql text eol=lf
+*.sh text eol=lf
+
 
 # Use consistent line endings for catalog and schema files.
 schema/portal-varlib/** text eol=lf
