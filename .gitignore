@@ -44,3 +44,6 @@ __pycache__/
 
 # Generated coverage reports
 testResults/
+
+# Local catalog validation environment
+.venv-varlib/

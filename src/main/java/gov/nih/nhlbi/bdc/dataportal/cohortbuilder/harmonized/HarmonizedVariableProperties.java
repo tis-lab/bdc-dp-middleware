@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 public record HarmonizedVariableProperties(
 
         @DefaultValue("true") boolean enabled,
-        @DefaultValue("classpath:harmonized/harmonized-index.json") String index,
+        @DefaultValue("classpath:harmonized/catalogs/manifest.json") String index,
         @DefaultValue("25") int maxMatches) {
 
     public HarmonizedVariableProperties {

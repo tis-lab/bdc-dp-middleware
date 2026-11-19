@@ -10,13 +10,28 @@ public record BdcConcept(String conceptType,
                          List<String> bdchmClasses,
                          List<SourceMapping> sourceMappings,
                          List<String> studies,
-                         List<BdcCarrier> variables) implements SearchItem {
+                         List<BdcCarrier> variables,
+                         List<IntegratedVariable> integratedVariables) implements SearchItem {
 
     /** Compatibility for callers constructing a concept without exact source metadata. */
     public BdcConcept(String conceptType, String conceptLabel, BdchmTypeEnum bdchmType,
                       List<String> studies, List<BdcCarrier> variables) {
-        this(conceptType, conceptLabel, bdchmType, List.of(), List.of(), studies, variables);
+        this(conceptType, conceptLabel, bdchmType, List.of(), List.of(), studies, variables, List.of());
     }
+
+    public BdcConcept(String conceptType, String conceptLabel, BdchmTypeEnum bdchmType,
+                      List<String> classes, List<SourceMapping> mappings,
+                      List<String> studies, List<BdcCarrier> variables) {
+        this(conceptType, conceptLabel, bdchmType, classes, mappings, studies, variables, List.of());
+    }
+
+    public record IntegratedVariable(String id, String label, String description,
+                                     BdchmTypeEnum bdchmType, List<StudyMapping> studyMappings) {}
+    public record StudyMapping(String compoundVariableId, String label, String description,
+                               String studyId, String studyName, List<SourceVariable> sourceVariables) {}
+    public record SourceVariable(String id, String variableName, String description, String dataType,
+                                 String unit, String datasetId, boolean nameIsAccession,
+                                 boolean valueVariable, List<String> microschemaSlots) {}
 
     public record SourceMapping(String study, String bdchmClass,
                                 String conceptSlot, String sourceFile) {}

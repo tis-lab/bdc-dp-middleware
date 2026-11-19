@@ -17,7 +17,11 @@ class HarmonizedSchemaTest {
     @Test
     void exposesTypedCategoriesAndSafeConceptLabels() throws Exception {
         var concept = new BdcConcept("EXAMPLE:1", null, BdchmTypeEnum.condition,
-                List.of("Condition"), List.of(), List.of("TEST"), List.of());
+                List.of("Condition"), List.of(), List.of("TEST"), List.of(),
+                List.of(new BdcConcept.IntegratedVariable("bdchm:Condition/EXAMPLE:1", "Example variable", null,
+                        BdchmTypeEnum.condition, List.of(new BdcConcept.StudyMapping("hv:test#0", "Test", null,
+                        "bdchm:Study/phs000001", "TEST", List.of(new BdcConcept.SourceVariable("dbgap:phv00000001",
+                        "BP", "Blood pressure", "integer", "mmHg", "pht000001", false, true, List.of("measurement_value"))))))));
         try (var reader = new InputStreamReader(Objects.requireNonNull(
                 getClass().getResourceAsStream("/graphql/core/schema.graphqls")), StandardCharsets.UTF_8)) {
             var registry = new SchemaParser().parse(reader);
@@ -31,7 +35,7 @@ class HarmonizedSchemaTest {
                     .makeExecutableSchema(registry, wiring)).build();
             var result = graphql.execute("""
                 { terms(query: "EXAMPLE:1") {
-                    items { ... on BdcConcept { conceptType conceptLabel displayLabel bdchmType bdchmClasses } }
+                    items { ... on BdcConcept { conceptType conceptLabel displayLabel bdchmType bdchmClasses integratedVariables { id label studyMappings { studyId sourceVariables { id variableName nameIsAccession valueVariable } } } } }
                 } }
                 """);
             assertThat(result.getErrors()).isEmpty();

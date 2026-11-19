@@ -39,7 +39,7 @@ class TermServiceMergeTest {
     private static TermService service(MonarchClient monarch) {
         return new TermService(monarch, HarmonizedVariableLibrary.bundled(
                 new HarmonizedVariableProperties(true,
-                        "classpath:harmonized/harmonized-index.json", 25)));
+                        "classpath:harmonized/catalogs/manifest.json", 5)));
     }
 
     private static MonarchClient searching(ConceptPage page) {
