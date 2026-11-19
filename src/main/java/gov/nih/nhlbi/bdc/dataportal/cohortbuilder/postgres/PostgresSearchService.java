@@ -51,14 +51,14 @@ public class PostgresSearchService {
     }
     private void checkRelease(Connection connection) throws SQLException {
         Set<String> passed = new HashSet<>();
-        rows(connection, "SELECT check_name, passed FROM counting.release_check WHERE release=?", List.of(config.release()), r -> {
+        rows(connection, "SELECT check_name, passed FROM hm.release_check WHERE release=?", List.of(config.release()), r -> {
             if (!r.getBoolean("passed")) throw new ApiException(UPSTREAM_UNAVAILABLE, "PostgreSQL release has failed validation checks.");
             passed.add(r.getString("check_name"));
         });
         if (!passed.containsAll(CHECKS)) throw new ApiException(UPSTREAM_UNAVAILABLE, "PostgreSQL release validation is incomplete.");
     }
     private SummaryResponse aggregate(Connection c, PostgresFilter.Compiled filter, List<String> focus) throws SQLException {
-        String cohort = "WITH selected AS (SELECT p.release,p.ordinal,p.research_study_id FROM counting.participant_ordinal p WHERE p.release=? AND " + filter.sql() + ") ";
+        String cohort = "WITH selected AS (SELECT p.release,p.ordinal,p.research_study_id FROM hm.participant_ordinal p WHERE p.release=? AND " + filter.sql() + ") ";
         List<Object> args = new ArrayList<>(); args.add(config.release()); args.addAll(filter.parameters());
         Map<String,Study> studies = new TreeMap<>();
         rows(c, cohort + "SELECT research_study_id, count(*) AS n FROM selected GROUP BY research_study_id ORDER BY research_study_id", args, r -> {
@@ -70,7 +70,7 @@ public class PostgresSearchService {
         String focused = focus.isEmpty() ? "" : " AND e.concept IN (" + String.join(",", Collections.nCopies(focus.size(), "?")) + ")";
         List<Object> conditionArgs = new ArrayList<>(args); conditionArgs.addAll(focus);
         rows(c, cohort + "SELECT s.research_study_id,e.concept,e.relationship,e.status, grouping(e.status) AS root, count(DISTINCT s.ordinal) AS n "
-                + "FROM selected s JOIN counting.event e ON e.release=s.release AND e.ordinal=s.ordinal WHERE e.source_class='Condition'" + focused
+                + "FROM selected s JOIN hm.event e ON e.release=s.release AND e.ordinal=s.ordinal WHERE e.source_class='Condition'" + focused
                 + " GROUP BY GROUPING SETS ((s.research_study_id,e.concept),(s.research_study_id,e.concept,e.relationship,e.status))"
                 + " ORDER BY s.research_study_id,e.concept,root DESC,e.relationship,e.status", conditionArgs, r -> {
             Study study = studies.get(r.getString("research_study_id")); if (study == null) return;
@@ -87,7 +87,7 @@ public class PostgresSearchService {
         for (String slot : List.of("sex", "race", "ethnicity")) {
             String values = slot.equals("race") ? "unnest(a.race)" : "unnest(ARRAY[a."+slot+"])";
             rows(c, cohort + "SELECT s.research_study_id,v.value,grouping(v.value) AS root,count(DISTINCT s.ordinal) AS n "
-                    + "FROM selected s JOIN counting.participant_attribute a ON a.release=s.release AND a.ordinal=s.ordinal "
+                    + "FROM selected s JOIN hm.participant_attribute a ON a.release=s.release AND a.ordinal=s.ordinal "
                     + "CROSS JOIN LATERAL " + values + " AS v(value) WHERE v.value IS NOT NULL "
                     + "GROUP BY GROUPING SETS ((s.research_study_id),(s.research_study_id,v.value)) ORDER BY s.research_study_id,root DESC,v.value", args, r -> {
                 Study study=studies.get(r.getString("research_study_id")); if (study==null) return;
@@ -111,7 +111,7 @@ public class PostgresSearchService {
                 + "count(*) FILTER (WHERE a.age_at_index_days>=16437 AND a.age_at_index_days<20089) AS b0,"
                 + "count(*) FILTER (WHERE a.age_at_index_days>=20089 AND a.age_at_index_days<23742) AS b1,"
                 + "count(*) FILTER (WHERE a.age_at_index_days>=23742 AND a.age_at_index_days<29220) AS b2 "
-                + "FROM selected s LEFT JOIN counting.participant_attribute a ON a.release=s.release AND a.ordinal=s.ordinal GROUP BY s.research_study_id",args,r -> {
+                + "FROM selected s LEFT JOIN hm.participant_attribute a ON a.release=s.release AND a.ordinal=s.ordinal GROUP BY s.research_study_id",args,r -> {
             Study study=studies.get(r.getString("research_study_id")); if(study==null) return;
             if(r.getLong("invalid")!=0) throw invalid("Negative index age.");
             BigInteger n=bounded(count(r,"n"),study.total); if(!visible(n)) return;

@@ -28,6 +28,32 @@ class PostgresSearchIntegrationTest {
         Path dir=Path.of("target/postgres-contract"); Files.createDirectories(dir);
         Files.writeString(dir.resolve(name+".json"),json.writeValueAsString(response));
     }
+    @Test void usesHmSchemaWithRestrictedPublicRole() throws Exception {
+        try (Connection connection=DriverManager.getConnection(settings(1).url(),"dp_search_test","test-only-password");
+             var statement=connection.createStatement()) {
+            try (var result=statement.executeQuery("SELECT current_database(), to_regclass('counting.event') IS NULL")) {
+                assertThat(result.next()).isTrue();
+                assertThat(result.getString(1)).isEqualTo("bdc_dp_hm_index");
+                assertThat(result.getBoolean(2)).isTrue();
+            }
+            for (String table:List.of("participant_ordinal","participant_attribute","event","release_check")) {
+                try (var result=statement.executeQuery("SELECT has_table_privilege('api_public','hm."+table+"','SELECT'), "
+                        +"has_table_privilege(current_user,'hm."+table+"','SELECT')")) {
+                    assertThat(result.next()).isTrue();
+                    assertThat(result.getBoolean(1)).isFalse();
+                    assertThat(result.getBoolean(2)).isTrue();
+                }
+            }
+            try (var result=statement.executeQuery("SELECT has_function_privilege('api_public','hm.create_release_partitions(text)','EXECUTE'), "
+                    +"has_function_privilege('rebuild_job','hm.create_release_partitions(text)','EXECUTE'), "
+                    +"(SELECT pg_get_userbyid(relowner) FROM pg_class WHERE oid='hm.event'::regclass)")) {
+                assertThat(result.next()).isTrue();
+                assertThat(result.getBoolean(1)).isFalse();
+                assertThat(result.getBoolean(2)).isTrue();
+                assertThat(result.getString(3)).isEqualTo("bdc_dp_owner");
+            }
+        }
+    }
     @Test void queriesRealTablesAndServesGraphQlWithoutElasticsearch() throws Exception {
         var service=new PostgresSearchService(settings(1));
         var page=service.search(null,null);
@@ -69,7 +95,7 @@ class PostgresSearchIntegrationTest {
         var smallLimit=new PostgresProperties(true,true,settings(1).url(),"dp_search_test","test-only-password","pg-test",1,15,1);
         assertThatThrownBy(()->new PostgresSearchService(smallLimit).search(null,null)).hasMessageContaining("exceeds configured limit");
         try(Connection connection=DriverManager.getConnection(settings(1).url(),"dp_search_test","test-only-password")) {
-            assertThatThrownBy(()->connection.createStatement().execute("DELETE FROM counting.event"))
+            assertThatThrownBy(()->connection.createStatement().execute("DELETE FROM hm.event"))
                     .isInstanceOf(SQLException.class);
         }
         try(var app=SpringApplication.run(BdcDpCohortBuilderApplication.class,

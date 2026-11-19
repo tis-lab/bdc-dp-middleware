@@ -78,7 +78,7 @@ final class PostgresFilter {
         for (String part : parts) if (part.isBlank() || part.length() > 512) throw bad("Invalid summary ID component.");
         List<Object> args = new ArrayList<>(); String sql;
         if (parts[0].equals("condition") && (parts.length == 2 || parts.length == 4)) {
-            sql = "EXISTS (SELECT 1 FROM counting.event e WHERE e.release=p.release AND e.ordinal=p.ordinal AND e.source_class='Condition' AND e.concept=?";
+            sql = "EXISTS (SELECT 1 FROM hm.event e WHERE e.release=p.release AND e.ordinal=p.ordinal AND e.source_class='Condition' AND e.concept=?";
             args.add(parts[1]);
             if (parts.length == 4) { sql += " AND e.relationship=? AND e.status=?"; args.add(parts[2]); args.add(parts[3]); }
             sql += ")";
@@ -86,7 +86,7 @@ final class PostgresFilter {
                 && Set.of("sex", "race", "ethnicity").contains(parts[1])) {
             // Only these three allowlisted identifiers may enter SQL text.
             String slot = parts[1];
-            sql = "EXISTS (SELECT 1 FROM counting.participant_attribute a WHERE a.release=p.release AND a.ordinal=p.ordinal AND ";
+            sql = "EXISTS (SELECT 1 FROM hm.participant_attribute a WHERE a.release=p.release AND a.ordinal=p.ordinal AND ";
             if (parts.length == 2) sql += slot.equals("race") ? "cardinality(a.race)>0" : "a."+slot+" IS NOT NULL";
             else { sql += slot.equals("race") ? "? = ANY(a.race)" : "a."+slot+"=?"; args.add(parts[2]); }
             sql += ")";

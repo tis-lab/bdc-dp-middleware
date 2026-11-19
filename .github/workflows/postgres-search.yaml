@@ -16,16 +16,16 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ci-admin-only
-          POSTGRES_DB: postgres_search_test
+          POSTGRES_DB: bdc_dp_hm_index
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d postgres_search_test"
+          --health-cmd "pg_isready -U postgres -d bdc_dp_hm_index"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 12
     env:
-      PG_TEST_URL: jdbc:postgresql://localhost:5432/postgres_search_test
+      PG_TEST_URL: jdbc:postgresql://localhost:5432/bdc_dp_hm_index
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -42,9 +42,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y postgresql-client
-          psql -h localhost -U postgres -d postgres_search_test -v ON_ERROR_STOP=1 -f src/test/resources/postgres/roles.sql
-          psql -h localhost -U postgres -d postgres_search_test -v ON_ERROR_STOP=1 -f src/test/resources/postgres/counting.sql
-          psql -h localhost -U postgres -d postgres_search_test -v ON_ERROR_STOP=1 -f src/test/resources/postgres/fixture.sql
+          psql -h localhost -U postgres -d bdc_dp_hm_index -v ON_ERROR_STOP=1 -f src/test/resources/postgres/bootstrap.sql
       - name: Run existing tests and actual PostgreSQL integration
         run: mvn --batch-mode clean verify
       - name: Validate PostgreSQL responses using summary.yaml

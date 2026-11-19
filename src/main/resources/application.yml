@@ -64,7 +64,6 @@ info:
     name: bdc-data-portal-cohort-builder-service
     environment: ${ENV}
 
-# Independent PostgreSQL prototype. Existing Elasticsearch settings are unchanged.
 postgres-search:
   enabled: ${POSTGRES_SEARCH_ENABLED:false}
   synthetic-data-confirmed: ${POSTGRES_SEARCH_SYNTHETIC_DATA_CONFIRMED:false}

@@ -1,2 +1,6 @@
-# Preserve the unmodified upstream SQL fixture, including its whitespace.
-src/test/resources/postgres/counting.sql -whitespace
+# Preserve upstream DDL whitespace and portable test bootstrap line endings.
+src/test/resources/postgres/hm_index.sql -whitespace
+src/test/resources/postgres/metadata.sql -whitespace
+src/test/resources/postgres/*.sh text eol=lf
+src/test/resources/postgres/*.sql text eol=lf
+*.sh text eol=lf
