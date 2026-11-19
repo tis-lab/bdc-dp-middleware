@@ -4,3 +4,10 @@ src/test/resources/postgres/metadata.sql -whitespace
 src/test/resources/postgres/*.sh text eol=lf
 src/test/resources/postgres/*.sql text eol=lf
 *.sh text eol=lf
+
+
+# Use consistent line endings for catalog and schema files.
+schema/portal-varlib/** text eol=lf
+src/main/resources/harmonized/catalogs/*.json text eol=lf
+# Preserve whitespace in vendored upstream files.
+schema/portal-varlib/vendor/** -whitespace

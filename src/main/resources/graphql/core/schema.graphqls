@@ -160,6 +160,8 @@ type BdcConcept {
   spec file names.
   """
   variables: [BdcCarrier!]!
+  """Authoritative integrated-variable identities and study-specific source mappings from VarLib."""
+  integratedVariables: [BdcIntegratedVariable!]!
 }
 
 """Legacy specification-alias grouping; not a per-study variable or integrated-variable identity."""
@@ -184,3 +186,34 @@ type BdcSourceMapping {
 }
 
 type Health { service: String!, status: String! }
+
+"""A distinct IntegratedVariable; multiple entries can share the concept on a BdcConcept card."""
+type BdcIntegratedVariable {
+  id: ID!
+  label: String!
+  description: String
+  bdchmType: BdchmTypeEnum!
+  studyMappings: [BdcStudyVariableMapping!]!
+}
+type BdcStudyVariableMapping {
+  compoundVariableId: ID!
+  label: String!
+  description: String
+  studyId: ID!
+  studyName: String!
+  sourceVariables: [BdcSourceVariable!]!
+}
+type BdcSourceVariable {
+  id: ID!
+  variableName: String!
+  """Authoritative dbGaP description when supplied; not the catalog's context-specific usage description."""
+  description: String
+  dataType: String
+  unit: String
+  datasetId: ID
+  """True when the producer supplied an accession as the name because enrichment was unavailable."""
+  nameIsAccession: Boolean!
+  """True for a value/status input; false for supporting inputs such as subject ID or age."""
+  valueVariable: Boolean!
+  microschemaSlots: [String!]!
+}

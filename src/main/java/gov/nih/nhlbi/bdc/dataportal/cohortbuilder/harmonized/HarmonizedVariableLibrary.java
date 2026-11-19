@@ -1,7 +1,5 @@
 package gov.nih.nhlbi.bdc.dataportal.cohortbuilder.harmonized;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,12 +13,8 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-import tools.jackson.core.JacksonException;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.json.JsonMapper;
 
 @Component
 public class HarmonizedVariableLibrary {
@@ -57,8 +51,7 @@ public class HarmonizedVariableLibrary {
             return;
         }
 
-        JsonNode index = read(resourceLoader.getResource(properties.index()));
-        List<BdcConcept> concepts = concepts(index.path("concepts"));
+        List<BdcConcept> concepts = new PortalCatalogLoader(resourceLoader).load(properties.index());
 
         this.searchable = concepts.stream()
                 .sorted(Comparator.comparingInt(BdcConcept::studyCount).reversed()
@@ -70,9 +63,7 @@ public class HarmonizedVariableLibrary {
         concepts.forEach(concept -> keyed.put(conceptKey(concept.conceptType()), concept));
         this.byConcept = Collections.unmodifiableMap(keyed);
 
-        log.info("Loaded harmonized index generated {}: {} concepts, {} with a label",
-                index.path("generated").asString("unknown"), concepts.size(),
-                concepts.stream().filter(c -> c.conceptLabel() != null).count());
+        log.info("Loaded VarLib catalogs: {} concepts", concepts.size());
     }
 
     /** How many concepts are covered. Zero when the feature is switched off. */
@@ -152,6 +143,17 @@ public class HarmonizedVariableLibrary {
                 tokens.addAll(tokenize(carrier.variableLabel()));
             }
         }
+        for (var variable : concept.integratedVariables()) {
+            tokens.addAll(tokenize(variable.label()));
+            for (var mapping : variable.studyMappings()) {
+                for (var source : mapping.sourceVariables()) {
+                    if (source.valueVariable()) {
+                        tokens.addAll(tokenize(source.variableName()));
+                        if (source.description() != null) tokens.addAll(tokenize(source.description()));
+                    }
+                }
+            }
+        }
         return tokens;
     }
 
@@ -166,90 +168,6 @@ public class HarmonizedVariableLibrary {
     }
 
     private record Indexed(BdcConcept concept, Set<String> tokens) {
-    }
-
-    // ---------------------------------------------------------------------------- loading
-
-    private static JsonNode read(Resource resource) {
-        JsonNode index;
-        try (InputStream input = resource.getInputStream()) {
-            index = JsonMapper.builder().build().readTree(input);
-        } catch (IOException exception) {
-            throw new IllegalStateException("Unable to read the harmonized index from "
-                    + resource.getDescription() + ". Regenerate it with "
-                    + "tools/build_harmonized_index.py, or set harmonized.enabled=false to start "
-                    + "without it.", exception);
-        } catch (JacksonException exception) {
-            // Jackson 3 makes parse failures unchecked; without this the message would not name
-            // the file.
-            throw new IllegalStateException("Unable to parse the harmonized index at "
-                    + resource.getDescription(), exception);
-        }
-        if (index == null || !index.path("concepts").isArray()) {
-            throw new IllegalStateException("The harmonized index at " + resource.getDescription()
-                    + " has no concepts array; regenerate with tools/build_harmonized_index.py");
-        }
-        if (index.path("schemaVersion").asInt() != 2) {
-            throw new IllegalStateException("The harmonized index at " + resource.getDescription()
-                    + " is not a version 2 concept index; regenerate it with "
-                    + "tools/build_harmonized_index.py");
-        }
-        return index;
-    }
-
-    private static List<BdcConcept> concepts(JsonNode rows) {
-        List<BdcConcept> concepts = new ArrayList<>(rows.size());
-        for (JsonNode row : rows) {
-            List<BdcConcept.BdcCarrier> carriers = new ArrayList<>();
-            for (JsonNode carrier : row.path("variables")) {
-                carriers.add(new BdcConcept.BdcCarrier(
-                        required(carrier, "variableName"),
-                        optional(carrier, "variableLabel"),
-                        strings(carrier.path("studies"))));
-            }
-            List<BdcConcept.SourceMapping> mappings = new ArrayList<>();
-            for (JsonNode mapping : row.path("sourceMappings")) {
-                mappings.add(new BdcConcept.SourceMapping(
-                        required(mapping, "study"), required(mapping, "bdchmClass"),
-                        required(mapping, "conceptSlot"), required(mapping, "sourceFile")));
-            }
-            concepts.add(new BdcConcept(
-                    required(row, "conceptType"),
-                    optional(row, "conceptLabel"),
-                    BdchmTypeEnum.fromIndex(optional(row, "bdchmType")),
-                    strings(row.path("bdchmClasses")),
-                    List.copyOf(mappings),
-                    strings(row.path("studies")),
-                    List.copyOf(carriers)));
-        }
-        return List.copyOf(concepts);
-    }
-
-    private static String required(JsonNode row, String field) {
-        String value = optional(row, field);
-        if (value == null) {
-            throw new IllegalStateException(
-                    "The harmonized index has a row with no '" + field + "'; regenerate it");
-        }
-        return value;
-    }
-
-    private static String optional(JsonNode row, String field) {
-        JsonNode value = row.path(field);
-        return value.isString() && !value.stringValue().isBlank() ? value.stringValue() : null;
-    }
-
-    private static List<String> strings(JsonNode node) {
-        if (!node.isArray()) {
-            return List.of();
-        }
-        List<String> values = new ArrayList<>(node.size());
-        node.forEach(element -> {
-            if (element.isString()) {
-                values.add(element.stringValue());
-            }
-        });
-        return List.copyOf(values);
     }
 
     /** Convenience for tests and for callers without an injected loader. */
