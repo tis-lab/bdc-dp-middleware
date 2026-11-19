@@ -131,7 +131,8 @@ LANGUAGE plpgsql IMMUTABLE
 SET search_path = pg_catalog
 AS $$
 BEGIN
-  IF p_release !~ '^[0-9A-Za-z][0-9A-Za-z._-]{0,30}$' THEN
+  IF p_release IS NULL
+   OR p_release !~ '^[0-9A-Za-z][0-9A-Za-z._-]{0,30}$' THEN
     RAISE EXCEPTION 'invalid release name: %', p_release;
   END IF;
   RETURN 'r' || regexp_replace(lower(p_release), '[^0-9a-z]', '_', 'g');
@@ -179,15 +180,43 @@ AS $$
 DECLARE
   parent    text;
   part      text;
+  bound     text;
+  part_oid  oid;
 BEGIN
-  FOREACH parent IN ARRAY ARRAY['participant_ordinal', 'participant_attribute', 'study_baseline',
-                                'group_range', 'event', 'term_closure', 'term_member']
+  FOREACH parent IN ARRAY ARRAY[
+    'participant_ordinal', 'participant_attribute', 'study_baseline',
+    'group_range', 'event', 'term_closure', 'term_member'
+  ]
   LOOP
     part := parent || '_' || hm.release_suffix(p_release);
-    IF to_regclass(format('hm.%I', part)) IS NOT NULL THEN
-      EXECUTE format('ALTER TABLE hm.%I DETACH PARTITION hm.%I', parent, part);
-      EXECUTE format('DROP TABLE hm.%I', part);
+
+    SELECT c.oid, pg_get_expr(c.relpartbound, c.oid)
+      INTO part_oid, bound
+    FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE n.nspname = 'hm' AND c.relname = part;
+
+    IF NOT FOUND THEN
+      CONTINUE;
     END IF;
+
+    -- Check release identity and parent before deleting the partition.
+    IF bound IS DISTINCT FROM format('FOR VALUES IN (%L)', p_release)
+       OR NOT EXISTS (
+         SELECT 1
+         FROM pg_inherits
+         WHERE inhrelid = part_oid
+           AND inhparent = to_regclass(format('hm.%I', parent))
+       ) THEN
+      RAISE EXCEPTION
+        'partition hm.% does not belong to release % and parent hm.%',
+        part, p_release, parent;
+    END IF;
+
+    EXECUTE format(
+      'ALTER TABLE hm.%I DETACH PARTITION hm.%I', parent, part
+    );
+    EXECUTE format('DROP TABLE hm.%I', part);
   END LOOP;
 END
 $$;
