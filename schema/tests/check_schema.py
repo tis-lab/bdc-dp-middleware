@@ -20,7 +20,7 @@ pinned version lacks fails here rather than at load time.
 Run from anywhere; default paths are resolved from the repository root:
 
   pip install -r schema/tests/requirements.txt
-  python schema/tests/check_schema.py              (catalog and counting)
+  python schema/tests/check_schema.py              (all pairs, including future/)
   python schema/tests/check_schema.py MODEL DDL    (one pair; paths relative to the current directory)
 
 Exit status 0 when nothing differs, 1 when something does, 2 on wrong arguments. CI runs it in .github/workflows/db-schema-validation.yaml.
@@ -37,9 +37,13 @@ from pglast.enums import ConstrType
 
 ROOT = Path(__file__).resolve().parents[2]  # repository root: schema/tests/check_schema.py
 BDCHM = "synthetic/bdchm.yaml"
-PAIRS = [("schema/db/catalog.yaml", "schema/db/catalog.sql"),
-         ("schema/db/counting.yaml", "schema/db/counting.sql")]
-TYPES = {"string": {"text", "jsonb"}, "uriorcurie": {"text"}, "integer": {"int4", "int8", "integer", "bigint"},
+PAIRS = [("schema/db/metadata.yaml", "schema/db/metadata.sql"),
+         ("schema/db/hm_index.yaml", "schema/db/hm_index.sql"),
+         # future additions, not deployed: checked so they keep matching the deployed models
+         ("schema/db/future/cohort_hm_index.yaml", "schema/db/future/cohort_hm_index.sql"),
+         ("schema/db/future/provisioning_metadata.yaml", "schema/db/future/provisioning_metadata.sql"),
+         ("schema/db/future/provisioning_hm_index.yaml", "schema/db/future/provisioning_hm_index.sql")]
+TYPES = {"string": {"text", "jsonb"}, "uriorcurie": {"text"}, "integer": {"int2", "int4", "int8", "smallint", "integer", "bigint"},
          "boolean": {"bool", "boolean"}, "date": {"date"}, "datetime": {"timestamptz"},
          "decimal": {"numeric"}, "uuid": {"uuid"}}
 

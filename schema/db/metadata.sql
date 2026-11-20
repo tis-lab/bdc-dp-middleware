@@ -1,9 +1,19 @@
 -- =====================================================================
--- CATALOG DATABASE
---   catalog : metadata, safe for search and document generation
+-- bdc_dp_metadata: schemas catalog and access. No participant-level data.
+--   catalog : releases, terms, studies, curated consent meaning and eligibility
+--   access  : accounts, entitlements and the query ledger
+-- Columns must match metadata.yaml (LinkML); run python schema/tests/check_schema.py
+-- after changing either (CI runs it too). Deployed as deploy_migrations acting as
+-- bdc_dp_owner, which owns every object; grants are at the end and are safe to re-run.
 -- =====================================================================
 
 CREATE SCHEMA catalog;
+COMMENT ON SCHEMA catalog IS
+  'Releases, terms, studies, curated consent meaning and eligibility. No participant-level data.';
+
+CREATE SCHEMA access;
+COMMENT ON SCHEMA access IS
+  'Accounts, entitlements and the query ledger.';
 
 -- ---------------------------------------------------------------------
 -- catalog: releases, terms, studies, curated consent meaning
@@ -142,24 +152,99 @@ CREATE TABLE catalog.term_resolution_cache (       -- BDC-KG results that passed
   PRIMARY KEY (release, query_text)
 );
 
+-- ---------------------------------------------------------------------
+-- access: accounts, entitlements, the query ledger
+-- ---------------------------------------------------------------------
+
+CREATE TABLE access.account (                      -- one row per NIH RAS identity
+  ras_subject  text PRIMARY KEY,
+  first_seen   timestamptz NOT NULL,
+  last_seen    timestamptz NOT NULL
+);
+
+CREATE TABLE access.entitlement (                  -- one row per consent group per visa
+  ras_subject       text REFERENCES access.account,
+  consent_group_id  text CHECK (consent_group_id ~ '^phs\d{6}\.c\d+$'),
+  visa_id           text,
+  issuer            text        NOT NULL,
+  granted_at        timestamptz NOT NULL,
+  expires_at        timestamptz NOT NULL,          -- never later than the visa's expiry
+  PRIMARY KEY (ras_subject, consent_group_id, visa_id)
+);
+CREATE INDEX entitlement_expiry_idx ON access.entitlement (expires_at);
+
+-- Public queries have no user: a public row is identified by client_key instead of an account.
+-- The CHECK keeps the two apart, so a row naming an account cannot be written as public and a
+-- signed-in or approved row cannot omit its account.
+CREATE TABLE access.query_ledger (                 -- budgets, overlap checks and audit
+  id               bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  ras_subject      text REFERENCES access.account, -- NULL for public requests
+  client_key       text,                           -- hashed network address, public tier only
+  tier             text        NOT NULL CHECK (tier IN ('public', 'signed_in', 'approved')),
+  stage            smallint,
+  policy_version   integer     NOT NULL,           -- disclosure policy the response was shaped under
+  release          text        NOT NULL,
+  expression_hash  text        NOT NULL,           -- canonical expression
+  result_hash      text,                           -- hash of the matched set (noise seed)
+  count_mode       text        NOT NULL CHECK (count_mode IN ('OBFUSCATED', 'EXACT')),
+  budget_cost      integer     NOT NULL DEFAULT 0,
+  created_at       timestamptz NOT NULL DEFAULT now(),
+  CHECK (CASE WHEN tier = 'public' THEN ras_subject IS NULL AND client_key IS NOT NULL
+              ELSE ras_subject IS NOT NULL AND client_key IS NULL END)
+);
+CREATE INDEX query_ledger_subject_idx ON access.query_ledger (ras_subject, created_at);
+CREATE INDEX query_ledger_client_idx  ON access.query_ledger (client_key, created_at);
+
 -- =====================================================================
 -- ROLES AND GRANTS
--- Each role maps to one Entra managed identity (Entra-only authentication).
--- Run the catalog section in the catalog database and the counting
--- section in the counting database.
+-- Roles are created once per server by an Entra administrator (see README.md); each maps to
+-- one Entra managed identity. Re-run this section after every schema change: grants limited
+-- to specific tables (api_public's) are not covered by the defaults. Grants for provisioning
+-- and doc_generator are future additions, in future/.
 -- =====================================================================
--- Some of these roles are theoretical and don't actually exist yet, but represent different 
--- access levels that may be required for different processes
 
-GRANT USAGE ON SCHEMA catalog TO rebuild_job, doc_generator, api_search, api_counting, provisioning;
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA catalog, access FROM PUBLIC;
+
+-- Schema usage and default privileges for tables added later
+GRANT USAGE ON SCHEMA catalog
+  TO rebuild_job, api_search, api_counting, api_public;
+GRANT USAGE ON SCHEMA access
+  TO api_search, api_counting, api_public, clearinghouse;
+
+ALTER DEFAULT PRIVILEGES FOR ROLE bdc_dp_owner IN SCHEMA catalog
+  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO rebuild_job;
+ALTER DEFAULT PRIVILEGES FOR ROLE bdc_dp_owner IN SCHEMA catalog
+  GRANT SELECT ON TABLES TO api_search;
+
+-- catalog: the rebuild job writes every catalog table from the release
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA catalog TO rebuild_job;
-GRANT SELECT ON ALL TABLES IN SCHEMA catalog TO doc_generator, api_search;
+GRANT SELECT ON ALL TABLES IN SCHEMA catalog TO api_search;
 GRANT INSERT, UPDATE ON catalog.term_resolution_cache TO api_search;
-GRANT SELECT ON catalog.consent_group, catalog.consent_group_eligibility, catalog.consent_group_current,
-                catalog.stigmatizing_concept, catalog.release TO api_counting, provisioning;
 
--- Summaries for unauthenticated and signed-in users (counting role api_public).
--- Labels, studies, releases and the stigmatizing-concept list; no curated consent records.
-GRANT USAGE ON SCHEMA catalog TO api_public;
+GRANT SELECT ON catalog.release, catalog.consent_group, catalog.consent_group_eligibility,
+                catalog.consent_group_current, catalog.stigmatizing_concept
+  TO api_counting;
+
+-- catalog: public summaries get labels, studies, releases and the stigmatizing list;
+-- no consent records or eligibility
 GRANT SELECT ON catalog.release, catalog.term, catalog.term_closure, catalog.study,
-                catalog.stigmatizing_concept, catalog.term_availability TO api_public;
+                catalog.stigmatizing_concept, catalog.term_availability
+  TO api_public;
+
+-- access: accounts and entitlements are written only by the clearinghouse
+GRANT SELECT, INSERT, UPDATE, DELETE ON access.account, access.entitlement TO clearinghouse;
+GRANT SELECT ON access.entitlement TO api_counting;
+
+-- access: the query ledger
+GRANT SELECT, INSERT ON access.query_ledger TO api_search, api_counting;
+-- The public summary app records its own queries. It may insert every column except
+-- ras_subject, so with the table's CHECK it can write only public rows (no account, a
+-- client_key). It gets no SELECT: it cannot read signed-in or approved history. If public
+-- budgets are adopted, give it a SECURITY DEFINER function that sums budget_cost for one
+-- client_key, rather than SELECT on the table.
+GRANT INSERT (client_key, tier, stage, policy_version, release, expression_hash, result_hash,
+              count_mode, budget_cost, created_at)
+  ON access.query_ledger TO api_public;
+
+-- api_public gets only the ledger insert above.

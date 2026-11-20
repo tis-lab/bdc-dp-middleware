@@ -1,0 +1,59 @@
+id: https://w3id.org/tis-lab/BDC-Portal/db/future/provisioning_hm_index
+name: bdchm_db_provisioning_hm_index
+title: "Future addition: provisioning views in bdc_dp_hm_index"
+description: >-
+  Not deployed. The cohort membership view the provisioning service reads. Builds on persisted cohorts (cohort_hm_index.yaml). Apply with provisioning_hm_index.sql after cohort_hm_index.sql when provisioning is ready.
+license: MIT
+version: 0.1.0
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  bdchm: https://w3id.org/bdchm/
+  bdchmdb: https://w3id.org/tis-lab/BDC-Portal/db/
+
+default_prefix: bdchmdb
+default_range: string
+
+imports:
+  - linkml:types
+  - ./cohort_hm_index
+
+classes:
+
+  CohortEvidence:
+    description: The BDC-HM records that satisfied each rule for each cohort member.
+    annotations:
+      table: cohort.cohort_evidence
+    slots:
+      - ordinal
+    attributes:
+      cohort_id:
+        range: Cohort
+        required: true
+      rule_name:
+        required: true
+        annotations:
+          origin: system
+      source_record_id:
+        required: true
+        exact_mappings:
+          - bdchm:id
+        annotations:
+          source_slot: id of the Condition, Procedure, DrugExposure or MeasurementObservation record
+    unique_keys:
+      primary_key:
+        unique_key_slots: [cohort_id, ordinal, rule_name, source_record_id]
+
+  CohortMemberInScope:
+    description: >-
+      Cohort members whose consent group is in the researcher's exact scope; the only cohort
+      membership provisioning can read.
+    annotations:
+      view: cohort.cohort_member_in_scope
+    slots:
+      - ordinal
+    attributes:
+      cohort_id:
+        range: Cohort
+        required: true
+

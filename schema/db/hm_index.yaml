@@ -1,12 +1,12 @@
-id: https://w3id.org/tis-lab/BDC-Portal/db/counting
-name: bdchm_db_counting
-title: Counting database
+id: https://w3id.org/tis-lab/BDC-Portal/db/hm_index
+name: bdchm_db_hm_index
+title: bdc_dp_hm_index database, hm schema
 description: >-
-  Participant-level projection of BDC-HM records used for counts and cohorts.
+  Participant-level projection of BDC-HM records used for counts.
   Every column copies a named BDC-HM slot or states how it is derived; see
   bdchm_db_common for the conventions.
 license: MIT
-version: 0.2.0
+version: 0.3.0
 
 prefixes:
   linkml: https://w3id.org/linkml/
@@ -22,7 +22,7 @@ imports:
   - linkml:types
   - ../../synthetic/bdchm
   - ../bdchm_governed
-  - common
+  - ./common
 
 classes:
 
@@ -41,7 +41,7 @@ classes:
     related_mappings:
       - bdchm:Participant
     annotations:
-      table: counting.participant_ordinal
+      table: hm.participant_ordinal
       partition: list(release)
     slots:
       - ordinal
@@ -83,7 +83,7 @@ classes:
       - bdchm:Participant
       - bdchm:Demography
     annotations:
-      table: counting.participant_attribute
+      table: hm.participant_attribute
       partition: list(release)
     slots:
       - ordinal
@@ -158,7 +158,7 @@ classes:
     mixins:
       - ReleaseScoped
     annotations:
-      table: counting.study_baseline
+      table: hm.study_baseline
       partition: list(release)
       origin: curated
     attributes:
@@ -182,7 +182,7 @@ classes:
     mixins:
       - ReleaseScoped
     annotations:
-      table: counting.group_range
+      table: hm.group_range
       partition: list(release)
     attributes:
       consent_group:
@@ -226,7 +226,7 @@ classes:
     mixins:
       - ReleaseScoped
     annotations:
-      table: counting.event
+      table: hm.event
       partition: list(release)
     slots:
       - ordinal
@@ -442,11 +442,11 @@ classes:
   # Terms and posting lists
   # -------------------------------------------------------------------
 
-  CountingTermClosure:
+  HmTermClosure:
     is_a: TermClosure
-    description: Copy of the release's term closure, so joins stay in the counting database.
+    description: Copy of the release's term closure, so joins stay in bdc_dp_hm_index.
     annotations:
-      table: counting.term_closure
+      table: hm.term_closure
       partition: list(release)
     unique_keys:
       primary_key:
@@ -457,7 +457,7 @@ classes:
     mixins:
       - ReleaseScoped
     annotations:
-      table: counting.term_member
+      table: hm.term_member
       partition: list(release)
     slots:
       - ordinal
@@ -492,7 +492,7 @@ classes:
     mixins:
       - ReleaseScoped
     annotations:
-      table: counting.release_check
+      table: hm.release_check
       origin: system
       retention: permanent       # not partitioned; never deleted when a release is retired
     attributes:
@@ -512,100 +512,6 @@ classes:
     unique_keys:
       primary_key:
         unique_key_slots: [release, check_name]
-
-  # -------------------------------------------------------------------
-  # Materialized cohorts
-  # -------------------------------------------------------------------
-
-  Cohort:
-    description: A materialized cohort, stored when a researcher runs the final refinement.
-    mixins:
-      - ReleaseScoped
-    annotations:
-      table: counting.cohort
-      origin: system
-    attributes:
-      cohort_id:
-        identifier: true
-        range: uuid
-      ras_subject:
-        description: RAS identity of the researcher who built the cohort.
-        annotations:
-          origin: ga4gh
-      expression:
-        required: true
-        description: The cohort expression over BDC-HM classes, slots and enum values, as JSON.
-      expression_hash:
-        required: true
-      created_at:
-        range: datetime
-        required: true
-      expires_at:
-        range: datetime
-        required: true
-
-  CohortMember:
-    description: A participant in a materialized cohort.
-    annotations:
-      table: counting.cohort_member
-    slots:
-      - ordinal
-    attributes:
-      cohort_id:
-        range: Cohort
-        required: true
-      in_exact_scope:
-        range: boolean
-        required: true
-        annotations:
-          origin: system
-          derivation: >-
-            The participant's consent group is covered by one of the researcher's dbGaP visas and
-            catalog.consent_group_current shows exact_count_eligible for it, both as of cohort creation.
-            That view reports a group eligible only when its eligibility decision was made against the
-            current version of its consent meaning.
-          access: >-
-            Provisioning reads only rows where this is true, through counting.cohort_member_in_scope.
-    unique_keys:
-      primary_key:
-        unique_key_slots: [cohort_id, ordinal]
-
-  CohortMemberInScope:
-    description: >-
-      Cohort members whose consent group is in the researcher's exact scope; the only cohort
-      membership provisioning can read.
-    annotations:
-      view: counting.cohort_member_in_scope
-    slots:
-      - ordinal
-    attributes:
-      cohort_id:
-        range: Cohort
-        required: true
-
-  CohortEvidence:
-    description: The BDC-HM records that satisfied each rule for each cohort member.
-    annotations:
-      table: counting.cohort_evidence
-    slots:
-      - ordinal
-    attributes:
-      cohort_id:
-        range: Cohort
-        required: true
-      rule_name:
-        required: true
-        annotations:
-          origin: system
-      source_record_id:
-        required: true
-        exact_mappings:
-          - bdchm:id
-        annotations:
-          source_slot: id of the Condition, Procedure, DrugExposure or MeasurementObservation record
-    unique_keys:
-      primary_key:
-        unique_key_slots: [cohort_id, ordinal, rule_name, source_record_id]
 
 # Release checks that must pass before activation (StatusRuleEnum is extended in bdchm_db_common)
 enums:

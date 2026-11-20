@@ -28,7 +28,7 @@ jobs:
       # gen-typescript will.
       - name: Load models with the LinkML generators
         run: |
-          for model in schema/db/catalog.yaml schema/db/counting.yaml; do
+          for model in schema/db/metadata.yaml schema/db/hm_index.yaml schema/db/future/*.yaml; do
             echo "gen-yaml $model"
             gen-yaml "$model" > /dev/null
           done
