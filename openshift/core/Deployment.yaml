@@ -130,8 +130,8 @@ objects:
         spring.graphql.schema.locations=classpath:graphql/core/
         spring.graphql.graphiql.enabled=${GRAPHIQL_ENABLED:false}
         spring.graphql.graphiql.path=/cb/graphiql
-  
-        spring.graphql.cors.allowed-origins=${FRONTEND_ORIGINS:}
+        
+        spring.graphql.cors.allowed-origins=${FRONTEND_ORIGINS}
         spring.graphql.cors.allowed-origin-patterns=${FRONTEND_ORIGIN_PATTERNS:}
         spring.graphql.cors.allowed-methods=POST
         spring.graphql.cors.allowed-headers=Content-Type
@@ -258,3 +258,7 @@ parameters:
   - name: GRAPHIQL_ENABLED
     description: Enable the GraphiQL interface
     value: "false"
+
+  - name: FRONTEND_ORIGINS
+    description: Comma-separated frontend origins allowed for GraphQL
+    value: ""
