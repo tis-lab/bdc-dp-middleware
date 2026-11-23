@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.OptionalInt;
 
 import gov.nih.nhlbi.bdc.dataportal.cohortbuilder.load.JsonObjectLoadCommand;
+import gov.nih.nhlbi.bdc.dataportal.cohortbuilder.setup.SetupDbCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
@@ -31,7 +32,9 @@ public final class Commands {
 
     private static final Map<String, Command> COMMANDS = registry(
             new Command("load", "Load JSON objects from files into a PostgreSQL table",
-                    JsonObjectLoadCommand.USAGE, JsonObjectLoadCommand.class));
+                    JsonObjectLoadCommand.USAGE, JsonObjectLoadCommand.class),
+            new Command("setup-db", "Create the hm or metadata schemas in a new PostgreSQL database",
+                    SetupDbCommand.USAGE, SetupDbCommand.class));
 
     private static final Logger log = LoggerFactory.getLogger(Commands.class);
 

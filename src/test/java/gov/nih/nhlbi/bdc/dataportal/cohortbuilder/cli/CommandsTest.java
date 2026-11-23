@@ -18,7 +18,7 @@ class CommandsTest {
     @Test
     void helpListsCommands() {
         assertThat(Commands.dispatch("help")).isEqualTo(OptionalInt.of(CliCommand.EXIT_OK));
-        assertThat(Commands.all()).containsKey("load");
+        assertThat(Commands.all()).containsKeys("load", "setup-db");
     }
 
     @Test

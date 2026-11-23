@@ -136,7 +136,7 @@ public class JsonObjectPathLoader {
     }
 
     /** The SQLException in {@code e}'s causes that means the database is unreachable, or null. */
-    static SQLException connectionFailure(Throwable e) {
+    public static SQLException connectionFailure(Throwable e) {
         for (Throwable t = e; t != null; t = t.getCause()) {
             if (t instanceof DatabaseUnavailableException
                     || t instanceof SQLTransientConnectionException || t instanceof SQLNonTransientConnectionException) {

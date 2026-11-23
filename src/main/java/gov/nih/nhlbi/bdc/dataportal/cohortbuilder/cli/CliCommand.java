@@ -1,5 +1,8 @@
 package gov.nih.nhlbi.bdc.dataportal.cohortbuilder.cli;
 
+import java.util.List;
+
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -30,12 +33,47 @@ public abstract class CliCommand implements ApplicationRunner, ExitCodeGenerator
     protected abstract int execute(ApplicationArguments args) throws Exception;
 
     @Override
-    public final void run(ApplicationArguments args) throws Exception {
+    public final void run(@NonNull ApplicationArguments args) throws Exception {
         exitCode = execute(args);
     }
 
     @Override
     public final int getExitCode() {
         return exitCode;
+    }
+
+    /**
+     * The last value of {@code --name=value} on the command line, or null if missing or
+     * blank. Only the command line counts, so environment variables like DB_NAME can't
+     * stand in for a required option.
+     */
+    protected static String option(ApplicationArguments args, String name) {
+        List<String> values = args.getOptionValues(name);
+        if (values == null || values.isEmpty()) {
+            return null;
+        }
+        String value = values.getLast();
+        return value == null || value.isBlank() ? null : value;
+    }
+
+    /**
+     * The number given as {@code --name=N}, or {@code fallback} if missing.
+     *
+     * @throws IllegalArgumentException if the value isn't a number
+     */
+    protected static int intOption(ApplicationArguments args, String name, int fallback) {
+        String value = option(args, name);
+        if (value == null) {
+            return fallback;
+        }
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("--" + name + " must be a number: " + value);
+        }
+    }
+
+    protected static String orDefault(String value, String fallback) {
+        return value == null ? fallback : value;
     }
 }

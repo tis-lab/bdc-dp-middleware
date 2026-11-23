@@ -38,6 +38,16 @@ The jar can also load files of JSON objects (YAML, JSON, NDJSON) into a PostgreS
 `java -jar target/app.jar load --db.name=DATABASE --db.user=USER <file-or-dir>`. See
 [README-LOAD.md](README-LOAD.md) for options, behavior and troubleshooting.
 
+## Set up the database schemas in PostgreSQL
+
+`java -jar target/app.jar setup-db --db.name=DATABASE --db.user=USER SCRIPT...` creates
+the schemas in a new database by running copies of the `schema/db` SQL scripts bundled in
+the jar: `hm` (schema `hm`, for `bdc_dp_hm_index`) and `metadata` (schemas `catalog` and
+`access`, for `bdc_dp_metadata`). It creates the database, and the roles the scripts grant
+to (as `NOLOGIN` placeholders), if they don't exist. A script that fails changes
+nothing. The command takes the same connection options as `load`. See
+[README-SETUP-DB.md](README-SETUP-DB.md).
+
 ## Routing
 
 The service name is `bdc-data-portal-cohort-builder-service`. The cohort builder UI
