@@ -5,6 +5,8 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -94,6 +96,56 @@ class SetupDbCommandTest {
             }
             assertThat(new TreeSet<>(SetupDbCommand.ROLES.get(name))).as(name).isEqualTo(named);
         }
+    }
+
+    @Test
+    void postgres10GetsTheVariants() {
+        assertThat(SetupDbCommand.resource("hm", 10)).isEqualTo("db/hm_index-pg10.sql");
+        assertThat(SetupDbCommand.resource("hm", 11)).isEqualTo("db/hm_index.sql");
+        assertThat(SetupDbCommand.resource("hm", 16)).isEqualTo("db/hm_index.sql");
+        assertThat(SetupDbCommand.resource("metadata", 10)).isEqualTo("db/metadata-pg10.sql");
+        assertThat(SetupDbCommand.resource("metadata", 11)).isEqualTo("db/metadata.sql");
+        assertThat(SetupDbCommand.PG10_SCRIPTS.keySet()).isEqualTo(SetupDbCommand.SCRIPTS.keySet());
+    }
+
+    /**
+     * The PostgreSQL 10 variants must keep schema/db's tables and columns (name and type;
+     * keys and indexes differ on purpose) and its grants exactly.
+     */
+    @Test
+    void postgres10VariantsAreInStepWithSchemaDb() throws Exception {
+        for (String name : SetupDbCommand.PG10_SCRIPTS.keySet()) {
+            String original = SetupDbCommand.script(name);
+            String pg10 = SetupDbCommand.read(SetupDbCommand.PG10_SCRIPTS.get(name));
+            assertThat(columns(original)).as(name + " tables found").hasSizeGreaterThan(2);
+            assertThat(columns(pg10)).as(name + " columns").isEqualTo(columns(original));
+            assertThat(grants(pg10)).as(name + " grants").isEqualTo(grants(original));
+        }
+    }
+
+    /** Each CREATE TABLE's columns as "table: name type, ...". */
+    private static List<String> columns(String sql) {
+        List<String> tables = new ArrayList<>();
+        Matcher table = Pattern.compile("(?ms)^CREATE TABLE (\\S+) \\((.*?)^\\)").matcher(sql);
+        while (table.find()) {
+            List<String> columns = new ArrayList<>();
+            for (String line : table.group(2).split("\\n")) {
+                String[] words = line.replaceAll("--.*", "").strip().split("\\s+");
+                if (words.length >= 2 && !words[0].isEmpty()
+                        && !List.of("PRIMARY", "UNIQUE", "CHECK", "FOREIGN").contains(words[0])) {
+                    columns.add(words[0] + " " + words[1].replaceAll(",$", ""));
+                }
+            }
+            tables.add(table.group(1) + ": " + String.join(", ", columns));
+        }
+        return tables;
+    }
+
+    /** Everything from the ROLES AND GRANTS banner on. */
+    private static String grants(String sql) {
+        int start = sql.indexOf("-- ROLES AND GRANTS");
+        assertThat(start).isPositive();
+        return sql.substring(start);
     }
 
     @Test

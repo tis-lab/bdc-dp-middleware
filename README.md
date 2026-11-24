@@ -44,8 +44,8 @@ The jar can also load files of JSON objects (YAML, JSON, NDJSON) into a PostgreS
 the schemas in a new database by running copies of the `schema/db` SQL scripts bundled in
 the jar: `hm` (schema `hm`, for `bdc_dp_hm_index`) and `metadata` (schemas `catalog` and
 `access`, for `bdc_dp_metadata`). It creates the database, and the roles the scripts grant
-to (as `NOLOGIN` placeholders), if they don't exist. A script that fails changes
-nothing. The command takes the same connection options as `load`. See
+to (as `NOLOGIN` placeholders), if they don't exist. On PostgreSQL 10 it runs variants
+of the scripts that 10 supports. A script that fails changes nothing. The command takes the same connection options as `load`. See
 [README-SETUP-DB.md](README-SETUP-DB.md).
 
 ## Routing

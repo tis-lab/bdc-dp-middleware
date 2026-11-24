@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
@@ -72,10 +73,10 @@ class SetupDbCommandPgTest {
     @AfterEach
     void dropDatabase() {
         if (admin != null && database != null) {
-            admin.execute("DROP DATABASE IF EXISTS " + database + " WITH (FORCE)");
+            admin.execute("DROP DATABASE IF EXISTS " + database);  // no WITH (FORCE): PostgreSQL 13+
         }
         if (admin != null && createdHmDatabase) {
-            admin.execute("DROP DATABASE IF EXISTS " + HM_DATABASE + " WITH (FORCE)");
+            admin.execute("DROP DATABASE IF EXISTS " + HM_DATABASE);
         }
     }
 
@@ -96,6 +97,48 @@ class SetupDbCommandPgTest {
         for (String role : ROLES) {
             assertThat(count("SELECT count(*) FROM pg_roles WHERE rolname = ?", admin, role)).as(role).isEqualTo(1);
         }
+    }
+
+    /**
+     * A release's partitions have the parents' keys and indexes, and enforce them: on 11+
+     * PostgreSQL copies them from the parent; on 10, hm.create_release_partitions adds them.
+     */
+    @Test
+    void releasePartitionsGetTheKeysAndIndexes() {
+        assertThat(setup("hm")).isEqualTo(CliCommand.EXIT_OK);
+
+        target.execute("SELECT hm.create_release_partitions('2026.10')");
+
+        assertThat(count("SELECT count(*) FROM pg_index i JOIN pg_class c ON c.oid = i.indrelid "
+                + "WHERE c.relnamespace = 'hm'::regnamespace AND c.relispartition", target)).isEqualTo(13);
+        assertThat(count("SELECT count(*) FROM pg_constraint con JOIN pg_class c ON c.oid = con.conrelid "
+                + "WHERE c.relnamespace = 'hm'::regnamespace AND c.relispartition AND con.contype = 'p'", target))
+                .isEqualTo(7);
+        target.execute("INSERT INTO hm.participant_ordinal VALUES ('2026.10', 1, 'p1', 's', 'c')");
+        assertThatThrownBy(() -> target.execute(
+                "INSERT INTO hm.participant_ordinal VALUES ('2026.10', 2, 'p1', 's', 'c')"))
+                .hasMessageContaining("duplicate key");
+        assertThatThrownBy(() -> target.execute(
+                "INSERT INTO hm.participant_ordinal VALUES ('2026.10', 1, 'p2', 's', 'c')"))
+                .hasMessageContaining("duplicate key");
+    }
+
+    /**
+     * consent_group_id must start with its study accession and ".c": starts_with() on 11+,
+     * left() on 10, with the same result.
+     */
+    @Test
+    void consentGroupIdMustStartWithItsStudy() {
+        assertThat(setup("metadata")).isEqualTo(CliCommand.EXIT_OK);
+        String insert = "INSERT INTO catalog.consent_group (consent_group_id, version, study_accession, "
+                + "dbgap_abbreviation, primary_data_use, source_consent_text, curated_by, reviewed_by, curated_on) "
+                + "VALUES (?, 1, ?, 'GRU', 'GRU', 'text', 'a', 'b', current_date)";
+
+        assertThatThrownBy(() -> target.update(insert, "phs000001.c1", "phs000002"))
+                .hasMessageContaining("check constraint");
+        target.update(insert, "phs000001.c1", "phs000001");
+
+        assertThat(count("SELECT count(*) FROM catalog.consent_group", target)).isEqualTo(1);
     }
 
     @Test

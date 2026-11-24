@@ -11,7 +11,9 @@ functions and grants.
 
 The scripts are exact copies of `schema/db/hm_index.sql` and `schema/db/metadata.sql`.
 They're for a **new database**: they create their objects without checking whether
-they exist. The command takes the same connection options as [`load`](README-LOAD.md).
+they exist. On PostgreSQL 10 the command runs variants of them instead (see
+[PostgreSQL 10](#postgresql-10)). The command takes the same connection options as
+[`load`](README-LOAD.md).
 
 ## Quick start
 
@@ -31,6 +33,8 @@ java -jar target/app.jar setup-db --db.name=mydb --db.user=me hm metadata
 ## Prerequisites
 
 - **Java 21+**.
+- **PostgreSQL 10 or later.** 11 and later run the `schema/db` scripts unchanged; 10
+  runs the `-pg10.sql` variants.
 - **The user exists.** The command doesn't create users.
 - **The database is new.** If it doesn't exist, the command creates it, owned by the
   user it connects as; that needs `CREATEDB` (see
@@ -60,6 +64,33 @@ don't run, and the ones before it stay committed.
 
 Running a script again on a database that already has its schemas fails at the first
 `CREATE SCHEMA` and changes nothing.
+
+## PostgreSQL 10
+
+On a server older than 11, `setup-db` runs `db/hm_index-pg10.sql` and
+`db/metadata-pg10.sql` instead of `db/hm_index.sql` and `db/metadata.sql`, because
+PostgreSQL 10 lacks two things the `schema/db` scripts use.
+
+**`hm`**: PostgreSQL 10 can't put a primary key, unique constraint or index on a
+partitioned table (`primary key constraints are not supported on partitioned tables`).
+In `hm_index-pg10.sql`:
+
+- The seven partitioned tables carry only their columns (key columns `NOT NULL`) and
+  `CHECK`s.
+- `hm.create_release_partitions` adds the primary keys, unique constraint and indexes to
+  each partition it creates, with the same columns and index types.
+- Everything else is the same as `schema/db/hm_index.sql`.
+
+Every key includes `release`, the partition key, and each partition holds one release,
+so a key per partition enforces exactly what the parent's key does. A release's
+partitions end up with the same keys and indexes as on 11 and later.
+
+**`metadata`**: PostgreSQL 10 has no `starts_with()`
+(`function starts_with(text, text) does not exist`). `metadata-pg10.sql` writes the
+`catalog.consent_group` check as
+`left(consent_group_id, length(study_accession) + 2) = study_accession || '.c'` instead of
+`starts_with(consent_group_id, study_accession || '.c')`, which accepts and rejects the
+same values. Nothing else differs.
 
 ## Creating the database
 
@@ -206,5 +237,10 @@ PG_TEST_SETUP_DB=true PG_TEST_DB=postgres PG_TEST_USER=postgres PG_TEST_PASSWORD
 ```
 
 `SetupDbCommandTest` checks that the bundled scripts are still identical to the ones
-in `schema/db`, and that the roles the command creates are the ones the scripts grant
-to, so a change to one without the other fails the build.
+in `schema/db`, that the `-pg10.sql` variants still have the same tables, columns and
+grants, and that the roles the command creates are the ones the scripts grant to, so a
+change to one without the others fails the build. The variants are edited by hand: when
+`schema/db` changes a key, index or check, make the same change in them.
+
+The PostgreSQL tests pass on 10 and on 16; point `PG_TEST_*` at a PostgreSQL 10 server
+to test the variants.

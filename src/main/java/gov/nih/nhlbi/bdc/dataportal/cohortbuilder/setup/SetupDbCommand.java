@@ -31,10 +31,11 @@ import org.springframework.boot.ApplicationArguments;
  * If the database doesn't exist, it's created first (owned by the user), by connecting to
  * the maintenance database {@code --setup.maintenance-db} (default {@value #DEFAULT_MAINTENANCE_DB}).
  * The scripts are copies of schema/db and create their objects unconditionally, so they
- * are for a database that doesn't have them yet. The roles they grant to ({@link #ROLES})
- * are created NOLOGIN first when missing: placeholders, not users; when the command
- * creates {@value #OWNER_ROLE}, a user who isn't a superuser is made a member of it, since
- * the scripts change its default privileges. A script is sent as one statement, so the
+ * are for a database that doesn't have them yet. On servers older than 11, a script with
+ * a variant in {@link #PG10_SCRIPTS} runs that instead. The roles the scripts grant to
+ * ({@link #ROLES}) are created NOLOGIN first when missing: placeholders, not users; when
+ * the command creates {@value #OWNER_ROLE}, a user who isn't a superuser is made a member
+ * of it, since the scripts change its default privileges. A script is sent as one statement, so the
  * server, not this class, splits it, and runs it as one implicit transaction: a script
  * that fails changes nothing. The scripts run in the order named, and a failed script
  * stops the ones after it; those before it stay committed.
@@ -73,6 +74,19 @@ public class SetupDbCommand extends CliCommand {
         SCRIPTS = Collections.unmodifiableMap(scripts);
     }
 
+    /**
+     * Variants run on servers older than {@value #FULL_SERVER_VERSION}, by the same names as
+     * {@link #SCRIPTS}; a script without one runs as it is. PostgreSQL 10 can't put a key or
+     * index on a partitioned table, so hm_index-pg10.sql adds them to each partition instead,
+     * and has no starts_with(), so metadata-pg10.sql uses left() for the same check.
+     */
+    public static final Map<String, String> PG10_SCRIPTS = Map.of(
+            "hm", "db/hm_index-pg10.sql",
+            "metadata", "db/metadata-pg10.sql");
+
+    /** From this major version on, {@link #SCRIPTS} run as they are. */
+    public static final int FULL_SERVER_VERSION = 11;
+
     public static final String USAGE = """
             Usage: java -jar app.jar setup-db --db.name=DATABASE --db.user=USER [OPTIONS] SCRIPT...
               Creates schemas in a new PostgreSQL database by running the bundled SQL scripts named,
@@ -82,6 +96,7 @@ public class SetupDbCommand extends CliCommand {
             Scripts:
               hm                            schema hm (%s), for bdc_dp_hm_index
               metadata                      schemas catalog and access (%s), for bdc_dp_metadata
+              On PostgreSQL 10, their -pg10.sql variants run instead.
             %sOptions:
               --setup.maintenance-db=NAME   database to connect to for creating DATABASE (default %s)
             Exit status: 0 all set up, 1 a script failed (it changed nothing), 2 usage error,
@@ -120,11 +135,7 @@ public class SetupDbCommand extends CliCommand {
 
         String maintenanceDb = orDefault(option(args, "setup.maintenance-db"), DEFAULT_MAINTENANCE_DB);
 
-        Map<String, String> scripts = new LinkedHashMap<>();
-        for (String name : names) {
-            scripts.put(name, script(name));
-        }
-        log.info("Setting up {} with {}", connection, String.join(", ", scripts.keySet()));
+        log.info("Setting up {} with {}", connection, String.join(", ", names));
 
         Connection opened;
         try {
@@ -138,6 +149,11 @@ public class SetupDbCommand extends CliCommand {
         }
         try (Connection db = opened) {
             db.setAutoCommit(true);  // the server runs each script as one implicit transaction
+            int serverVersion = db.getMetaData().getDatabaseMajorVersion();
+            Map<String, String> scripts = new LinkedHashMap<>();  // name to resource, in the order named
+            for (String name : names) {
+                scripts.put(name, resource(name, serverVersion));
+            }
             try {
                 createMissingRoles(db, scripts.keySet());
             } catch (SQLException e) {
@@ -148,10 +164,10 @@ public class SetupDbCommand extends CliCommand {
                 return EXIT_ERROR;
             }
             for (Map.Entry<String, String> script : scripts.entrySet()) {
-                String resource = SCRIPTS.get(script.getKey());
+                String resource = script.getValue();
                 log.info("Running {} ({})", script.getKey(), resource);
                 try {
-                    run(db, script.getValue());
+                    run(db, read(resource));
                 } catch (SQLException e) {
                     if (JsonObjectPathLoader.connectionFailure(e) != null) {
                         throw e;
@@ -281,9 +297,21 @@ public class SetupDbCommand extends CliCommand {
         }
     }
 
-    /** The text of the script registered as {@code name}, from the classpath. */
+    /** The text of the script registered as {@code name}, for PostgreSQL 11 and later. */
     static String script(String name) throws IOException {
-        String resource = SCRIPTS.get(name);
+        return read(SCRIPTS.get(name));
+    }
+
+    /** The classpath resource of script {@code name} for a server of this major version. */
+    static String resource(String name, int serverVersion) {
+        if (serverVersion < FULL_SERVER_VERSION && PG10_SCRIPTS.containsKey(name)) {
+            return PG10_SCRIPTS.get(name);
+        }
+        return SCRIPTS.get(name);
+    }
+
+    /** The text of a classpath resource. */
+    static String read(String resource) throws IOException {
         try (InputStream in = SetupDbCommand.class.getClassLoader().getResourceAsStream(resource)) {
             if (in == null) {
                 throw new IOException(resource + " is missing from the classpath");
