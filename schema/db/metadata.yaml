@@ -1,9 +1,9 @@
 id: https://w3id.org/tis-lab/BDC-Portal/db/metadata
 name: bdchm_db_metadata
-title: bdc_dp_metadata database, catalog and access schemas
+title: Metadata database (bdc_dp_metadata), catalog and access schemas
 description: >-
-  Release, term, study and curated consent metadata (catalog), and accounts,
-  entitlements and the query ledger (access). Contains no
+  The catalog schema holds release, term, study and curated consent metadata; the access
+  schema holds accounts, entitlements and the query ledger. Contains no
   participant-level data. See bdchm_db_common for the conventions.
 license: MIT
 version: 0.2.0
@@ -333,21 +333,22 @@ classes:
     unique_keys:
       primary_key:
         unique_key_slots: [release, query_text]
+
   # -------------------------------------------------------------------
   # access: accounts, entitlements, the query ledger
   # -------------------------------------------------------------------
 
   Account:
     description: >-
-      One NIH RAS identity. Researchers never connect to the database; the API connects as its
-      own identity and acts on their behalf. Written only by the clearinghouse.
+      One NIH RAS identity. Researchers never connect to the database; the middleware connects
+      as its own identity and acts on their behalf. Written only by the clearinghouse.
     annotations:
       table: access.account
       origin: ga4gh
     attributes:
       ras_subject:
         identifier: true
-        description: The RAS subject identifier.
+        description: The RAS subject identifier (the passport's sub claim).
       first_seen:
         range: datetime
         required: true
@@ -375,7 +376,7 @@ classes:
         required: true
       issuer:
         required: true
-        description: The passport broker or visa issuer.
+        description: The visa's issuer, from the trusted-issuer allowlist.
       granted_at:
         range: datetime
         required: true
@@ -444,7 +445,7 @@ classes:
       policy_version:
         range: integer
         required: true
-        description: Version of the disclosure policy the response was shaped under.
+        description: The disclosure policy version the response was shaped under.
       expression_hash:
         required: true
         description: Hash of the canonical cohort expression.

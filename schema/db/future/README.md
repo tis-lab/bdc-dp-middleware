@@ -15,7 +15,7 @@ a separate implementation:
 
 | File | Database | Adds |
 |---|---|---|
-| `cohort_hm_index.yaml`, `cohort_hm_index.sql` | `bdc_dp_hm_index` | The `cohort` schema: `cohort.cohort`, `cohort.cohort_member`; `api_counting`'s grants on them |
+| `cohort_hm_index.yaml`, `cohort_hm_index.sql` | `bdc_dp_hm_index` | The `cohort` schema: `cohort.cohort`, `cohort.cohort_member`, and `cohort.released_set` for the overlap check; `api_counting`'s grants on them |
 | `COHORTS.md` | — | Why querying does without stored cohorts, when they are needed, and what to decide first |
 | `provisioning_metadata.yaml`, `provisioning_metadata.sql` | `bdc_dp_metadata` | `access.share_record`; provisioning's grants on `catalog` and `access` |
 | `provisioning_hm_index.yaml`, `provisioning_hm_index.sql` | `bdc_dp_hm_index` | Builds on persisted cohorts. `cohort.cohort_evidence`; the `cohort.cohort_member_in_scope` view; provisioning's grants on `hm` and `cohort` |
@@ -54,10 +54,15 @@ re-run after every schema change.
 
 ## Roles
 
-| Postgres role | Entra identity (dev) | Hosted on | `bdc_dp_metadata` | `bdc_dp_hm_index` | `statement_timeout` | Connection limit |
+| Postgres role | Entra identity (dev) | Runs in | `bdc_dp_metadata` | `bdc_dp_hm_index` | `statement_timeout` | Connection limit |
 |---|---|---|---|---|---|---|
-| `provisioning` | `id-bdcdp-provisioning-dev` | Container App or Function | Reads releases, consent groups, eligibility, the stigmatizing list, entitlements and accounts; writes share records | Reads participant numbers and in-scope cohort members only | 30s | 5 |
-| `doc_generator` | `id-bdcdp-docgen-dev` | Function or job; only if Azure AI Search is kept | Reads `catalog` | No connection | 60s | 2 |
+| `provisioning` | App registration `app-bdcdp-provisioning-dev` | ARO | Reads releases, consent groups, eligibility, the stigmatizing list, entitlements and accounts; writes share records | Reads the participant mapping, the only role that sees participant IDs, and in-scope cohort members | 30s | 5 |
+| `doc_generator` | Managed identity `id-bdcdp-docgen-dev`; only if Azure AI Search is kept | Azure Function or job | Reads `catalog` | No connection | 60s | 2 |
+
+Provisioning logs in with its own app registration, never through the
+`middleware` role. Its certificate is kept in its own OpenShift Secret,
+readable by the provisioning pod only, with the master copy in Key Vault like
+the others (see [Credentials](../README.md#credentials)).
 
 ## Persisted cohorts
 

@@ -30,7 +30,10 @@ grants at the end. They must agree; see [Validation](#validation).
 |---|---|---|---|
 | `bdc_dp_metadata` | `catalog` | Releases, terms and their closure, studies, variable mappings, consent groups and eligibility, the stigmatizing-concept list, term availability, the term resolution cache | No |
 | | `access` | Accounts, entitlements, the query ledger | No, but sensitive |
-| `bdc_dp_hm_index` | `hm` | The participant-level projection of BDC-HM: participant numbers, attributes, events, posting lists, release checks | Yes |
+| `bdc_dp_hm_index` | `hm` | The participant-level projection of BDC-HM: participant numbers, attributes, events, posting lists, release checks; and the fixed public table (`hm.public_summary`) | Yes, except `hm.public_summary` |
+
+The `cohort` schema (stored cohorts and the overlap check's released sets) is
+a future addition; see [`future/COHORTS.md`](future/COHORTS.md).
 
 The database boundary keeps search-facing identities away from participant
 data: a role without `CONNECT` on `bdc_dp_hm_index` cannot reach it at all.
@@ -50,6 +53,7 @@ partitioned by release:
 3. When a release is retired, it is marked retired in `catalog.release`, then
    `hm.retire_release_partitions('2026.10')` detaches and drops its partitions.
    `bdc_dp_hm_index` cannot check the first step, so the caller must do it.
+   Retiring also drops the release's `hm.public_summary` rows.
 
 `hm.release_check` is not partitioned. It is the permanent record of what was
 verified before each release was served, and the rebuild job cannot delete
@@ -64,35 +68,53 @@ and sharing, each naming the meaning version it was made against.
 changed since the decision, the group reads as ineligible until eligibility is
 decided again.
 
+### The fixed public table
+
+`hm.public_summary` holds every public answer before anyone asks: one row per
+filter of one or two terms combined with And, built by the rebuild job from
+`hm.term_member`. Demographic values and age bins are terms too, so a one-term
+filter's facets are the two-term rows that include it. Rows hold released
+values only: totals already obfuscated, studies listed without counts,
+below-threshold studies counted. Because every row is known at build time, the
+job withholds any pair of rows whose difference would fall below `min_count`
+before the release is activated. `api_public` reads this table and nothing
+else in `bdc_dp_hm_index`, so it never sees an exact count or a participant.
+
 ### Ownership
 
 `bdc_dp_owner` owns every schema, table, view and function, and no one logs in
-as it. `deploy_migrations` (the CI/CD pipeline) acts as the owner to change
-schemas: run each `.sql` connected to its database as `deploy_migrations`,
-after `SET ROLE bdc_dp_owner`. The rebuild job owns nothing; it adds and
+as it. `deploy_migrations` (the Jenkins migration job) acts as the owner to
+change schemas: run each `.sql` connected to its database as
+`deploy_migrations`; each file starts with `SET ROLE bdc_dp_owner`. The rebuild job owns nothing; it adds and
 retires release partitions through two `SECURITY DEFINER` functions that run
 with the owner's rights, so it cannot change grants or table definitions.
 
-## Roles and managed identities
+## Roles and Entra identities
 
 Databases, roles and who may connect to each database are created once per
 server by a member of the Entra administrators group, not by the CI/CD
 pipeline: the pipeline's identity must not be able to create roles. Each login
-role is created with `pgaadauth_create_principal_with_oid` from its managed
-identity's Entra object ID. The DDL here assumes the roles exist.
+role is created with `pgaadauth_create_principal_with_oid` from its Entra
+object ID (see [How sign-in works](#how-sign-in-works)). The DDL here assumes
+the roles exist.
 
-Role names are the same in every environment. Each environment has its own
-Entra identities, named `id-bdcdp-<workload>-<env>`; the table shows dev.
+Role names are the same in every environment; each environment has its own
+Entra identities. Workloads in ARO and Jenkins sign in as **app
+registrations** with certificates, because the ARO cluster cannot federate its
+service accounts with Entra ID. Workloads in Databricks or other Azure
+services use **managed identities**, which need no stored credential. The
+table shows dev.
 
-| Postgres role | Entra identity (dev) | Hosted on | `bdc_dp_metadata` | `bdc_dp_hm_index` |
-|---|---|---|---|---|
-| `bdc_dp_owner` | None: cannot log in | — | Owns everything | Owns everything |
-| `deploy_migrations` | `id-bdcdp-deploy-dev` | CI/CD pipeline, through workload identity federation | Acts as owner | Acts as owner |
-| `rebuild_job` | `id-bdcdp-rebuild-dev` | Databricks job | Writes `catalog` | Writes `hm` (not deletes from `release_check`); runs the partition functions |
-| `api_search` | `id-bdcdp-api-search-dev` | Query API Container App | Reads `catalog`; writes the resolution cache and query ledger | No connection |
-| `api_counting` | `id-bdcdp-api-counting-dev` | Query API Container App | Reads releases, consent groups, eligibility, the stigmatizing list and entitlements; writes the query ledger | Reads `hm`; creates temporary tables for one transaction (stage 5) |
-| `api_public` | `id-bdcdp-api-public-dev` | Public summary Container App | Reads releases, terms, closure, studies, term availability, the stigmatizing list; records public queries in the query ledger, without reading it | Connects, but reads no table. Will execute only the public-summary functions (see below) |
-| `clearinghouse` | `id-bdcdp-clearinghouse-dev` | Container App or Function | Writes accounts and entitlements | No connection |
+| Postgres role | Logs in? | Entra identity (dev) | Runs in | `bdc_dp_metadata` | `bdc_dp_hm_index` |
+|---|---|---|---|---|---|
+| `bdc_dp_owner` | No | None | — | Owns everything | Owns everything |
+| `deploy_migrations` | Yes | App registration `app-bdcdp-deploy-dev` | Jenkins | Acts as owner | Acts as owner |
+| `middleware` | Yes | App registration `app-bdcdp-middleware-dev` | ARO | Nothing until it switches role | Nothing until it switches role |
+| `api_search` | No; reached by `middleware` | — | ARO, via `middleware` | Reads `catalog`; writes the resolution cache and query ledger | No connection |
+| `api_counting` | No; reached by `middleware` | — | ARO, via `middleware` | Reads releases, consent groups, eligibility, the stigmatizing list and entitlements; writes the query ledger | Reads `hm` except participant IDs; creates temporary tables for one transaction (stage 5) |
+| `api_public` | No; reached by `middleware` | — | ARO, via `middleware` | Reads releases, terms, closure, studies, term availability, the stigmatizing list; records public queries in the query ledger, without reading it | Reads the fixed public table only: released values, no participants |
+| `clearinghouse` | Yes | App registration `app-bdcdp-clearinghouse-dev` | ARO | Writes accounts and entitlements | No connection |
+| `rebuild_job` | Yes | Managed identity `id-bdcdp-rebuild-dev` | Databricks | Writes `catalog` | Writes `hm` (not deletes from `release_check`); runs the partition functions |
 
 Two identities have no Postgres role: the Unity Catalog access connector
 (`id-bdcdp-uc-connector-dev`), which reads storage only, and the server's
@@ -100,29 +122,44 @@ administrators, an Entra group (`grp-bdcdp-pg-admins-dev`) that creates the
 databases and roles. The `provisioning` and `doc_generator` roles are future
 additions; see [`future/`](future/README.md).
 
-Per-role limits, set when the roles are created:
+### How the middleware switches role
+
+The middleware has one app registration and logs in as `middleware`, which
+holds no privileges of its own (`NOINHERIT`). Each connection pool runs
+`SET ROLE` to one of `api_search`, `api_counting` or `api_public` when a
+connection opens, and sets that role's statement timeout; from then on,
+Postgres enforces that role's grants. Which pool a request uses is decided by
+the caller's tier, from the RAS token or its absence, never by the request.
+
+This keeps the database separation between search, public and authenticated
+queries with one credential instead of three. The trade-off: a SQL injection
+flaw in middleware code could switch a connection to another of the three
+roles, so every query must be parameterized. The clearinghouse keeps its own
+app registration and is never reachable from the middleware's credential; so
+will provisioning, when it is added.
+
+Role settings and connection limits apply to the login role, so the
+middleware's connection limit covers all its pools together, and per-role
+timeouts are set by the pools:
 
 | Role | `statement_timeout` | Connection limit |
 |---|---|---|
-| `api_public` | 2s | 40 |
-| `api_search` | 5s | 20 |
-| `api_counting` | 30s (stage 4 temporal queries) | 40 |
+| `api_public` (pool) | 2s, set by the pool | Shares `middleware`'s |
+| `api_search` (pool) | 5s, set by the pool | Shares `middleware`'s |
+| `api_counting` (pool) | 30s (stage 4 temporal queries), set by the pool | Shares `middleware`'s |
+| `middleware` (login) | — | 100 (the three pools together) |
 | `clearinghouse` | 10s | 5 |
 | `rebuild_job` | None; it runs off-peak | 10 |
 
 ### Public summaries
 
-Every `hm` table is participant-level and keyed by `ordinal`, so any two of
-them join into a row-level profile: `term_member`, `participant_attribute` and
-`group_range` together give each participant's study, consent group,
-demographics and concepts. `api_public` therefore gets no `SELECT` on `hm`.
-It will get `EXECUTE` only on `SECURITY DEFINER` functions that return the
-public tier of the disclosure policy already shaped: obfuscated root and facet
-totals, studies at or above `min_count` named without counts, and a
-`suppressed_study_count`. Noise is applied inside the functions, because it is
-seeded by the matching participant set, which only the database sees. The
-functions arrive with the counting query layer; `hm_index.sql` states the full
-contract.
+Every `hm` table other than `hm.public_summary` is participant-level and keyed
+by `ordinal`, so any two of them join into a row-level profile:
+`term_member`, `participant_attribute` and `group_range` together give each
+participant's study, consent group, demographics and concepts. `api_public`
+therefore gets `SELECT` on `hm.public_summary` only; see
+[The fixed public table](#the-fixed-public-table). `hm_index.sql` states the
+full contract for what that table may hold.
 
 ### Stage 5 cohorts
 
@@ -137,6 +174,12 @@ this, since the bootstrap revokes it from `PUBLIC`. Session-scoped temporary
 tables are not used: connections are pooled and shared between users. Stored
 cohorts are a future addition; see [`future/COHORTS.md`](future/COHORTS.md).
 
+The overlap check on stage 5 responses (refusing a fresh count that differs
+from an earlier released set by 1 to `min_count − 1` participants) is also a
+future addition: it stores each response's cohort in `cohort.released_set`
+and runs through `SECURITY DEFINER` functions; see
+[`future/COHORTS.md`](future/COHORTS.md#the-overlap-check).
+
 ### The query ledger
 
 `access.query_ledger` records every answered query, for budgets, overlap
@@ -147,19 +190,42 @@ A `CHECK` constraint enforces this. `api_public` may insert every column except
 `ras_subject`, so it can record only public queries, and it cannot read the
 ledger.
 
-### How the mapping works
+### How sign-in works
 
-1. The identity is created in Entra ID and attached to the Azure resource that
-   runs the workload.
-2. A Postgres role is created for the identity's object ID.
-3. The grant sections of `metadata.sql` and `hm_index.sql` give that role its
+1. The Azure team creates the app registration and its certificate, or the
+   managed identity.
+2. An Entra administrator creates a Postgres role tied to the identity's
+   object ID with `pgaadauth_create_principal_with_oid`. For an app
+   registration, use its **service principal's** object ID (Enterprise
+   applications in the Entra portal), not the app registration's own.
+3. The grant sections of `metadata.sql` and `hm_index.sql` give the role its
    privileges.
-4. At run time, the workload requests a short-lived token for its identity and
-   uses it as the password.
+4. At run time, the workload uses its certificate (or its managed identity) to
+   get a short-lived Entra token, and uses the token as the password.
 
-Disabling an identity in Entra ends its database access immediately.
+Disabling the identity, or revoking its certificate, ends its database access.
 Researchers never connect: they are identified by their NIH RAS subject in
-`access.account`, and the API connects on their behalf as its own identity.
+`access.account`, and the middleware connects on their behalf.
+
+### Credentials
+
+Three credentials exist, one certificate per app registration; managed
+identities need none.
+
+| Certificate | Stored in | Readable by |
+|---|---|---|
+| `app-bdcdp-middleware-dev` | OpenShift Secret `bdc-data-portal-middleware-cert` | The middleware pod only |
+| `app-bdcdp-clearinghouse-dev` | Its own OpenShift Secret | The clearinghouse pod only |
+| `app-bdcdp-deploy-dev` | Jenkins credential store | The migration job only |
+
+Key Vault holds the master copy of each certificate. Whoever owns rotation
+renews certificates before they expire, updates the Secrets, and is alerted
+well ahead of expiry; an expired certificate stops that workload from
+connecting. Reading a Secret is equivalent to holding that role's database
+access, so access to Secrets in the namespace should be limited to the people
+who deploy and rotate. Sign-ins by these service principals should be
+monitored. Provisioning will add a fourth certificate; see
+[`future/`](future/README.md#roles).
 
 ## Changing the schema
 

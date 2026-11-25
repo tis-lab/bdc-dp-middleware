@@ -7,6 +7,8 @@
 -- bdc_dp_owner, which owns every object; grants are at the end and are safe to re-run.
 -- =====================================================================
 
+SET ROLE bdc_dp_owner;
+
 CREATE SCHEMA catalog;
 COMMENT ON SCHEMA catalog IS
   'Releases, terms, studies, curated consent meaning and eligibility. No participant-level data.';
@@ -137,7 +139,7 @@ CREATE TABLE catalog.stigmatizing_concept (        -- excluded as filters outsid
   PRIMARY KEY (list_version, root_curie)
 );
 
-CREATE TABLE catalog.term_availability (           -- studies with at least min_count participants per term
+CREATE TABLE catalog.term_availability (           -- studies whose obfuscated count per term is at least min_count
   release            text REFERENCES catalog.release,
   curie              text,
   research_study_id  text,
@@ -197,8 +199,9 @@ CREATE INDEX query_ledger_client_idx  ON access.query_ledger (client_key, create
 
 -- =====================================================================
 -- ROLES AND GRANTS
--- Roles are created once per server by an Entra administrator (see README.md); each maps to
--- one Entra managed identity. Re-run this section after every schema change: grants limited
+-- Roles are created once per server by an Entra administrator (see README.md). Login roles
+-- map to Entra identities; api_search, api_counting and api_public are reached by the
+-- middleware login role through SET ROLE. Re-run this section after every schema change: grants limited
 -- to specific tables (api_public's) are not covered by the defaults. Grants for provisioning
 -- and doc_generator are future additions, in future/.
 -- =====================================================================

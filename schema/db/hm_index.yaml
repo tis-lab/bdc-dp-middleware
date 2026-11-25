@@ -1,9 +1,9 @@
 id: https://w3id.org/tis-lab/BDC-Portal/db/hm_index
 name: bdchm_db_hm_index
-title: bdc_dp_hm_index database, hm schema
+title: Participant index (bdc_dp_hm_index) database, hm schema
 description: >-
-  Participant-level projection of BDC-HM records used for counts.
-  Every column copies a named BDC-HM slot or states how it is derived; see
+  Participant-level projection of BDC-HM records used for counts, and the fixed public table
+  (hm.public_summary) of released values built from it. Every column copies a named BDC-HM slot or states how it is derived; see
   bdchm_db_common for the conventions.
 license: MIT
 version: 0.3.0
@@ -119,7 +119,7 @@ classes:
         range: integer
         description: >-
           Kept for fidelity to BDC-HM. No harmonized study populates Participant.age_at_index today, so this is
-          NULL for every participant; summaries use age_at_baseline_days.
+          NULL for every participant; age summaries bin age_at_baseline_days instead.
         exact_mappings:
           - bdchm:age_at_index
         annotations:
@@ -160,7 +160,7 @@ classes:
     annotations:
       table: hm.study_baseline
       partition: list(release)
-      origin: curated
+      origin: curation
     attributes:
       research_study_id:
         required: true
@@ -484,6 +484,45 @@ classes:
       primary_key:
         unique_key_slots: [release, concept, status_rule, ordinal]
 
+  PublicSummary:
+    description: >-
+      The fixed public table. One row per filter of one or two terms combined with And, built by the rebuild
+      job from hm.term_member. Demographic values and age bins are terms too, so a one-term filter's facets
+      are the two-term rows that include it. Rows hold released values only: obfuscated, suppressed, and
+      checked against every other row for small differences before the release is activated.
+    mixins:
+      - ReleaseScoped
+    annotations:
+      table: hm.public_summary
+      partition: list(release)
+    attributes:
+      filter_terms:
+        range: uriorcurie
+        multivalued: true
+        required: true
+        description: The filter's one or two terms, sorted.
+        annotations:
+          derivation: Every term in hm.term_member, alone and paired with every other term it co-occurs with.
+      total_status:
+        range: PublicTotalStatusEnum
+        required: true
+      total_count:
+        range: integer
+        description: The obfuscated total; present only when total_status is REPORTED.
+        annotations:
+          derivation: Exact union of the filter's participants, obfuscated once with the policy's noise.
+      listed_studies:
+        multivalued: true
+        required: true
+        description: Studies at or above min_count for the filter, listed without counts.
+      suppressed_study_count:
+        range: integer
+        required: true
+        description: Studies below min_count for the filter.
+    unique_keys:
+      primary_key:
+        unique_key_slots: [release, filter_terms]
+
   ReleaseCheck:
     description: >-
       Checks that must pass before a release is activated. Every value of ReleaseCheckEnum must have a passing
@@ -513,9 +552,15 @@ classes:
       primary_key:
         unique_key_slots: [release, check_name]
 
-# Release checks that must pass before activation (StatusRuleEnum is extended in bdchm_db_common)
 enums:
+  PublicTotalStatusEnum:
+    description: Used by PublicSummary. Whether a fixed public table total is reported, below min_count, or withheld.
+    permissible_values:
+      REPORTED: {}
+      BELOW_MIN_COUNT: {}
+      WITHHELD: {}
 
+  # Release checks that must pass before activation (StatusRuleEnum is in bdchm_db_common)
   ReleaseCheckEnum:
     permissible_values:
       participant_count:

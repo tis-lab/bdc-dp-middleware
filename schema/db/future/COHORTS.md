@@ -55,7 +55,38 @@ request.
 | `cohort.cohort` | One row per cohort: owner (`ras_subject`), release, expression and its hash, creation and expiry times |
 | `cohort.cohort_member` | One row per member, with `in_exact_scope` |
 | Index on `cohort.cohort.expires_at` | Finds expired cohorts |
-| Grants | `api_counting` may read, write and delete cohorts |
+| `cohort.released_set` | The overlap check's record of each released cohort (below) |
+| Grants | `api_counting` may read, write and delete cohorts; no role reads `cohort.released_set` directly |
+
+## The overlap check
+
+A live query's released counts must not differ from an earlier released set by
+1 to `min_count − 1` participants. Storing every facet and contribution of
+every response would be too large, so only the **cohort's** participant
+numbers are stored, in `cohort.released_set`. Every facet, value and
+contribution in a response is that cohort intersected with a posting list or a
+consent-group range, so its difference from the same cell of an earlier
+response is the cohort difference intersected with the same posting list or
+range.
+
+Still to be written with this addition, as `SECURITY DEFINER` functions:
+
+- `cohort.record_released_set` records a response's cohort.
+- `cohort.overlap_violations` computes the check for every cell the middleware
+  is about to release, against earlier sets for the same account or, with no
+  account, for everyone; identical sets are allowed. It returns the keys of
+  cells that must not get a fresh count, and translates earlier sets from
+  another release through participant IDs.
+- `cohort.purge_released_sets` enforces the retention window.
+
+The API roles can run these functions but cannot read the stored sets.
+
+Facets must therefore be intersections with sets the database holds: terms
+(through `hm.term_member`) and consent groups (through `hm.group_range`).
+Value bins and demographic values need posting lists of their own before they
+can be checked this way. Public queries do not need the check: they read
+`hm.public_summary`, whose rows were checked against each other when the
+release was built.
 
 ## Decisions to make before applying it
 

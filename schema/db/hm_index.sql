@@ -1,7 +1,9 @@
 -- =====================================================================
--- bdc_dp_hm_index: schema hm. Participant-level; restricted.
+-- hm_index.sql: bdc_dp_hm_index schemas, tables and functions
+--
 --   hm : participant-level projection of BDC-HM, rebuilt per release:
---        participants, events, posting lists, release checks
+--        participants, events, posting lists, release checks, and the
+--        released public summary (hm.public_summary)
 -- Cohorts are not stored: a stage 5 request materializes its cohort in a temporary
 -- table for one transaction (see the grants for api_counting). Persisted cohorts are
 -- a future addition, in future/cohort_hm_index.sql.
@@ -17,9 +19,15 @@
 -- grants are at the end and are safe to re-run.
 -- =====================================================================
 
+SET ROLE bdc_dp_owner;
+
+-- ---------------------------------------------------------------------
+-- Schemas
+-- ---------------------------------------------------------------------
+
 CREATE SCHEMA hm;
 COMMENT ON SCHEMA hm IS
-  'Participant-level projection of BDC-HM, rebuilt per release: participants, events, posting lists. Restricted.';
+  'Participant-level projection of BDC-HM, rebuilt per release: participants, events, posting lists. Restricted, except public_summary, which holds released public values only.';
 
 -- ---------------------------------------------------------------------
 -- hm tables
@@ -41,7 +49,7 @@ CREATE TABLE hm.participant_attribute (
   sex                   text,                       -- NULL when Demography records disagree
   ethnicity             text,
   race                  text[],                     -- union across Demography records (multivalued in BDC-HM)
-  age_at_index_days     integer,                    -- unpopulated by current harmonization
+  age_at_index_days     integer,                    -- Participant.age_at_index; not populated by harmonization, not used by summaries
   baseline_visit_id     text,
   age_at_baseline_days  integer,                    -- whole years x 365
   PRIMARY KEY (release, ordinal)
@@ -118,7 +126,28 @@ CREATE TABLE hm.release_check (              -- checks that must pass before act
 );                                                 -- not partitioned: retained after a release is retired
 
 -- ---------------------------------------------------------------------
--- Release partition functions. The rebuild job calls
+-- Fixed public table
+-- ---------------------------------------------------------------------
+
+-- Built by the rebuild job from hm.term_member for each release: one row per filter
+-- of one or two terms combined with And. Demographic values and age bins are terms
+-- too, so a one-term filter's facets are the two-term rows that include it.
+-- Rows hold RELEASED values only: already obfuscated, suppressed, and checked against
+-- every other row for small differences before the release is activated. The public
+-- role reads this table and nothing else in this database, so it never sees an exact
+-- count or a participant.
+CREATE TABLE hm.public_summary (
+  release                 text,
+  filter_terms            text[]  NOT NULL CHECK (cardinality(filter_terms) BETWEEN 1 AND 2),  -- sorted CURIEs
+  total_status            text    NOT NULL CHECK (total_status IN ('REPORTED', 'BELOW_MIN_COUNT', 'WITHHELD')),
+  total_count             integer CHECK ((total_status = 'REPORTED') = (total_count IS NOT NULL)),   -- obfuscated
+  listed_studies          text[]  NOT NULL,          -- studies at or above min_count, without counts
+  suppressed_study_count  integer NOT NULL,
+  PRIMARY KEY (release, filter_terms)
+) PARTITION BY LIST (release);
+
+-- ---------------------------------------------------------------------
+-- Release partition functions
 -- hm.create_release_partitions('2026.10') before loading a release and
 -- hm.retire_release_partitions('2026.10') after marking it retired in
 -- bdc_dp_metadata.catalog.release. Both run with the owner's rights, so
@@ -151,7 +180,7 @@ DECLARE
   bound     text;
 BEGIN
   FOREACH parent IN ARRAY ARRAY['participant_ordinal', 'participant_attribute', 'study_baseline',
-                                'group_range', 'event', 'term_closure', 'term_member']
+                                'group_range', 'event', 'term_closure', 'term_member', 'public_summary']
   LOOP
     part := parent || '_' || hm.release_suffix(p_release);
 
@@ -168,9 +197,9 @@ BEGIN
 END
 $$;
 
--- Retiring a release removes its participant-level data. The caller must first
--- mark the release retired in bdc_dp_metadata.catalog.release; this database
--- cannot check that.
+-- Retiring a release removes its participant-level data and its public summary
+-- rows. The caller must first mark the release retired in
+-- bdc_dp_metadata.catalog.release; this database cannot check that.
 CREATE FUNCTION hm.retire_release_partitions(p_release text)
 RETURNS void
 LANGUAGE plpgsql
@@ -183,10 +212,8 @@ DECLARE
   bound     text;
   part_oid  oid;
 BEGIN
-  FOREACH parent IN ARRAY ARRAY[
-    'participant_ordinal', 'participant_attribute', 'study_baseline',
-    'group_range', 'event', 'term_closure', 'term_member'
-  ]
+  FOREACH parent IN ARRAY ARRAY['participant_ordinal', 'participant_attribute', 'study_baseline',
+                                'group_range', 'event', 'term_closure', 'term_member', 'public_summary']
   LOOP
     part := parent || '_' || hm.release_suffix(p_release);
 
@@ -228,12 +255,14 @@ REVOKE ALL ON FUNCTION hm.retire_release_partitions(text) FROM PUBLIC;
 
 -- =====================================================================
 -- ROLES AND GRANTS
--- Roles are created once per server by an Entra administrator (see README.md); each maps to
--- one Entra managed identity. Re-run this section after every schema change: grants limited
--- to specific objects are not covered by the defaults. Grants for provisioning are a future
--- addition, in future/provisioning_hm_index.sql. Grant on partitioned
--- parents only: queries go through the parent, where privileges are checked, so partitions
--- created later by hm.create_release_partitions need no grants of their own.
+-- Roles are created once per server by an Entra administrator (see README.md). Login roles
+-- map to Entra identities; api_counting and api_public are reached by the middleware login
+-- role through SET ROLE. Re-run this section after every schema change: grants limited to
+-- specific objects are not covered by the defaults. Grant on partitioned parents only:
+-- queries go through the parent, where privileges are checked, so partitions created later
+-- by hm.create_release_partitions need no grants of their own.
+-- Future additions (not deployed): persisted cohorts and the overlap check in
+-- future/cohort_hm_index.sql, provisioning in future/provisioning_hm_index.sql.
 -- =====================================================================
 
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
@@ -260,25 +289,28 @@ GRANT EXECUTE ON FUNCTION hm.create_release_partitions(text), hm.retire_release_
 
 -- hm: the counting API reads everything
 GRANT SELECT ON ALL TABLES IN SCHEMA hm TO api_counting;
+-- ...except participant identifiers: counting works on participant numbers. No deployed
+-- role reads participant IDs; future provisioning (future/provisioning_hm_index.sql) will
+-- be the only one that maps numbers back to them.
+REVOKE SELECT ON hm.participant_ordinal FROM api_counting;
+GRANT SELECT (release, ordinal, research_study_id, consent_group) ON hm.participant_ordinal TO api_counting;
 
--- hm: public and pre-stage-5 summaries. api_public gets no SELECT on any hm table: every
--- table here is participant-level and keyed by ordinal, so posting lists (term_member),
+-- hm: public summaries. api_public reads hm.public_summary and nothing else here. Every
+-- other hm table is participant-level and keyed by ordinal, so posting lists (term_member),
 -- attributes (participant_attribute) and consent-group ranges (group_range) together give
--- every participant's study, consent group, demographics and concepts. It will get EXECUTE
--- only on SECURITY DEFINER functions that return exactly the public tier of the disclosure
--- policy, already shaped, so this role never receives a participant row or an exact count:
---   * root and facet totals, each the exact union over every study in scope (including
---     studies below min_count), then obfuscated once; never a sum of per-study values
+-- every participant's study, consent group, demographics and concepts. public_summary holds
+-- the public tier of the disclosure policy, already shaped by the rebuild job before the
+-- release is activated, so this role never receives a participant row or an exact count:
+--   * totals, each the exact union over every study in scope (including studies below
+--     min_count), then obfuscated once; never a sum of per-study values
 --   * studies at or above min_count, named without counts, and suppressed_study_count for
 --     the rest (zero and small counts are indistinguishable)
 --   * no contributions, no record_count, no records
--- Noise is applied inside the function: it is seeded by release, consent group and the
--- matching participant set, which only the database can see. min_count, noise scale and
--- policy_version come from the policy loaded into the database, never from the caller, and
--- every result carries the policy_version it was shaped under. Those functions arrive with
--- the counting query layer; until then api_public reads nothing here. The REVOKE also
--- removes the table grants from databases deployed with earlier versions of this file.
+--   * no pair of rows whose difference falls below min_count
+-- The REVOKE removes table grants from databases deployed with earlier versions of this
+-- file; the GRANT then gives back the one table api_public may read.
 REVOKE ALL ON ALL TABLES IN SCHEMA hm FROM api_public;
+GRANT SELECT ON hm.public_summary TO api_public;
 
 -- Stage 5 (signed-in breakdowns and approved counts) materializes the refined cohort for
 -- one request only: api_counting evaluates the cohort expression once into

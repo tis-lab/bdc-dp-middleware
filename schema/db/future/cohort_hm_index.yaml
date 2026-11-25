@@ -3,8 +3,8 @@ name: bdchm_db_cohort_hm_index
 title: "Future addition: persisted cohorts in bdc_dp_hm_index"
 description: >-
   Not deployed. Cohorts stored beyond one request, for cohorts reused across a researcher's
-  session or for participant-list provisioning. Querying materializes each cohort in a
-  transaction-scoped temporary table instead. Apply with cohort_hm_index.sql after
+  session or for participant-list provisioning, and the released sets behind the overlap
+  check. Querying materializes each cohort in a transaction-scoped temporary table instead. Apply with cohort_hm_index.sql after
   hm_index.sql when persisted cohorts are needed. See COHORTS.md.
 license: MIT
 version: 0.1.0
@@ -76,4 +76,39 @@ classes:
     unique_keys:
       primary_key:
         unique_key_slots: [cohort_id, ordinal]
+
+  ReleasedSet:
+    description: >-
+      One released response from a live query, for the overlap check: the cohort's participant numbers only.
+      Every facet, value and contribution in the response is the cohort intersected with a posting list or a
+      consent-group range, so their sets are derived when checking rather than stored. Read and written only
+      through the SECURITY DEFINER functions cohort.record_released_set and cohort.overlap_violations, which
+      are part of this future addition; see COHORTS.md.
+    annotations:
+      table: cohort.released_set
+      origin: system
+    attributes:
+      id:
+        identifier: true
+        range: integer
+      ledger_id:
+        range: integer
+        required: true
+        description: The access.query_ledger row in bdc_dp_metadata.
+      account:
+        required: true
+        description: RAS subject of the caller.
+      release:
+        required: true
+      matched_count:
+        range: integer
+        required: true
+      participants:
+        range: integer
+        multivalued: true
+        required: true
+        description: Sorted participant numbers in this release.
+      created_at:
+        range: datetime
+        required: true
 
