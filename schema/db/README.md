@@ -14,6 +14,7 @@ deployed.
 
 | File | What it holds |
 |---|---|
+| `bootstrap.sql` | Run once per server by an administrator, before the two `.sql` files below: roles, both databases, `CONNECT` grants. See [README-bootstrap.md](README-bootstrap.md) |
 | `common.yaml` | Conventions, slots and enums shared by both databases |
 | `metadata.yaml`, `metadata.sql` | `bdc_dp_metadata`: schemas `catalog` and `access` |
 | `hm_index.yaml`, `hm_index.sql` | `bdc_dp_hm_index`: schema `hm`, and the release partition functions |

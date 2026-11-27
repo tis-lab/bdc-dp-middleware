@@ -44,7 +44,11 @@ java -jar target/app.jar setup-db --db.name=mydb --db.user=me hm metadata
   `rebuild_job`, `api_counting` and `api_public` (`hm`), and also `api_search` and
   `clearinghouse` (`metadata`). The command creates missing ones (see
   [Creating the roles](#creating-the-roles)). In deployment an Entra administrator
-  creates them beforehand, so nothing is created.
+  creates them beforehand, so nothing is created. To prepare a server the way
+  deployment expects (roles, both databases, `CONNECT` grants, objects owned by
+  `bdc_dp_owner`), run [`schema/db/bootstrap.sql`](schema/db/bootstrap.sql) as an
+  administrator first and connect as `deploy_migrations`; see
+  [schema/db/README-bootstrap.md](schema/db/README-bootstrap.md).
 - **The user is the database's owner** (`bdc_dp_owner` in deployment), or a superuser
   on a development server. The scripts change `bdc_dp_owner`'s default privileges and
   revoke `CREATE` on schema `public`. Objects created are owned by the user the command
